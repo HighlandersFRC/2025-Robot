@@ -128,8 +128,10 @@ public class Elevator extends SubsystemBase {
     systemState = handleStateTransition();
 
     Logger.recordOutput("Elevator State", systemState);
-    Logger.recordOutput("1 position", elevatorMotorMaster.getPosition().getValueAsDouble());
-    Logger.recordOutput("2 position", elevatorMotorFollower.getPosition().getValueAsDouble());
+    Logger.recordOutput("1 position",
+        elevatorMotorMaster.getPosition().getValueAsDouble());
+    Logger.recordOutput("2 position",
+        elevatorMotorFollower.getPosition().getValueAsDouble());
     switch (systemState) {
       case UP:
         firstTimeIdle = true;
@@ -169,7 +171,8 @@ public class Elevator extends SubsystemBase {
         } else {
           moveWithTorque(-25, 0.6);
         }
-        Logger.recordOutput("Elevator Current", elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
+        Logger.recordOutput("Elevator Current",
+            elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
         Logger.recordOutput("Elevator MPS",
             Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble()));
         break;

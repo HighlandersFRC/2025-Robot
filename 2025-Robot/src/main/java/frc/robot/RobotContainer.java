@@ -33,9 +33,11 @@ import frc.robot.commands.RunOutake;
 import frc.robot.commands.SetElevatorPercent;
 import frc.robot.commands.SetElevatorState;
 import frc.robot.commands.SetIntake;
+import frc.robot.commands.SetPivotPercent;
 import frc.robot.commands.SetRobotPose;
 import frc.robot.commands.SetRobotState;
 import frc.robot.commands.SetRobotStateSimple;
+import frc.robot.commands.SetTwistPercent;
 import frc.robot.commands.ZeroAngleMidMatch;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
@@ -43,7 +45,9 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.MotorTest;
 import frc.robot.subsystems.Peripherals;
+import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Twist;
 import frc.robot.subsystems.Superstructure.SuperState;
 
 /**
@@ -61,6 +65,8 @@ public class RobotContainer {
   Peripherals peripherals = new Peripherals();
   Drive drive = new Drive(peripherals);
   Elevator elevator = new Elevator();
+  Pivot pivot = new Pivot();
+  Twist twist = new Twist();
   MotorTest motorTest = new MotorTest();
   Intake intake = new Intake();
   Lights lights = new Lights();
@@ -142,20 +148,35 @@ public class RobotContainer {
     // Driver
 
     OI.driverViewButton.whileTrue(new ZeroAngleMidMatch(drive)); // zero pidgeon
-    OI.driverA.whileTrue(new SetRobotState(superstructure, SuperState.ELEVATOR_L2)); // elevator up for placement L2
-    OI.driverA.onFalse(new L2Place(elevator, intake, superstructure)); // placement sequence for L2
+    // OI.driverA.whileTrue(new SetRobotState(superstructure,
+    // SuperState.ELEVATOR_L2)); // elevator up for placement L2
+    // OI.driverA.onFalse(new L2Place(elevator, intake, superstructure)); //
+    // placement sequence for L2
     OI.driverPOVLeft.whileTrue(new SetRobotState(superstructure, SuperState.ELEVATOR_ALGAE));
-    OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.ELEVATOR_L3)); // elevator up for placement L3
-    OI.driverY.onFalse(new L3Place(elevator, intake, superstructure)); // placement sequence for L3
-    OI.driverLT.whileTrue(new IntakeAlgae(intake, superstructure)); // outake
-    OI.driverRT.whileTrue(new RunIntake(intake, superstructure)); // intake
-    OI.driverRT.whileTrue(new SetRobotState(superstructure, SuperState.CYCLING));
-    OI.driverX.whileTrue(new SetRobotState(superstructure, SuperState.ELEVATOR_MID)); // elevator mid setpoint to remove
-                                                                                      // algae
-    OI.driverB.whileTrue(new SetRobotState(superstructure, SuperState.ELEVATOR_UP)); // elevator
+    // OI.driverY.whileTrue(new SetRobotState(superstructure,
+    // SuperState.ELEVATOR_L3)); // elevator up for placement L3
+    // OI.driverY.onFalse(new L3Place(elevator, intake, superstructure)); //
+    // placement sequence for L3
+    // OI.driverLT.whileTrue(new IntakeAlgae(intake, superstructure)); // outake
+    // OI.driverRT.whileTrue(new RunIntake(intake, superstructure)); // intake
+    OI.driverRT.whileTrue(new SetIntake(intake, 0.3));
+    OI.driverLT.whileTrue(new SetIntake(intake, -0.3));
+    // OI.driverRT.whileTrue(new SetRobotState(superstructure, SuperState.CYCLING));
+    // OI.driverX.whileTrue(new SetRobotState(superstructure,
+    // SuperState.ELEVATOR_MID)); // elevator mid setpoint to remove
+    // algae
+    // OI.driverB.whileTrue(new SetRobotState(superstructure,
+    // SuperState.ELEVATOR_UP)); // elevator
+    OI.driverY.whileTrue(new SetElevatorPercent(elevator, 0.3));
+    OI.driverA.whileTrue(new SetElevatorPercent(elevator, -0.3));
+    OI.driverX.whileTrue(new SetPivotPercent(pivot, 0.3));
+    OI.driverB.whileTrue(new SetPivotPercent(pivot, -0.3));
+    OI.driverRB.whileTrue(new SetTwistPercent(twist, 0.3));
+    OI.driverLB.whileTrue(new SetTwistPercent(twist, -0.3));
     // OI.driverRB.whileTrue(new MoveToPoint(drive, 1, 1, Math.PI / 2, false));
-    OI.driverLB.whileTrue(new MoveToPiece(drive, peripherals, intake));
-    OI.driverRB.onTrue(new L2AutoPlace(superstructure, elevator, drive, intake, peripherals));
+    // OI.driverLB.whileTrue(new MoveToPiece(drive, peripherals, intake));
+    // OI.driverRB.onTrue(new L2AutoPlace(superstructure, elevator, drive, intake,
+    // peripherals));
     OI.driverMenuButton.whileTrue(new SetRobotPose(drive, 10.375, 1.5, 0));
   }
 

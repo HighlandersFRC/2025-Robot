@@ -16,7 +16,7 @@ import frc.robot.subsystems.Elevator.ElevatorState;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
-  private final TalonFX intakeMotor = new TalonFX(20, "rio");
+  private final TalonFX intakeMotor = new TalonFX(Constants.CANInfo.INTAKE_MOTOR_ID, Constants.CANInfo.CANBUS_NAME);
 
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
 
@@ -41,7 +41,8 @@ public class Intake extends SubsystemBase {
     Logger.recordOutput("Intake Velocity", intakeMotor.getVelocity().getValueAsDouble());
     Logger.recordOutput("Intake Torque", intakeMotor.getTorqueCurrent().getValueAsDouble());
     Logger.recordOutput("Intake Acceleration", intakeMotor.getAcceleration().getValueAsDouble());
-    if (Math.abs(intakeMotor.getVelocity().getValueAsDouble()) < 1 && Math.abs(intakeMotor.getTorqueCurrent().getValueAsDouble()) > 8
+    if (Math.abs(intakeMotor.getVelocity().getValueAsDouble()) < 1
+        && Math.abs(intakeMotor.getTorqueCurrent().getValueAsDouble()) > 8
         && Math.abs(intakeMotor.getAcceleration().getValueAsDouble()) < 10) {
       return true;
     } else {
@@ -84,25 +85,25 @@ public class Intake extends SubsystemBase {
     Logger.recordOutput("Intake State", systemState);
     Logger.recordOutput("Has Coral", hasCoral());
     switch (systemState) {
-    case INTAKE:
-    if (hasCoral()) {
-    setIntakeTorque(-10, 0.2);
-    } else {
-    setIntakePercent(-0.7);
-    }
-    break;
-    case OUTAKE:
-    if (hasCoral()) {
-    setIntakeTorque(10, 0.2);
-    } else {
-    setIntakePercent(0.7);
-    }
-    break;
-    case OFF:
-    setIntakePercent(0.0);
-    break;
-    default:
-    setIntakeTorque(-20, 0.2);
+      case INTAKE:
+        if (hasCoral()) {
+          setIntakeTorque(-10, 0.2);
+        } else {
+          setIntakePercent(-0.7);
+        }
+        break;
+      case OUTAKE:
+        if (hasCoral()) {
+          setIntakeTorque(10, 0.2);
+        } else {
+          setIntakePercent(0.7);
+        }
+        break;
+      case OFF:
+        setIntakePercent(0.0);
+        break;
+      default:
+        setIntakeTorque(-20, 0.2);
     }
   }
 }
