@@ -30,7 +30,7 @@ import frc.robot.tools.math.Vector;
 
 public class Peripherals {
   private PhotonCamera frontCam = new PhotonCamera("Front_Cam");
-  private PhotonCamera gamePieceCamera = new PhotonCamera("Game_Piece_Camera");
+  private PhotonCamera gamePieceCamera = new PhotonCamera("Game_Piece_Cam");
 
   AprilTagFieldLayout aprilTagFieldLayout;
 
