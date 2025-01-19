@@ -14,6 +14,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.SetPoints.ElevatorPosition;
 
 public class Elevator extends SubsystemBase {
   private final TalonFX elevatorMotorMaster = new TalonFX(Constants.CANInfo.MASTER_ELEVATOR_MOTOR_ID,
@@ -66,7 +67,7 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.CurrentLimits.SupplyCurrentLimit = 60;
     // elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold =
 
-    elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
     elevatorMotorMaster.getConfigurator().apply(elevatorConfig);
     elevatorMotorFollower.getConfigurator().apply(elevatorConfig);
@@ -149,8 +150,13 @@ public class Elevator extends SubsystemBase {
         elevatorMotorFollower.getPosition().getValueAsDouble());
     switch (systemState) {
       case DEFAULT:
+        moveWithPercent(0.0);
+        break;
+      case L2:
+        moveElevatorToPosition(ElevatorPosition.kL2);
         break;
       default:
+        moveWithPercent(0.0);
         break;
     }
   }

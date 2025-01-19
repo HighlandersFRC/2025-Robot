@@ -152,7 +152,8 @@ public class RobotContainer {
     // SuperState.ELEVATOR_L2)); // elevator up for placement L2
     // OI.driverA.onFalse(new L2Place(elevator, intake, superstructure)); //
     // placement sequence for L2
-    // OI.driverPOVLeft.whileTrue(new SetRobotState(superstructure, SuperState.ELEVATOR_ALGAE));
+    // OI.driverPOVLeft.whileTrue(new SetRobotState(superstructure,
+    // SuperState.ELEVATOR_ALGAE));
     // OI.driverY.whileTrue(new SetRobotState(superstructure,
     // SuperState.ELEVATOR_L3)); // elevator up for placement L3
     // OI.driverY.onFalse(new L3Place(elevator, intake, superstructure)); //
@@ -167,12 +168,14 @@ public class RobotContainer {
     // algae
     // OI.driverB.whileTrue(new SetRobotState(superstructure,
     // SuperState.ELEVATOR_UP)); // elevator
-    OI.driverY.whileTrue(new SetElevatorPercent(elevator, 0.3));
+    // OI.driverY.whileTrue(new SetElevatorPercent(elevator, 0.3));
     OI.driverA.whileTrue(new SetElevatorPercent(elevator, -0.3));
     OI.driverX.whileTrue(new SetPivotPercent(pivot, 0.3));
     OI.driverB.whileTrue(new SetPivotPercent(pivot, -0.3));
     OI.driverRB.whileTrue(new SetTwistPercent(twist, 0.3));
     OI.driverLB.whileTrue(new SetTwistPercent(twist, -0.3));
+    OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.L2_PLACE));
+    // OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.L3_PLACE));
     // OI.driverRB.whileTrue(new MoveToPoint(drive, 1, 1, Math.PI / 2, false));
     // OI.driverLB.whileTrue(new MoveToPiece(drive, peripherals, intake));
     // OI.driverRB.onTrue(new L2AutoPlace(superstructure, elevator, drive, intake,

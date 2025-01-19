@@ -287,8 +287,8 @@ public final class Constants {
     public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
     public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26); // L2 after placement
     public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
-    public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(54);
-    public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(39);
+    public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(40);
+    public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(25);
     public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8);
 
     public enum ElevatorPosition {
@@ -460,7 +460,7 @@ public final class Constants {
 
     // elevator
     public static final double ELEVATOR_FIRST_STAGE = Constants.inchesToMeters(23.25);
-    public static final double ELEVATOR_MOTOR_ROTATIONS_FOR_FIRST_STAGE = 19.595703;
+    public static final double ELEVATOR_MOTOR_ROTATIONS_FOR_FIRST_STAGE = 20.425781;
     public static final double ELEVATOR_MOTOR_ROTATIONS_PER_METER = ELEVATOR_MOTOR_ROTATIONS_FOR_FIRST_STAGE
         * (1 / ELEVATOR_FIRST_STAGE);
 
