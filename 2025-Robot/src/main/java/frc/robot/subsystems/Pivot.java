@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -16,13 +18,38 @@ public class Pivot extends SubsystemBase {
   /** Creates a new Pivot. */
   private final TalonFX pivotMotor = new TalonFX(Constants.CANInfo.PIVOT_MOTOR_ID,
       new CANBus(Constants.CANInfo.CANBUS_NAME));
-
+  private final PositionTorqueCurrentFOC positionTorqueFOCRequest = new PositionTorqueCurrentFOC(0);
+  
   public Pivot() {
   }
 
   public void init() {
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+    TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
+    pivotConfig.Slot0.kP = 1.0;
+    pivotConfig.Slot0.kI = 0.0;
+    pivotConfig.Slot0.kD = 0.0;
 
+    pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    pivotConfig.CurrentLimits.StatorCurrentLimit = 60;
+    pivotConfig.CurrentLimits.SupplyCurrentLimit = 60;
+
+    pivotMotor.getConfigurator().apply(pivotConfig);
+    pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+    pivotMotor.setPosition(0.0);
+  }
+
+  public void pivotToPosition(double rotations) {
+    pivotMotor.setControl(positionTorqueFOCRequest.withPosition(Constants.Ratios.pivotOutRotationsToRotationsIn(rotations)));
+  }
+
+  public double getpivotPosition() {
+    return Constants.Ratios.pivotInRotationsToRotationsOut(pivotMotor.getPosition().getValueAsDouble());
+  }
+
+  public void setpivotEncoderPosition(double position) {
+    pivotMotor.setPosition(position);
   }
 
   public void setPivotPercent(double percent) {
@@ -81,6 +108,15 @@ public class Pivot extends SubsystemBase {
 
   @Override
   public void periodic() {
+    systemState = handleStateTransition();
+    switch (systemState) {
+      case DEFAULT:
+        pivotToPosition(0.0);
+        break;
+      default:
+        pivotToPosition(0.0);
+        break;
+    }
     // This method will be called once per scheduler run
   }
 }

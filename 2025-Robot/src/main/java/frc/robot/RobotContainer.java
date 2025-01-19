@@ -30,10 +30,12 @@ import frc.robot.commands.SetElevatorPercent;
 import frc.robot.commands.SetElevatorState;
 import frc.robot.commands.SetIntake;
 import frc.robot.commands.SetPivotPercent;
+import frc.robot.commands.SetPivotState;
 import frc.robot.commands.SetRobotPose;
 import frc.robot.commands.SetRobotState;
 import frc.robot.commands.SetRobotStateSimple;
 import frc.robot.commands.SetTwistPercent;
+import frc.robot.commands.SetTwistState;
 import frc.robot.commands.ZeroAngleMidMatch;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
@@ -44,7 +46,9 @@ import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Twist;
+import frc.robot.subsystems.Pivot.PivotState;
 import frc.robot.subsystems.Superstructure.SuperState;
+import frc.robot.subsystems.Twist.TwistState;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -170,8 +174,16 @@ public class RobotContainer {
     // SuperState.ELEVATOR_UP)); // elevator
     // OI.driverY.whileTrue(new SetElevatorPercent(elevator, 0.3));
     OI.driverA.whileTrue(new SetElevatorPercent(elevator, -0.3));
+
+    OI.driverX.whileTrue(new SetPivotState(pivot, PivotState.DEFAULT));
+    OI.driverB.whileTrue(new SetPivotState(pivot, PivotState.GROUND_CORAL));
+
     OI.driverX.whileTrue(new SetPivotPercent(pivot, 0.3));
     OI.driverB.whileTrue(new SetPivotPercent(pivot, -0.3));
+
+    OI.driverRB.whileTrue(new SetTwistState(twist, TwistState.UP));
+    OI.driverLB.whileTrue(new SetTwistState(twist, TwistState.SIDE));
+
     OI.driverRB.whileTrue(new SetTwistPercent(twist, 0.3));
     OI.driverLB.whileTrue(new SetTwistPercent(twist, -0.3));
     OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.L2_PLACE));

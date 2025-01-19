@@ -454,6 +454,23 @@ public final class Constants {
 
   // Gear ratios and conversions
   public static final class Ratios {
+
+    // twist
+    public static double twistInRotationsToRotationsOut(double rotations) {
+      return rotations/100;
+    }
+    public static double twistOutRotationsToRotationsIn(double rotations) {
+      return rotations*100;
+    }
+
+    // pivot
+    public static double pivotInRotationsToRotationsOut(double rotations) {
+      return rotations/91.4285714;
+    }
+    public static double pivotOutRotationsToRotationsIn(double rotations) {
+      return rotations*91.4285714;
+    }
+
     // drive
     public static final double DRIVE_GEAR_RATIO = 6.5;
     public static final double STEER_GEAR_RATIO = 21.43;
