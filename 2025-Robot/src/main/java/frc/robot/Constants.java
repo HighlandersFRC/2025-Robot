@@ -113,38 +113,48 @@ public final class Constants {
     Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint12);
 
     // for (int i = 0; i < Constants.Vision.redSideReefTags.length; i++) {
-    //   Vector tagVector = new Vector(Constants.Vision.redSideReefTags[i][0], Constants.Vision.redSideReefTags[i][1]);
-    //   Vector offsetXVector = new Vector(
-    //       Constants.Physical.CORAL_PLACEMENT_X * Math.cos(Constants.Vision.redSideReefTags[i][3]),
-    //       Constants.Physical.CORAL_PLACEMENT_X * Math.sin(Constants.Vision.redSideReefTags[i][3]));
-    //   Vector offsetYVector = new Vector(
-    //       Constants.Physical.CORAL_PLACEMENT_Y * Math.sin(Constants.Vision.redSideReefTags[i][3]),
-    //       Constants.Physical.CORAL_PLACEMENT_Y * Math.cos(Constants.Vision.redSideReefTags[i][3]));
-    //   Vector leftVector = tagVector.add(offsetXVector.add(offsetYVector));
-    //   Vector rightVector = tagVector.add(offsetXVector.subtract(offsetYVector));
-    //   Constants.Physical.redCoralScoringPositions
-    //       .add(new Pose2d(new Translation2d(leftVector.getI(), leftVector.getJ()),
-    //           new Rotation2d(Constants.Vision.redSideReefTags[i][3] + Math.PI)));
-    //   Constants.Physical.redCoralScoringPositions
-    //       .add(new Pose2d(new Translation2d(rightVector.getI(), rightVector.getJ()),
-    //           new Rotation2d(Constants.Vision.redSideReefTags[i][3] + Math.PI)));
+    // Vector tagVector = new Vector(Constants.Vision.redSideReefTags[i][0],
+    // Constants.Vision.redSideReefTags[i][1]);
+    // Vector offsetXVector = new Vector(
+    // Constants.Physical.CORAL_PLACEMENT_X *
+    // Math.cos(Constants.Vision.redSideReefTags[i][3]),
+    // Constants.Physical.CORAL_PLACEMENT_X *
+    // Math.sin(Constants.Vision.redSideReefTags[i][3]));
+    // Vector offsetYVector = new Vector(
+    // Constants.Physical.CORAL_PLACEMENT_Y *
+    // Math.sin(Constants.Vision.redSideReefTags[i][3]),
+    // Constants.Physical.CORAL_PLACEMENT_Y *
+    // Math.cos(Constants.Vision.redSideReefTags[i][3]));
+    // Vector leftVector = tagVector.add(offsetXVector.add(offsetYVector));
+    // Vector rightVector = tagVector.add(offsetXVector.subtract(offsetYVector));
+    // Constants.Physical.redCoralScoringPositions
+    // .add(new Pose2d(new Translation2d(leftVector.getI(), leftVector.getJ()),
+    // new Rotation2d(Constants.Vision.redSideReefTags[i][3] + Math.PI)));
+    // Constants.Physical.redCoralScoringPositions
+    // .add(new Pose2d(new Translation2d(rightVector.getI(), rightVector.getJ()),
+    // new Rotation2d(Constants.Vision.redSideReefTags[i][3] + Math.PI)));
     // }
     // for (int i = 0; i < Constants.Vision.blueSideReefTags.length; i++) {
-    //   Vector tagVector = new Vector(Constants.Vision.blueSideReefTags[i][0], Constants.Vision.blueSideReefTags[i][1]);
-    //   Vector offsetXVector = new Vector(
-    //       Constants.Physical.CORAL_PLACEMENT_X * Math.cos(Constants.Vision.blueSideReefTags[i][3]),
-    //       Constants.Physical.CORAL_PLACEMENT_X * Math.sin(Constants.Vision.blueSideReefTags[i][3]));
-    //   Vector offsetYVector = new Vector(
-    //       Constants.Physical.CORAL_PLACEMENT_Y * Math.sin(Constants.Vision.blueSideReefTags[i][3]),
-    //       Constants.Physical.CORAL_PLACEMENT_Y * Math.cos(Constants.Vision.blueSideReefTags[i][3]));
-    //   Vector leftVector = tagVector.add(offsetXVector.add(offsetYVector));
-    //   Vector rightVector = tagVector.add(offsetXVector.subtract(offsetYVector));
-    //   Constants.Physical.blueCoralScoringPositions
-    //       .add(new Pose2d(new Translation2d(leftVector.getI(), leftVector.getJ()),
-    //           new Rotation2d(Constants.Vision.blueSideReefTags[i][3] + Math.PI)));
-    //   Constants.Physical.blueCoralScoringPositions
-    //       .add(new Pose2d(new Translation2d(rightVector.getI(), rightVector.getJ()),
-    //           new Rotation2d(Constants.Vision.blueSideReefTags[i][3] + Math.PI)));
+    // Vector tagVector = new Vector(Constants.Vision.blueSideReefTags[i][0],
+    // Constants.Vision.blueSideReefTags[i][1]);
+    // Vector offsetXVector = new Vector(
+    // Constants.Physical.CORAL_PLACEMENT_X *
+    // Math.cos(Constants.Vision.blueSideReefTags[i][3]),
+    // Constants.Physical.CORAL_PLACEMENT_X *
+    // Math.sin(Constants.Vision.blueSideReefTags[i][3]));
+    // Vector offsetYVector = new Vector(
+    // Constants.Physical.CORAL_PLACEMENT_Y *
+    // Math.sin(Constants.Vision.blueSideReefTags[i][3]),
+    // Constants.Physical.CORAL_PLACEMENT_Y *
+    // Math.cos(Constants.Vision.blueSideReefTags[i][3]));
+    // Vector leftVector = tagVector.add(offsetXVector.add(offsetYVector));
+    // Vector rightVector = tagVector.add(offsetXVector.subtract(offsetYVector));
+    // Constants.Physical.blueCoralScoringPositions
+    // .add(new Pose2d(new Translation2d(leftVector.getI(), leftVector.getJ()),
+    // new Rotation2d(Constants.Vision.blueSideReefTags[i][3] + Math.PI)));
+    // Constants.Physical.blueCoralScoringPositions
+    // .add(new Pose2d(new Translation2d(rightVector.getI(), rightVector.getJ()),
+    // new Rotation2d(Constants.Vision.blueSideReefTags[i][3] + Math.PI)));
     // }
 
     Logger.recordOutput("red side scoring", Constants.Physical.redCoralScoringPositions.toString());
@@ -487,6 +497,15 @@ public final class Constants {
     // Elevator
     public static final int MASTER_ELEVATOR_MOTOR_ID = 9;
     public static final int FOLLOWER_ELEVATOR_MOTOR_ID = 10;
+
+    // Pivot
+    public static final int PIVOT_MOTOR_ID = 11;
+
+    // Twist
+    public static final int TWIST_MOTOR_ID = 12;
+
+    // Intake
+    public static final int INTAKE_MOTOR_ID = 13;
   }
 
   // Misc. controller values

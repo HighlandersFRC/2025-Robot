@@ -4,12 +4,30 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Pivot.PivotState;
+import frc.robot.Constants;
 
 public class Pivot extends SubsystemBase {
   /** Creates a new Pivot. */
-  public Pivot() {}
+  private final TalonFX pivotMotor = new TalonFX(Constants.CANInfo.PIVOT_MOTOR_ID,
+      new CANBus(Constants.CANInfo.CANBUS_NAME));
+
+  public Pivot() {
+  }
+
+  public void init() {
+    pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+
+  }
+
+  public void setPivotPercent(double percent) {
+    pivotMotor.set(percent);
+  }
 
   public enum PivotState {
     L1,
@@ -24,7 +42,7 @@ public class Pivot extends SubsystemBase {
     DEFAULT,
     SCORE,
   }
-  
+
   private PivotState wantedState = PivotState.DEFAULT;
   private PivotState systemState = PivotState.DEFAULT;
 
@@ -33,31 +51,31 @@ public class Pivot extends SubsystemBase {
   }
 
   private PivotState handleStateTransition() {
-  switch (wantedState) {
-    case DEFAULT:
-      return PivotState.DEFAULT;
-    case L1:
-      return PivotState.L1;
-    case L23:
-      return PivotState.L23;
-    case L4:
-      return PivotState.L4;
-    case FEEDER:
-      return PivotState.FEEDER;
-    case REEF_ALGAE:
-      return PivotState.REEF_ALGAE;
-    case GROUND_CORAL:
-      return PivotState.GROUND_CORAL;
-    case GROUND_ALGAE:
-      return PivotState.GROUND_ALGAE;
-    case PROCESSOR:
-      return PivotState.PROCESSOR;
-    case NET:
-      return PivotState.NET;
-    case SCORE:
-      return PivotState.SCORE;
-    default:
-      return PivotState.DEFAULT;
+    switch (wantedState) {
+      case DEFAULT:
+        return PivotState.DEFAULT;
+      case L1:
+        return PivotState.L1;
+      case L23:
+        return PivotState.L23;
+      case L4:
+        return PivotState.L4;
+      case FEEDER:
+        return PivotState.FEEDER;
+      case REEF_ALGAE:
+        return PivotState.REEF_ALGAE;
+      case GROUND_CORAL:
+        return PivotState.GROUND_CORAL;
+      case GROUND_ALGAE:
+        return PivotState.GROUND_ALGAE;
+      case PROCESSOR:
+        return PivotState.PROCESSOR;
+      case NET:
+        return PivotState.NET;
+      case SCORE:
+        return PivotState.SCORE;
+      default:
+        return PivotState.DEFAULT;
     }
   }
 

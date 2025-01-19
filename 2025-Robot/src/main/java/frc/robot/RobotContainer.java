@@ -29,9 +29,11 @@ import frc.robot.commands.RunOutake;
 import frc.robot.commands.SetElevatorPercent;
 import frc.robot.commands.SetElevatorState;
 import frc.robot.commands.SetIntake;
+import frc.robot.commands.SetPivotPercent;
 import frc.robot.commands.SetRobotPose;
 import frc.robot.commands.SetRobotState;
 import frc.robot.commands.SetRobotStateSimple;
+import frc.robot.commands.SetTwistPercent;
 import frc.robot.commands.ZeroAngleMidMatch;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
@@ -70,25 +72,29 @@ public class RobotContainer {
     {
       // put("Instant", () -> new InstantCommand());
       // put("Outake", () -> new RunOutake(intake, superstructure));
-      // put("Elevator Down", () -> new SetRobotStateSimple(superstructure, SuperState.IDLE));
-      // put("Elevator L2", () -> new SetRobotStateSimple(superstructure, SuperState.ELEVATOR_L2));
-      // put("Elevator Mid", () -> new SetRobotStateSimple(superstructure, SuperState.ELEVATOR_MID));
+      // put("Elevator Down", () -> new SetRobotStateSimple(superstructure,
+      // SuperState.IDLE));
+      // put("Elevator L2", () -> new SetRobotStateSimple(superstructure,
+      // SuperState.ELEVATOR_L2));
+      // put("Elevator Mid", () -> new SetRobotStateSimple(superstructure,
+      // SuperState.ELEVATOR_MID));
       // put("Wait", () -> new DoNothing());
       // put("Print", () -> new PrintCommand("10s"));
       // put("Full Send", () -> new FullSendFollower(drive, null, false));
       // put("Accurate", () -> new AccurateFollower(drive, false));
       // put("Place Coral High", () -> new SequentialCommandGroup(
-      //     new ParallelRaceGroup(
-      //         new SetRobotState(superstructure, SuperState.ELEVATOR_L2),
-      //         new WaitCommand(1)),
-      //     new ParallelRaceGroup(
-      //         new SetRobotState(superstructure, SuperState.ELEVATOR_MID),
-      //         new WaitCommand(0.2)),
-      //     new ParallelRaceGroup(
-      //         new SetIntake(intake, 0.3),
-      //         new WaitCommand(0.2))));
+      // new ParallelRaceGroup(
+      // new SetRobotState(superstructure, SuperState.ELEVATOR_L2),
+      // new WaitCommand(1)),
+      // new ParallelRaceGroup(
+      // new SetRobotState(superstructure, SuperState.ELEVATOR_MID),
+      // new WaitCommand(0.2)),
+      // new ParallelRaceGroup(
+      // new SetIntake(intake, 0.3),
+      // new WaitCommand(0.2))));
       // put("Intake Coral", () -> new RunIntake(intake, superstructure));
-      // put("Raise 2in", () -> new SetRobotStateSimple(superstructure, SuperState.ELEVATOR_ALGAE));
+      // put("Raise 2in", () -> new SetRobotStateSimple(superstructure,
+      // SuperState.ELEVATOR_ALGAE));
     }
   };
 
@@ -142,21 +148,36 @@ public class RobotContainer {
     // Driver
 
     OI.driverViewButton.whileTrue(new ZeroAngleMidMatch(drive)); // zero pidgeon
-    // OI.driverA.whileTrue(new SetRobotState(superstructure, SuperState.ELEVATOR_L2)); // elevator up for placement L2
-    // OI.driverA.onFalse(new L2Place(elevator, intake, superstructure)); // placement sequence for L2
-    // OI.driverPOVLeft.whileTrue(new SetRobotState(superstructure, SuperState.ELEVATOR_ALGAE));
-    // OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.ELEVATOR_L3)); // elevator up for placement L3
-    // OI.driverY.onFalse(new L3Place(elevator, intake, superstructure)); // placement sequence for L3
+    // OI.driverA.whileTrue(new SetRobotState(superstructure,
+    // SuperState.ELEVATOR_L2)); // elevator up for placement L2
+    // OI.driverA.onFalse(new L2Place(elevator, intake, superstructure)); //
+    // placement sequence for L2
+    OI.driverPOVLeft.whileTrue(new SetRobotState(superstructure, SuperState.ELEVATOR_ALGAE));
+    // OI.driverY.whileTrue(new SetRobotState(superstructure,
+    // SuperState.ELEVATOR_L3)); // elevator up for placement L3
+    // OI.driverY.onFalse(new L3Place(elevator, intake, superstructure)); //
+    // placement sequence for L3
     // OI.driverLT.whileTrue(new IntakeAlgae(intake, superstructure)); // outake
     // OI.driverRT.whileTrue(new RunIntake(intake, superstructure)); // intake
+    OI.driverRT.whileTrue(new SetIntake(intake, 0.3));
+    OI.driverLT.whileTrue(new SetIntake(intake, -0.3));
     // OI.driverRT.whileTrue(new SetRobotState(superstructure, SuperState.CYCLING));
-    // OI.driverX.whileTrue(new SetRobotState(superstructure, SuperState.ELEVATOR_MID)); // elevator mid setpoint to remove
-    //                                                                                   // algae
-    // OI.driverB.whileTrue(new SetRobotState(superstructure, SuperState.ELEVATOR_UP)); // elevator
-    // // OI.driverRB.whileTrue(new MoveToPoint(drive, 1, 1, Math.PI / 2, false));
+    // OI.driverX.whileTrue(new SetRobotState(superstructure,
+    // SuperState.ELEVATOR_MID)); // elevator mid setpoint to remove
+    // algae
+    // OI.driverB.whileTrue(new SetRobotState(superstructure,
+    // SuperState.ELEVATOR_UP)); // elevator
+    OI.driverY.whileTrue(new SetElevatorPercent(elevator, 0.3));
+    OI.driverA.whileTrue(new SetElevatorPercent(elevator, -0.3));
+    OI.driverX.whileTrue(new SetPivotPercent(pivot, 0.3));
+    OI.driverB.whileTrue(new SetPivotPercent(pivot, -0.3));
+    OI.driverRB.whileTrue(new SetTwistPercent(twist, 0.3));
+    OI.driverLB.whileTrue(new SetTwistPercent(twist, -0.3));
+    // OI.driverRB.whileTrue(new MoveToPoint(drive, 1, 1, Math.PI / 2, false));
     // OI.driverLB.whileTrue(new MoveToPiece(drive, peripherals, intake));
-    // OI.driverRB.onTrue(new L2AutoPlace(superstructure, elevator, drive, intake, peripherals));
-    // OI.driverMenuButton.whileTrue(new SetRobotPose(drive, 10.375, 1.5, 0));
+    // OI.driverRB.onTrue(new L2AutoPlace(superstructure, elevator, drive, intake,
+    // peripherals));
+    OI.driverMenuButton.whileTrue(new SetRobotPose(drive, 10.375, 1.5, 0));
   }
 
   /**

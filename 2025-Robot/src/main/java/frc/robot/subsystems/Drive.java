@@ -330,19 +330,27 @@ public class Drive extends SubsystemBase {
     turningPID.setSetPoint(angleSetpoint);
     peripherals.zeroPigeon();
     // SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
-    // swerveModulePositions[0] = new SwerveModulePosition(frontLeft.getModuleDistance(),
-    //     new Rotation2d(frontLeft.getCanCoderPositionRadians()));
-    // swerveModulePositions[1] = new SwerveModulePosition(frontRight.getModuleDistance(),
-    //     new Rotation2d(frontRight.getCanCoderPositionRadians()));
-    // swerveModulePositions[2] = new SwerveModulePosition(backLeft.getModuleDistance(),
-    //     new Rotation2d(backLeft.getCanCoderPositionRadians()));
-    // swerveModulePositions[3] = new SwerveModulePosition(backRight.getModuleDistance(),
-    //     new Rotation2d(backRight.getCanCoderPositionRadians()));
+    // swerveModulePositions[0] = new
+    // SwerveModulePosition(frontLeft.getModuleDistance(),
+    // new Rotation2d(frontLeft.getCanCoderPositionRadians()));
+    // swerveModulePositions[1] = new
+    // SwerveModulePosition(frontRight.getModuleDistance(),
+    // new Rotation2d(frontRight.getCanCoderPositionRadians()));
+    // swerveModulePositions[2] = new
+    // SwerveModulePosition(backLeft.getModuleDistance(),
+    // new Rotation2d(backLeft.getCanCoderPositionRadians()));
+    // swerveModulePositions[3] = new
+    // SwerveModulePosition(backRight.getModuleDistance(),
+    // new Rotation2d(backRight.getCanCoderPositionRadians()));
 
-    // m_pose = m_odometry.update(new Rotation2d((Math.toRadians(peripherals.getPigeonAngle()))), swerveModulePositions);
+    // m_pose = m_odometry.update(new
+    // Rotation2d((Math.toRadians(peripherals.getPigeonAngle()))),
+    // swerveModulePositions);
     // loggingPose = loggingOdometry.update(new Rotation2d(
-    //     Math.toRadians(peripherals.getPigeonAngle())), swerveModulePositions);
-    // mt2Pose = mt2Odometry.update(new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())), swerveModulePositions);
+    // Math.toRadians(peripherals.getPigeonAngle())), swerveModulePositions);
+    // mt2Pose = mt2Odometry.update(new
+    // Rotation2d(Math.toRadians(peripherals.getPigeonAngle())),
+    // swerveModulePositions);
   }
 
   /**
@@ -660,7 +668,7 @@ public class Drive extends SubsystemBase {
         }
       }
     }
-    if(Math.hypot(x - getMT2OdometryX(), y - getMT2OdometryY()) > 5) {
+    if (Math.hypot(x - getMT2OdometryX(), y - getMT2OdometryY()) > 5) {
       return getMT2Odometry();
     } else {
       return chosenSetpoint;
@@ -966,8 +974,9 @@ public class Drive extends SubsystemBase {
   }
 
   public void driveToPoint(double x, double y, double theta) {
-    
-    Logger.recordOutput("Magnitude Error Inches", Constants.metersToInches(Math.sqrt(Math.pow(x - getMT2OdometryX(), 2) + Math.pow(y - getMT2OdometryY(), 2))));
+
+    Logger.recordOutput("Magnitude Error Inches",
+        Constants.metersToInches(Math.sqrt(Math.pow(x - getMT2OdometryX(), 2) + Math.pow(y - getMT2OdometryY(), 2))));
     Logger.recordOutput("Theta Error Degrees", Math.toDegrees(theta - getMT2OdometryAngle()));
 
     while (Math.abs(theta - getMT2OdometryAngle()) > Math.PI) {
@@ -1017,7 +1026,6 @@ public class Drive extends SubsystemBase {
     desiredThetaChange = velocityArray[2].doubleValue();
 
     autoDrive(velocityVector, desiredThetaChange);
-
 
   }
 
