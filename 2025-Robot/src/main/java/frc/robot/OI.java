@@ -156,7 +156,7 @@ public class OI {
     }
 
     public static boolean isRedSide() {
-        return autoChooser.getRawButton(6);
+        return !autoChooser.getRawButton(8);
     }
 
     public static boolean isNothingAuto() {

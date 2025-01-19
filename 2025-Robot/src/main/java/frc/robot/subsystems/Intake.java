@@ -24,6 +24,7 @@ public class Intake extends SubsystemBase {
     INTAKE,
     OUTAKE,
     DEFAULT,
+    OFF,
   }
 
   private IntakeState wantedState = IntakeState.DEFAULT;
@@ -65,6 +66,8 @@ public class Intake extends SubsystemBase {
         return IntakeState.INTAKE;
       case OUTAKE:
         return IntakeState.OUTAKE;
+      case OFF:
+        return IntakeState.OFF;
       default:
         return IntakeState.DEFAULT;
     }
@@ -76,30 +79,30 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // systemState = handleStateTransition();
+    systemState = handleStateTransition();
 
-    // Logger.recordOutput("Intake State", systemState);
-    // Logger.recordOutput("Has Coral", hasCoral());
-    // switch (systemState) {
-    // case INTAKE:
-    // if (hasCoral()) {
-    // setIntakeTorque(-10, 0.2);
-    // } else {
-    // setIntakePercent(-0.7);
-    // }
-    // break;
-    // case OUTAKE:
-    // if (hasCoral()) {
-    // setIntakeTorque(10, 0.2);
-    // } else {
-    // setIntakePercent(0.7);
-    // }
-    // break;
-    // case DEFAULT:
-    // setIntakePercent(0.0);
-    // break;
-    // default:
-    // setIntakePercent(0.0);
-    // }
+    Logger.recordOutput("Intake State", systemState);
+    Logger.recordOutput("Has Coral", hasCoral());
+    switch (systemState) {
+    case INTAKE:
+    if (hasCoral()) {
+    setIntakeTorque(-10, 0.2);
+    } else {
+    setIntakePercent(-0.7);
+    }
+    break;
+    case OUTAKE:
+    if (hasCoral()) {
+    setIntakeTorque(10, 0.2);
+    } else {
+    setIntakePercent(0.7);
+    }
+    break;
+    case OFF:
+    setIntakePercent(0.0);
+    break;
+    default:
+    setIntakeTorque(-20, 0.2);
+    }
   }
 }

@@ -9,25 +9,29 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Drive.DriveState;
+import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.tools.math.Vector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveToPoint extends Command {
   Drive drive;
+  Elevator elevator;
   double x, y, theta;
   Boolean auto;
   double setpointTime;
   int hitSetpoint;
 
   /** Creates a new MoveToPoint. */
-  public MoveToPoint(Drive drive, double x, double y, double theta, Boolean auto) {
+  public MoveToPoint(Drive drive, Elevator elevator, double x, double y, double theta, Boolean auto) {
     this.drive = drive;
+    this.elevator = elevator;
     this.x = x;
     this.y = y;
     this.theta = theta;
     this.auto = auto;
-    addRequirements(drive);
+    addRequirements(this.drive, this.elevator);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -36,7 +40,7 @@ public class MoveToPoint extends Command {
   public void initialize() {
     setpointTime = 0;
     hitSetpoint = 0;
-    if(auto) {
+    if (auto) {
       x = drive.getReefClosestSetpoint(drive.getMT2Odometry())[0];
       y = drive.getReefClosestSetpoint(drive.getMT2Odometry())[1];
       theta = drive.getReefClosestSetpoint(drive.getMT2Odometry())[2];
@@ -45,13 +49,13 @@ public class MoveToPoint extends Command {
       System.out.println("y: " + y);
       System.out.println("theta: " + theta);
 
-      while(Math.abs(theta - drive.getMT2OdometryAngle()) > Math.PI) {
-        if(theta - drive.getMT2OdometryAngle() > Math.PI) {
-          theta -= 2*Math.PI;
+      while (Math.abs(theta - drive.getMT2OdometryAngle()) > Math.PI) {
+        if (theta - drive.getMT2OdometryAngle() > Math.PI) {
+          theta -= 2 * Math.PI;
         } else {
-          theta += 2*Math.PI;
+          theta += 2 * Math.PI;
         }
-      }   
+      }
 
     }
   }
@@ -60,15 +64,21 @@ public class MoveToPoint extends Command {
   @Override
   public void execute() {
 
+    if(Math.hypot(x - drive.getMT2OdometryX(), y - drive.getMT2OdometryY()) < 2) {
+      elevator.setWantedState(ElevatorState.L2);
+    }
+
     drive.setWantedState(DriveState.IDLE);
     drive.driveToPoint(x, y, theta);
     Logger.recordOutput("Setpoint X", x);
     Logger.recordOutput("Setpoint Y", y);
     Logger.recordOutput("Setpoint Theta", theta);
-    if(auto && Math.sqrt(Math.pow((x - drive.getMT2OdometryX()), 2) + Math.pow((y - drive.getMT2OdometryY()), 2)) < 0.03 && Math.abs(theta - drive.getMT2OdometryAngle()) < 0.05) {
+    if (auto
+        && Math.sqrt(Math.pow((x - drive.getMT2OdometryX()), 2) + Math.pow((y - drive.getMT2OdometryY()), 2)) < 0.03
+        && Math.abs(theta - drive.getMT2OdometryAngle()) < 0.05) {
       hitSetpoint += 1;
     }
-    if(hitSetpoint > 3 && setpointTime != 0) {
+    if (hitSetpoint > 5 && setpointTime == 0.0) {
       setpointTime = Timer.getFPGATimestamp();
     }
   }
@@ -77,7 +87,7 @@ public class MoveToPoint extends Command {
   @Override
   public void end(boolean interrupted) {
     drive.autoRobotCentricDrive(new Vector(0, 0), 0);
-    if(!auto) {
+    if (!auto) {
       drive.setWantedState(DriveState.DEFAULT);
     }
   }
@@ -85,10 +95,9 @@ public class MoveToPoint extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(hitSetpoint > 3 && Timer.getFPGATimestamp() - setpointTime > 0.2) {
+    if (hitSetpoint > 6 /*&& Timer.getFPGATimestamp() - setpointTime > 0.2*/) {
       return true;
     }
-    
 
     return false;
   }

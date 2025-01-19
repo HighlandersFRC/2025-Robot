@@ -162,8 +162,8 @@ public final class Constants {
     public static final double WHEEL_TO_FRAME_DISTANCE = inchesToMeters(2.5);
     public static final double TOP_SPEED = feetToMeters(25);
 
-    public static final double ROBOT_LENGTH = inchesToMeters(26);
-    public static final double ROBOT_WIDTH = inchesToMeters(26);
+    public static final double ROBOT_LENGTH = inchesToMeters(29);
+    public static final double ROBOT_WIDTH = inchesToMeters(29);
     public static final double MODULE_OFFSET = inchesToMeters(2.5);
     public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
         ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
@@ -279,7 +279,7 @@ public final class Constants {
     public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26); // L2 after placement
     public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
     public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(54);
-    public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(40.5);
+    public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(39);
     public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8);
 
     public enum ElevatorPosition {

@@ -158,22 +158,39 @@ public class Drive extends SubsystemBase {
   double diffAngle;
 
   // path following PID values
-  private double kXP = 4.0;
-  private double kXI = 0.0;
-  private double kXD = 1.2;
+  private double kXP = 4.00;
+  private double kXI = 0.00;
+  private double kXD = 1.20;
 
-  private double kYP = 4.0;
-  private double kYI = 0.0;
-  private double kYD = 1.2;
+  private double kYP = 4.00;
+  private double kYI = 0.00;
+  private double kYD = 1.20;
 
-  private double kThetaP = 2.7;
-  private double kThetaI = 0.0;
-  private double kThetaD = 2.0;
+  private double kThetaP = 2.70;
+  private double kThetaI = 0.00;
+  private double kThetaD = 2.00;
+
+  // auto placement PID values
+  private double kkXP = 3.00;
+  private double kkXI = 0.00;
+  private double kkXD = 1.60;
+
+  private double kkYP = 3.00;
+  private double kkYI = 0.00;
+  private double kkYD = 1.60;
+
+  private double kkThetaP = 2.70;
+  private double kkThetaI = 0.00;
+  private double kkThetaD = 2.00;
 
   // teleop targeting PID values
   private double kTurningP = 0.04;
   private double kTurningI = 0;
   private double kTurningD = 0.06;
+
+  private PID xxPID = new PID(kkXP, kkXI, kkXD);
+  private PID yyPID = new PID(kkYP, kkYI, kkYD);
+  private PID thetaaPID = new PID(kkThetaP, kkThetaI, kkThetaD);
 
   private PID xPID = new PID(kXP, kXI, kXD);
   private PID yPID = new PID(kYP, kYI, kYD);
@@ -259,6 +276,15 @@ public class Drive extends SubsystemBase {
     frontLeft.init();
     backRight.init();
     backLeft.init();
+
+    xxPID.setMinOutput(-4.9);
+    xxPID.setMaxOutput(4.9);
+
+    yyPID.setMinOutput(-4.9);
+    yyPID.setMaxOutput(4.9);
+
+    thetaaPID.setMinOutput(-3);
+    thetaaPID.setMaxOutput(3);
 
     xPID.setMinOutput(-4.9);
     xPID.setMaxOutput(4.9);
@@ -632,7 +658,11 @@ public class Drive extends SubsystemBase {
         }
       }
     }
-    return chosenSetpoint;
+    if(Math.hypot(x - getMT2OdometryX(), y - getMT2OdometryY()) > 5) {
+      return getMT2Odometry();
+    } else {
+      return chosenSetpoint;
+    }
   }
 
   /**
@@ -816,12 +846,8 @@ public class Drive extends SubsystemBase {
     if (Math.abs(turn) < 0.15) {
       turn = 0.0;
     }
-    boolean heading = false;
 
     if (turn == 0.0 && Timer.getFPGATimestamp() - teleopInitTime > 2.0) {
-      heading = true;
-    Logger.recordOutput("hold heading", heading);
-
       turningPID.setSetPoint(angleSetpoint);
       double yaw = peripherals.getPigeonAngle();
       while (Math.abs(angleSetpoint - yaw) > 180) {
@@ -831,15 +857,11 @@ public class Drive extends SubsystemBase {
           yaw -= 360;
         }
       }
-      double result = -1 * turningPID.updatePID(yaw);
+      double result = -2 * turningPID.updatePID(yaw);
       Logger.recordOutput("result", result);
       driveAutoAligned(result);
-
     } else {
-      heading = false;
       angleSetpoint = peripherals.getPigeonAngle();
-    Logger.recordOutput("hold heading", heading);
-
       double compensation = peripherals.getPigeonAngularVelocityW() * 0.050;
       angleSetpoint += compensation;
       Logger.recordOutput("setpoint", angleSetpoint);
@@ -954,17 +976,17 @@ public class Drive extends SubsystemBase {
       }
     }
 
-    xPID.setSetPoint(x);
-    yPID.setSetPoint(y);
-    thetaPID.setSetPoint(theta);
+    xxPID.setSetPoint(x);
+    yyPID.setSetPoint(y);
+    thetaaPID.setSetPoint(theta);
 
-    xPID.updatePID(getMT2OdometryX());
-    yPID.updatePID(getMT2OdometryY());
-    thetaPID.updatePID(getMT2OdometryAngle());
+    xxPID.updatePID(getMT2OdometryX());
+    yyPID.updatePID(getMT2OdometryY());
+    thetaaPID.updatePID(getMT2OdometryAngle());
 
-    double xVelNoFF = xPID.getResult();
-    double yVelNoFF = yPID.getResult();
-    double thetaVelNoFF = -thetaPID.getResult();
+    double xVelNoFF = xxPID.getResult();
+    double yVelNoFF = yyPID.getResult();
+    double thetaVelNoFF = -thetaaPID.getResult();
 
     // double feedForwardX = targetPoint.getDouble("x_velocity") *
     // Constants.Autonomous.FEED_FORWARD_MULTIPLIER;

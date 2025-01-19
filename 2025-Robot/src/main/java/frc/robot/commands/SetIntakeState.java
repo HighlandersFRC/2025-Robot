@@ -5,40 +5,41 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.Superstructure.SuperState;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class RunOutake extends Command {
-  /** Creates a new MoveTestMotor. */
+public class SetIntakeState extends Command {
+  /** Creates a new L3Setup. */
   Intake intake;
-  Superstructure superstructure;
-  public RunOutake(Intake intake, Superstructure superstructure) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  IntakeState intakeState;
+
+  public SetIntakeState(Intake intake, IntakeState intakeState) {
     this.intake = intake;
-    this.superstructure = superstructure;
+    this.intakeState = intakeState;
     addRequirements(this.intake);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.setWantedState(IntakeState.OUTAKE);
+    intake.setWantedState(intakeState);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    intake.setWantedState(IntakeState.OFF);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
