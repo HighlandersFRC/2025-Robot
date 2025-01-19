@@ -152,7 +152,7 @@ public class RobotContainer {
     // SuperState.ELEVATOR_L2)); // elevator up for placement L2
     // OI.driverA.onFalse(new L2Place(elevator, intake, superstructure)); //
     // placement sequence for L2
-    OI.driverPOVLeft.whileTrue(new SetRobotState(superstructure, SuperState.ELEVATOR_ALGAE));
+    // OI.driverPOVLeft.whileTrue(new SetRobotState(superstructure, SuperState.ELEVATOR_ALGAE));
     // OI.driverY.whileTrue(new SetRobotState(superstructure,
     // SuperState.ELEVATOR_L3)); // elevator up for placement L3
     // OI.driverY.onFalse(new L3Place(elevator, intake, superstructure)); //
