@@ -25,20 +25,25 @@ public class Elevator extends SubsystemBase {
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
 
   public enum ElevatorState {
-    IDLE,
-    UP,
-    MID,
-    DOWN,
-    OFF,
-    L3,
+    DEFAULT,
+    L1,
     L2,
-    ALGAE,
+    L3,
+    L4,
+    FEEDER_INTAKE,
+    L2_ALGAE,
+    L3_ALGAE,
+    GROUND_INTAKE,
+    PROCESSOR,
+    SCORE,
+    NET,
+
   }
 
   private double idleTime;
   private boolean firstTimeIdle = true;
-  private ElevatorState wantedState = ElevatorState.IDLE;
-  private ElevatorState systemState = ElevatorState.IDLE;
+  private ElevatorState wantedState = ElevatorState.DEFAULT;
+  private ElevatorState systemState = ElevatorState.DEFAULT;
 
   public Elevator() {
   }
@@ -104,22 +109,32 @@ public class Elevator extends SubsystemBase {
 
   private ElevatorState handleStateTransition() {
     switch (wantedState) {
-      case IDLE:
-        return ElevatorState.IDLE;
-      case UP:
-        return ElevatorState.UP;
-      case MID:
-        return ElevatorState.MID;
-      case DOWN:
-        return ElevatorState.DOWN;
-      case L3:
-        return ElevatorState.L3;
+      case DEFAULT:
+        return ElevatorState.DEFAULT;
+      case L1:
+        return ElevatorState.L1;
       case L2:
         return ElevatorState.L2;
-      case ALGAE:
-        return ElevatorState.ALGAE;
+      case L3:
+        return ElevatorState.L3;
+      case L4:
+        return ElevatorState.L4;
+      case FEEDER_INTAKE:
+        return ElevatorState.FEEDER_INTAKE;
+      case L2_ALGAE:
+        return ElevatorState.L2_ALGAE;
+      case L3_ALGAE:
+        return ElevatorState.L3_ALGAE;
+      case GROUND_INTAKE:
+        return ElevatorState.GROUND_INTAKE;
+      case PROCESSOR:
+        return ElevatorState.PROCESSOR;
+      case SCORE:
+        return ElevatorState.SCORE;
+      case NET:
+        return ElevatorState.NET;
       default:
-        return ElevatorState.OFF;
+        return ElevatorState.DEFAULT;
     }
   }
 
@@ -131,51 +146,10 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput("1 position", elevatorMotorMaster.getPosition().getValueAsDouble());
     Logger.recordOutput("2 position", elevatorMotorFollower.getPosition().getValueAsDouble());
     switch (systemState) {
-      case UP:
-        firstTimeIdle = true;
-        moveElevatorToPosition(Constants.SetPoints.ElevatorPosition.kUP);
-        break;
-      case MID:
-        firstTimeIdle = true;
-        moveElevatorToPosition(Constants.SetPoints.ElevatorPosition.kMID);
-        break;
-      case DOWN:
-        firstTimeIdle = true;
-        moveElevatorToPosition(Constants.SetPoints.ElevatorPosition.kDOWN);
-        break;
-      case L3:
-        firstTimeIdle = true;
-        moveElevatorToPosition(Constants.SetPoints.ElevatorPosition.kL3);
-        break;
-      case L2:
-        firstTimeIdle = true;
-        moveElevatorToPosition(Constants.SetPoints.ElevatorPosition.kL2);
-        break;
-      case ALGAE:
-        firstTimeIdle = true;
-        moveElevatorToPosition(Constants.SetPoints.ElevatorPosition.kALGAE);
-        break;
-      case IDLE:
-
-        if (firstTimeIdle) {
-          idleTime = Timer.getFPGATimestamp();
-          firstTimeIdle = false;
-        }
-        if (Math
-            .abs(Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
-            && Timer.getFPGATimestamp() - idleTime > 0.1) {
-          moveWithPercent(0.0);
-          setElevatorEncoderPosition(0.0);
-        } else {
-          moveWithTorque(-25, 0.6);
-        }
-        Logger.recordOutput("Elevator Current", elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
-        Logger.recordOutput("Elevator MPS",
-            Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble()));
-        break;
+      case DEFAULT:
+      break;
       default:
-        firstTimeIdle = true;
-        moveWithPercent(0.0);
+      break;
     }
   }
 }

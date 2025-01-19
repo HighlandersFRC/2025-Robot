@@ -21,7 +21,8 @@ public class Intake extends SubsystemBase {
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
 
   public enum IntakeState {
-    INTAKE,
+    CORAL_INTAKE,
+    ALGAE_INTAKE,
     OUTAKE,
     DEFAULT,
     OFF,
@@ -62,8 +63,10 @@ public class Intake extends SubsystemBase {
 
   private IntakeState handleStateTransition() {
     switch (wantedState) {
-      case INTAKE:
-        return IntakeState.INTAKE;
+      case CORAL_INTAKE:
+        return IntakeState.CORAL_INTAKE;
+      case ALGAE_INTAKE:
+        return IntakeState.ALGAE_INTAKE;
       case OUTAKE:
         return IntakeState.OUTAKE;
       case OFF:
@@ -84,18 +87,25 @@ public class Intake extends SubsystemBase {
     Logger.recordOutput("Intake State", systemState);
     Logger.recordOutput("Has Coral", hasCoral());
     switch (systemState) {
-    case INTAKE:
+    case CORAL_INTAKE:
     if (hasCoral()) {
     setIntakeTorque(-10, 0.2);
     } else {
     setIntakePercent(-0.7);
     }
     break;
-    case OUTAKE:
+    case ALGAE_INTAKE:
     if (hasCoral()) {
     setIntakeTorque(10, 0.2);
     } else {
     setIntakePercent(0.7);
+    }
+    break;
+    case OUTAKE:
+    if(true/* logic for if it coral (true) or algae (false) */) {
+      setIntakePercent(0.7);
+    } else {
+      setIntakePercent(-0.7);
     }
     break;
     case OFF:

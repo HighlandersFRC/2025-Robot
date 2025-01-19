@@ -2,38 +2,57 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Drive.DriveState;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Intake.IntakeState;
+import frc.robot.subsystems.Pivot.PivotState;
+import frc.robot.subsystems.Twist.TwistState;
 
 public class Superstructure extends SubsystemBase {
   private Drive drive;
   private Elevator elevator;
   private Intake intake;
+  private Pivot pivot;
+  private Twist twist;
 
   public enum SuperState {
-    CYCLING,
+    DEFAULT,
+    AUTO_L1_PLACE,
+    AUTO_L2_PLACE,
+    AUTO_L3_PLACE,
+    AUTO_L4_PLACE,
+    L1_PLACE,
+    L2_PLACE,
+    L3_PLACE,
+    L4_PLACE,
+    PROCESSOR,
+    NET,
+    FEEDER,
+    GROUND_CORAL_PICKUP,
+    GROUND_ALGAE_PICKUP,
+    L2_ALGAE_PICKUP,
+    L3_ALGAE_PICKUP,
+    DEPLOY_CLIMBER,
+    CLIMB,
+    OUTAKE,
+    SCORE_CORAL,
     IDLE,
-    ELEVATOR_UP,
-    ELEVATOR_MID,
-    ELEVATOR_OFF,
-    ELEVATOR_L3,
-    ELEVATOR_L2,
-    ELEVATOR_ALGAE,
-    INTAKING,
-    OUTAKING,
-    INTAKE_DEFAULT,
   }
 
-  private SuperState wantedSuperState = SuperState.IDLE;
-  private SuperState currentSuperState = SuperState.IDLE;
+  private SuperState wantedSuperState = SuperState.DEFAULT;
+  private SuperState currentSuperState = SuperState.DEFAULT;
 
-  public Superstructure(Drive drive, Elevator elevator) {
+  public Superstructure(Drive drive, Elevator elevator, Intake intake, Pivot pivot, Twist twist) {
     this.drive = drive;
     this.elevator = elevator;
+    this.intake = intake;
+    this.pivot = pivot;
+    this.twist = twist;
   }
 
   public void setWantedState(SuperState wantedState) {
@@ -46,45 +65,71 @@ public class Superstructure extends SubsystemBase {
 
   private void applyStates() {
     switch (currentSuperState) {
-      case CYCLING:
-        handleCYCLINGState();
-        // Cycling state
+      case DEFAULT:
+        handleDefaultState();
+        break;
+      case AUTO_L1_PLACE:
+        handleAutoL1PlaceState();
+        break;
+      case AUTO_L2_PLACE:
+        handleAutoL2PlaceState();
+        break;
+      case AUTO_L3_PLACE:
+        handleAutoL3PlaceState();
+        break;
+      case AUTO_L4_PLACE:
+        handleAutoL4PlaceState();
+        break;
+      case L1_PLACE:
+        handleL1PlaceState();
+        break;
+      case L2_PLACE:
+        handleL2PlaceState();
+        break;
+      case L3_PLACE:
+        handleL3PlaceState();
+        break;
+      case L4_PLACE:
+        handleL4PlaceState();
+        break;
+      case PROCESSOR:
+        handleProcessorState();
+        break;
+      case NET:
+        handleNetState();
+        break;
+      case FEEDER:
+        handleFeederState();
+        break;
+      case GROUND_CORAL_PICKUP:
+        handleGroundCoralPickupState();
+        break;
+      case GROUND_ALGAE_PICKUP:
+        handleGroundAlgaePickupState();
+        break;
+      case L2_ALGAE_PICKUP:
+        handleL2AlgaePickupState();
+        break;
+      case L3_ALGAE_PICKUP:
+        handleL3AlgaePickupState();
+        break;
+      case DEPLOY_CLIMBER:
+        handleDeployClimberState();
+        break;
+      case CLIMB:
+        handleClimbState();
+        break;
+      case OUTAKE:
+        handleOutakeState();
+        break;
+      case SCORE_CORAL:
+        handleScoreCoralState();
         break;
       case IDLE:
-        // Idle state
-        handleIDLEState();
-        break;
-      case ELEVATOR_UP:
-        // Idle state
-        handleElevatorUPState();
-        break;
-      case ELEVATOR_MID:
-        // Idle state
-        handleElevatorMIDState();
-        break;
-      case ELEVATOR_OFF:
-        handleElevatorOFFState();
-        break;
-      case ELEVATOR_L3:
-        handleElevatorL3State();
-        break;
-      case ELEVATOR_L2:
-        handleElevatorL2State();
-        break;
-      case ELEVATOR_ALGAE:
-        handeElevatorAlgaeState();
-        break;
-      case INTAKING:
-        handleIntakingState();
-        break;
-      case OUTAKING:
-        handleOutakingState();
-        break;
-      case INTAKE_DEFAULT:
-        handleIntakeDefaultState();
+        handleIdleState();
         break;
       default:
-        handleIDLEState();
+        handleIdleState();
         break;
     }
   }
@@ -103,42 +148,68 @@ public class Superstructure extends SubsystemBase {
    */
   private SuperState handleStateTransitions() {
     switch (wantedSuperState) {
-      case CYCLING:
-        // Cycling state
-        currentSuperState = SuperState.CYCLING;
+      case DEFAULT:
+        currentSuperState = SuperState.DEFAULT;
+        break;
+      case AUTO_L1_PLACE:
+        currentSuperState = SuperState.AUTO_L1_PLACE;
+        break;
+      case AUTO_L2_PLACE:
+        currentSuperState = SuperState.AUTO_L2_PLACE;
+        break;
+      case AUTO_L3_PLACE:
+        currentSuperState = SuperState.AUTO_L3_PLACE;
+        break;
+      case AUTO_L4_PLACE:
+        currentSuperState = SuperState.AUTO_L4_PLACE;
+        break;
+      case L1_PLACE:
+        currentSuperState = SuperState.L1_PLACE;
+        break;
+      case L2_PLACE:
+        currentSuperState = SuperState.L2_PLACE;
+        break;
+      case L3_PLACE:
+        currentSuperState = SuperState.L3_PLACE;
+        break;
+      case L4_PLACE:
+        currentSuperState = SuperState.L4_PLACE;
+        break;
+      case PROCESSOR:
+        currentSuperState = SuperState.PROCESSOR;
+        break;
+      case NET:
+        currentSuperState = SuperState.NET;
+        break;
+      case FEEDER:
+        currentSuperState = SuperState.FEEDER;
+        break;
+      case GROUND_CORAL_PICKUP:
+        currentSuperState = SuperState.GROUND_CORAL_PICKUP;
+        break;
+      case GROUND_ALGAE_PICKUP:
+        currentSuperState = SuperState.GROUND_ALGAE_PICKUP;
+        break;
+      case L2_ALGAE_PICKUP:
+        currentSuperState = SuperState.L2_ALGAE_PICKUP;
+        break;
+      case L3_ALGAE_PICKUP:
+        currentSuperState = SuperState.L3_ALGAE_PICKUP;
+        break;
+      case DEPLOY_CLIMBER:
+        currentSuperState = SuperState.DEPLOY_CLIMBER;
+        break;
+      case CLIMB:
+        currentSuperState = SuperState.CLIMB;
+        break;
+      case OUTAKE:
+        currentSuperState = SuperState.OUTAKE;
+        break;
+      case SCORE_CORAL:
+        currentSuperState = SuperState.SCORE_CORAL;
         break;
       case IDLE:
-        // Idle state
         currentSuperState = SuperState.IDLE;
-        break;
-      case ELEVATOR_MID:
-        // Mid state
-        currentSuperState = SuperState.ELEVATOR_MID;
-        break;
-      case ELEVATOR_UP:
-        // Up state
-        currentSuperState = SuperState.ELEVATOR_UP;
-        break;
-      case ELEVATOR_OFF:
-        currentSuperState = SuperState.ELEVATOR_OFF;
-        break;
-      case ELEVATOR_L3:
-        currentSuperState = SuperState.ELEVATOR_L3;
-        break;
-      case ELEVATOR_L2:
-        currentSuperState = SuperState.ELEVATOR_L2;
-        break;
-      case ELEVATOR_ALGAE:
-        currentSuperState = SuperState.ELEVATOR_ALGAE;
-        break;
-      case INTAKING:
-        currentSuperState = SuperState.INTAKING;
-        break;
-      case OUTAKING:
-        currentSuperState = SuperState.OUTAKING;
-        break;
-      case INTAKE_DEFAULT:
-        currentSuperState = SuperState.INTAKE_DEFAULT;
         break;
       default:
         currentSuperState = SuperState.IDLE;
@@ -147,62 +218,213 @@ public class Superstructure extends SubsystemBase {
     return currentSuperState;
   }
 
-  /**
-   * This function handles the CYCLING state of the Superstructure subsystem.
-   * In the CYCLING state, the drive subsystem is set to its default state.
-   *
-   * @return void - This function does not return any value.
-   */
-  public void handleCYCLINGState() {
+  // /**
+  //  * This function handles the CYCLING state of the Superstructure subsystem.
+  //  * In the CYCLING state, the drive subsystem is set to its default state.
+  //  *
+  //  * @return void - This function does not return any value.
+  //  */
+  // public void handleCYCLINGState() {
+  //   drive.setWantedState(DriveState.DEFAULT);
+  //   elevator.setWantedState(ElevatorState.IDLE);
+  // }
+
+  // /**
+  //  * This function handles the IDLE state of the Superstructure subsystem.
+  //  * In the IDLE state, the drive subsystem is set to its IDLE state.
+  //  *
+  //  * @return void - This function does not return any value.
+  //  */
+  // public void handleIDLEState() {
+  //   drive.setWantedState(DriveState.IDLE);
+  //   elevator.setWantedState(ElevatorState.IDLE);
+  // }
+
+  // public void handleElevatorOFFState() {
+  //   elevator.setWantedState(ElevatorState.OFF);
+  // }
+
+  // public void handleElevatorMIDState() {
+  //   elevator.setWantedState(ElevatorState.MID);
+  // }
+
+  // public void handleElevatorUPState() {
+  //   elevator.setWantedState(ElevatorState.UP);
+  // }
+
+  // public void handleElevatorL2State() {
+  //   elevator.setWantedState(ElevatorState.L2);
+  // }
+
+  // public void handeElevatorAlgaeState() {
+  //   elevator.setWantedState(ElevatorState.ALGAE);
+  // }
+
+  // public void handleElevatorL3State() {
+  //   elevator.setWantedState(ElevatorState.L3);
+  // }
+
+  // public void handleOutakingState() {
+  //   intake.setWantedState(IntakeState.OUTAKE);
+  // }
+
+  // public void handleIntakingState() {
+  //   intake.setWantedState(IntakeState.INTAKE);
+  // }
+
+  // public void handleIntakeDefaultState() {
+  //   intake.setWantedState(IntakeState.DEFAULT);
+  // }
+
+  public void handleDefaultState() {
     drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.IDLE);
+    elevator.setWantedState(ElevatorState.DEFAULT);
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.DEFAULT);
+    twist.setWantedState(TwistState.DOWN);
   }
 
-  /**
-   * This function handles the IDLE state of the Superstructure subsystem.
-   * In the IDLE state, the drive subsystem is set to its IDLE state.
-   *
-   * @return void - This function does not return any value.
-   */
-  public void handleIDLEState() {
-    drive.setWantedState(DriveState.IDLE);
-    elevator.setWantedState(ElevatorState.IDLE);
+  public void handleAutoL1PlaceState() {
+    drive.setWantedState(DriveState.REEF);
+    elevator.setWantedState(ElevatorState.L1);
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.L1);
+    twist.setWantedState(TwistState.DOWN);
   }
 
-  public void handleElevatorOFFState() {
-    elevator.setWantedState(ElevatorState.OFF);
-  }
-
-  public void handleElevatorMIDState() {
-    elevator.setWantedState(ElevatorState.MID);
-  }
-
-  public void handleElevatorUPState() {
-    elevator.setWantedState(ElevatorState.UP);
-  }
-
-  public void handleElevatorL2State() {
+  public void handleAutoL2PlaceState() {
+    drive.setWantedState(DriveState.REEF);
     elevator.setWantedState(ElevatorState.L2);
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.L23);
+    twist.setWantedState(TwistState.SIDE);
   }
 
-  public void handeElevatorAlgaeState() {
-    elevator.setWantedState(ElevatorState.ALGAE);
-  }
-
-  public void handleElevatorL3State() {
+  public void handleAutoL3PlaceState() {
+    drive.setWantedState(DriveState.REEF);
     elevator.setWantedState(ElevatorState.L3);
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.L23);
+    twist.setWantedState(TwistState.SIDE);
   }
 
-  public void handleOutakingState() {
+  public void handleAutoL4PlaceState() {
+    drive.setWantedState(DriveState.REEF);
+    elevator.setWantedState(ElevatorState.L4);
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.L4);
+    twist.setWantedState(TwistState.SIDE);
+  }
+
+  public void handleL1PlaceState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.L1);
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.L1);
+    twist.setWantedState(TwistState.DOWN);
+  }
+
+  public void handleL2PlaceState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.L2);
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.L23);
+    twist.setWantedState(TwistState.SIDE);
+  }
+
+  public void handleL3PlaceState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.L3);
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.L23);
+    twist.setWantedState(TwistState.SIDE);
+  }
+
+  public void handleL4PlaceState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.L4);
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.L4);
+    twist.setWantedState(TwistState.SIDE);
+  }
+
+  public void handleProcessorState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.PROCESSOR);
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.PROCESSOR);
+    twist.setWantedState(TwistState.SIDE);
+  }
+
+  public void handleNetState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.NET);
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.NET);
+    twist.setWantedState(TwistState.UP);
+  }
+
+  public void handleFeederState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
+    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    pivot.setWantedState(PivotState.FEEDER);
+    twist.setWantedState(TwistState.DOWN);
+  }
+
+  public void handleGroundCoralPickupState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.GROUND_INTAKE);
+    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    pivot.setWantedState(PivotState.GROUND_CORAL);
+    twist.setWantedState(TwistState.DOWN);
+  }
+
+  public void handleGroundAlgaePickupState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.GROUND_INTAKE);
+    intake.setWantedState(IntakeState.ALGAE_INTAKE);
+    pivot.setWantedState(PivotState.GROUND_ALGAE);
+    twist.setWantedState(TwistState.UP);
+  }
+
+  public void handleL2AlgaePickupState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.L2_ALGAE);
+    intake.setWantedState(IntakeState.ALGAE_INTAKE);
+    pivot.setWantedState(PivotState.REEF_ALGAE);
+    twist.setWantedState(TwistState.UP);
+  }
+
+  public void handleL3AlgaePickupState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.L3_ALGAE);
+    intake.setWantedState(IntakeState.ALGAE_INTAKE);
+    pivot.setWantedState(PivotState.REEF_ALGAE);
+    twist.setWantedState(TwistState.UP);
+  }
+
+  public void handleDeployClimberState() {
+    
+  }
+
+  public void handleClimbState() {
+    
+  }
+
+  public void handleOutakeState() {
     intake.setWantedState(IntakeState.OUTAKE);
   }
 
-  public void handleIntakingState() {
-    intake.setWantedState(IntakeState.INTAKE);
+  public void handleScoreCoralState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.SCORE);
+    intake.setWantedState(IntakeState.OUTAKE);
+    pivot.setWantedState(PivotState.SCORE);
   }
 
-  public void handleIntakeDefaultState() {
-    intake.setWantedState(IntakeState.DEFAULT);
+  public void handleIdleState() {
+    drive.setWantedState(DriveState.IDLE);
   }
 
   @Override

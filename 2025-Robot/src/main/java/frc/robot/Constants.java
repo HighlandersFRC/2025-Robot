@@ -33,7 +33,6 @@ public final class Constants {
     public static final double ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER = 1;
     public static final String[] paths = new String[] {
         "Test.polarauto",
-        "4piece.polarauto",
         "3piece.polarauto"
     };
 

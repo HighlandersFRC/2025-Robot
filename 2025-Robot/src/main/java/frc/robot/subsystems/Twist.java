@@ -10,8 +10,36 @@ public class Twist extends SubsystemBase {
   /** Creates a new Twist. */
   public Twist() {}
 
+  public enum TwistState {
+    UP, // idk why we have this
+    SIDE, // the coral part of the intake (__)_) or (_)__) with positive X for the robot being up
+    DOWN, // ground intake
+    
+  }
+  
+  private TwistState wantedState = TwistState.DOWN;
+  private TwistState systemState = TwistState.DOWN;
+
+  public void setWantedState(TwistState wantedState) {
+    this.wantedState = wantedState;
+  }
+
+  private TwistState handleStateTransition() {
+  switch (wantedState) {
+    case UP:
+      return TwistState.UP;
+    case SIDE:
+      return TwistState.SIDE;
+    case DOWN:
+      return TwistState.DOWN;
+    default:
+      return TwistState.UP;
+    }
+  }
+
   @Override
   public void periodic() {
+    
     // This method will be called once per scheduler run
   }
 }

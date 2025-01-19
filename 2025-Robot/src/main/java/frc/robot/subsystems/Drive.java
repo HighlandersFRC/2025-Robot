@@ -205,6 +205,8 @@ public class Drive extends SubsystemBase {
   public enum DriveState {
     DEFAULT,
     IDLE,
+    REEF,
+    ALGAE,
   }
 
   private DriveState wantedState = DriveState.IDLE;
@@ -857,7 +859,7 @@ public class Drive extends SubsystemBase {
           yaw -= 360;
         }
       }
-      double result = -2 * turningPID.updatePID(yaw);
+      double result = -1 * turningPID.updatePID(yaw);
       Logger.recordOutput("result", result);
       driveAutoAligned(result);
     } else {
@@ -1254,6 +1256,10 @@ public class Drive extends SubsystemBase {
         return DriveState.DEFAULT;
       case IDLE:
         return DriveState.IDLE;
+      case REEF:
+        return DriveState.REEF;
+      case ALGAE:
+        return DriveState.ALGAE;
       default:
         return DriveState.IDLE;
     }
@@ -1277,7 +1283,14 @@ public class Drive extends SubsystemBase {
       case DEFAULT:
         teleopDrive();
         break;
+      case IDLE:
+        break;
+      case REEF:
+        break;
+      case ALGAE:
+        break;
       default:
+        break;
     }
   }
 
