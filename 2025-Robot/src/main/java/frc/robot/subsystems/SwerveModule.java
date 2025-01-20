@@ -94,7 +94,7 @@ public class SwerveModule extends SubsystemBase {
     TalonFXConfiguration angleMotorConfig = new TalonFXConfiguration();
     TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
 
-    angleMotorConfig.Slot0.kP = 350.0;
+    angleMotorConfig.Slot0.kP = 370.0;
     angleMotorConfig.Slot0.kI = 0.0;
     angleMotorConfig.Slot0.kD = 15;
 
@@ -116,10 +116,17 @@ public class SwerveModule extends SubsystemBase {
     angleMotorConfig.Feedback.SensorToMechanismRatio = 1.0;
     angleMotorConfig.Feedback.RotorToSensorRatio = Constants.Ratios.STEER_GEAR_RATIO;
 
-    driveMotorConfig.Slot0.kP = 6.5;
-    driveMotorConfig.Slot0.kI = 0.0;
-    driveMotorConfig.Slot0.kD = 0.0;
-    driveMotorConfig.Slot0.kV = 0.0;
+    if (moduleNumber == 2 || moduleNumber == 3) {
+      driveMotorConfig.Slot0.kP = 9.9;
+      driveMotorConfig.Slot0.kI = 0.0;
+      driveMotorConfig.Slot0.kD = 0.0;
+      driveMotorConfig.Slot0.kV = 0.0;
+    } else {
+      driveMotorConfig.Slot0.kP = 9.0;
+      driveMotorConfig.Slot0.kI = 0.0;
+      driveMotorConfig.Slot0.kD = 0.0;
+      driveMotorConfig.Slot0.kV = 0.0;
+    }
 
     driveMotorConfig.TorqueCurrent.PeakForwardTorqueCurrent = 120;
     driveMotorConfig.TorqueCurrent.PeakReverseTorqueCurrent = -120;

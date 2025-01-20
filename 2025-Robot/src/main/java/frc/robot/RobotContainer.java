@@ -175,10 +175,10 @@ public class RobotContainer {
     // OI.driverY.whileTrue(new SetElevatorPercent(elevator, 0.3));
     OI.driverA.whileTrue(new SetElevatorPercent(elevator, -0.3));
 
-    OI.driverX.whileTrue(new SetPivotState(pivot, PivotState.DEFAULT));
-    OI.driverB.whileTrue(new SetPivotState(pivot, PivotState.GROUND_CORAL));
+    OI.driverX.whileTrue(new SetRobotState(superstructure, SuperState.L1_PLACE));
+    // OI.driverB.whileTrue(new SetPivotState(pivot, PivotState.GROUND_CORAL));
 
-    OI.driverX.whileTrue(new SetPivotPercent(pivot, 0.3));
+    // OI.driverX.whileTrue(new SetPivotPercent(pivot, 0.3));
     OI.driverB.whileTrue(new SetPivotPercent(pivot, -0.3));
 
     OI.driverRB.whileTrue(new SetTwistState(twist, TwistState.UP));

@@ -288,7 +288,7 @@ public final class Constants {
     public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26); // L2 after placement
     public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
     public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(40);
-    public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(25);
+    public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(30);
     public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8);
 
     public enum ElevatorPosition {
@@ -304,6 +304,22 @@ public final class Constants {
 
       private ElevatorPosition(double meters, double rotations) {
         this.meters = meters;
+        this.rotations = rotations;
+      }
+    }
+
+    public static final double PIVOT_L23_POSITION_D = 0.0;
+    public static final double PIVOT_UPRIGHT_POSITION_D = 45.0;
+
+    public enum PivotPosition {
+      kL23(PIVOT_L23_POSITION_D, Constants.degreesToRotations(PIVOT_L23_POSITION_D)),
+      kUP(PIVOT_UPRIGHT_POSITION_D, Constants.degreesToRotations(PIVOT_UPRIGHT_POSITION_D));
+
+      public final double degrees;
+      public final double rotations;
+
+      private PivotPosition(double degrees, double rotations) {
+        this.degrees = degrees;
         this.rotations = rotations;
       }
     }
@@ -457,19 +473,15 @@ public final class Constants {
 
     // twist
     public static double twistInRotationsToRotationsOut(double rotations) {
-      return rotations/100;
+      return rotations / 100;
     }
+
     public static double twistOutRotationsToRotationsIn(double rotations) {
-      return rotations*100;
+      return rotations * 100;
     }
 
     // pivot
-    public static double pivotInRotationsToRotationsOut(double rotations) {
-      return rotations/91.4285714;
-    }
-    public static double pivotOutRotationsToRotationsIn(double rotations) {
-      return rotations*91.4285714;
-    }
+    public static final double PIVOT_GEAR_RATIO = 91.4285714;
 
     // drive
     public static final double DRIVE_GEAR_RATIO = 6.5;
@@ -517,6 +529,7 @@ public final class Constants {
 
     // Pivot
     public static final int PIVOT_MOTOR_ID = 11;
+    public static final int PIVOT_CANCODER_ID = 5;
 
     // Twist
     public static final int TWIST_MOTOR_ID = 12;

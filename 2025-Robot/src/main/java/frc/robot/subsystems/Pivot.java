@@ -4,48 +4,82 @@
 
 package frc.robot.subsystems;
 
+import org.apache.commons.math3.optimization.general.ConjugateGradientFormula;
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.Pivot.PivotState;
 import frc.robot.Constants;
+import frc.robot.Constants.SetPoints.PivotPosition;
 
 public class Pivot extends SubsystemBase {
   /** Creates a new Pivot. */
   private final TalonFX pivotMotor = new TalonFX(Constants.CANInfo.PIVOT_MOTOR_ID,
       new CANBus(Constants.CANInfo.CANBUS_NAME));
-  private final PositionTorqueCurrentFOC positionTorqueFOCRequest = new PositionTorqueCurrentFOC(0);
-  
+  private final CANcoder pivotCANcoder = new CANcoder(Constants.CANInfo.PIVOT_CANCODER_ID,
+      new CANBus(Constants.CANInfo.CANBUS_NAME));
+
+  // private final PositionTorqueCurrentFOC positionTorqueFOCRequest = new
+  // PositionTorqueCurrentFOC(0);
+  private final DynamicMotionMagicVoltage pivotMotionProfileRequest = new DynamicMotionMagicVoltage(0, 0.5, 0, 0);
+
+  private final double angleFalconJerk = 15;
+  private final double angleFalconAcceleration = 3;
+  private final double angleFalconCruiseVelocity = 0.75;
+
+  private final double angleFalconProfileScalarFactor = 1;
+
   public Pivot() {
   }
 
   public void init() {
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
     TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
-    pivotConfig.Slot0.kP = 1.0;
+    pivotConfig.Slot0.kP = 550.0;
     pivotConfig.Slot0.kI = 0.0;
     pivotConfig.Slot0.kD = 0.0;
-
+    pivotConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
+    pivotConfig.Slot0.kG = 0.0;
+    pivotConfig.MotionMagic.MotionMagicJerk = this.angleFalconJerk;
+    pivotConfig.MotionMagic.MotionMagicAcceleration = this.angleFalconAcceleration;
+    pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.angleFalconCruiseVelocity;
     pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     pivotConfig.CurrentLimits.StatorCurrentLimit = 60;
     pivotConfig.CurrentLimits.SupplyCurrentLimit = 60;
+    pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
+    pivotConfig.Feedback.SensorToMechanismRatio = 1.0;
+    pivotConfig.Feedback.RotorToSensorRatio = Constants.Ratios.PIVOT_GEAR_RATIO;
 
     pivotMotor.getConfigurator().apply(pivotConfig);
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
     pivotMotor.setPosition(0.0);
   }
 
-  public void pivotToPosition(double rotations) {
-    pivotMotor.setControl(positionTorqueFOCRequest.withPosition(Constants.Ratios.pivotOutRotationsToRotationsIn(rotations)));
+  public void pivotToPosition(Constants.SetPoints.PivotPosition pivotPosition) {
+    Logger.recordOutput("Pivot Setpoint", (pivotPosition.rotations));
+    // pivotMotor
+    // .setControl(positionTorqueFOCRequest
+    // .withPosition((pivotPosition.rotations)));
+    pivotMotor.setControl(this.pivotMotionProfileRequest
+        .withPosition(pivotPosition.rotations)
+        .withAcceleration(this.angleFalconAcceleration * angleFalconProfileScalarFactor)
+        .withJerk(
+            this.angleFalconJerk * angleFalconProfileScalarFactor));
   }
 
-  public double getpivotPosition() {
-    return Constants.Ratios.pivotInRotationsToRotationsOut(pivotMotor.getPosition().getValueAsDouble());
+  public double getPivotPosition() {
+    return (pivotMotor.getPosition().getValueAsDouble());
   }
 
   public void setpivotEncoderPosition(double position) {
@@ -108,13 +142,18 @@ public class Pivot extends SubsystemBase {
 
   @Override
   public void periodic() {
+    Logger.recordOutput("Pivot Position", getPivotPosition());
+    Logger.recordOutput("Pivot Output", pivotMotor.getClosedLoopOutput().getValueAsDouble());
     systemState = handleStateTransition();
     switch (systemState) {
       case DEFAULT:
-        pivotToPosition(0.0);
+        setPivotPercent(0.0);
+        break;
+      case L1:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kUP);
         break;
       default:
-        pivotToPosition(0.0);
+        setPivotPercent(0.0);
         break;
     }
     // This method will be called once per scheduler run
