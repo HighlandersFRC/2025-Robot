@@ -26,6 +26,8 @@ import frc.robot.commands.MoveToPoint;
 import frc.robot.commands.PolarAutoFollower;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunOutake;
+import frc.robot.commands.SetClimberPivotTorque;
+import frc.robot.commands.SetClimberRollerTorque;
 import frc.robot.commands.SetElevatorPercent;
 import frc.robot.commands.SetElevatorState;
 import frc.robot.commands.SetIntake;
@@ -37,6 +39,7 @@ import frc.robot.commands.SetRobotStateSimple;
 import frc.robot.commands.SetTwistPercent;
 import frc.robot.commands.SetTwistState;
 import frc.robot.commands.ZeroAngleMidMatch;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -70,6 +73,7 @@ public class RobotContainer {
   Lights lights = new Lights();
   Pivot pivot = new Pivot();
   Twist twist = new Twist();
+  Climber climber = new Climber();
   Superstructure superstructure = new Superstructure(drive, elevator, intake, pivot, twist);
 
   HashMap<String, Supplier<Command>> commandMap = new HashMap<String, Supplier<Command>>() {
@@ -173,21 +177,24 @@ public class RobotContainer {
     // OI.driverB.whileTrue(new SetRobotState(superstructure,
     // SuperState.ELEVATOR_UP)); // elevator
     // OI.driverY.whileTrue(new SetElevatorPercent(elevator, 0.3));
-    OI.driverA.whileTrue(new SetElevatorPercent(elevator, -0.3));
+    // OI.driverA.whileTrue(new SetElevatorPercent(elevator, -0.3));
 
-    OI.driverX.whileTrue(new SetRobotState(superstructure, SuperState.L1_PLACE));
+    // OI.driverX.whileTrue(new SetRobotState(superstructure, SuperState.L1_PLACE));
     // OI.driverB.whileTrue(new SetPivotState(pivot, PivotState.GROUND_CORAL));
 
     // OI.driverX.whileTrue(new SetPivotPercent(pivot, 0.3));
-    OI.driverB.whileTrue(new SetPivotPercent(pivot, -0.3));
+    // OI.driverB.whileTrue(new SetPivotPercent(pivot, -0.3));
 
-    OI.driverRB.whileTrue(new SetTwistState(twist, TwistState.UP));
-    OI.driverLB.whileTrue(new SetTwistState(twist, TwistState.SIDE));
+    // OI.driverRB.whileTrue(new SetTwistState(twist, TwistState.UP));
+    // OI.driverLB.whileTrue(new SetTwistState(twist, TwistState.SIDE));
 
     // OI.driverRB.whileTrue(new SetTwistPercent(twist, 0.3));
     // OI.driverLB.whileTrue(new SetTwistPercent(twist, -0.3));
-    
-    OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.L2_PLACE));
+    OI.driverY.whileTrue(new SetClimberPivotTorque(climber, 40, 0.4));
+    OI.driverA.whileTrue(new SetClimberPivotTorque(climber, -40, 0.4));
+    OI.driverRB.whileTrue(new SetClimberRollerTorque(climber, 20, 0.3));
+    OI.driverLB.whileTrue(new SetClimberRollerTorque(climber, -20, 0.3));
+    // OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.L2_PLACE));
     // OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.L3_PLACE));
     // OI.driverRB.whileTrue(new MoveToPoint(drive, 1, 1, Math.PI / 2, false));
     // OI.driverLB.whileTrue(new MoveToPiece(drive, peripherals, intake));

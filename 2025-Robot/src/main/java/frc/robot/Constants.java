@@ -530,6 +530,10 @@ public final class Constants {
 
     // Intake
     public static final int INTAKE_MOTOR_ID = 13;
+
+    // Climber
+    public static final int CLIMBER_ROLLER_MOTOR_ID = 14;
+    public static final int CLIMBER_PIVOT_MOTOR_ID = 15;
   }
 
   // Misc. controller values
