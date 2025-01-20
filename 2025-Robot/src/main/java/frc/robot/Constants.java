@@ -472,7 +472,7 @@ public final class Constants {
   public static final class Ratios {
 
     // twist
-    public static final double TWIST_GEAR_RATIO = 100;
+    public static final double TWIST_GEAR_RATIO = 33.75;
 
     // pivot
     public static final double PIVOT_GEAR_RATIO = 91.4285714;
