@@ -184,8 +184,9 @@ public class RobotContainer {
     OI.driverRB.whileTrue(new SetTwistState(twist, TwistState.UP));
     OI.driverLB.whileTrue(new SetTwistState(twist, TwistState.SIDE));
 
-    OI.driverRB.whileTrue(new SetTwistPercent(twist, 0.3));
-    OI.driverLB.whileTrue(new SetTwistPercent(twist, -0.3));
+    // OI.driverRB.whileTrue(new SetTwistPercent(twist, 0.3));
+    // OI.driverLB.whileTrue(new SetTwistPercent(twist, -0.3));
+    
     OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.L2_PLACE));
     // OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.L3_PLACE));
     // OI.driverRB.whileTrue(new MoveToPoint(drive, 1, 1, Math.PI / 2, false));

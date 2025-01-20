@@ -4,10 +4,13 @@
 
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,7 +27,7 @@ public class Twist extends SubsystemBase {
 
   public void init() {
     TalonFXConfiguration twistConfig = new TalonFXConfiguration();
-    twistConfig.Slot0.kP = 1.0;
+    twistConfig.Slot0.kP = 10.0;
     twistConfig.Slot0.kI = 0.0;
     twistConfig.Slot0.kD = 0.0;
 
@@ -32,6 +35,7 @@ public class Twist extends SubsystemBase {
     twistConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     twistConfig.CurrentLimits.StatorCurrentLimit = 60;
     twistConfig.CurrentLimits.SupplyCurrentLimit = 60;
+    twistConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
 
     twistMotor.getConfigurator().apply(twistConfig);
     twistMotor.setNeutralMode(NeutralModeValue.Brake);
@@ -39,7 +43,7 @@ public class Twist extends SubsystemBase {
   }
 
   public void twistToPosition(double rotations) {
-    twistMotor.setControl(positionTorqueFOCRequest.withPosition(Constants.Ratios.twistOutRotationsToRotationsIn(rotations)));
+    twistMotor.setControl(positionTorqueFOCRequest.withPosition(rotations*Constants.Ratios.TWIST_GEAR_RATIO));
   }
 
   public void setTwistPercent(double percent) {
@@ -47,7 +51,7 @@ public class Twist extends SubsystemBase {
   }
 
   public double getTwistPosition() {
-    return Constants.Ratios.twistInRotationsToRotationsOut(twistMotor.getPosition().getValueAsDouble());
+    return twistMotor.getPosition().getValueAsDouble()/Constants.Ratios.TWIST_GEAR_RATIO;
   }
 
   public void setTwistEncoderPosition(double position) {
@@ -84,6 +88,8 @@ public class Twist extends SubsystemBase {
   @Override
   public void periodic() {
     systemState = handleStateTransition();
+    Logger.recordOutput("Twist Position Rotations", getTwistPosition());
+    Logger.recordOutput("Twist Error", twistMotor.getClosedLoopError().getValueAsDouble());
     switch (systemState) {
       case UP:
       twistToPosition(0.0);
@@ -92,7 +98,7 @@ public class Twist extends SubsystemBase {
       twistToPosition(0.25);
       break;
       case DOWN:
-      twistToPosition(0.5);
+      // twistToPosition(0.5);
       break;
       default:
       twistToPosition(0.0);
