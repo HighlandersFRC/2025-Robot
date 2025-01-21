@@ -36,6 +36,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.drive.init(m_fieldSide);
     m_robotContainer.elevator.init();
     m_robotContainer.pivot.init();
+    m_robotContainer.twist.init();
     motortest.init();
     Constants.init();
 
