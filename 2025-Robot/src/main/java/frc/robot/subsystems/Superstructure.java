@@ -381,11 +381,11 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleGroundAlgaePickupState() {
-    drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.GROUND_INTAKE);
-    intake.setWantedState(IntakeState.ALGAE_INTAKE);
+    // drive.setWantedState(DriveState.DEFAULT);
+    // elevator.setWantedState(ElevatorState.GROUND_INTAKE);
+    // intake.setWantedState(IntakeState.ALGAE_INTAKE);
     pivot.setWantedState(PivotState.GROUND_ALGAE);
-    twist.setWantedState(TwistState.UP);
+    // twist.setWantedState(TwistState.UP);
   }
 
   public void handleL2AlgaePickupState() {

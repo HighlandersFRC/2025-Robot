@@ -30,13 +30,17 @@ public class Pivot extends SubsystemBase {
 
   // private final PositionTorqueCurrentFOC positionTorqueFOCRequest = new
   // PositionTorqueCurrentFOC(0);
-  private final DynamicMotionMagicVoltage pivotMotionProfileRequest = new DynamicMotionMagicVoltage(0, 0.5, 0, 0);
 
-  private final double angleFalconJerk = 15;
-  private final double angleFalconAcceleration = 3;
-  private final double angleFalconCruiseVelocity = 0.75;
+  private final double pivotJerk = 13.0;
+  private final double pivotAcceleration = 4.0;
+  private final double pivotCruiseVelocity = 2.0;
 
-  private final double angleFalconProfileScalarFactor = 1;
+  private final double pivotProfileScalarFactor = 1;
+
+  private final DynamicMotionMagicVoltage pivotMotionProfileRequest = new DynamicMotionMagicVoltage(0,
+      pivotCruiseVelocity,
+      pivotAcceleration,
+      pivotJerk);
 
   public Pivot() {
   }
@@ -44,14 +48,14 @@ public class Pivot extends SubsystemBase {
   public void init() {
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
     TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
-    pivotConfig.Slot0.kP = 550.0;
+    pivotConfig.Slot0.kP = 450.0;
     pivotConfig.Slot0.kI = 0.0;
     pivotConfig.Slot0.kD = 0.0;
     pivotConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
     pivotConfig.Slot0.kG = 0.0;
-    pivotConfig.MotionMagic.MotionMagicJerk = this.angleFalconJerk;
-    pivotConfig.MotionMagic.MotionMagicAcceleration = this.angleFalconAcceleration;
-    pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.angleFalconCruiseVelocity;
+    pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerk;
+    pivotConfig.MotionMagic.MotionMagicAcceleration = this.pivotAcceleration;
+    pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocity;
     pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     pivotConfig.CurrentLimits.StatorCurrentLimit = 60;
@@ -73,9 +77,9 @@ public class Pivot extends SubsystemBase {
     // .withPosition((pivotPosition.rotations)));
     pivotMotor.setControl(this.pivotMotionProfileRequest
         .withPosition(pivotPosition.rotations)
-        .withAcceleration(this.angleFalconAcceleration * angleFalconProfileScalarFactor)
+        .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
         .withJerk(
-            this.angleFalconJerk * angleFalconProfileScalarFactor));
+            this.pivotJerk * pivotProfileScalarFactor));
   }
 
   public double getPivotPosition() {
@@ -151,6 +155,9 @@ public class Pivot extends SubsystemBase {
         break;
       case L1:
         pivotToPosition(Constants.SetPoints.PivotPosition.kUP);
+        break;
+      case GROUND_ALGAE:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE);
         break;
       default:
         setPivotPercent(0.0);

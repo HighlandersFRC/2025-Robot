@@ -310,10 +310,12 @@ public final class Constants {
 
     public static final double PIVOT_L23_POSITION_D = 0.0;
     public static final double PIVOT_UPRIGHT_POSITION_D = 45.0;
+    public static final double PIVOT_GROUNDALGAE_POSITION_D = -100.0;
 
     public enum PivotPosition {
       kL23(PIVOT_L23_POSITION_D, Constants.degreesToRotations(PIVOT_L23_POSITION_D)),
-      kUP(PIVOT_UPRIGHT_POSITION_D, Constants.degreesToRotations(PIVOT_UPRIGHT_POSITION_D));
+      kUP(PIVOT_UPRIGHT_POSITION_D, Constants.degreesToRotations(PIVOT_UPRIGHT_POSITION_D)),
+      kGROUNDALGAE(PIVOT_GROUNDALGAE_POSITION_D, Constants.degreesToRotations(PIVOT_GROUNDALGAE_POSITION_D));
 
       public final double degrees;
       public final double rotations;
