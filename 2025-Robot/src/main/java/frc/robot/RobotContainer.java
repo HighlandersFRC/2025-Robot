@@ -168,7 +168,8 @@ public class RobotContainer {
     // placement sequence for L3
     // OI.driverLT.whileTrue(new IntakeAlgae(intake, superstructure)); // outake
     // OI.driverRT.whileTrue(new RunIntake(intake, superstructure)); // intake
-    OI.driverRT.whileTrue(new SetIntake(intake, 0.3));
+    // OI.driverRT.whileTrue(new SetIntake(intake, 0.3));
+    OI.driverRT.whileTrue(new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP));
     OI.driverLT.whileTrue(new SetIntake(intake, -0.3));
     // OI.driverRT.whileTrue(new SetRobotState(superstructure, SuperState.CYCLING));
     // OI.driverX.whileTrue(new SetRobotState(superstructure,
@@ -179,18 +180,20 @@ public class RobotContainer {
     // OI.driverY.whileTrue(new SetElevatorPercent(elevator, 0.3));
     OI.driverA.whileTrue(new SetElevatorPercent(elevator, 0.3));
 
-    OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.L1_PLACE));
+    OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.L3_PLACE));
+    OI.driverX.whileTrue(new SetRobotState(superstructure, SuperState.FEEDER));
     // OI.driverB.whileTrue(new SetPivotState(pivot, PivotState.GROUND_CORAL));
 
-    OI.driverX.whileTrue(new SetPivotPercent(pivot, 0.3));
-    OI.driverB.whileTrue(new SetPivotPercent(pivot, -0.3));
-    OI.driverRB.whileTrue(new SetRobotState(superstructure, SuperState.GROUND_ALGAE_PICKUP));
+    // OI.driverX.whileTrue(new SetPivotPercent(pivot, 0.3));
+    // OI.driverB.whileTrue(new SetPivotPercent(pivot, -0.3));
+    // OI.driverRB.whileTrue(new SetRobotState(superstructure,
+    // SuperState.GROUND_ALGAE_PICKUP));
 
     // OI.driverRB.whileTrue(new SetTwistState(twist, TwistState.UP));
     // OI.driverLB.whileTrue(new SetTwistState(twist, TwistState.SIDE));
 
-    // OI.driverRB.whileTrue(new SetTwistPercent(twist, 0.3));
-    // OI.driverLB.whileTrue(new SetTwistPercent(twist, -0.3));
+    OI.driverRB.whileTrue(new SetTwistPercent(twist, 0.3));
+    OI.driverLB.whileTrue(new SetTwistPercent(twist, -0.3));
     // OI.driverY.whileTrue(new SetClimberPivotTorque(climber, 60, 0.2));
     // OI.driverA.whileTrue(new SetClimberPivotTorque(climber, -60, 0.2));
     // OI.driverB.whileTrue(new SetClimberPivotTorque(climber, 20, 0.15));

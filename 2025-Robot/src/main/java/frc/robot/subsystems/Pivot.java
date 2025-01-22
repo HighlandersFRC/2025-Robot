@@ -151,12 +151,15 @@ public class Pivot extends SubsystemBase {
     systemState = handleStateTransition();
     switch (systemState) {
       case DEFAULT:
-        setPivotPercent(0.0);
+        pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT);
         break;
       case L1:
         pivotToPosition(Constants.SetPoints.PivotPosition.kUP);
         break;
       case GROUND_ALGAE:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE);
+        break;
+      case GROUND_CORAL:
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE);
         break;
       default:

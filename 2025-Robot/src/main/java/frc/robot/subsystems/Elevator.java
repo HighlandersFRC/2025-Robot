@@ -149,14 +149,27 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput("2 position",
         elevatorMotorFollower.getPosition().getValueAsDouble());
     switch (systemState) {
-      case DEFAULT:
-        moveWithPercent(0.0);
+      case GROUND_INTAKE:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kGROUNDPICKUP);
         break;
       case L2:
+        firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kL2);
         break;
       default:
-        moveWithPercent(0.0);
+        if (firstTimeIdle) {
+          idleTime = Timer.getFPGATimestamp();
+          firstTimeIdle = false;
+        }
+        if (Math
+            .abs(Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
+            && Timer.getFPGATimestamp() - idleTime > 0.1) {
+          moveWithPercent(0.0);
+          setElevatorEncoderPosition(0.0);
+        } else {
+          moveWithTorque(-25, 0.6);
+        }
         break;
     }
   }

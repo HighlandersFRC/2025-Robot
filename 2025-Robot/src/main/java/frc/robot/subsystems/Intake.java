@@ -90,9 +90,9 @@ public class Intake extends SubsystemBase {
     switch (systemState) {
       case CORAL_INTAKE:
         if (hasCoral()) {
-          setIntakeTorque(-10, 0.2);
+          setIntakeTorque(10, 0.2);
         } else {
-          setIntakePercent(-0.7);
+          setIntakePercent(0.7);
         }
         break;
       case ALGAE_INTAKE:

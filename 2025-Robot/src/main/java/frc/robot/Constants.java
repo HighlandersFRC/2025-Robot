@@ -290,6 +290,7 @@ public final class Constants {
     public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(40);
     public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(30);
     public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8);
+    public static final double ELEVATOR_GROUND_PICKUP_POSITION_M = inchesToMeters(9.0);
 
     public enum ElevatorPosition {
       kDOWN(ELEVATOR_BOTTOM_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_BOTTOM_POSITION_M)),
@@ -297,7 +298,9 @@ public final class Constants {
       kUP(ELEVATOR_TOP_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_TOP_POSITION_M)),
       kL2(ELEVATOR_L2_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_L2_POSITION_M)),
       kL3(ELEVATOR_L3_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_L3_POSITION_M)),
-      kALGAE(ELEVATOR_ALGAE_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_ALGAE_POSITION_M));
+      kALGAE(ELEVATOR_ALGAE_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_ALGAE_POSITION_M)),
+      kGROUNDPICKUP(ELEVATOR_GROUND_PICKUP_POSITION_M,
+          Ratios.elevatorMetersToRotations(ELEVATOR_GROUND_PICKUP_POSITION_M));
 
       public final double meters;
       public final double rotations;
@@ -310,12 +313,14 @@ public final class Constants {
 
     public static final double PIVOT_L23_POSITION_D = 0.0;
     public static final double PIVOT_UPRIGHT_POSITION_D = 45.0;
-    public static final double PIVOT_GROUNDALGAE_POSITION_D = -100.0;
+    public static final double PIVOT_GROUNDALGAE_POSITION_D = 135.0;
+    public static final double PIVOT_DEFAULT_POSITION_D = 30.0;
 
     public enum PivotPosition {
       kL23(PIVOT_L23_POSITION_D, Constants.degreesToRotations(PIVOT_L23_POSITION_D)),
       kUP(PIVOT_UPRIGHT_POSITION_D, Constants.degreesToRotations(PIVOT_UPRIGHT_POSITION_D)),
-      kGROUNDALGAE(PIVOT_GROUNDALGAE_POSITION_D, Constants.degreesToRotations(PIVOT_GROUNDALGAE_POSITION_D));
+      kGROUNDALGAE(PIVOT_GROUNDALGAE_POSITION_D, Constants.degreesToRotations(PIVOT_GROUNDALGAE_POSITION_D)),
+      kDEFAULT(PIVOT_DEFAULT_POSITION_D, Constants.degreesToRotations(PIVOT_DEFAULT_POSITION_D));
 
       public final double degrees;
       public final double rotations;

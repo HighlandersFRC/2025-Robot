@@ -281,7 +281,7 @@ public class Superstructure extends SubsystemBase {
     elevator.setWantedState(ElevatorState.DEFAULT);
     intake.setWantedState(IntakeState.DEFAULT);
     pivot.setWantedState(PivotState.DEFAULT);
-    twist.setWantedState(TwistState.DOWN);
+    twist.setWantedState(TwistState.UP);
   }
 
   public void handleAutoL1PlaceState() {
@@ -333,10 +333,10 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleL3PlaceState() {
-    drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.L3);
-    intake.setWantedState(IntakeState.DEFAULT);
-    pivot.setWantedState(PivotState.L23);
+    // drive.setWantedState(DriveState.DEFAULT);
+    // elevator.setWantedState(ElevatorState.L3);
+    // intake.setWantedState(IntakeState.DEFAULT);
+    // pivot.setWantedState(PivotState.L23);
     twist.setWantedState(TwistState.SIDE);
   }
 
@@ -365,10 +365,10 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleFeederState() {
-    drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
-    intake.setWantedState(IntakeState.CORAL_INTAKE);
-    pivot.setWantedState(PivotState.FEEDER);
+    // drive.setWantedState(DriveState.DEFAULT);
+    // elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
+    // intake.setWantedState(IntakeState.CORAL_INTAKE);
+    // pivot.setWantedState(PivotState.FEEDER);
     twist.setWantedState(TwistState.DOWN);
   }
 
@@ -377,7 +377,7 @@ public class Superstructure extends SubsystemBase {
     elevator.setWantedState(ElevatorState.GROUND_INTAKE);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
     pivot.setWantedState(PivotState.GROUND_CORAL);
-    twist.setWantedState(TwistState.DOWN);
+    twist.setWantedState(TwistState.UP);
   }
 
   public void handleGroundAlgaePickupState() {
