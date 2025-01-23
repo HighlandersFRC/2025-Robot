@@ -83,7 +83,7 @@ public class Twist extends SubsystemBase {
     // twistMotor.setControl(positionTorqueFOCRequest.withPosition(rotations *
     // Constants.Ratios.TWIST_GEAR_RATIO));
     twistMotor.setControl(this.twistTorqueCurrentFOC
-        .withPosition(rotations * Constants.Ratios.TWIST_GEAR_RATIO).withEnableFOC(true));
+        .withPosition(-rotations * Constants.Ratios.TWIST_GEAR_RATIO).withEnableFOC(true));
   }
 
   public void setTwistPercent(double percent) {
@@ -147,7 +147,7 @@ public class Twist extends SubsystemBase {
           setTwistPercent(0.0);
           setTwistEncoderPosition(0.0);
         } else {
-          setTwistTorque(-20, 0.2);
+          setTwistTorque(20, 0.2);
         }
         break;
       case SIDE:

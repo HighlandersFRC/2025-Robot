@@ -31,9 +31,9 @@ public class Pivot extends SubsystemBase {
   // private final PositionTorqueCurrentFOC positionTorqueFOCRequest = new
   // PositionTorqueCurrentFOC(0);
 
-  private final double pivotJerk = 13.0;
-  private final double pivotAcceleration = 4.0;
-  private final double pivotCruiseVelocity = 2.0;
+  private final double pivotJerk = 0.0;
+  private final double pivotAcceleration = 7.0;
+  private final double pivotCruiseVelocity = 7.0;
 
   private final double pivotProfileScalarFactor = 1;
 
@@ -48,11 +48,9 @@ public class Pivot extends SubsystemBase {
   public void init() {
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
     TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
-    pivotConfig.Slot0.kP = 450.0;
+    pivotConfig.Slot0.kP = 150.0;
     pivotConfig.Slot0.kI = 0.0;
-    pivotConfig.Slot0.kD = 0.0;
-    pivotConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-    pivotConfig.Slot0.kG = 0.0;
+    pivotConfig.Slot0.kD = 10.0;
     pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerk;
     pivotConfig.MotionMagic.MotionMagicAcceleration = this.pivotAcceleration;
     pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocity;
@@ -160,7 +158,7 @@ public class Pivot extends SubsystemBase {
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE);
         break;
       case GROUND_CORAL:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE);
+        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORAL);
         break;
       default:
         setPivotPercent(0.0);

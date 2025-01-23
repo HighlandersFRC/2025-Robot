@@ -278,7 +278,9 @@ public class Superstructure extends SubsystemBase {
 
   public void handleDefaultState() {
     drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.DEFAULT);
+    if(Math.abs(pivot.getPivotPosition()) < 0.3) {
+      elevator.setWantedState(ElevatorState.DEFAULT);
+    }
     intake.setWantedState(IntakeState.DEFAULT);
     pivot.setWantedState(PivotState.DEFAULT);
     twist.setWantedState(TwistState.UP);
