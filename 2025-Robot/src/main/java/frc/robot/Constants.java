@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.tools.math.Vector;
@@ -389,6 +390,7 @@ public final class Constants {
     public static final double ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE = 3;
     public static final double TAG_STANDARD_DEVIATION_DISTANCE = 2; // meters
     public static final double TAG_STANDARD_DEVIATION_FLATNESS = 5;
+    // public static final double XY_STD_DEV_SCALAR = 0.1;
 
     // Standard deviation regressions
     /**
@@ -398,9 +400,12 @@ public final class Constants {
      * @return The standard deviation scalar.
      */
     public static double getTagDistStdDevScalar(double dist) {
-      double a = TAG_STANDARD_DEVIATION_FLATNESS;
-      double b = 1 - a * Math.pow(TAG_STANDARD_DEVIATION_DISTANCE, 2);
-      return Math.max(1, a * Math.pow(dist, 2) + b);
+      // double a = TAG_STANDARD_DEVIATION_FLATNESS;
+      // double b = 1 - a * Math.pow(TAG_STANDARD_DEVIATION_DISTANCE, 2);
+      Logger.recordOutput("std devs",
+          -0.000277778 * Math.pow(dist, 3) + 0.00988095 * Math.pow(dist, 2) + 0.00444444 * dist + 0.0371429);
+      // return Math.max(1, a * Math.pow(dist, 2) + b);
+      return -0.000277778 * Math.pow(dist, 3) + 0.00988095 * Math.pow(dist, 2) + 0.00444444 * dist + 0.0371429;
     }
 
     /**
@@ -472,6 +477,10 @@ public final class Constants {
     public static double getTriStdDevY(double xOffset, double yOffset) {
       return Math.max(0, 0.002615358015002413 * (xOffset * xOffset + yOffset * yOffset) - 0.008955462032388808)
           * STANDARD_DEVIATION_SCALAR;
+    }
+
+    public static double distBetweenPose(Pose3d pose1, Pose3d pose2) {
+      return (Math.sqrt(Math.pow(pose1.getX() - pose2.getX(), 2) + Math.pow(pose1.getY() - pose2.getY(), 2)));
     }
   }
 

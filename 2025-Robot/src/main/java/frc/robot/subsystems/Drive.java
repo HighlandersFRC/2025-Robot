@@ -1,20 +1,35 @@
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -153,6 +168,13 @@ public class Drive extends SubsystemBase {
   SwerveDrivePoseEstimator mt2Odometry;
   Pose2d mt2Pose;
 
+  PhotonPoseEstimator photonPoseEstimator;
+  AprilTagFieldLayout aprilTagFieldLayout;
+
+  Transform3d robotToCam = new Transform3d(
+      new Translation3d(Constants.inchesToMeters(1.75), Constants.inchesToMeters(11.625),
+          Constants.inchesToMeters(33.5)),
+      new Rotation3d(0, Math.toRadians(30.6), 0));
   double initAngle;
   double setAngle;
   double diffAngle;
@@ -273,6 +295,15 @@ public class Drive extends SubsystemBase {
   public void init(String fieldSide) {
     // sets configurations when run on robot initalization
     this.m_fieldSide = fieldSide;
+
+    try {
+      aprilTagFieldLayout = new AprilTagFieldLayout(
+          Filesystem.getDeployDirectory().getPath() + "/" + "2025-reefscape.json");
+    } catch (Exception e) {
+      System.out.println("error with april tag: " + e.getMessage());
+    }
+    photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
 
     frontRight.init();
     frontLeft.init();
@@ -524,7 +555,7 @@ public class Drive extends SubsystemBase {
     m_currentX = getOdometryX();
     m_currentY = getOdometryY();
     m_currentTheta = navxOffset;
-    Pose2d defaultPose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
+    // Pose2d defaultPose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
 
     // Pose2d frontCamTrigPose = peripherals.getFrontCamTrigPose(); //TODO:
     // uncomment when using camera
@@ -534,12 +565,39 @@ public class Drive extends SubsystemBase {
     // peripherals.getFrontCamLatency());
     // }
 
-    Pose2d frontCamPnPPose = peripherals.getFrontCamPnPPose().toPose2d();
-    if (isPoseInField(frontCamPnPPose) && !frontCamPnPPose.equals(defaultPose)) {
-      // peripherals.setPigeonAngle(frontCamPnPPose.getRotation().getRadians());
-      mt2Odometry.addVisionMeasurement(frontCamPnPPose,
-          peripherals.getFrontCamLatency());
+    // Pose2d frontCamPnPPose = peripherals.getFrontCamPnPPose().toPose2d();
+    Matrix<N3, N1> standardDeviation = new Matrix<>(Nat.N3(), Nat.N1());
+
+    var result = peripherals.getFrontCamResult();
+    Optional<EstimatedRobotPose> multiTagResult = photonPoseEstimator.update(result);
+    if (multiTagResult.isPresent()) {
+      if (result.getBestTarget().getPoseAmbiguity() < 0.3) {
+        Pose3d robotPose = multiTagResult.get().estimatedPose;
+        Logger.recordOutput("multitag result", robotPose);
+        int numFrontTracks = result.getTargets().size();
+        Pose3d tagPose = aprilTagFieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get();
+        double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+        Logger.recordOutput("Distance to tag", distToTag);
+        standardDeviation.set(0, 0,
+            Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        standardDeviation.set(1, 0,
+            Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        standardDeviation.set(2, 0, 0.1);
+        mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+            result.getTimestampSeconds(), standardDeviation);
+      }
     }
+    // if (isPoseInField(frontCamPnPPose) && !frontCamPnPPose.equals(defaultPose)) {
+    // // peripherals.setPigeonAngle(frontCamPnPPose.getRotation().getRadians());
+    // mt2Odometry.addVisionMeasurement(frontCamPnPPose,
+    // peripherals.getFrontCamLatency());
+    // }
 
     m_currentTime = Timer.getFPGATimestamp() - m_initTime;
 
