@@ -4,6 +4,8 @@ import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DynamicMotionMagicTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -22,9 +24,17 @@ public class Elevator extends SubsystemBase {
   private final TalonFX elevatorMotorFollower = new TalonFX(Constants.CANInfo.FOLLOWER_ELEVATOR_MOTOR_ID,
       new CANBus(Constants.CANInfo.CANBUS_NAME));
 
-  private final PositionTorqueCurrentFOC positionTorqueFOCRequest = new PositionTorqueCurrentFOC(0);
+  private final PositionTorqueCurrentFOC positionTorqueFOCRequest = new PositionTorqueCurrentFOC(0).withFeedForward(0).withVelocity(0);
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
+  private final double elevatorAcceleration = 100.0;
+  private final double elevatorCruiseVelocity = 50.0;
+  private final double elevatorFeedForward = 10.0;
+  private final double elevatorProfileScalarFactor = 1;
 
+  private final DynamicMotionMagicTorqueCurrentFOC elevatorMotionProfileRequest = new DynamicMotionMagicTorqueCurrentFOC(0,
+      elevatorCruiseVelocity,
+      elevatorAcceleration,
+      0.0);
   public enum ElevatorState {
     DEFAULT,
     L1,
@@ -55,12 +65,13 @@ public class Elevator extends SubsystemBase {
 
   public void init() {
     TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
-    elevatorConfig.Slot0.kP = 3.5;
+    elevatorConfig.Slot0.kP = 30.0;
     elevatorConfig.Slot0.kI = 0.0;
-    elevatorConfig.Slot0.kD = 0.4;
-    elevatorConfig.Slot0.kG = 0.5;
+    elevatorConfig.Slot0.kD = 0.0;
+    elevatorConfig.Slot0.kG = 13.0;
     elevatorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
-
+    elevatorConfig.MotionMagic.MotionMagicAcceleration = this.elevatorAcceleration;
+    elevatorConfig.MotionMagic.MotionMagicCruiseVelocity = this.elevatorCruiseVelocity;
     elevatorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     elevatorConfig.CurrentLimits.StatorCurrentLimit = 60;
@@ -88,11 +99,13 @@ public class Elevator extends SubsystemBase {
   }
 
   public void moveElevatorToPosition(Constants.SetPoints.ElevatorPosition position) {
-    elevatorMotorMaster
-        .setControl(positionTorqueFOCRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position.meters)));
-    elevatorMotorFollower
-        .setControl(
-            positionTorqueFOCRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position.meters)));
+    // elevatorMotorMaster
+    //     .setControl(positionTorqueFOCRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position.meters)));
+    // elevatorMotorFollower
+    //     .setControl(
+    //         positionTorqueFOCRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position.meters)));
+    elevatorMotorMaster.setControl(elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position.meters)).withVelocity(elevatorCruiseVelocity*elevatorProfileScalarFactor).withAcceleration(elevatorAcceleration*elevatorProfileScalarFactor));
+    elevatorMotorFollower.setControl(elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position.meters)).withVelocity(elevatorCruiseVelocity*elevatorProfileScalarFactor).withAcceleration(elevatorAcceleration*elevatorProfileScalarFactor));
   }
 
   public double getElevatorPosition() {
@@ -144,10 +157,7 @@ public class Elevator extends SubsystemBase {
     systemState = handleStateTransition();
 
     Logger.recordOutput("Elevator State", systemState);
-    Logger.recordOutput("1 position",
-        elevatorMotorMaster.getPosition().getValueAsDouble());
-    Logger.recordOutput("2 position",
-        elevatorMotorFollower.getPosition().getValueAsDouble());
+    Logger.recordOutput("Elevator Height", getElevatorPosition()*39.37);
     switch (systemState) {
       case GROUND_INTAKE:
         firstTimeIdle = true;
@@ -168,7 +178,7 @@ public class Elevator extends SubsystemBase {
           moveWithPercent(0.0);
           setElevatorEncoderPosition(0.0);
         } else {
-          moveWithTorque(-25, 0.6);
+          moveWithTorque(-20, 0.4);
         }
         break;
     }
