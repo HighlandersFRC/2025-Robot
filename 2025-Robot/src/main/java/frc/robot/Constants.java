@@ -407,7 +407,7 @@ public final class Constants {
       Logger.recordOutput("std devs",
           -0.000277778 * Math.pow(dist, 3) + 0.00988095 * Math.pow(dist, 2) + 0.00444444 * dist + 0.0371429);
       // return Math.max(1, a * Math.pow(dist, 2) + b);
-      return -0.000277778 * Math.pow(dist, 3) + 0.00988095 * Math.pow(dist, 2) + 0.00444444 * dist + 0.0371429;
+      return 0 * Math.pow(dist, 3) + 0.0109524 * Math.pow(dist, 2) - 0.00119048 * dist + 0.0728571;
     }
 
     /**

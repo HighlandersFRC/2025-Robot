@@ -578,19 +578,19 @@ public class Drive extends SubsystemBase {
         Pose3d tagPose = aprilTagFieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
         Logger.recordOutput("Distance to tag", distToTag);
-        standardDeviation.set(0, 0,
-            Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                * Constants.Vision.getTagDistStdDevScalar(distToTag));
-        // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-        // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-        standardDeviation.set(1, 0,
-            Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                * Constants.Vision.getTagDistStdDevScalar(distToTag));
-        // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-        // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-        standardDeviation.set(2, 0, 0.1);
+        // standardDeviation.set(0, 0,
+        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        // standardDeviation.set(1, 0,
+        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        // standardDeviation.set(2, 0, 0.1);
         mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-            result.getTimestampSeconds(), standardDeviation);
+            result.getTimestampSeconds());
       }
     }
     // if (isPoseInField(frontCamPnPPose) && !frontCamPnPPose.equals(defaultPose)) {
