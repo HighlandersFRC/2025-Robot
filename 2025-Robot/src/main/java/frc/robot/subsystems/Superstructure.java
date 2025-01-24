@@ -327,11 +327,11 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleL2PlaceState() {
-    // drive.setWantedState(DriveState.DEFAULT);
+    drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L2);
-    // intake.setWantedState(IntakeState.DEFAULT);
-    // pivot.setWantedState(PivotState.L23);
-    // twist.setWantedState(TwistState.SIDE);
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.L23);
+    twist.setWantedState(TwistState.SIDE);
   }
 
   public void handleL3PlaceState() {

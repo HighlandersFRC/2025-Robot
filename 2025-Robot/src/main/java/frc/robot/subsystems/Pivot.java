@@ -147,23 +147,26 @@ public class Pivot extends SubsystemBase {
     Logger.recordOutput("Pivot Position", getPivotPosition());
     Logger.recordOutput("Pivot Output", pivotMotor.getClosedLoopOutput().getValueAsDouble());
     systemState = handleStateTransition();
-    switch (systemState) {
-      case DEFAULT:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT);
-        break;
-      case L1:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kUP);
-        break;
-      case GROUND_ALGAE:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE);
-        break;
-      case GROUND_CORAL:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORAL);
-        break;
-      default:
+    // switch (systemState) {
+    //   case DEFAULT:
+    //     pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT);
+    //     break;
+    //   case L1:
+    //     pivotToPosition(Constants.SetPoints.PivotPosition.kUP);
+    //     break;
+    //   case GROUND_ALGAE:
+    //     pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE);
+    //     break;
+    //   case GROUND_CORAL:
+    //     pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORAL);
+    //     break;
+    //   case L23:
+    //     pivotToPosition(Constants.SetPoints.PivotPosition.kL23);
+    //     break;
+    //   default:
         setPivotPercent(0.0);
-        break;
-    }
+        // break;
+    // }
     // This method will be called once per scheduler run
   }
 }

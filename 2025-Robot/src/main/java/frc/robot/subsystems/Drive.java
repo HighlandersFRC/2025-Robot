@@ -915,20 +915,20 @@ public class Drive extends SubsystemBase {
       turn = 0.0;
     }
 
-    if (turn == 0.0 && Timer.getFPGATimestamp() - teleopInitTime > 2.0) {
-      turningPID.setSetPoint(angleSetpoint);
-      double yaw = peripherals.getPigeonAngle();
-      while (Math.abs(angleSetpoint - yaw) > 180) {
-        if (angleSetpoint - yaw > 180) {
-          yaw += 360;
-        } else {
-          yaw -= 360;
-        }
-      }
-      double result = -1 * turningPID.updatePID(yaw);
-      Logger.recordOutput("result", result);
-      driveAutoAligned(result);
-    } else {
+    // if (turn == 0.0 && Timer.getFPGATimestamp() - teleopInitTime > 2.0) {
+    //   turningPID.setSetPoint(angleSetpoint);
+    //   double yaw = peripherals.getPigeonAngle();
+    //   while (Math.abs(angleSetpoint - yaw) > 180) {
+    //     if (angleSetpoint - yaw > 180) {
+    //       yaw += 360;
+    //     } else {
+    //       yaw -= 360;
+    //     }
+    //   }
+    //   double result = -1 * turningPID.updatePID(yaw);
+    //   Logger.recordOutput("result", result);
+    //   driveAutoAligned(result);
+    // } else {
       angleSetpoint = peripherals.getPigeonAngle();
       double compensation = peripherals.getPigeonAngularVelocityW() * 0.050;
       angleSetpoint += compensation;
@@ -946,7 +946,7 @@ public class Drive extends SubsystemBase {
       frontRight.drive(controllerVector, turn, pigeonAngle);
       backLeft.drive(controllerVector, turn, pigeonAngle);
       backRight.drive(controllerVector, turn, pigeonAngle);
-    }
+    // }
   }
 
   public void teleopDriveToPiece(double yToPiece) {
