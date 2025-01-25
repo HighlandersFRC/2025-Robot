@@ -165,7 +165,7 @@ public class Pivot extends SubsystemBase {
     //     break;
     //   default:
         setPivotPercent(0.0);
-        // break;
+    //     break;
     // }
     // This method will be called once per scheduler run
   }

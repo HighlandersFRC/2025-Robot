@@ -6,6 +6,7 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DynamicMotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
+import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -26,15 +27,12 @@ public class Elevator extends SubsystemBase {
 
   private final PositionTorqueCurrentFOC positionTorqueFOCRequest = new PositionTorqueCurrentFOC(0).withFeedForward(0).withVelocity(0);
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
-  private final double elevatorAcceleration = 100.0;
-  private final double elevatorCruiseVelocity = 50.0;
+  private final double elevatorAcceleration = 500.0;
+  private final double elevatorCruiseVelocity = 125.0;
   private final double elevatorFeedForward = 10.0;
   private final double elevatorProfileScalarFactor = 1;
 
-  private final DynamicMotionMagicTorqueCurrentFOC elevatorMotionProfileRequest = new DynamicMotionMagicTorqueCurrentFOC(0,
-      elevatorCruiseVelocity,
-      elevatorAcceleration,
-      0.0);
+  private final MotionMagicTorqueCurrentFOC elevatorMotionProfileRequest = new MotionMagicTorqueCurrentFOC(0);
   public enum ElevatorState {
     DEFAULT,
     L1,
@@ -65,11 +63,16 @@ public class Elevator extends SubsystemBase {
 
   public void init() {
     TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
-    elevatorConfig.Slot0.kP = 30.0;
+    elevatorConfig.Slot0.kP = 14.10;
     elevatorConfig.Slot0.kI = 0.0;
-    elevatorConfig.Slot0.kD = 0.0;
-    elevatorConfig.Slot0.kG = 13.0;
+    elevatorConfig.Slot0.kD = 1.6; // bomb squad finna get cooked by their own number
+    elevatorConfig.Slot0.kG = 1.6;
+    elevatorConfig.Slot1.kP = 44.99;
+    elevatorConfig.Slot1.kI = 0.0;
+    elevatorConfig.Slot1.kD = 3.937; // W breakaway
+    elevatorConfig.Slot1.kG = 3.937; 
     elevatorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
+    elevatorConfig.Slot1.GravityType = GravityTypeValue.Elevator_Static;
     elevatorConfig.MotionMagic.MotionMagicAcceleration = this.elevatorAcceleration;
     elevatorConfig.MotionMagic.MotionMagicCruiseVelocity = this.elevatorCruiseVelocity;
     elevatorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -104,8 +107,13 @@ public class Elevator extends SubsystemBase {
     // elevatorMotorFollower
     //     .setControl(
     //         positionTorqueFOCRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position.meters)));
-    elevatorMotorMaster.setControl(elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position.meters)).withVelocity(elevatorCruiseVelocity*elevatorProfileScalarFactor).withAcceleration(elevatorAcceleration*elevatorProfileScalarFactor));
-    elevatorMotorFollower.setControl(elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position.meters)).withVelocity(elevatorCruiseVelocity*elevatorProfileScalarFactor).withAcceleration(elevatorAcceleration*elevatorProfileScalarFactor));
+    if(position.meters < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
+      elevatorMotorMaster.setControl(elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position.meters)).withSlot(0));
+      elevatorMotorFollower.setControl(elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position.meters)).withSlot(0));
+    } else {
+      elevatorMotorMaster.setControl(elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position.meters)).withSlot(1));
+      elevatorMotorFollower.setControl(elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position.meters)).withSlot(1)); 
+    }
   }
 
   public double getElevatorPosition() {
