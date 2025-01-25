@@ -286,11 +286,11 @@ public final class Constants {
   // Subsystem setpoint constants
   public static final class SetPoints {
     public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
-    public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26); // L2 after placement
+    public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
     public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
     public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(40);
-    public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(55);
-    public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8);
+    public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(15.0);
+    public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8.0);
     public static final double ELEVATOR_GROUND_PICKUP_POSITION_M = inchesToMeters(6.0);
 
     public enum ElevatorPosition {
@@ -312,7 +312,7 @@ public final class Constants {
       }
     }
 
-    public static final double PIVOT_L23_POSITION_D = 45.0;
+    public static final double PIVOT_L23_POSITION_D = 55.0;
     public static final double PIVOT_UPRIGHT_POSITION_D = 45.0;
     public static final double PIVOT_GROUND_ALGAE_POSITION_D = 135.0;
     public static final double PIVOT_GROUND_CORAL_POSITION_D = 130.0;

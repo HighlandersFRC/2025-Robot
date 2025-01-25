@@ -1,19 +1,10 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.DynamicMotionMagicTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
-import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
-import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -25,27 +16,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Twist extends SubsystemBase {
-  /** Creates a new Twist. */
+
   private final TalonFX twistMotor = new TalonFX(Constants.CANInfo.TWIST_MOTOR_ID,
       new CANBus(Constants.CANInfo.CANBUS_NAME));
-  // private final PositionTorqueCurrentFOC positionTorqueFOCRequest = new
-  // PositionTorqueCurrentFOC(0);
 
   private final double twistJerk = 20.0;
-  private final double twistAcceleration = 20.0;
+  private final double twistAcceleration = 30.0;
   private final double twistCruiseVelocity = 100.0;
 
   private final double twistProfileScalarFactor = 3;
   private boolean startedZero = false;
   private double zeroInitTime = 0.0;
-
-  // private final DynamicMotionMagicTorqueCurrentFOC twistMotionProfileRequest =
-  // new DynamicMotionMagicTorqueCurrentFOC(0,
-  // twistCruiseVelocity,
-  // twistAcceleration,
-  // twistJerk);
-  // private final MotionMagicTorqueCurrentFOC twistMotionMagicTorqueCurrentFOC =
-  // new MotionMagicTorqueCurrentFOC(0.0);
 
   private final MotionMagicExpoVoltage twistTorqueCurrentFOC = new MotionMagicExpoVoltage(0.0);
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
@@ -55,7 +36,7 @@ public class Twist extends SubsystemBase {
 
   public void init() {
     TalonFXConfiguration twistConfig = new TalonFXConfiguration();
-    twistConfig.Slot0.kP = 70.0;
+    twistConfig.Slot0.kP = 90.0;
     twistConfig.Slot0.kI = 0.0;
     twistConfig.Slot0.kD = 0.0;
     twistConfig.Slot0.kS = 2.0;
@@ -80,8 +61,6 @@ public class Twist extends SubsystemBase {
 
   public void twistToPosition(double rotations) {
     Logger.recordOutput("Twist Setpoint", rotations);
-    // twistMotor.setControl(positionTorqueFOCRequest.withPosition(rotations *
-    // Constants.Ratios.TWIST_GEAR_RATIO));
     twistMotor.setControl(this.twistTorqueCurrentFOC
         .withPosition(-rotations * Constants.Ratios.TWIST_GEAR_RATIO).withEnableFOC(true));
   }
@@ -103,10 +82,9 @@ public class Twist extends SubsystemBase {
   }
 
   public enum TwistState {
-    UP, // idk why we have this
-    SIDE, // the coral part of the intake (__)_) or (_)__) with positive X for the robot
-          // being up
-    DOWN, // ground intake
+    UP,
+    SIDE,
+    DOWN,
   }
 
   private TwistState wantedState = TwistState.UP;
@@ -165,6 +143,5 @@ public class Twist extends SubsystemBase {
         zeroInitTime = 0.0;
         break;
     }
-    // This method will be called once per scheduler run
   }
 }

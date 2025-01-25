@@ -4,10 +4,7 @@ import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.DynamicMotionMagicTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -25,12 +22,9 @@ public class Elevator extends SubsystemBase {
   private final TalonFX elevatorMotorFollower = new TalonFX(Constants.CANInfo.FOLLOWER_ELEVATOR_MOTOR_ID,
       new CANBus(Constants.CANInfo.CANBUS_NAME));
 
-  private final PositionTorqueCurrentFOC positionTorqueFOCRequest = new PositionTorqueCurrentFOC(0).withFeedForward(0).withVelocity(0);
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
   private final double elevatorAcceleration = 500.0;
   private final double elevatorCruiseVelocity = 125.0;
-  private final double elevatorFeedForward = 10.0;
-  private final double elevatorProfileScalarFactor = 1;
 
   private final MotionMagicTorqueCurrentFOC elevatorMotionProfileRequest = new MotionMagicTorqueCurrentFOC(0);
   public enum ElevatorState {
@@ -79,7 +73,6 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     elevatorConfig.CurrentLimits.StatorCurrentLimit = 60;
     elevatorConfig.CurrentLimits.SupplyCurrentLimit = 60;
-    // elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold =
 
     elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
@@ -102,11 +95,6 @@ public class Elevator extends SubsystemBase {
   }
 
   public void moveElevatorToPosition(Constants.SetPoints.ElevatorPosition position) {
-    // elevatorMotorMaster
-    //     .setControl(positionTorqueFOCRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position.meters)));
-    // elevatorMotorFollower
-    //     .setControl(
-    //         positionTorqueFOCRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position.meters)));
     if(position.meters < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
       elevatorMotorMaster.setControl(elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position.meters)).withSlot(0));
       elevatorMotorFollower.setControl(elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position.meters)).withSlot(0));

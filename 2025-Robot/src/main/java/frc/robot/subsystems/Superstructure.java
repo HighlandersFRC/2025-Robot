@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -319,26 +317,26 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleL1PlaceState() {
-    // drive.setWantedState(DriveState.DEFAULT);
-    // elevator.setWantedState(ElevatorState.L1);
-    // intake.setWantedState(IntakeState.DEFAULT);
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.L1);
+    intake.setWantedState(IntakeState.DEFAULT);
     pivot.setWantedState(PivotState.L1);
-    // twist.setWantedState(TwistState.DOWN);
+    twist.setWantedState(TwistState.DOWN);
   }
 
   public void handleL2PlaceState() {
-    // drive.setWantedState(DriveState.DEFAULT);
+    drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L2);
-    // intake.setWantedState(IntakeState.DEFAULT);
-    // pivot.setWantedState(PivotState.L23);
-    // twist.setWantedState(TwistState.SIDE);
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.L23);
+    twist.setWantedState(TwistState.SIDE);
   }
 
   public void handleL3PlaceState() {
-    // drive.setWantedState(DriveState.DEFAULT);
-    // elevator.setWantedState(ElevatorState.L3);
-    // intake.setWantedState(IntakeState.DEFAULT);
-    // pivot.setWantedState(PivotState.L23);
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.L3);
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.L23);
     twist.setWantedState(TwistState.SIDE);
   }
 
@@ -367,10 +365,10 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleFeederState() {
-    // drive.setWantedState(DriveState.DEFAULT);
-    // elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
-    // intake.setWantedState(IntakeState.CORAL_INTAKE);
-    // pivot.setWantedState(PivotState.FEEDER);
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
+    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    pivot.setWantedState(PivotState.FEEDER);
     twist.setWantedState(TwistState.DOWN);
   }
 
@@ -383,11 +381,11 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleGroundAlgaePickupState() {
-    // drive.setWantedState(DriveState.DEFAULT);
-    // elevator.setWantedState(ElevatorState.GROUND_INTAKE);
-    // intake.setWantedState(IntakeState.ALGAE_INTAKE);
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.GROUND_INTAKE);
+    intake.setWantedState(IntakeState.ALGAE_INTAKE);
     pivot.setWantedState(PivotState.GROUND_ALGAE);
-    // twist.setWantedState(TwistState.UP);
+    twist.setWantedState(TwistState.UP);
   }
 
   public void handleL2AlgaePickupState() {
