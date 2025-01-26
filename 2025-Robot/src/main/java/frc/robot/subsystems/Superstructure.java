@@ -186,7 +186,11 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.AUTO_L1_PLACE;
         break;
       case AUTO_L2_PLACE:
-        currentSuperState = SuperState.AUTO_L2_PLACE;
+        if (drive.hitSetPoint()) {
+          currentSuperState = SuperState.AUTO_SCORE_L2;
+        } else {
+          currentSuperState = SuperState.AUTO_L2_PLACE;
+        }
         break;
       case AUTO_L3_PLACE:
         currentSuperState = SuperState.AUTO_L3_PLACE;
@@ -250,6 +254,18 @@ public class Superstructure extends SubsystemBase {
         break;
       case SCORE_L4:
         currentSuperState = SuperState.SCORE_L4;
+        break;
+      case AUTO_SCORE_L1:
+        currentSuperState = SuperState.AUTO_SCORE_L1;
+        break;
+      case AUTO_SCORE_L2:
+        currentSuperState = SuperState.AUTO_SCORE_L2;
+        break;
+      case AUTO_SCORE_L3:
+        currentSuperState = SuperState.AUTO_SCORE_L3;
+        break;
+      case AUTO_SCORE_L4:
+        currentSuperState = SuperState.AUTO_SCORE_L4;
         break;
       case IDLE:
         currentSuperState = SuperState.IDLE;
@@ -321,13 +337,14 @@ public class Superstructure extends SubsystemBase {
 
   public void handleDefaultState() {
     drive.setWantedState(DriveState.DEFAULT);
-    if(pivot.getPivotPosition() < 0.3 && pivot.getPivotPosition() > 0.05) {
+    if (pivot.getPivotPosition() < 0.3 && pivot.getPivotPosition() > 0.05) {
       elevator.setWantedState(ElevatorState.DEFAULT);
     } else {
       elevator.setWantedState(ElevatorState.L1);
     }
     intake.setWantedState(IntakeState.DEFAULT);
-    if(elevator.getElevatorPosition() > 10/39.37 || (pivot.getPivotPosition() < 0.3 && pivot.getPivotPosition() > 0.05)) {
+    if (elevator.getElevatorPosition() > 10 / 39.37
+        || (pivot.getPivotPosition() < 0.3 && pivot.getPivotPosition() > 0.05)) {
       pivot.setWantedState(PivotState.DEFAULT);
     }
     twist.setWantedState(TwistState.UP);
@@ -342,7 +359,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoL2PlaceState() {
-    // drive.setWantedState(DriveState.REEF);
+    drive.setWantedState(DriveState.REEF);
     elevator.setWantedState(ElevatorState.AUTO_L2);
     intake.setWantedState(IntakeState.DEFAULT);
     pivot.setWantedState(PivotState.AUTO_L23);
@@ -414,26 +431,23 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleFeederState() {
-    drive.setWantedState(DriveState.DEFAULT);
+    drive.setWantedState(DriveState.FEEDER);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
-      if(
-        // (
-        // Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 45 
-        // && Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 0) 
-        // || 
-        !(Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 315 
-        && Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 135)
-        ) {
-        twist.setWantedState(TwistState.UP);
-        pivot.setWantedState(PivotState.FEEDER_FRONT);
+    if ((Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 45
+        && Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 0)
+        ||
+        (Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 360
+            && Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 225)) {
+      twist.setWantedState(TwistState.UP);
+      pivot.setWantedState(PivotState.FEEDER_FRONT);
+    } else {
+      if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
+        elevator.setWantedState(ElevatorState.L1);
+      } else if (elevator.getElevatorPosition() >= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
+        twist.setWantedState(TwistState.DOWN);
+        elevator.setWantedState(ElevatorState.L1);
+        pivot.setWantedState(PivotState.FEEDER_BACK);
       } else {
-        if(elevator.getElevatorPosition() <= 13/39.37 && pivot.getPivotPosition() > -0.08) {
-          elevator.setWantedState(ElevatorState.L1);
-        } else if (elevator.getElevatorPosition() >= 13/39.37 && pivot.getPivotPosition() > -0.08) {
-          twist.setWantedState(TwistState.DOWN);
-          elevator.setWantedState(ElevatorState.L1);
-          pivot.setWantedState(PivotState.FEEDER_BACK);
-        } else {
         elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
         twist.setWantedState(TwistState.DOWN);
         pivot.setWantedState(PivotState.FEEDER_BACK);
@@ -454,10 +468,10 @@ public class Superstructure extends SubsystemBase {
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_INTAKE);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
-    if(twist.getTwistPosition() < 0.1 || pivot.getPivotPosition() < -0.1) {
+    if (twist.getTwistPosition() < 0.1 || pivot.getPivotPosition() < -0.1) {
       pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
     }
-    if(pivot.getPivotPosition() < -0.1) {
+    if (pivot.getPivotPosition() < -0.1) {
       twist.setWantedState(TwistState.DOWN);
     }
   }
@@ -504,16 +518,15 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoL2ScoreState() {
     drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.AUTO_L2);
-    pivot.setWantedState(PivotState.SCORE_L23);    
+    pivot.setWantedState(PivotState.AUTO_SCORE_L23);
   }
 
   public void handleAutoL3ScoreState() {
-    
+
   }
 
   public void handleAutoL4ScoreState() {
-    
+
   }
 
   public void handleScoreL1State() {

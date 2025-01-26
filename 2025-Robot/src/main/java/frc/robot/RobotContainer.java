@@ -35,6 +35,7 @@ import frc.robot.commands.SetPivotPercent;
 import frc.robot.commands.SetPivotState;
 import frc.robot.commands.SetRobotPose;
 import frc.robot.commands.SetRobotState;
+import frc.robot.commands.SetRobotStateOnce;
 import frc.robot.commands.SetRobotStateSimple;
 import frc.robot.commands.SetTwistPercent;
 import frc.robot.commands.SetTwistState;
@@ -172,8 +173,7 @@ public class RobotContainer {
     OI.driverPOVRight.whileTrue(new SetRobotStateSimple(superstructure, SuperState.L2_PLACE));
     OI.driverPOVRight.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L2));
 
-    // OI.driverX.whileTrue(new SetRobotStateSimple(superstructure, SuperState.AUTO_L2_PLACE));
-    // OI.driverX.whileTrue(new SetRobotStateSimple(superstructure, SuperState.AUTO_SCORE_L2));
+    OI.driverX.whileTrue(new SetRobotStateOnce(superstructure, SuperState.AUTO_L2_PLACE));
 
     OI.driverPOVUp.whileTrue(new SetRobotStateSimple(superstructure, SuperState.L3_PLACE));
     OI.driverPOVUp.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L3));

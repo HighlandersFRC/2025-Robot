@@ -172,8 +172,8 @@ public final class Constants {
     public static final double WHEEL_TO_FRAME_DISTANCE = inchesToMeters(2.5);
     public static final double TOP_SPEED = feetToMeters(25);
 
-    public static final double ROBOT_LENGTH = inchesToMeters(29);
-    public static final double ROBOT_WIDTH = inchesToMeters(29);
+    public static final double ROBOT_LENGTH = inchesToMeters(26);
+    public static final double ROBOT_WIDTH = inchesToMeters(26);
     public static final double MODULE_OFFSET = inchesToMeters(2.5);
     public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
         ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
@@ -190,20 +190,20 @@ public final class Constants {
     public static final Rotation2d redRotationSetpoint2 = new Rotation2d(0.0);
     public static final Pose2d redSetpoint2 = new Pose2d(redTranslationSetpoint2, redRotationSetpoint2);
 
-    public static final Translation2d redTranslationSetpoint3 = new Translation2d(13.78, 2.713);
+    public static final Translation2d redTranslationSetpoint3 = new Translation2d(13.73, 2.77);
     public static final Rotation2d redRotationSetpoint3 = new Rotation2d(2.094);
     public static final Pose2d redSetpoint3 = new Pose2d(redTranslationSetpoint3, redRotationSetpoint3);
 
-    public static final Translation2d redTranslationSetpoint4 = new Translation2d(14.09, 2.88);
-    public static final Rotation2d redRotationSetpoint4 = new Rotation2d(2.094);
+    public static final Translation2d redTranslationSetpoint4 = new Translation2d(0, 0);
+    public static final Rotation2d redRotationSetpoint4 = new Rotation2d(0);
     public static final Pose2d redSetpoint4 = new Pose2d(redTranslationSetpoint4, redRotationSetpoint4);
 
-    public static final Translation2d redTranslationSetpoint5 = new Translation2d(14.582, 3.97);
-    public static final Rotation2d redRotationSetpoint5 = new Rotation2d(3.142);
+    public static final Translation2d redTranslationSetpoint5 = new Translation2d(0, 0);
+    public static final Rotation2d redRotationSetpoint5 = new Rotation2d(0);
     public static final Pose2d redSetpoint5 = new Pose2d(redTranslationSetpoint5, redRotationSetpoint5);
 
-    public static final Translation2d redTranslationSetpoint6 = new Translation2d(14.582, 4.3002);
-    public static final Rotation2d redRotationSetpoint6 = new Rotation2d(3.142);
+    public static final Translation2d redTranslationSetpoint6 = new Translation2d(0, 0);
+    public static final Rotation2d redRotationSetpoint6 = new Rotation2d(0);
     public static final Pose2d redSetpoint6 = new Pose2d(redTranslationSetpoint6, redRotationSetpoint6);
 
     public static final Translation2d redTranslationSetpoint7 = new Translation2d(0.0, 0.0);
@@ -323,6 +323,7 @@ public final class Constants {
     public static final double PIVOT_L1_POSITION_D = 90.0;
     public static final double PIVOT_L23_POSITION_D = 55.0;
     public static final double PIVOT_AUTO_L23_POSITION_D = 60.0;
+    public static final double PIVOT_AUTO_L23_SCORE_POSITION_D = 110;
     public static final double PIVOT_L4_POSITION_D = 55.0;
     public static final double PIVOT_UPRIGHT_POSITION_D = 45.0;
     public static final double PIVOT_GROUND_ALGAE_POSITION_D = 135.0;
@@ -338,8 +339,11 @@ public final class Constants {
       kL4(PIVOT_L4_POSITION_D, Constants.degreesToRotations(PIVOT_L4_POSITION_D)),
       kUP(PIVOT_UPRIGHT_POSITION_D, Constants.degreesToRotations(PIVOT_UPRIGHT_POSITION_D)),
       kGROUNDALGAE(PIVOT_GROUND_ALGAE_POSITION_D, Constants.degreesToRotations(PIVOT_GROUND_ALGAE_POSITION_D)),
-      kGROUNDCORALFRONT(PIVOT_GROUND_CORAL_POSITION_FRONT_D, Constants.degreesToRotations(PIVOT_GROUND_CORAL_POSITION_FRONT_D)),
-      kGROUNDCORALBACK(PIVOT_GROUND_CORAL_POSITION_BACK_D, Constants.degreesToRotations(PIVOT_GROUND_CORAL_POSITION_BACK_D)),
+      kGROUNDCORALFRONT(PIVOT_GROUND_CORAL_POSITION_FRONT_D,
+          Constants.degreesToRotations(PIVOT_GROUND_CORAL_POSITION_FRONT_D)),
+      kGROUNDCORALBACK(PIVOT_GROUND_CORAL_POSITION_BACK_D,
+          Constants.degreesToRotations(PIVOT_GROUND_CORAL_POSITION_BACK_D)),
+      kAUTOL23SCORE(PIVOT_AUTO_L23_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L23_SCORE_POSITION_D)),
       kDEFAULT(PIVOT_DEFAULT_POSITION_D, Constants.degreesToRotations(PIVOT_DEFAULT_POSITION_D)),
       kFEEDER(PIVOT_FEEDER_POSITION_D, Constants.degreesToRotations(PIVOT_FEEDER_POSITION_D));
 

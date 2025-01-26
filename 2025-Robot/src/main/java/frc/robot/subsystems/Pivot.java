@@ -162,6 +162,7 @@ public class Pivot extends SubsystemBase {
   public void periodic() {
     Logger.recordOutput("Pivot Position", getPivotPosition());
     Logger.recordOutput("Pivot Output", pivotMotor.getClosedLoopOutput().getValueAsDouble());
+    Logger.recordOutput("Pivot Current", pivotMotor.getStatorCurrent().getValueAsDouble());
     systemState = handleStateTransition();
     switch (systemState) {
       case DEFAULT:
@@ -193,6 +194,9 @@ public class Pivot extends SubsystemBase {
       case SCORE_L4:
         pivotToPosition(0.25);
         break;
+      case AUTO_SCORE_L23:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
+        break;
       case FEEDER_FRONT:
         pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
         break;
@@ -205,7 +209,7 @@ public class Pivot extends SubsystemBase {
         pivotToPosition(Constants.SetPoints.PivotPosition.kLAUTO23.rotations);
         break;
       case AUTO_L4:
-      break;
+        break;
       default:
         setPivotPercent(0.0);
         break;

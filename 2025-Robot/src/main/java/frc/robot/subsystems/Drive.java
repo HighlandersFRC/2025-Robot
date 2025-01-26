@@ -177,11 +177,11 @@ public class Drive extends SubsystemBase {
           Constants.inchesToMeters(15.15)),
       new Rotation3d(0, Math.toRadians(5.0), Math.toRadians(32.0)));
 
-      Transform3d backRobotToCam = new Transform3d(
-        new Translation3d(Constants.inchesToMeters(-1.5), Constants.inchesToMeters(-11.0),
-            Constants.inchesToMeters(15.15)),
-        new Rotation3d(0, Math.toRadians(5.9), Math.toRadians(148.0)));
-        
+  Transform3d backRobotToCam = new Transform3d(
+      new Translation3d(Constants.inchesToMeters(-1.5), Constants.inchesToMeters(-11.0),
+          Constants.inchesToMeters(15.15)),
+      new Rotation3d(0, Math.toRadians(5.9), Math.toRadians(148.0)));
+
   double initAngle;
   double setAngle;
   double diffAngle;
@@ -236,6 +236,7 @@ public class Drive extends SubsystemBase {
     IDLE,
     REEF,
     ALGAE,
+    FEEDER,
   }
 
   private DriveState wantedState = DriveState.IDLE;
@@ -266,14 +267,14 @@ public class Drive extends SubsystemBase {
         new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())), swerveModulePositions, m_pose);
   }
 
-  public boolean atSetpoint() {
-    double currentAngle = peripherals.getPigeonAngle();
-    if (getFieldSide().equals("red")) {
-      currentAngle -= 180;
-    }
-    return (Math.abs(Constants.standardizeAngleDegrees(currentAngle)
-        - Constants.standardizeAngleDegrees(angleSetpoint)) < 2);
-  }
+  // public boolean atSetpoint() {
+  // double currentAngle = peripherals.getPigeonAngle();
+  // if (getFieldSide().equals("red")) {
+  // currentAngle -= 180;
+  // }
+  // return (Math.abs(Constants.standardizeAngleDegrees(currentAngle)
+  // - Constants.standardizeAngleDegrees(angleSetpoint)) < 2);
+  // }
 
   public void setWantedState(DriveState wantedState) {
     this.wantedState = wantedState;
@@ -311,7 +312,7 @@ public class Drive extends SubsystemBase {
     }
     photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontRobotToCam);
-    
+
     backPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backRobotToCam);
 
@@ -599,7 +600,9 @@ public class Drive extends SubsystemBase {
         // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
         // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
         // standardDeviation.set(2, 0, 0.1);
-        mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+        Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+            new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+        mt2Odometry.addVisionMeasurement(poseWithoutAngle,
             result.getTimestampSeconds());
       }
     }
@@ -625,8 +628,10 @@ public class Drive extends SubsystemBase {
         // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
         // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
         // standardDeviation.set(2, 0, 0.1);
-        mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-        backResult.getTimestampSeconds());
+        Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+            new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+        mt2Odometry.addVisionMeasurement(poseWithoutAngle,
+            backResult.getTimestampSeconds());
       }
     }
     // if (isPoseInField(frontCamPnPPose) && !frontCamPnPPose.equals(defaultPose)) {
@@ -947,41 +952,41 @@ public class Drive extends SubsystemBase {
     double turn = turnLimit
         * (OI.getDriverRightX() * (Constants.Physical.TOP_SPEED) / (Constants.Physical.ROBOT_RADIUS));
 
-    if (Math.abs(turn) < 0.15) {
+    if (Math.abs(turn) < 0.05) {
       turn = 0.0;
     }
 
     // if (turn == 0.0 && Timer.getFPGATimestamp() - teleopInitTime > 2.0) {
-    //   turningPID.setSetPoint(angleSetpoint);
-    //   double yaw = peripherals.getPigeonAngle();
-    //   while (Math.abs(angleSetpoint - yaw) > 180) {
-    //     if (angleSetpoint - yaw > 180) {
-    //       yaw += 360;
-    //     } else {
-    //       yaw -= 360;
-    //     }
-    //   }
-    //   double result = -1 * turningPID.updatePID(yaw);
-    //   Logger.recordOutput("result", result);
-    //   driveAutoAligned(result);
+    // turningPID.setSetPoint(angleSetpoint);
+    // double yaw = peripherals.getPigeonAngle();
+    // while (Math.abs(angleSetpoint - yaw) > 180) {
+    // if (angleSetpoint - yaw > 180) {
+    // yaw += 360;
     // } else {
-      angleSetpoint = peripherals.getPigeonAngle();
-      double compensation = peripherals.getPigeonAngularVelocityW() * 0.050;
-      angleSetpoint += compensation;
-      Logger.recordOutput("setpoint", angleSetpoint);
-      turningPID.setSetPoint(angleSetpoint);
-      double pigeonAngle = Math.toRadians(peripherals.getPigeonAngle());
-      double xPower = getAdjustedX(originalX, originalY);
-      double yPower = getAdjustedY(originalX, originalY);
+    // yaw -= 360;
+    // }
+    // }
+    // double result = -1 * turningPID.updatePID(yaw);
+    // Logger.recordOutput("result", result);
+    // driveAutoAligned(result);
+    // } else {
+    angleSetpoint = peripherals.getPigeonAngle();
+    double compensation = peripherals.getPigeonAngularVelocityW() * 0.050;
+    angleSetpoint += compensation;
+    Logger.recordOutput("setpoint", angleSetpoint);
+    turningPID.setSetPoint(angleSetpoint);
+    double pigeonAngle = Math.toRadians(peripherals.getPigeonAngle());
+    double xPower = getAdjustedX(originalX, originalY);
+    double yPower = getAdjustedY(originalX, originalY);
 
-      double xSpeed = xPower * Constants.Physical.TOP_SPEED;
-      double ySpeed = yPower * Constants.Physical.TOP_SPEED;
+    double xSpeed = xPower * Constants.Physical.TOP_SPEED;
+    double ySpeed = yPower * Constants.Physical.TOP_SPEED;
 
-      Vector controllerVector = new Vector(xSpeed, ySpeed);
-      frontLeft.drive(controllerVector, turn, pigeonAngle);
-      frontRight.drive(controllerVector, turn, pigeonAngle);
-      backLeft.drive(controllerVector, turn, pigeonAngle);
-      backRight.drive(controllerVector, turn, pigeonAngle);
+    Vector controllerVector = new Vector(xSpeed, ySpeed);
+    frontLeft.drive(controllerVector, turn, pigeonAngle);
+    frontRight.drive(controllerVector, turn, pigeonAngle);
+    backLeft.drive(controllerVector, turn, pigeonAngle);
+    backRight.drive(controllerVector, turn, pigeonAngle);
     // }
   }
 
@@ -1067,6 +1072,27 @@ public class Drive extends SubsystemBase {
     }
   }
 
+  private int hitNumber = 0;
+
+  public boolean hitSetPoint() {
+    Logger.recordOutput("Error for setpoint",
+        Math.sqrt(Math.pow((getReefClosestSetpoint(getMT2Odometry())[0] - getMT2OdometryX()), 2)
+            + Math.pow((getReefClosestSetpoint(getMT2Odometry())[1] - getMT2OdometryY()), 2)));
+    if (Math
+        .sqrt(Math.pow((getReefClosestSetpoint(getMT2Odometry())[0] - getMT2OdometryX()), 2)
+            + Math.pow((getReefClosestSetpoint(getMT2Odometry())[1] - getMT2OdometryY()), 2)) < 0.02
+        && Math.abs(getReefClosestSetpoint(getMT2Odometry())[2] - getMT2OdometryAngle()) < 0.05) {
+      hitNumber += 1;
+    } else {
+      hitNumber = 0;
+    }
+    if (hitNumber > 6) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   public void driveToPoint(double x, double y, double theta) {
 
     Logger.recordOutput("Magnitude Error Inches",
@@ -1121,6 +1147,19 @@ public class Drive extends SubsystemBase {
 
     autoDrive(velocityVector, desiredThetaChange);
 
+  }
+
+  public void driveToTheta(double theta) {
+    Logger.recordOutput("Drive Angle Setpoint", theta);
+    turningPID.setSetPoint(theta);
+    turningPID.updatePID(Constants.standardizeAngleDegrees(peripherals.getPigeonAngle()));
+
+    Logger.recordOutput("Theta Error Degrees", Math.toDegrees(theta - peripherals.getPigeonAngle()));
+    double result = -turningPID.getResult();
+    if (Math.abs(peripherals.getPigeonAngle() - theta) < 2) {
+      result = 0;
+    }
+    driveAutoAligned(result);
   }
 
   /**
@@ -1362,6 +1401,8 @@ public class Drive extends SubsystemBase {
         return DriveState.REEF;
       case ALGAE:
         return DriveState.ALGAE;
+      case FEEDER:
+        return DriveState.FEEDER;
       default:
         return DriveState.IDLE;
     }
@@ -1388,8 +1429,21 @@ public class Drive extends SubsystemBase {
       case IDLE:
         break;
       case REEF:
+        driveToPoint(getReefClosestSetpoint(getMT2Odometry())[0], getReefClosestSetpoint(getMT2Odometry())[1],
+            getReefClosestSetpoint(getMT2Odometry())[2]);
         break;
       case ALGAE:
+        break;
+      case FEEDER:
+        if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 45
+            && Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 0)
+            ||
+            (Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 360
+                && Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 225)) {
+          driveToTheta(315);
+        } else {
+          driveToTheta(135);
+        }
         break;
       default:
         break;
