@@ -31,6 +31,7 @@ import frc.robot.commands.SetClimberRollerTorque;
 import frc.robot.commands.SetElevatorPercent;
 import frc.robot.commands.SetElevatorState;
 import frc.robot.commands.SetIntake;
+import frc.robot.commands.SetLightsState;
 import frc.robot.commands.SetPivotPercent;
 import frc.robot.commands.SetPivotState;
 import frc.robot.commands.SetRobotPose;
@@ -50,6 +51,7 @@ import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Twist;
+import frc.robot.subsystems.Lights.LightsState;
 import frc.robot.subsystems.Pivot.PivotState;
 import frc.robot.subsystems.Superstructure.SuperState;
 import frc.robot.subsystems.Twist.TwistState;
@@ -166,7 +168,6 @@ public class RobotContainer {
     // OI.driverY.whileTrue(new SetElevatorPercent(elevator, 0.3));
     // OI.driverA.whileTrue(new SetElevatorPercent(elevator, 0.3));
 
-
     OI.driverPOVLeft.whileTrue(new SetRobotStateSimple(superstructure, SuperState.L1_PLACE));
     OI.driverPOVLeft.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L1));
 
@@ -183,6 +184,10 @@ public class RobotContainer {
 
     OI.driverLB.whileTrue(new SetRobotState(superstructure, SuperState.FEEDER));
     OI.driverMenuButton.whileTrue(new SetRobotState(superstructure, SuperState.DEFAULT));
+
+    OI.driverA.whileTrue(new SetLightsState(lights, LightsState.BLUE));
+    OI.driverY.whileTrue(new SetLightsState(lights, LightsState.RED));
+    OI.driverB.whileTrue(new SetLightsState(lights, LightsState.HAS_PIECE));
     // OI.driverX.whileTrue(new SetRobotState(superstructure, SuperState.FEEDER));
     // OI.driverB.whileTrue(new SetPivotState(pivot, PivotState.GROUND_CORAL));
 

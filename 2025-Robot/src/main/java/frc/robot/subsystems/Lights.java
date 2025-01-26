@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.RgbFadeAnimation;
@@ -13,6 +15,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
+import frc.robot.subsystems.Intake.IntakeState;
 
 public class Lights extends SubsystemBase {
   /** Creates a new Lights. */
@@ -21,13 +24,24 @@ public class Lights extends SubsystemBase {
   private double time = Timer.getFPGATimestamp();
   private double timeout = 0.0;
   private boolean timedFlashes = false;
-  CANdle candle = new CANdle(Constants.CANInfo.CANDLE_ID, Constants.CANInfo.CANBUS_NAME);
+  CANdle candle = new CANdle(Constants.CANInfo.CANDLE_ID, "rio");
 
   RgbFadeAnimation rgbFade = new RgbFadeAnimation(1, 0.2, 308);
   RainbowAnimation rainbowAnimation = new RainbowAnimation(1, 0.4, 308, true, 0);
   StrobeAnimation flashGreen = new StrobeAnimation(0, 255, 0, 0, 0.7, 308, 0);
   StrobeAnimation flashPurple = new StrobeAnimation(255, 0, 255, 0, 0.7, 308, 0);
   StrobeAnimation flashYellow = new StrobeAnimation(255, 255, 0, 0, 0.5, 308, 0);
+
+  public enum LightsState {
+    CORAL,
+    ALGAE,
+    RED,
+    BLUE,
+    HAS_PIECE,
+  }
+
+  private LightsState wantedState = LightsState.CORAL;
+  private LightsState systemState = LightsState.CORAL;
 
   /*
    * Lights codes are as follows:
@@ -62,6 +76,25 @@ public class Lights extends SubsystemBase {
     this.commandRunning = commandRunning;
   }
 
+  public void setWantedState(LightsState wantedState) {
+    this.wantedState = wantedState;
+  }
+
+  private LightsState handleStateTransition() {
+    switch (wantedState) {
+      case HAS_PIECE:
+        return LightsState.HAS_PIECE;
+      case ALGAE:
+        return LightsState.ALGAE;
+      case RED:
+        return LightsState.RED;
+      case BLUE:
+        return LightsState.BLUE;
+      default:
+        return LightsState.CORAL;
+    }
+  }
+
   /**
    * Sets the RGB values of the lights to the specified values.
    *
@@ -75,33 +108,57 @@ public class Lights extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    if (!commandRunning) { // only makes lights red/blue if a command is not trying to change light colors
-      if (!OI.autoChooserConnected()) {
-        fieldSide = "none";
-      } else if (OI.isBlueSide()) {
-        fieldSide = "blue";
-      } else {
-        fieldSide = "red";
-      }
-
-      if (fieldSide == "red") { // sets lights to color of alliance
-        candle.setLEDs(255, 0, 0);
-      } else if (fieldSide == "blue") {
-        candle.setLEDs(0, 0, 255);
-      } else if (fieldSide == "none") {
-        candle.setLEDs(255, 255, 0);
-      } else {
-        candle.setLEDs(255, 255, 255);
-      }
-    } else if (timedFlashes) { // allows lights to flash for a certain period of time before returning to
-                               // default colors
-      if (Timer.getFPGATimestamp() - time > timeout) {
-        timedFlashes = false;
-        candle.clearAnimation(0);
-        setCommandRunning(false);
-      }
+    LightsState newState = handleStateTransition();
+    if (newState != systemState) {
+      candle.clearAnimation(0);
+      systemState = newState;
     }
+    Logger.recordOutput("Lights State", systemState);
+    switch (systemState) {
+      case HAS_PIECE:
+        blinkGreen(2.0);
+        break;
+      case ALGAE:
+        setCandleRGB(0, 255, 0);
+        break;
+      case RED:
+        setCandleRGB(255, 0, 0);
+        break;
+      case BLUE:
+        setCandleRGB(0, 0, 255);
+        break;
+      default:
+        setRainbow();
+    }
+    // // This method will be called once per scheduler run
+    // if (!commandRunning) { // only makes lights red/blue if a command is not
+    // trying to change light colors
+    // if (!OI.autoChooserConnected()) {
+    // fieldSide = "none";
+    // } else if (OI.isBlueSide()) {
+    // fieldSide = "blue";
+    // } else {
+    // fieldSide = "red";
+    // }
+
+    // if (fieldSide == "red") { // sets lights to color of alliance
+    // candle.setLEDs(255, 0, 0);
+    // } else if (fieldSide == "blue") {
+    // candle.setLEDs(0, 0, 255);
+    // } else if (fieldSide == "none") {
+    // candle.setLEDs(255, 255, 0);
+    // } else {
+    // candle.setLEDs(255, 255, 255);
+    // }
+    // } else if (timedFlashes) { // allows lights to flash for a certain period of
+    // time before returning to
+    // // default colors
+    // if (Timer.getFPGATimestamp() - time > timeout) {
+    // timedFlashes = false;
+    // candle.clearAnimation(0);
+    // setCommandRunning(false);
+    // }
+    // }
   }
 
   /**
