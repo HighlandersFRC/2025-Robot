@@ -27,6 +27,7 @@ public class Elevator extends SubsystemBase {
   private final double elevatorCruiseVelocity = 125.0;
 
   private final MotionMagicTorqueCurrentFOC elevatorMotionProfileRequest = new MotionMagicTorqueCurrentFOC(0);
+
   public enum ElevatorState {
     DEFAULT,
     AUTO_L1,
@@ -71,7 +72,7 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.Slot1.kP = 44.99;
     elevatorConfig.Slot1.kI = 0.0;
     elevatorConfig.Slot1.kD = 3.937; // W breakaway
-    elevatorConfig.Slot1.kG = 3.937; 
+    elevatorConfig.Slot1.kG = 3.937;
     elevatorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
     elevatorConfig.Slot1.GravityType = GravityTypeValue.Elevator_Static;
     elevatorConfig.MotionMagic.MotionMagicAcceleration = this.elevatorAcceleration;
@@ -102,12 +103,16 @@ public class Elevator extends SubsystemBase {
   }
 
   public void moveElevatorToPosition(double position) {
-    if(position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
-      elevatorMotorMaster.setControl(elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
-      elevatorMotorFollower.setControl(elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
+    if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
+      elevatorMotorMaster.setControl(
+          elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
+      elevatorMotorFollower.setControl(
+          elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
     } else {
-      elevatorMotorMaster.setControl(elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(1));
-      elevatorMotorFollower.setControl(elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(1)); 
+      elevatorMotorMaster.setControl(
+          elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(1));
+      elevatorMotorFollower.setControl(
+          elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(1));
     }
   }
 
@@ -173,8 +178,13 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     systemState = handleStateTransition();
 
+    Logger.recordOutput("Elevator Current", elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
+    Logger.recordOutput("Elevator Idle Time", idleTime);
+    Logger.recordOutput("First Time Idle", firstTimeIdle);
     Logger.recordOutput("Elevator State", systemState);
-    Logger.recordOutput("Elevator Height", getElevatorPosition()*39.37);
+    Logger.recordOutput("Elevator Velocity",
+        Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble()));
+    Logger.recordOutput("Elevator Height", getElevatorPosition() * 39.37);
     switch (systemState) {
       case GROUND_INTAKE:
         firstTimeIdle = true;
@@ -224,12 +234,14 @@ public class Elevator extends SubsystemBase {
           firstTimeIdle = false;
         }
         if (Math
-            .abs(Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
-            && Timer.getFPGATimestamp() - idleTime > 0.1 && Math.abs(elevatorMotorMaster.getStatorCurrent().getValueAsDouble()) >= 0) {
+            .abs(
+                Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.05
+            && Timer.getFPGATimestamp() - idleTime > 0.3
+            && Math.abs(elevatorMotorMaster.getStatorCurrent().getValueAsDouble()) >= 0.0 && !firstTimeIdle) {
           moveWithPercent(0.0);
           setElevatorEncoderPosition(0.0);
         } else {
-          moveWithTorque(-20, 0.4);
+          moveWithTorque(-30, 0.4);
         }
         break;
     }
