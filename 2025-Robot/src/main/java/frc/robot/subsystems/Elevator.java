@@ -29,6 +29,10 @@ public class Elevator extends SubsystemBase {
   private final MotionMagicTorqueCurrentFOC elevatorMotionProfileRequest = new MotionMagicTorqueCurrentFOC(0);
   public enum ElevatorState {
     DEFAULT,
+    AUTO_L1,
+    AUTO_L2,
+    AUTO_L3,
+    AUTO_L4,
     L1,
     L2,
     L3,
@@ -38,7 +42,10 @@ public class Elevator extends SubsystemBase {
     L3_ALGAE,
     GROUND_INTAKE,
     PROCESSOR,
-    SCORE,
+    SCORE_L1,
+    SCORE_L2,
+    SCORE_L3,
+    SCORE_L4,
     NET,
 
   }
@@ -94,13 +101,13 @@ public class Elevator extends SubsystemBase {
     elevatorMotorFollower.setControl(torqueCurrentFOCRequest.withOutput(-current).withMaxAbsDutyCycle(maxPercent));
   }
 
-  public void moveElevatorToPosition(Constants.SetPoints.ElevatorPosition position) {
-    if(position.meters < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
-      elevatorMotorMaster.setControl(elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position.meters)).withSlot(0));
-      elevatorMotorFollower.setControl(elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position.meters)).withSlot(0));
+  public void moveElevatorToPosition(double position) {
+    if(position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
+      elevatorMotorMaster.setControl(elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
+      elevatorMotorFollower.setControl(elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
     } else {
-      elevatorMotorMaster.setControl(elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position.meters)).withSlot(1));
-      elevatorMotorFollower.setControl(elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position.meters)).withSlot(1)); 
+      elevatorMotorMaster.setControl(elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(1));
+      elevatorMotorFollower.setControl(elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(1)); 
     }
   }
 
@@ -129,6 +136,14 @@ public class Elevator extends SubsystemBase {
         return ElevatorState.L3;
       case L4:
         return ElevatorState.L4;
+      case AUTO_L1:
+        return ElevatorState.AUTO_L1;
+      case AUTO_L2:
+        return ElevatorState.AUTO_L2;
+      case AUTO_L3:
+        return ElevatorState.AUTO_L3;
+      case AUTO_L4:
+        return ElevatorState.AUTO_L4;
       case FEEDER_INTAKE:
         return ElevatorState.FEEDER_INTAKE;
       case L2_ALGAE:
@@ -139,8 +154,14 @@ public class Elevator extends SubsystemBase {
         return ElevatorState.GROUND_INTAKE;
       case PROCESSOR:
         return ElevatorState.PROCESSOR;
-      case SCORE:
-        return ElevatorState.SCORE;
+      case SCORE_L1:
+        return ElevatorState.SCORE_L1;
+      case SCORE_L2:
+        return ElevatorState.SCORE_L2;
+      case SCORE_L3:
+        return ElevatorState.SCORE_L3;
+      case SCORE_L4:
+        return ElevatorState.SCORE_L4;
       case NET:
         return ElevatorState.NET;
       default:
@@ -157,11 +178,45 @@ public class Elevator extends SubsystemBase {
     switch (systemState) {
       case GROUND_INTAKE:
         firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kGROUNDPICKUP);
+        moveElevatorToPosition(ElevatorPosition.kGROUNDPICKUP.meters);
+        break;
+      case L1:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kL1.meters);
+        break;
+      case SCORE_L1:
         break;
       case L2:
         firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL2);
+        moveElevatorToPosition(ElevatorPosition.kL2.meters);
+        break;
+      case SCORE_L2:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kL2.meters - 0.07);
+        break;
+      case L3:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kL3.meters);
+        break;
+      case SCORE_L3:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kL3.meters - 0.1);
+        break;
+      case L4:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kL4.meters);
+        break;
+      case SCORE_L4:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kL4.meters - 0.1);
+        break;
+      case FEEDER_INTAKE:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kFEEDER.meters);
+        break;
+      case AUTO_L2:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kAUTOL2.meters);
         break;
       default:
         if (firstTimeIdle) {
@@ -170,7 +225,7 @@ public class Elevator extends SubsystemBase {
         }
         if (Math
             .abs(Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
-            && Timer.getFPGATimestamp() - idleTime > 0.1) {
+            && Timer.getFPGATimestamp() - idleTime > 0.1 && Math.abs(elevatorMotorMaster.getStatorCurrent().getValueAsDouble()) >= 0) {
           moveWithPercent(0.0);
           setElevatorEncoderPosition(0.0);
         } else {

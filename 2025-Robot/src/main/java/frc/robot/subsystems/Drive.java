@@ -169,12 +169,19 @@ public class Drive extends SubsystemBase {
   Pose2d mt2Pose;
 
   PhotonPoseEstimator photonPoseEstimator;
+  PhotonPoseEstimator backPhotonPoseEstimator;
   AprilTagFieldLayout aprilTagFieldLayout;
 
-  Transform3d robotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(1.75), Constants.inchesToMeters(11.625),
-          Constants.inchesToMeters(33.5)),
-      new Rotation3d(0, Math.toRadians(30.6), 0));
+  Transform3d frontRobotToCam = new Transform3d(
+      new Translation3d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.0),
+          Constants.inchesToMeters(15.15)),
+      new Rotation3d(0, Math.toRadians(5.0), Math.toRadians(32.0)));
+
+      Transform3d backRobotToCam = new Transform3d(
+        new Translation3d(Constants.inchesToMeters(-1.5), Constants.inchesToMeters(-11.0),
+            Constants.inchesToMeters(15.15)),
+        new Rotation3d(0, Math.toRadians(5.9), Math.toRadians(148.0)));
+        
   double initAngle;
   double setAngle;
   double diffAngle;
@@ -303,7 +310,10 @@ public class Drive extends SubsystemBase {
       System.out.println("error with april tag: " + e.getMessage());
     }
     photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontRobotToCam);
+    
+    backPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backRobotToCam);
 
     frontRight.init();
     frontLeft.init();
@@ -591,6 +601,32 @@ public class Drive extends SubsystemBase {
         // standardDeviation.set(2, 0, 0.1);
         mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
             result.getTimestampSeconds());
+      }
+    }
+
+    var backResult = peripherals.getBackCamResult();
+    Optional<EstimatedRobotPose> backMultiTagResult = backPhotonPoseEstimator.update(backResult);
+    if (backMultiTagResult.isPresent()) {
+      if (backResult.getBestTarget().getPoseAmbiguity() < 0.3) {
+        Pose3d robotPose = backMultiTagResult.get().estimatedPose;
+        Logger.recordOutput("multitag result", robotPose);
+        int numFrontTracks = backResult.getTargets().size();
+        Pose3d tagPose = aprilTagFieldLayout.getTagPose(backResult.getBestTarget().getFiducialId()).get();
+        double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+        Logger.recordOutput("Distance to tag", distToTag);
+        // standardDeviation.set(0, 0,
+        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        // standardDeviation.set(1, 0,
+        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        // standardDeviation.set(2, 0, 0.1);
+        mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+        backResult.getTimestampSeconds());
       }
     }
     // if (isPoseInField(frontCamPnPPose) && !frontCamPnPPose.equals(defaultPose)) {
@@ -891,7 +927,7 @@ public class Drive extends SubsystemBase {
 
     if (OI.driverController.getLeftBumper()) {
       // activate speedy spin
-      turnLimit = 1;
+      // turnLimit = 1;
     }
 
     // this is correct, X is forward in field, so originalX should be the y on the
@@ -957,7 +993,7 @@ public class Drive extends SubsystemBase {
 
     if (OI.driverController.getLeftBumper()) {
       // activate speedy spin
-      turnLimit = 1;
+      // turnLimit = 1; //TODO: find a different keybind for this
     }
 
     // this is correct, X is forward in field, so originalX should be the y on the

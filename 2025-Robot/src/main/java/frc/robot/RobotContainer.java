@@ -156,14 +156,33 @@ public class RobotContainer {
     // Driver
 
     OI.driverViewButton.whileTrue(new ZeroAngleMidMatch(drive)); // zero pidgeon
-    OI.driverRT.whileTrue(new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP));
-    OI.driverLT.whileTrue(new SetRobotState(superstructure, SuperState.OUTAKE));
+
+    OI.driverRT.whileTrue(new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_FRONT));
+    OI.driverRB.whileTrue(new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_BACK));
+
+    OI.driverLT.whileTrue(new SetRobotStateSimple(superstructure, SuperState.OUTAKE));
 
     // OI.driverY.whileTrue(new SetElevatorPercent(elevator, 0.3));
     // OI.driverA.whileTrue(new SetElevatorPercent(elevator, 0.3));
 
 
-    OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.L2_PLACE));
+    OI.driverPOVLeft.whileTrue(new SetRobotStateSimple(superstructure, SuperState.L1_PLACE));
+    OI.driverPOVLeft.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L1));
+
+    OI.driverPOVRight.whileTrue(new SetRobotStateSimple(superstructure, SuperState.L2_PLACE));
+    OI.driverPOVRight.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L2));
+
+    // OI.driverX.whileTrue(new SetRobotStateSimple(superstructure, SuperState.AUTO_L2_PLACE));
+    // OI.driverX.whileTrue(new SetRobotStateSimple(superstructure, SuperState.AUTO_SCORE_L2));
+
+    OI.driverPOVUp.whileTrue(new SetRobotStateSimple(superstructure, SuperState.L3_PLACE));
+    OI.driverPOVUp.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L3));
+
+    OI.driverPOVDown.whileTrue(new SetRobotStateSimple(superstructure, SuperState.L4_PLACE));
+    OI.driverPOVDown.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L4));
+
+    OI.driverLB.whileTrue(new SetRobotState(superstructure, SuperState.FEEDER));
+    OI.driverMenuButton.whileTrue(new SetRobotState(superstructure, SuperState.DEFAULT));
     // OI.driverX.whileTrue(new SetRobotState(superstructure, SuperState.FEEDER));
     // OI.driverB.whileTrue(new SetPivotState(pivot, PivotState.GROUND_CORAL));
 
@@ -190,7 +209,7 @@ public class RobotContainer {
     // OI.driverLB.whileTrue(new MoveToPiece(drive, peripherals, intake));
     // OI.driverRB.onTrue(new L2AutoPlace(superstructure, elevator, drive, intake,
     // peripherals));
-    OI.driverMenuButton.whileTrue(new SetRobotPose(drive, 10.375, 1.5, 0));
+    // OI.driverMenuButton.whileTrue(new SetRobotPose(drive, 10.375, 1.5, 0));
   }
 
   /**

@@ -57,10 +57,10 @@ public class Pivot extends SubsystemBase {
     pivotMotor.setPosition(0.0);
   }
 
-  public void pivotToPosition(Constants.SetPoints.PivotPosition pivotPosition) {
-    Logger.recordOutput("Pivot Setpoint", (pivotPosition.rotations));
+  public void pivotToPosition(double pivotPosition) {
+    Logger.recordOutput("Pivot Setpoint", (pivotPosition));
     pivotMotor.setControl(this.pivotMotionProfileRequest
-        .withPosition(pivotPosition.rotations)
+        .withPosition(pivotPosition)
         .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
         .withJerk(
             this.pivotJerk * pivotProfileScalarFactor));
@@ -79,17 +79,27 @@ public class Pivot extends SubsystemBase {
   }
 
   public enum PivotState {
+    AUTO_L1,
+    AUTO_L23,
+    AUTO_L4,
     L1,
     L23,
     L4,
     PROCESSOR,
     NET,
-    FEEDER,
-    GROUND_CORAL,
+    FEEDER_FRONT,
+    FEEDER_BACK,
+    GROUND_CORAL_FRONT,
+    GROUND_CORAL_BACK,
     GROUND_ALGAE,
     REEF_ALGAE,
     DEFAULT,
-    SCORE,
+    SCORE_L1,
+    SCORE_L23,
+    SCORE_L4,
+    AUTO_SCORE_L1,
+    AUTO_SCORE_L23,
+    AUTO_SCORE_L4,
   }
 
   private PivotState wantedState = PivotState.DEFAULT;
@@ -109,20 +119,40 @@ public class Pivot extends SubsystemBase {
         return PivotState.L23;
       case L4:
         return PivotState.L4;
-      case FEEDER:
-        return PivotState.FEEDER;
+      case AUTO_L1:
+        return PivotState.AUTO_L1;
+      case AUTO_L23:
+        return PivotState.AUTO_L23;
+      case AUTO_L4:
+        return PivotState.AUTO_L4;
+      case FEEDER_FRONT:
+        return PivotState.FEEDER_FRONT;
+      case FEEDER_BACK:
+        return PivotState.FEEDER_BACK;
       case REEF_ALGAE:
         return PivotState.REEF_ALGAE;
-      case GROUND_CORAL:
-        return PivotState.GROUND_CORAL;
+      case GROUND_CORAL_FRONT:
+        return PivotState.GROUND_CORAL_FRONT;
+      case GROUND_CORAL_BACK:
+        return PivotState.GROUND_CORAL_BACK;
       case GROUND_ALGAE:
         return PivotState.GROUND_ALGAE;
       case PROCESSOR:
         return PivotState.PROCESSOR;
       case NET:
         return PivotState.NET;
-      case SCORE:
-        return PivotState.SCORE;
+      case SCORE_L1:
+        return PivotState.SCORE_L1;
+      case SCORE_L23:
+        return PivotState.SCORE_L23;
+      case SCORE_L4:
+        return PivotState.SCORE_L4;
+      case AUTO_SCORE_L1:
+        return PivotState.AUTO_SCORE_L1;
+      case AUTO_SCORE_L23:
+        return PivotState.AUTO_SCORE_L23;
+      case AUTO_SCORE_L4:
+        return PivotState.AUTO_SCORE_L4;
       default:
         return PivotState.DEFAULT;
     }
@@ -135,20 +165,47 @@ public class Pivot extends SubsystemBase {
     systemState = handleStateTransition();
     switch (systemState) {
       case DEFAULT:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT);
-        break;
-      case L1:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kUP);
+        pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT.rotations);
         break;
       case GROUND_ALGAE:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE);
+        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
         break;
-      case GROUND_CORAL:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORAL);
+      case GROUND_CORAL_FRONT:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALFRONT.rotations);
+        break;
+      case GROUND_CORAL_BACK:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALBACK.rotations);
+        break;
+      case L1:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
+        break;
+      case SCORE_L1:
         break;
       case L23:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kL23);
+        pivotToPosition(Constants.SetPoints.PivotPosition.kL23.rotations);
         break;
+      case SCORE_L23:
+        pivotToPosition(0.25);
+        break;
+      case L4:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kL4.rotations);
+        break;
+      case SCORE_L4:
+        pivotToPosition(0.25);
+        break;
+      case FEEDER_FRONT:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+        break;
+      case FEEDER_BACK:
+        pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+        break;
+      case AUTO_L1:
+        break;
+      case AUTO_L23:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kLAUTO23.rotations);
+        break;
+      case AUTO_L4:
+      break;
       default:
         setPivotPercent(0.0);
         break;

@@ -74,7 +74,7 @@ public class Twist extends SubsystemBase {
   }
 
   public double getTwistPosition() {
-    return twistMotor.getPosition().getValueAsDouble() / Constants.Ratios.TWIST_GEAR_RATIO;
+    return 360*twistMotor.getPosition().getValueAsDouble() / Constants.Ratios.TWIST_GEAR_RATIO;
   }
 
   public void setTwistEncoderPosition(double position) {
@@ -121,11 +121,11 @@ public class Twist extends SubsystemBase {
           zeroInitTime = Timer.getFPGATimestamp();
           startedZero = true;
         }
-        if (Timer.getFPGATimestamp() - zeroInitTime > 1.0) {
+        if (Timer.getFPGATimestamp() - zeroInitTime > 2.0) {
           setTwistPercent(0.0);
           setTwistEncoderPosition(0.0);
         } else {
-          setTwistTorque(20, 0.2);
+          setTwistTorque(10, 0.3);
         }
         break;
       case SIDE:
@@ -136,7 +136,7 @@ public class Twist extends SubsystemBase {
       case DOWN:
         startedZero = false;
         zeroInitTime = 0.0;
-        twistToPosition(0.45);
+        twistToPosition(0.5);
         break;
       default:
         startedZero = false;

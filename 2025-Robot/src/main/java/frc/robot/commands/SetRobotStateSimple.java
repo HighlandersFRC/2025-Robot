@@ -34,6 +34,7 @@ public class SetRobotStateSimple extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    superstructure.setWantedState(superState);
   }
 
   // Called once the command ends or is interrupted.
@@ -43,6 +44,6 @@ public class SetRobotStateSimple extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }
