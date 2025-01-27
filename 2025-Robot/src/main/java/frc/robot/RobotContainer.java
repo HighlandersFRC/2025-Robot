@@ -67,8 +67,8 @@ public class RobotContainer {
 
   // Subsystems
   Peripherals peripherals = new Peripherals();
-  Drive drive = new Drive(peripherals);
   Elevator elevator = new Elevator();
+  Drive drive = new Drive(peripherals, elevator);
   MotorTest motorTest = new MotorTest();
   Intake intake = new Intake();
   Lights lights = new Lights();
@@ -166,9 +166,10 @@ public class RobotContainer {
     // OI.driverY.whileTrue(new SetElevatorPercent(elevator, 0.3));
     // OI.driverA.whileTrue(new SetElevatorPercent(elevator, 0.3));
 
-
     OI.driverPOVLeft.whileTrue(new SetRobotStateSimple(superstructure, SuperState.L1_PLACE));
     OI.driverPOVLeft.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L1));
+
+    OI.driverA.whileTrue(new SetRobotStateOnce(superstructure, SuperState.AUTO_L1_PLACE));
 
     OI.driverPOVRight.whileTrue(new SetRobotStateSimple(superstructure, SuperState.L2_PLACE));
     OI.driverPOVRight.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L2));
@@ -178,8 +179,12 @@ public class RobotContainer {
     OI.driverPOVUp.whileTrue(new SetRobotStateSimple(superstructure, SuperState.L3_PLACE));
     OI.driverPOVUp.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L3));
 
+    OI.driverB.whileTrue(new SetRobotStateOnce(superstructure, SuperState.AUTO_L3_PLACE));
+
     OI.driverPOVDown.whileTrue(new SetRobotStateSimple(superstructure, SuperState.L4_PLACE));
     OI.driverPOVDown.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L4));
+
+    OI.driverY.whileTrue(new SetRobotStateOnce(superstructure, SuperState.AUTO_L4_PLACE));
 
     OI.driverLB.whileTrue(new SetRobotState(superstructure, SuperState.FEEDER));
     OI.driverMenuButton.whileTrue(new SetRobotState(superstructure, SuperState.DEFAULT));

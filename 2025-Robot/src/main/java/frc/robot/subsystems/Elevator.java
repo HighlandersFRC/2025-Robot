@@ -57,6 +57,7 @@ public class Elevator extends SubsystemBase {
   private ElevatorState systemState = ElevatorState.DEFAULT;
 
   public Elevator() {
+
   }
 
   public void teleopInit() {
@@ -224,9 +225,20 @@ public class Elevator extends SubsystemBase {
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kFEEDER.meters);
         break;
+      case AUTO_L1:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kL1.meters);
       case AUTO_L2:
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kAUTOL2.meters);
+        break;
+      case AUTO_L3:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kAUTOL3.meters);
+        break;
+      case AUTO_L4:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kAUTOL4.meters);
         break;
       default:
         if (firstTimeIdle) {

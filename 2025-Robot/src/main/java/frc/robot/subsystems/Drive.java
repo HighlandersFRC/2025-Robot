@@ -175,12 +175,12 @@ public class Drive extends SubsystemBase {
   Transform3d frontRobotToCam = new Transform3d(
       new Translation3d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.0),
           Constants.inchesToMeters(15.15)),
-      new Rotation3d(0, Math.toRadians(5.0), Math.toRadians(32.0)));
+      new Rotation3d(Math.toRadians(2.3), Math.toRadians(1.9), Math.toRadians(32.0)));
 
   Transform3d backRobotToCam = new Transform3d(
       new Translation3d(Constants.inchesToMeters(-1.5), Constants.inchesToMeters(-11.0),
           Constants.inchesToMeters(15.15)),
-      new Rotation3d(0, Math.toRadians(5.9), Math.toRadians(148.0)));
+      new Rotation3d(Math.toRadians(-0.9), Math.toRadians(7.0), Math.toRadians(148.0)));
 
   double initAngle;
   double setAngle;
@@ -248,8 +248,11 @@ public class Drive extends SubsystemBase {
    * 
    * @param peripherals The peripherals used by the Swerve Drive subsystem.
    */
-  public Drive(Peripherals peripherals) {
+  Elevator elevator;
+
+  public Drive(Peripherals peripherals, Elevator elevator) {
     this.peripherals = peripherals;
+    this.elevator = elevator;
 
     SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
     swerveModulePositions[0] = new SwerveModulePosition(0, new Rotation2d(frontLeft.getCanCoderPositionRadians()));
@@ -926,6 +929,24 @@ public class Drive extends SubsystemBase {
    *          robot's movement based on joystick inputs.
    */
   public void teleopDrive() {
+    double oiRX = OI.getDriverRightX();
+    double oiLX = OI.getDriverLeftX();
+    double oiRY = OI.getDriverRightY();
+    double oiLY = OI.getDriverLeftY();
+    double speedMultiplier = (((60 - Constants.metersToInches(elevator.getElevatorPosition())) * 0.8 / 50) + 0.2);
+
+    if (elevator.getElevatorPosition() > Constants.inchesToMeters(10)) {
+      oiRX = oiRX * speedMultiplier;
+      oiLX = oiLX * speedMultiplier;
+      oiRY = oiRY * speedMultiplier;
+      oiLY = oiLY * speedMultiplier;
+    }
+
+    Logger.recordOutput("Adjusted Right X", oiRX);
+    Logger.recordOutput("Adjusted Left X", oiLX);
+    Logger.recordOutput("Adjusted Right Y", oiRY);
+    Logger.recordOutput("Adjusted Left Y", oiLY);
+
     updateOdometryFusedArray();
     double turnLimit = 0.17;
     // 0.35 before
@@ -936,13 +957,17 @@ public class Drive extends SubsystemBase {
     }
 
     // this is correct, X is forward in field, so originalX should be the y on the
-    // joystick
-    double originalX = -(Math.copySign(OI.getDriverLeftY() * OI.getDriverLeftY(), OI.getDriverLeftY()));
-    double originalY = -(Math.copySign(OI.getDriverLeftX() * OI.getDriverLeftX(), OI.getDriverLeftX()));
-    if (Math.abs(originalX) < 0.075) {
+    // // joystick
+    // double originalX = -(Math.copySign(OI.getDriverLeftY() * OI.getDriverLeftY(),
+    // OI.getDriverLeftY()));
+    // double originalY = -(Math.copySign(OI.getDriverLeftX() * OI.getDriverLeftX(),
+    // OI.getDriverLeftX()));
+    double originalX = -(Math.copySign(oiLY * oiLY, oiLY));
+    double originalY = -(Math.copySign(oiLX * oiLX, oiLX));
+    if (Math.abs(originalX) < 0.005) {
       originalX = 0;
     }
-    if (Math.abs(originalY) < 0.075) {
+    if (Math.abs(originalY) < 0.005) {
       originalY = 0;
     }
 
@@ -950,7 +975,7 @@ public class Drive extends SubsystemBase {
     // OI.getDriverRightX() * OI.getDriverRightX(), OI.getDriverRightX())) *
     // (Constants.Physical.TOP_SPEED)/(Constants.Physical.ROBOT_RADIUS));
     double turn = turnLimit
-        * (OI.getDriverRightX() * (Constants.Physical.TOP_SPEED) / (Constants.Physical.ROBOT_RADIUS));
+        * (oiRX * (Constants.Physical.TOP_SPEED) / (Constants.Physical.ROBOT_RADIUS));
 
     if (Math.abs(turn) < 0.05) {
       turn = 0.0;
@@ -1080,7 +1105,7 @@ public class Drive extends SubsystemBase {
             + Math.pow((getReefClosestSetpoint(getMT2Odometry())[1] - getMT2OdometryY()), 2)));
     if (Math
         .sqrt(Math.pow((getReefClosestSetpoint(getMT2Odometry())[0] - getMT2OdometryX()), 2)
-            + Math.pow((getReefClosestSetpoint(getMT2Odometry())[1] - getMT2OdometryY()), 2)) < 0.02
+            + Math.pow((getReefClosestSetpoint(getMT2Odometry())[1] - getMT2OdometryY()), 2)) < 0.04
         && Math.abs(getReefClosestSetpoint(getMT2Odometry())[2] - getMT2OdometryAngle()) < 0.05) {
       hitNumber += 1;
     } else {
