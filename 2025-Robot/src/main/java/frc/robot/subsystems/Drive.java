@@ -34,6 +34,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
+import frc.robot.subsystems.Elevator.ElevatorState;
+import frc.robot.subsystems.Pivot.PivotState;
+import frc.robot.subsystems.Twist.TwistState;
 import frc.robot.tools.controlloops.PID;
 import frc.robot.tools.math.Vector;
 
@@ -550,7 +553,7 @@ public class Drive extends SubsystemBase {
    * time differences.
    */
   public void updateOdometryFusedArray() {
-    double navxOffset = Math.toRadians(peripherals.getPigeonAngle());
+    double navxOffset = Math.toRadians(peripherals.getPigeonAngle() + 180);
 
     SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
     swerveModulePositions[0] = new SwerveModulePosition(frontLeft.getModuleDistance(),
@@ -1460,7 +1463,7 @@ public class Drive extends SubsystemBase {
       case ALGAE:
         break;
       case FEEDER:
-        if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 45
+        /* *     if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 45
             && Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 0)
             ||
             (Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 360
@@ -1468,7 +1471,54 @@ public class Drive extends SubsystemBase {
           driveToTheta(315);
         } else {
           driveToTheta(135);
+        } /* */
+
+        if (getFieldSide() == "red") { // red side
+          if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
+            if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 315
+                &&
+                Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 135)) {
+              driveToTheta(45);
+            } else { // robot back side redside left feeder (fieldside top right)
+              driveToTheta(225);
+            }
+          } else { // redside left feeder (fieldside bottom right)
+            if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 45
+                &&
+                Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 0)
+                ||
+                (Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 360
+                    &&
+                    Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 225)) {
+              driveToTheta(315);
+            } else { // robot back side redside left (fieldside bottom right)
+              driveToTheta(135);
+            }
+          }
+        } else { // blue side
+          if (getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
+            if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 315
+                &&
+                Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 135)) {
+              driveToTheta(225);
+            } else { // robot back side blueside right (fieldside bottom left)
+              driveToTheta(45);
+            }
+          } else { // blue side left feeder (fieldside top left)
+            if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 45
+                &&
+                Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 0)
+                ||
+                (Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 360
+                    &&
+                    Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 225)) {
+              driveToTheta(315);
+            } else { // robot back side blueside left (fieldside top left)
+              driveToTheta(135);
+            }
+          }
         }
+
         break;
       default:
         break;
