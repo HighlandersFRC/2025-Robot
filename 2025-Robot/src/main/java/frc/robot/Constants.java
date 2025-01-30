@@ -699,20 +699,25 @@ public final class Constants {
    * @return The standardized angle within the range [0, 360) degrees.
    */
   public static double standardizeAngleDegrees(double angleDegrees) {
+    System.out.println("initial angle degrees" + angleDegrees);
     if (angleDegrees >= 0 && angleDegrees < 360) {
+      System.out.println("standardized angle degrees" + angleDegrees);
       return angleDegrees;
     } else if (angleDegrees < 0) {
       while (angleDegrees < 0) {
         angleDegrees += 360;
       }
+      System.out.println("standardized angle degrees" + angleDegrees);
       return angleDegrees;
     } else if (angleDegrees >= 360) {
       while (angleDegrees >= 360) {
         angleDegrees -= 360;
       }
+      System.out.println("standardized angle degrees" + angleDegrees);
       return angleDegrees;
     } else {
       // System.out.println("Weird ErroR");
+      System.out.println("standardized angle degrees" + angleDegrees);
       return angleDegrees;
     }
   }

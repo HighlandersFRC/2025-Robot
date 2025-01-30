@@ -179,12 +179,12 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     systemState = handleStateTransition();
 
-    Logger.recordOutput("Elevator Current", elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
-    Logger.recordOutput("Elevator Idle Time", idleTime);
-    Logger.recordOutput("First Time Idle", firstTimeIdle);
+    // Logger.recordOutput("Elevator Current", elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
+    // Logger.recordOutput("Elevator Idle Time", idleTime);
+    // Logger.recordOutput("First Time Idle", firstTimeIdle);
     Logger.recordOutput("Elevator State", systemState);
-    Logger.recordOutput("Elevator Velocity",
-        Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble()));
+    // Logger.recordOutput("Elevator Velocity",
+    //     Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble()));
     Logger.recordOutput("Elevator Height", getElevatorPosition() * 39.37);
     switch (systemState) {
       case GROUND_INTAKE:

@@ -34,12 +34,12 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean hasCoral() {
-    Logger.recordOutput("Has Coral", (intakeMotor.getVelocity().getValueAsDouble() > -10
-        && intakeMotor.getTorqueCurrent().getValueAsDouble() < -15
-        && intakeMotor.getAcceleration().getValueAsDouble() < -100));
-    Logger.recordOutput("Intake Velocity", intakeMotor.getVelocity().getValueAsDouble());
-    Logger.recordOutput("Intake Torque", intakeMotor.getTorqueCurrent().getValueAsDouble());
-    Logger.recordOutput("Intake Acceleration", intakeMotor.getAcceleration().getValueAsDouble());
+    // Logger.recordOutput("Has Coral", (intakeMotor.getVelocity().getValueAsDouble() > -10
+    // && intakeMotor.getTorqueCurrent().getValueAsDouble() < -15
+    // && intakeMotor.getAcceleration().getValueAsDouble() < -100));
+    // Logger.recordOutput("Intake Velocity", intakeMotor.getVelocity().getValueAsDouble());
+    // Logger.recordOutput("Intake Torque", intakeMotor.getTorqueCurrent().getValueAsDouble());
+    // Logger.recordOutput("Intake Acceleration", intakeMotor.getAcceleration().getValueAsDouble());
     if (Math.abs(intakeMotor.getVelocity().getValueAsDouble()) < 1
         && Math.abs(intakeMotor.getTorqueCurrent().getValueAsDouble()) > 8
         && Math.abs(intakeMotor.getAcceleration().getValueAsDouble()) < 10) {

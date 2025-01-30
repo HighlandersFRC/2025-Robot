@@ -74,7 +74,7 @@ public class Twist extends SubsystemBase {
   }
 
   public double getTwistPosition() {
-    return 360*twistMotor.getPosition().getValueAsDouble() / Constants.Ratios.TWIST_GEAR_RATIO;
+    return 360 * twistMotor.getPosition().getValueAsDouble() / Constants.Ratios.TWIST_GEAR_RATIO;
   }
 
   public void setTwistEncoderPosition(double position) {
@@ -112,9 +112,9 @@ public class Twist extends SubsystemBase {
     systemState = handleStateTransition();
     Logger.recordOutput("Twist State", systemState);
     Logger.recordOutput("Twist Position Rotations", getTwistPosition());
-    Logger.recordOutput("Twist Error", twistMotor.getClosedLoopError().getValueAsDouble());
-    Logger.recordOutput("Twist Current", twistMotor.getStatorCurrent().getValueAsDouble());
-    Logger.recordOutput("Twist MPS", (twistMotor.getVelocity().getValueAsDouble()));
+    // Logger.recordOutput("Twist Error", twistMotor.getClosedLoopError().getValueAsDouble());
+    // Logger.recordOutput("Twist Current", twistMotor.getStatorCurrent().getValueAsDouble());
+    // Logger.recordOutput("Twist MPS", (twistMotor.getVelocity().getValueAsDouble()));
     switch (systemState) {
       case UP:
         if (!startedZero) {
