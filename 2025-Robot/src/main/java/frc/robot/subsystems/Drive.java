@@ -210,7 +210,7 @@ public class Drive extends SubsystemBase {
   private double kYI = 0.00;
   private double kYD = 1.20;
 
-  private double kThetaP = 2.70;
+  private double kThetaP = 2.90;
   private double kThetaI = 0.00;
   private double kThetaD = 2.00;
 
@@ -223,7 +223,7 @@ public class Drive extends SubsystemBase {
   private double kkYI = 0.00;
   private double kkYD = 1.60;
 
-  private double kkThetaP = 2.70;
+  private double kkThetaP = 2.90;
   private double kkThetaI = 0.00;
   private double kkThetaD = 2.00;
 

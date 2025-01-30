@@ -90,6 +90,7 @@ public class Pivot extends SubsystemBase {
     FEEDER_FRONT,
     FEEDER_BACK,
     GROUND_CORAL_FRONT,
+    GROUND_CORAL_PREP_BACK,
     GROUND_CORAL_BACK,
     GROUND_ALGAE,
     REEF_ALGAE,
@@ -135,6 +136,8 @@ public class Pivot extends SubsystemBase {
         return PivotState.GROUND_CORAL_FRONT;
       case GROUND_CORAL_BACK:
         return PivotState.GROUND_CORAL_BACK;
+      case GROUND_CORAL_PREP_BACK:
+        return PivotState.GROUND_CORAL_PREP_BACK;
       case GROUND_ALGAE:
         return PivotState.GROUND_ALGAE;
       case PROCESSOR:
@@ -178,6 +181,9 @@ public class Pivot extends SubsystemBase {
         break;
       case GROUND_CORAL_BACK:
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALBACK.rotations);
+        break;
+      case GROUND_CORAL_PREP_BACK:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALPREPBACK.rotations);
         break;
       case L1:
         pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
