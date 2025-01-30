@@ -57,6 +57,7 @@ public class Elevator extends SubsystemBase {
   private ElevatorState systemState = ElevatorState.DEFAULT;
 
   public Elevator() {
+
   }
 
   public void teleopInit() {
@@ -178,12 +179,13 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     systemState = handleStateTransition();
 
-    Logger.recordOutput("Elevator Current", elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
-    Logger.recordOutput("Elevator Idle Time", idleTime);
-    Logger.recordOutput("First Time Idle", firstTimeIdle);
+    // Logger.recordOutput("Elevator Current",
+    // elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
+    // Logger.recordOutput("Elevator Idle Time", idleTime);
+    // Logger.recordOutput("First Time Idle", firstTimeIdle);
     Logger.recordOutput("Elevator State", systemState);
-    Logger.recordOutput("Elevator Velocity",
-        Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble()));
+    // Logger.recordOutput("Elevator Velocity",
+    // Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble()));
     Logger.recordOutput("Elevator Height", getElevatorPosition() * 39.37);
     switch (systemState) {
       case GROUND_INTAKE:
@@ -224,13 +226,20 @@ public class Elevator extends SubsystemBase {
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kFEEDER.meters);
         break;
+      case AUTO_L1:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kL1.meters);
       case AUTO_L2:
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kAUTOL2.meters);
         break;
+      case AUTO_L3:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kAUTOL3.meters);
+        break;
       case AUTO_L4:
         firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL4.meters);
+        moveElevatorToPosition(ElevatorPosition.kAUTOL4.meters);
         break;
       default:
         if (firstTimeIdle) {

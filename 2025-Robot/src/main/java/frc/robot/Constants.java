@@ -190,7 +190,7 @@ public final class Constants {
     public static final Rotation2d redRotationSetpoint2 = new Rotation2d(0.0);
     public static final Pose2d redSetpoint2 = new Pose2d(redTranslationSetpoint2, redRotationSetpoint2);
 
-    public static final Translation2d redTranslationSetpoint3 = new Translation2d(13.73, 2.77);
+    public static final Translation2d redTranslationSetpoint3 = new Translation2d(13.70, 2.80);
     public static final Rotation2d redRotationSetpoint3 = new Rotation2d(2.094);
     public static final Pose2d redSetpoint3 = new Pose2d(redTranslationSetpoint3, redRotationSetpoint3);
 
@@ -288,11 +288,13 @@ public final class Constants {
     public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
     public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
     public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
-    public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(15);
+    public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(11);
     public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(15);
     public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(17);
-    public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(30);
-    public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(55.0);
+    public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(35);
+    public static final double ELEVATOR_AUTO_L4_POSITION_M = inchesToMeters(57);
+    public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(33);
+    public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(57.0);
     public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8.0);
     public static final double ELEVATOR_GROUND_PICKUP_POSITION_M = inchesToMeters(6.0);
     public static final double ELEVATOR_FEEDER_POSITION_M = inchesToMeters(2);
@@ -304,6 +306,8 @@ public final class Constants {
       kL1(ELEVATOR_L1_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_L1_POSITION_M)),
       kL2(ELEVATOR_L2_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_L2_POSITION_M)),
       kAUTOL2(ELEVATOR_AUTO_L2_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_AUTO_L2_POSITION_M)),
+      kAUTOL3(ELEVATOR_AUTO_L3_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_AUTO_L3_POSITION_M)),
+      kAUTOL4(ELEVATOR_AUTO_L4_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_AUTO_L4_POSITION_M)),
       kL3(ELEVATOR_L3_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_L3_POSITION_M)),
       kL4(ELEVATOR_L4_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_L4_POSITION_M)),
       kALGAE(ELEVATOR_ALGAE_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_ALGAE_POSITION_M)),
@@ -323,6 +327,8 @@ public final class Constants {
     public static final double PIVOT_L1_POSITION_D = 90.0;
     public static final double PIVOT_L23_POSITION_D = 55.0;
     public static final double PIVOT_AUTO_L23_POSITION_D = 60.0;
+    public static final double PIVOT_AUTO_L4_POSITION_D = 60.0;
+    public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 110;
     public static final double PIVOT_AUTO_L23_SCORE_POSITION_D = 110;
     public static final double PIVOT_L4_POSITION_D = 55.0;
     public static final double PIVOT_UPRIGHT_POSITION_D = 45.0;
@@ -335,7 +341,8 @@ public final class Constants {
     public enum PivotPosition {
       kL1(PIVOT_L1_POSITION_D, Constants.degreesToRotations(PIVOT_L1_POSITION_D)),
       kL23(PIVOT_L23_POSITION_D, Constants.degreesToRotations(PIVOT_L23_POSITION_D)),
-      kLAUTO23(PIVOT_AUTO_L23_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L23_POSITION_D)),
+      kAUTOL23(PIVOT_AUTO_L23_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L23_POSITION_D)),
+      kAUTOL4(PIVOT_AUTO_L4_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L4_POSITION_D)),
       kL4(PIVOT_L4_POSITION_D, Constants.degreesToRotations(PIVOT_L4_POSITION_D)),
       kUP(PIVOT_UPRIGHT_POSITION_D, Constants.degreesToRotations(PIVOT_UPRIGHT_POSITION_D)),
       kGROUNDALGAE(PIVOT_GROUND_ALGAE_POSITION_D, Constants.degreesToRotations(PIVOT_GROUND_ALGAE_POSITION_D)),
@@ -344,6 +351,7 @@ public final class Constants {
       kGROUNDCORALBACK(PIVOT_GROUND_CORAL_POSITION_BACK_D,
           Constants.degreesToRotations(PIVOT_GROUND_CORAL_POSITION_BACK_D)),
       kAUTOL23SCORE(PIVOT_AUTO_L23_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L23_SCORE_POSITION_D)),
+      kAUTOL4SCORE(PIVOT_AUTO_L4_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L4_SCORE_POSITION_D)),
       kDEFAULT(PIVOT_DEFAULT_POSITION_D, Constants.degreesToRotations(PIVOT_DEFAULT_POSITION_D)),
       kFEEDER(PIVOT_FEEDER_POSITION_D, Constants.degreesToRotations(PIVOT_FEEDER_POSITION_D));
 
@@ -691,20 +699,25 @@ public final class Constants {
    * @return The standardized angle within the range [0, 360) degrees.
    */
   public static double standardizeAngleDegrees(double angleDegrees) {
+    System.out.println("initial angle degrees" + angleDegrees);
     if (angleDegrees >= 0 && angleDegrees < 360) {
+      System.out.println("standardized angle degrees" + angleDegrees);
       return angleDegrees;
     } else if (angleDegrees < 0) {
       while (angleDegrees < 0) {
         angleDegrees += 360;
       }
+      System.out.println("standardized angle degrees" + angleDegrees);
       return angleDegrees;
     } else if (angleDegrees >= 360) {
       while (angleDegrees >= 360) {
         angleDegrees -= 360;
       }
+      System.out.println("standardized angle degrees" + angleDegrees);
       return angleDegrees;
     } else {
       // System.out.println("Weird ErroR");
+      System.out.println("standardized angle degrees" + angleDegrees);
       return angleDegrees;
     }
   }

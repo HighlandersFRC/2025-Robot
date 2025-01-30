@@ -188,6 +188,7 @@ public class Superstructure extends SubsystemBase {
       case AUTO_L2_PLACE:
         if (drive.hitSetPoint()) {
           currentSuperState = SuperState.AUTO_SCORE_L2;
+          wantedSuperState = SuperState.AUTO_SCORE_L2;
         } else {
           currentSuperState = SuperState.AUTO_L2_PLACE;
         }
@@ -355,7 +356,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoL1PlaceState() {
-    drive.setWantedState(DriveState.REEF);
+    drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.AUTO_L1);
     intake.setWantedState(IntakeState.DEFAULT);
     pivot.setWantedState(PivotState.L1);
@@ -434,32 +435,157 @@ public class Superstructure extends SubsystemBase {
     twist.setWantedState(TwistState.UP);
   }
 
-  public void handleFeederState() {
+  /*
+  *
+  public void handleFeederState() { // function for the normal setup in the warehouse
+  drive.setWantedState(DriveState.FEEDER);
+  intake.setWantedState(IntakeState.CORAL_INTAKE);
+  if
+  ((Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle(
+  ))) <= 45
+  &&
+  Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())
+  ) >= 0)
+  ||
+  (Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle()
+  )) <= 360
+  &&
+  Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())
+  ) >= 225)) {
+  twist.setWantedState(TwistState.UP);
+  pivot.setWantedState(PivotState.FEEDER_FRONT);
+  } else {
+  if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition()
+  > -0.08) {
+  elevator.setWantedState(ElevatorState.L2);
+  } else if (elevator.getElevatorPosition() >= 13 / 39.37 &&
+  pivot.getPivotPosition() > -0.08) {
+  twist.setWantedState(TwistState.DOWN);
+  elevator.setWantedState(ElevatorState.L2);
+  pivot.setWantedState(PivotState.FEEDER_BACK);
+  } else {
+  elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
+  twist.setWantedState(TwistState.DOWN);
+  pivot.setWantedState(PivotState.FEEDER_BACK);
+  }
+  }
+  
+  }
+  
+  /*
+   */
+  /**/
+
+  public void handleFeederState() { // function for an actual field, comment
+    // out the function above when running on
+    // an actual field
     drive.setWantedState(DriveState.FEEDER);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
-    if ((Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 45
-        && Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 0)
-        ||
-        (Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 360
-            && Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 225)) {
-      twist.setWantedState(TwistState.UP);
-      pivot.setWantedState(PivotState.FEEDER_FRONT);
-    } else {
-      if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
-        elevator.setWantedState(ElevatorState.L1);
-      } else if (elevator.getElevatorPosition() >= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
-        twist.setWantedState(TwistState.DOWN);
-        elevator.setWantedState(ElevatorState.L1);
-        pivot.setWantedState(PivotState.FEEDER_BACK);
-      } else {
-        elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
-        twist.setWantedState(TwistState.DOWN);
-        pivot.setWantedState(PivotState.FEEDER_BACK);
+    if (drive.getFieldSide() == "red") { // red side
+      if (drive.getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
+        if (!(Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 324
+            &&
+            Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 144)) {
+          twist.setWantedState(TwistState.UP);
+          pivot.setWantedState(PivotState.FEEDER_FRONT);
+          elevator.setWantedState(ElevatorState.DEFAULT);
+        } else { // robot back side redside left feeder (fieldside top right)
+          if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
+            elevator.setWantedState(ElevatorState.L2);
+          } else if (elevator.getElevatorPosition() >= 13 / 39.37 &&
+              pivot.getPivotPosition() > -0.08) {
+            twist.setWantedState(TwistState.DOWN);
+            elevator.setWantedState(ElevatorState.L2);
+            pivot.setWantedState(PivotState.FEEDER_BACK);
+          } else {
+            elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
+            twist.setWantedState(TwistState.DOWN);
+            pivot.setWantedState(PivotState.FEEDER_BACK);
+          }
+        }
+      } else { // redside left feeder (fieldside bottom right)
+        if ((Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 36
+            &&
+            Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 0)
+            ||
+            (Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 360
+                &&
+                Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 216)) {
+          twist.setWantedState(TwistState.UP);
+          pivot.setWantedState(PivotState.FEEDER_FRONT);
+          elevator.setWantedState(ElevatorState.DEFAULT);
+        } else { // robot back side redside left (fieldside bottom right)
+          if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
+            elevator.setWantedState(ElevatorState.L2);
+          } else if (elevator.getElevatorPosition() >= 13 / 39.37 &&
+              pivot.getPivotPosition() > -0.08) {
+            twist.setWantedState(TwistState.DOWN);
+            elevator.setWantedState(ElevatorState.L2);
+            pivot.setWantedState(PivotState.FEEDER_BACK);
+          } else {
+            elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
+            twist.setWantedState(TwistState.DOWN);
+            pivot.setWantedState(PivotState.FEEDER_BACK);
+          }
+        }
+      }
+    } else { // blue side
+      if (drive.getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
+        if ((Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 324
+            &&
+            Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 144)) {
+          twist.setWantedState(TwistState.UP);
+          System.out.println("front");
+          pivot.setWantedState(PivotState.FEEDER_FRONT);
+          elevator.setWantedState(ElevatorState.DEFAULT);
+        } else { // robot back side blueside right (fieldside bottom left)
+          if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
+            elevator.setWantedState(ElevatorState.L2);
+            System.out.println("part 1");
+          } else if (elevator.getElevatorPosition() >= 13 / 39.37 &&
+              pivot.getPivotPosition() > -0.08) {
+            twist.setWantedState(TwistState.DOWN);
+            System.out.println("part 2");
+            elevator.setWantedState(ElevatorState.L2);
+            pivot.setWantedState(PivotState.FEEDER_BACK);
+          } else {
+            elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
+            System.out.println("part 3");
+            twist.setWantedState(TwistState.DOWN);
+            pivot.setWantedState(PivotState.FEEDER_BACK);
+          }
+        }
+      } else { // blue side left feeder (fieldside top left)
+        if (!((Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 36
+            &&
+            Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 0)
+            ||
+            (Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 360
+                &&
+                Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 216))) {
+          twist.setWantedState(TwistState.UP);
+          pivot.setWantedState(PivotState.FEEDER_FRONT);
+          elevator.setWantedState(ElevatorState.DEFAULT);
+        } else { // robot back side blueside left (fieldside top left)
+          if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
+            elevator.setWantedState(ElevatorState.L2);
+          } else if (elevator.getElevatorPosition() >= 13 / 39.37 &&
+              pivot.getPivotPosition() > -0.08) {
+            twist.setWantedState(TwistState.DOWN);
+            elevator.setWantedState(ElevatorState.L2);
+            pivot.setWantedState(PivotState.FEEDER_BACK);
+          } else {
+            elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
+            twist.setWantedState(TwistState.DOWN);
+            pivot.setWantedState(PivotState.FEEDER_BACK);
+          }
+        }
       }
     }
-
   }
 
+  /*
+   */
   public void handleGroundCoralPickupFrontState() {
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_INTAKE);
@@ -475,7 +601,7 @@ public class Superstructure extends SubsystemBase {
     if (twist.getTwistPosition() < 0.1 || pivot.getPivotPosition() < -0.1) {
       pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
     }
-    if (pivot.getPivotPosition() < -0.1) {
+    if (pivot.getPivotPosition() < 0.0) {
       twist.setWantedState(TwistState.DOWN);
     }
   }
@@ -517,7 +643,8 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoL1ScoreState() {
-
+    drive.setWantedState(DriveState.DEFAULT);
+    intake.setWantedState(IntakeState.OUTAKE);
   }
 
   public void handleAutoL2ScoreState() {
@@ -526,7 +653,8 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoL3ScoreState() {
-
+    drive.setWantedState(DriveState.DEFAULT);
+    pivot.setWantedState(PivotState.AUTO_SCORE_L23);
   }
 
   public void handleAutoL4ScoreState() {
