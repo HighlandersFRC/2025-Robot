@@ -32,6 +32,8 @@ import frc.robot.tools.math.Vector;
 public class Peripherals {
   private PhotonCamera frontCam = new PhotonCamera("Front_Cam");
   private PhotonCamera backCam = new PhotonCamera("Back_Cam");
+  private PhotonCamera rightCam = new PhotonCamera("Right_Cam");
+  private PhotonCamera leftCam = new PhotonCamera("Left_Cam");
   private PhotonCamera gamePieceCamera = new PhotonCamera("Game_Piece_Cam");
 
   AprilTagFieldLayout aprilTagFieldLayout;
@@ -263,6 +265,24 @@ public class Peripherals {
 
   public PhotonPipelineResult getBackCamResult() {
     var result = backCam.getAllUnreadResults();
+    if (!result.isEmpty()) {
+      return result.get(0);
+    } else {
+      return new PhotonPipelineResult();
+    }
+  }
+
+  public PhotonPipelineResult getRightCamResult() {
+    var result = rightCam.getAllUnreadResults();
+    if (!result.isEmpty()) {
+      return result.get(0);
+    } else {
+      return new PhotonPipelineResult();
+    }
+  }
+
+  public PhotonPipelineResult getLeftCamResult() {
+    var result = leftCam.getAllUnreadResults();
     if (!result.isEmpty()) {
       return result.get(0);
     } else {

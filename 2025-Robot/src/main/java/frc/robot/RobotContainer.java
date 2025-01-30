@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -76,6 +77,9 @@ public class RobotContainer {
   Twist twist = new Twist();
   Climber climber = new Climber();
   Superstructure superstructure = new Superstructure(drive, elevator, intake, pivot, twist);
+
+  boolean algaeMode = false;
+  boolean manualMode = false;
 
   HashMap<String, Supplier<Command>> commandMap = new HashMap<String, Supplier<Command>>() {
     {
@@ -166,7 +170,6 @@ public class RobotContainer {
     // OI.driverY.whileTrue(new SetElevatorPercent(elevator, 0.3));
     // OI.driverA.whileTrue(new SetElevatorPercent(elevator, 0.3));
 
-
     OI.driverPOVLeft.whileTrue(new SetRobotStateSimple(superstructure, SuperState.L1_PLACE));
     OI.driverPOVLeft.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L1));
 
@@ -174,6 +177,7 @@ public class RobotContainer {
     OI.driverPOVRight.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L2));
 
     OI.driverX.whileTrue(new SetRobotStateOnce(superstructure, SuperState.AUTO_L2_PLACE));
+    OI.driverA.whileTrue(new SetRobotStateOnce(superstructure, SuperState.AUTO_L4_PLACE));
 
     OI.driverPOVUp.whileTrue(new SetRobotStateSimple(superstructure, SuperState.L3_PLACE));
     OI.driverPOVUp.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L3));
@@ -186,30 +190,47 @@ public class RobotContainer {
     // OI.driverX.whileTrue(new SetRobotState(superstructure, SuperState.FEEDER));
     // OI.driverB.whileTrue(new SetPivotState(pivot, PivotState.GROUND_CORAL));
 
-    // OI.driverX.whileTrue(new SetPivotPercent(pivot, 0.3));
-    // OI.driverB.whileTrue(new SetPivotPercent(pivot, -0.3));
-    // OI.driverRB.whileTrue(new SetRobotState(superstructure,
-    // SuperState.GROUND_ALGAE_PICKUP));
-
-    // OI.driverRB.whileTrue(new SetTwistState(twist, TwistState.UP));
-    // OI.driverLB.whileTrue(new SetTwistState(twist, TwistState.SIDE));
-
-    // OI.driverRB.whileTrue(new SetTwistPercent(twist, 0.3));
-    // OI.driverLB.whileTrue(new SetTwistPercent(twist, -0.3));
-
     // OI.driverY.whileTrue(new SetClimberPivotTorque(climber, 60, 0.2));
     // OI.driverA.whileTrue(new SetClimberPivotTorque(climber, -60, 0.2));
     // OI.driverB.whileTrue(new SetClimberPivotTorque(climber, 20, 0.15));
     // OI.driverRB.whileTrue(new SetClimberRollerTorque(climber, 70, 0.8));
     // OI.driverLB.whileTrue(new SetClimberRollerTorque(climber, -70, 0.8));
 
-    // OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.L2_PLACE));
-    // OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.L3_PLACE));
-    // OI.driverRB.whileTrue(new MoveToPoint(drive, 1, 1, Math.PI / 2, false));
-    // OI.driverLB.whileTrue(new MoveToPiece(drive, peripherals, intake));
-    // OI.driverRB.onTrue(new L2AutoPlace(superstructure, elevator, drive, intake,
-    // peripherals));
-    // OI.driverMenuButton.whileTrue(new SetRobotPose(drive, 10.375, 1.5, 0));
+    // ********OFFICIAL COMPETITION CONTROLS*********
+    // DO NOT DELET
+    // NEED TO TEST
+
+    // OI.driverPOVLeft.whileTrue(new ConditionalCommand(new
+    // SetRobotState(superstructure, SuperState.L1_PLACE),
+    // new ConditionalCommand(new SetRobotState(superstructure,
+    // SuperState.GROUND_ALGAE_PICKUP),
+    // new SetRobotState(superstructure, SuperState.AUTO_L1_PLACE), () ->
+    // algaeMode),
+    // () -> manualMode));
+
+    // OI.driverPOVRight.whileTrue(new ConditionalCommand(new
+    // SetRobotState(superstructure, SuperState.L2_PLACE),
+    // new ConditionalCommand(new SetRobotState(superstructure,
+    // SuperState.GROUND_ALGAE_PICKUP),
+    // new SetRobotState(superstructure, SuperState.AUTO_L2_PLACE), () ->
+    // algaeMode),
+    // () -> manualMode));
+
+    // OI.driverPOVUp.whileTrue(new ConditionalCommand(new
+    // SetRobotState(superstructure, SuperState.L3_PLACE),
+    // new ConditionalCommand(new SetRobotState(superstructure,
+    // SuperState.GROUND_ALGAE_PICKUP),
+    // new SetRobotState(superstructure, SuperState.AUTO_L3_PLACE), () ->
+    // algaeMode),
+    // () -> manualMode));
+
+    // OI.driverPOVDown.whileTrue(new ConditionalCommand(new
+    // SetRobotState(superstructure, SuperState.L4_PLACE),
+    // new ConditionalCommand(new SetRobotState(superstructure,
+    // SuperState.GROUND_ALGAE_PICKUP),
+    // new SetRobotState(superstructure, SuperState.AUTO_L4_PLACE), () ->
+    // algaeMode),
+    // () -> manualMode));
   }
 
   /**

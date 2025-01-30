@@ -197,6 +197,9 @@ public class Pivot extends SubsystemBase {
       case AUTO_SCORE_L23:
         pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
         break;
+      case AUTO_SCORE_L4:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
+        break;
       case FEEDER_FRONT:
         pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
         break;
@@ -209,6 +212,7 @@ public class Pivot extends SubsystemBase {
         pivotToPosition(Constants.SetPoints.PivotPosition.kLAUTO23.rotations);
         break;
       case AUTO_L4:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kL4.rotations);
         break;
       default:
         setPivotPercent(0.0);

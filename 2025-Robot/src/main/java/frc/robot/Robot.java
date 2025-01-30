@@ -19,6 +19,7 @@ public class Robot extends LoggedRobot {
 
   private MotorTest motortest = new MotorTest();
   String m_fieldSide = "blue";
+  boolean rjPressed = false;
 
   @Override
   public void robotInit() {
@@ -72,6 +73,24 @@ public class Robot extends LoggedRobot {
     } catch (Exception e) {
       System.out.println("Problem with logging");
     }
+
+    if (OI.isManualMode()) {
+      m_robotContainer.manualMode = true;
+    } else {
+      m_robotContainer.manualMode = false;
+    }
+
+    if (OI.driverRJ.getAsBoolean()) {
+      if (rjPressed) {
+        m_robotContainer.algaeMode = !m_robotContainer.algaeMode;
+        rjPressed = false;
+      }
+    } else {
+      rjPressed = true;
+    }
+
+    Logger.recordOutput("Algae Mode", m_robotContainer.algaeMode);
+    Logger.recordOutput("Manual Mode", m_robotContainer.manualMode);
     Logger.recordOutput("Swerve Module States", m_robotContainer.drive.getModuleStates());
     Logger.recordOutput("Swerve Module Setpoints", m_robotContainer.drive.getModuleSetpoints());
     Logger.recordOutput("IMU", m_robotContainer.peripherals.getPigeonAngle());
@@ -127,9 +146,12 @@ public class Robot extends LoggedRobot {
     } else {
       m_fieldSide = "red";
     }
-    if (this.m_fieldSide == "red") {
-      this.m_robotContainer.drive.setPigeonAfterAuto();
-    }
+
+    // Leave uncommented to use field relative theta system. Instead we are flipping
+    // joystick values on red side.
+    // if (this.m_fieldSide == "red") {
+    // this.m_robotContainer.drive.setPigeonAfterAuto();
+    // }
     System.out.println("field side" + m_fieldSide);
 
     this.m_robotContainer.drive.setFieldSide(m_fieldSide);

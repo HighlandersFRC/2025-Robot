@@ -117,12 +117,12 @@ public class SwerveModule extends SubsystemBase {
     angleMotorConfig.Feedback.RotorToSensorRatio = Constants.Ratios.STEER_GEAR_RATIO;
 
     if (moduleNumber == 2 || moduleNumber == 3) {
-      driveMotorConfig.Slot0.kP = 9.5;
+      driveMotorConfig.Slot0.kP = 9.0;
       driveMotorConfig.Slot0.kI = 0.0;
       driveMotorConfig.Slot0.kD = 0.0;
       driveMotorConfig.Slot0.kV = 0.0;
     } else {
-      driveMotorConfig.Slot0.kP = 8.5;
+      driveMotorConfig.Slot0.kP = 8.0;
       driveMotorConfig.Slot0.kI = 0.0;
       driveMotorConfig.Slot0.kD = 0.0;
       driveMotorConfig.Slot0.kV = 0.0;

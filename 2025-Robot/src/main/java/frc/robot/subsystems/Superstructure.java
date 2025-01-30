@@ -196,7 +196,11 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.AUTO_L3_PLACE;
         break;
       case AUTO_L4_PLACE:
-        currentSuperState = SuperState.AUTO_L4_PLACE;
+        if (drive.hitSetPoint()) {
+          currentSuperState = SuperState.AUTO_SCORE_L4;
+        } else {
+          currentSuperState = SuperState.AUTO_L4_PLACE;
+        }
         break;
       case L1_PLACE:
         currentSuperState = SuperState.L1_PLACE;
@@ -526,7 +530,8 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoL4ScoreState() {
-
+    drive.setWantedState(DriveState.DEFAULT);
+    pivot.setWantedState(PivotState.AUTO_SCORE_L4);
   }
 
   public void handleScoreL1State() {

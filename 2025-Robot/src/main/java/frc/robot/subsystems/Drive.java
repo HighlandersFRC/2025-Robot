@@ -170,6 +170,8 @@ public class Drive extends SubsystemBase {
 
   PhotonPoseEstimator photonPoseEstimator;
   PhotonPoseEstimator backPhotonPoseEstimator;
+  PhotonPoseEstimator rightPhotonPoseEstimator;
+  PhotonPoseEstimator leftPhotonPoseEstimator;
   AprilTagFieldLayout aprilTagFieldLayout;
 
   Transform3d frontRobotToCam = new Transform3d(
@@ -181,6 +183,16 @@ public class Drive extends SubsystemBase {
       new Translation3d(Constants.inchesToMeters(-1.5), Constants.inchesToMeters(-11.0),
           Constants.inchesToMeters(15.15)),
       new Rotation3d(0, Math.toRadians(5.9), Math.toRadians(148.0)));
+
+  Transform3d rightRobotToCam = new Transform3d(
+      new Translation3d(Constants.inchesToMeters(3.0), Constants.inchesToMeters(-12.5), // mead to get yaw
+          Constants.inchesToMeters(17.75)),
+      new Rotation3d(0, Math.toRadians(5.7), Math.toRadians(313.0)));
+
+  Transform3d leftRobotToCam = new Transform3d(
+      new Translation3d(Constants.inchesToMeters(-2.0), Constants.inchesToMeters(-12.5),
+          Constants.inchesToMeters(17.7)),
+      new Rotation3d(0, Math.toRadians(6.2), Math.toRadians(227.0)));
 
   double initAngle;
   double setAngle;
@@ -315,6 +327,12 @@ public class Drive extends SubsystemBase {
 
     backPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backRobotToCam);
+
+    rightPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, rightRobotToCam);
+
+    leftPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, leftRobotToCam);
 
     frontRight.init();
     frontLeft.init();
@@ -634,6 +652,62 @@ public class Drive extends SubsystemBase {
             backResult.getTimestampSeconds());
       }
     }
+
+    var rightResult = peripherals.getRightCamResult();
+    Optional<EstimatedRobotPose> rightMultiTagResult = rightPhotonPoseEstimator.update(rightResult);
+    if (rightMultiTagResult.isPresent()) {
+      if (rightResult.getBestTarget().getPoseAmbiguity() < 0.3) {
+        Pose3d robotPose = rightMultiTagResult.get().estimatedPose;
+        Logger.recordOutput("multitag result", robotPose);
+        int numFrontTracks = rightResult.getTargets().size();
+        Pose3d tagPose = aprilTagFieldLayout.getTagPose(rightResult.getBestTarget().getFiducialId()).get();
+        double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+        Logger.recordOutput("Distance to tag", distToTag);
+        // standardDeviation.set(0, 0,
+        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        // standardDeviation.set(1, 0,
+        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        // standardDeviation.set(2, 0, 0.1);
+        Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+            new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+        mt2Odometry.addVisionMeasurement(poseWithoutAngle,
+            rightResult.getTimestampSeconds());
+      }
+    }
+
+    var leftResult = peripherals.getLeftCamResult();
+    Optional<EstimatedRobotPose> leftMultiTagResult = leftPhotonPoseEstimator.update(leftResult);
+    if (leftMultiTagResult.isPresent()) {
+      if (leftResult.getBestTarget().getPoseAmbiguity() < 0.3) {
+        Pose3d robotPose = leftMultiTagResult.get().estimatedPose;
+        Logger.recordOutput("multitag result", robotPose);
+        int numFrontTracks = leftResult.getTargets().size();
+        Pose3d tagPose = aprilTagFieldLayout.getTagPose(leftResult.getBestTarget().getFiducialId()).get();
+        double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+        Logger.recordOutput("Distance to tag", distToTag);
+        // standardDeviation.set(0, 0,
+        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        // standardDeviation.set(1, 0,
+        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        // standardDeviation.set(2, 0, 0.1);
+        Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+            new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+        mt2Odometry.addVisionMeasurement(poseWithoutAngle,
+            leftResult.getTimestampSeconds());
+      }
+    }
     // if (isPoseInField(frontCamPnPPose) && !frontCamPnPPose.equals(defaultPose)) {
     // // peripherals.setPigeonAngle(frontCamPnPPose.getRotation().getRadians());
     // mt2Odometry.addVisionMeasurement(frontCamPnPPose,
@@ -882,6 +956,10 @@ public class Drive extends SubsystemBase {
     double ySpeed = yPower * Constants.Physical.TOP_SPEED;
 
     Vector controllerVector = new Vector(xSpeed, ySpeed);
+    if (getFieldSide().equals("red")) {
+      controllerVector.setI(-xSpeed);
+      controllerVector.setJ(-ySpeed);
+    }
 
     frontLeft.drive(controllerVector, turn, pigeonAngle);
     frontRight.drive(controllerVector, turn, pigeonAngle);
@@ -983,6 +1061,10 @@ public class Drive extends SubsystemBase {
     double ySpeed = yPower * Constants.Physical.TOP_SPEED;
 
     Vector controllerVector = new Vector(xSpeed, ySpeed);
+    if (getFieldSide().equals("red")) {
+      controllerVector.setI(-xSpeed);
+      controllerVector.setJ(-ySpeed);
+    }
     frontLeft.drive(controllerVector, turn, pigeonAngle);
     frontRight.drive(controllerVector, turn, pigeonAngle);
     backLeft.drive(controllerVector, turn, pigeonAngle);
@@ -1046,7 +1128,10 @@ public class Drive extends SubsystemBase {
       double ySpeed = yPower * Constants.Physical.TOP_SPEED;
 
       Vector controllerVector = new Vector(xSpeed, ySpeed);
-
+      if (getFieldSide().equals("red")) {
+        controllerVector.setI(-xSpeed);
+        controllerVector.setJ(-ySpeed);
+      }
       frontLeft.drive(controllerVector, result, pigeonAngle);
       frontRight.drive(controllerVector, result, pigeonAngle);
       backLeft.drive(controllerVector, result, pigeonAngle);
@@ -1065,6 +1150,10 @@ public class Drive extends SubsystemBase {
       double ySpeed = yPower * Constants.Physical.TOP_SPEED;
 
       Vector controllerVector = new Vector(xSpeed, ySpeed);
+      if (getFieldSide().equals("red")) {
+        controllerVector.setI(-xSpeed);
+        controllerVector.setJ(-ySpeed);
+      }
       frontLeft.drive(controllerVector, turn, pigeonAngle);
       frontRight.drive(controllerVector, turn, pigeonAngle);
       backLeft.drive(controllerVector, turn, pigeonAngle);

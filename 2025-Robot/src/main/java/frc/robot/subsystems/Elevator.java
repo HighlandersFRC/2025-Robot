@@ -228,6 +228,10 @@ public class Elevator extends SubsystemBase {
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kAUTOL2.meters);
         break;
+      case AUTO_L4:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kL4.meters);
+        break;
       default:
         if (firstTimeIdle) {
           idleTime = Timer.getFPGATimestamp();

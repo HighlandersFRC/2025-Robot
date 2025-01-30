@@ -39,6 +39,9 @@ public class OI {
     public static JoystickButton driverRB = new JoystickButton(driverController, 6);
     public static JoystickButton driverLB = new JoystickButton(driverController, 5);
 
+    public static JoystickButton driverLJ = new JoystickButton(driverController, 9);
+    public static JoystickButton driverRJ = new JoystickButton(driverController, 10);
+
     public static JoystickButton operatorX = new JoystickButton(operatorController, 3);
     public static JoystickButton operatorB = new JoystickButton(operatorController, 2);
 
@@ -159,7 +162,7 @@ public class OI {
         return !autoChooser.getRawButton(8);
     }
 
-    public static boolean isNothingAuto() {
+    public static boolean isManualMode() {
         return autoChooser.getRawButton(7);
     }
 
