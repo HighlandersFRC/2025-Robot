@@ -250,6 +250,7 @@ public class Drive extends SubsystemBase {
     DEFAULT,
     IDLE,
     REEF,
+    REEF_BACK,
     ALGAE,
     FEEDER,
   }
@@ -1523,6 +1524,8 @@ public class Drive extends SubsystemBase {
         return DriveState.IDLE;
       case REEF:
         return DriveState.REEF;
+      case REEF_BACK:
+        return DriveState.REEF_BACK;
       case ALGAE:
         return DriveState.ALGAE;
       case FEEDER:
@@ -1555,6 +1558,9 @@ public class Drive extends SubsystemBase {
       case REEF:
         driveToPoint(getReefClosestSetpoint(getMT2Odometry())[0], getReefClosestSetpoint(getMT2Odometry())[1],
             getReefClosestSetpoint(getMT2Odometry())[2]);
+        break;
+      case REEF_BACK:
+        teleopDrive();
         break;
       case ALGAE:
         break;
