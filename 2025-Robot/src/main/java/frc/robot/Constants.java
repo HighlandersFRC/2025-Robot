@@ -184,15 +184,14 @@ public final class Constants {
     // public static final List<Map<ReefHeight, Pose3d>> redBranchPositions = new
     // ArrayList<>(); // Starting at the right
 
-    public static final List<Map<ReefHeight, Pose3d>> blueFrontPlacingPositions = new ArrayList<>();
-    public static final List<Map<ReefHeight, Pose3d>> redFrontPlacingPositions = new ArrayList<>();
+    public static final List<Pose2d> blueFrontPlacingPositions = new ArrayList<>();
+    public static final List<Pose2d> redFrontPlacingPositions = new ArrayList<>();
     // public static final List<Map<ReefHeight, Pose3d>> blueBackPlacingPositions =
     // new ArrayList<>();
     // public static final List<Map<ReefHeight, Pose3d>> redBackPlacingPositions =
     // new ArrayList<>();
 
     static {
-      // Initialize faces
       centerFaces[0] = new Pose2d(
           inchesToMeters(144.003),
           inchesToMeters(158.500),
@@ -218,96 +217,56 @@ public final class Constants {
           inchesToMeters(130.144),
           Rotation2d.fromDegrees(-120));
 
-      // Initialize branch positions
       for (int face = 0; face < 6; face++) {
-        Map<ReefHeight, Pose3d> fillRight = new HashMap<>();
-        Map<ReefHeight, Pose3d> fillLeft = new HashMap<>();
-        for (var level : ReefHeight.values()) {
-          Pose2d poseDirection = new Pose2d(center, Rotation2d.fromDegrees(180 - (60 * face)));
-          double adjustX = inchesToMeters(30.738);
-          double adjustY = inchesToMeters(6.469);
+        Pose2d fillRight = new Pose2d();
+        Pose2d fillLeft = new Pose2d();
+        Pose2d poseDirection = new Pose2d(center, Rotation2d.fromDegrees(180 - (60 * face)));
+        double adjustX = inchesToMeters(30.738);
+        double adjustY = inchesToMeters(6.469);
 
-          fillRight.put(
-              level,
-              new Pose3d(
-                  new Translation3d(
-                      poseDirection
-                          .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
-                          .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_FRONT, Physical.INTAKE_Y_OFFSET_FRONT,
-                              new Rotation2d(Math.PI)))
-                          .getX(),
-                      poseDirection
-                          .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
-                          .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_FRONT, Physical.INTAKE_Y_OFFSET_FRONT,
-                              new Rotation2d(Math.PI)))
-                          .getY(),
-                      level.height),
-                  new Rotation3d(
-                      0,
-                      degreesToRadians(level.pitch),
-                      poseDirection.getRotation().getRadians())));
-          fillLeft.put(
-              level,
-              new Pose3d(
-                  new Translation3d(
-                      poseDirection
-                          .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
-                          .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_FRONT, Physical.INTAKE_Y_OFFSET_FRONT,
-                              new Rotation2d(Math.PI)))
-                          .getX(),
-                      poseDirection
-                          .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
-                          .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_FRONT, Physical.INTAKE_Y_OFFSET_FRONT,
-                              new Rotation2d(Math.PI)))
-                          .getY(),
-                      level.height),
-                  new Rotation3d(
-                      0,
-                      degreesToRadians(level.pitch),
-                      poseDirection.getRotation().getRadians())));
-        }
+        fillRight = new Pose2d(
+            new Translation2d(
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_FRONT, Physical.INTAKE_Y_OFFSET_FRONT,
+                        new Rotation2d(Math.PI)))
+                    .getX(),
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_FRONT, Physical.INTAKE_Y_OFFSET_FRONT,
+                        new Rotation2d(Math.PI)))
+                    .getY()),
+            new Rotation2d(
+                poseDirection.getRotation().getRadians() - Math.PI));
+        fillLeft = new Pose2d(
+            new Translation2d(
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_FRONT, Physical.INTAKE_Y_OFFSET_FRONT,
+                        new Rotation2d(Math.PI)))
+                    .getX(),
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_FRONT, Physical.INTAKE_Y_OFFSET_FRONT,
+                        new Rotation2d(Math.PI)))
+                    .getY()),
+            new Rotation2d(
+                poseDirection.getRotation().getRadians() - Math.PI));
         blueFrontPlacingPositions.add(fillRight);
         blueFrontPlacingPositions.add(fillLeft);
       }
 
-      for (Map<ReefHeight, Pose3d> blueMap : blueFrontPlacingPositions) {
-        Map<ReefHeight, Pose3d> redMap = new HashMap<>();
-        for (var entry : blueMap.entrySet()) {
-          Pose3d bluePose = entry.getValue();
-          Translation3d mirroredTranslation = new Translation3d(
-              Constants.Physical.FIELD_LENGTH - bluePose.getX(),
-              Constants.Physical.FIELD_WIDTH - bluePose.getY(),
-              bluePose.getZ());
-          System.out.println("rotation: " + bluePose.getRotation().getZ());
-          Rotation3d mirroredRotation = new Rotation3d(
-              bluePose.getRotation().getX(),
-              bluePose.getRotation().getY(),
-              bluePose.getRotation().getZ() + Math.PI);
-          System.out.println("post rotation: " + " " + mirroredRotation.getZ());
-          redMap.put(entry.getKey(), new Pose3d(mirroredTranslation, mirroredRotation));
-        }
-        redFrontPlacingPositions.add(redMap);
+      for (Pose2d bluePose : blueFrontPlacingPositions) {
+        Pose2d redPose = new Pose2d();
+        Translation2d mirroredTranslation = new Translation2d(
+            Constants.Physical.FIELD_LENGTH - bluePose.getX(),
+            Constants.Physical.FIELD_WIDTH - bluePose.getY());
+        Rotation2d mirroredRotation = new Rotation2d(
+            bluePose.getRotation().getRadians() + Math.PI);
+        redPose = new Pose2d(mirroredTranslation, mirroredRotation);
+        redFrontPlacingPositions.add(redPose);
       }
-
-      // for (int i = 0; i < branchPositions.size(); i++) {
-      // placingPositions.add(branchPositions.get(i).);
-      // }
     }
-  }
-
-  public enum ReefHeight {
-    L4(inchesToMeters(72), -90),
-    L3(inchesToMeters(47.625), -35),
-    L2(inchesToMeters(31.875), -35),
-    L1(inchesToMeters(18), 0);
-
-    ReefHeight(double height, double pitch) {
-      this.height = height;
-      this.pitch = pitch; // in degrees
-    }
-
-    public final double height;
-    public final double pitch;
   }
 
   // Physical constants (e.g. field and robot dimensions)
