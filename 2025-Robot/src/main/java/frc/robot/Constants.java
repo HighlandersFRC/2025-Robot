@@ -285,12 +285,10 @@ public final class Constants {
     public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
         ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
 
-    public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(25.0);
-    public static final double INTAKE_Y_OFFSET_FRONT = inchesToMeters(3.0);
+    public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(22.5);
+    public static final double INTAKE_Y_OFFSET_FRONT = inchesToMeters(5.6);
 
     public static final double GRAVITY_ACCEL_MS2 = 9.806;
-    public static final double CORAL_PLACEMENT_X = inchesToMeters(27);
-    public static final double CORAL_PLACEMENT_Y = inchesToMeters(6.25);
 
     public static final Translation2d redTranslationSetpoint1 = new Translation2d(0.0, 0.0);
     public static final Rotation2d redRotationSetpoint1 = new Rotation2d(0.0);

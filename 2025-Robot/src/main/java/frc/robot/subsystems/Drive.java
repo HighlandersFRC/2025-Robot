@@ -826,25 +826,25 @@ public class Drive extends SubsystemBase {
     double currentDist = 100.0;
     double[] chosenSetpoint = { x, y, theta };
     if (getFieldSide() == "red") {
-      for (int i = 0; i < Constants.Physical.redCoralScoringPositions.size(); i++) {
-        currentDist = Math.sqrt(Math.pow((x - Constants.Physical.redCoralScoringPositions.get(i).getX()), 2)
-            + Math.pow((y - Constants.Physical.redCoralScoringPositions.get(i).getY()), 2));
+      for (int i = 0; i < Constants.Reef.redFrontPlacingPositions.size(); i++) {
+        currentDist = Math.sqrt(Math.pow((x - Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
+            + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
         if (currentDist < dist) {
           dist = currentDist;
-          chosenSetpoint[0] = Constants.Physical.redCoralScoringPositions.get(i).getX();
-          chosenSetpoint[1] = Constants.Physical.redCoralScoringPositions.get(i).getY();
-          chosenSetpoint[2] = Constants.Physical.redCoralScoringPositions.get(i).getRotation().getRadians();
+          chosenSetpoint[0] = Constants.Reef.redFrontPlacingPositions.get(i).getX();
+          chosenSetpoint[1] = Constants.Reef.redFrontPlacingPositions.get(i).getY();
+          chosenSetpoint[2] = Constants.Reef.redFrontPlacingPositions.get(i).getRotation().getRadians();
         }
       }
     } else {
-      for (int i = 0; i < Constants.Physical.blueCoralScoringPositions.size(); i++) {
-        currentDist = Math.sqrt(Math.pow((x - Constants.Physical.blueCoralScoringPositions.get(i).getX()), 2)
-            + Math.pow((y - Constants.Physical.blueCoralScoringPositions.get(i).getY()), 2));
+      for (int i = 0; i < Constants.Reef.blueFrontPlacingPositions.size(); i++) {
+        currentDist = Math.sqrt(Math.pow((x - Constants.Reef.blueFrontPlacingPositions.get(i).getX()), 2)
+            + Math.pow((y - Constants.Reef.blueFrontPlacingPositions.get(i).getY()), 2));
         if (currentDist < dist) {
           dist = currentDist;
-          chosenSetpoint[0] = Constants.Physical.redCoralScoringPositions.get(i).getX();
-          chosenSetpoint[1] = Constants.Physical.redCoralScoringPositions.get(i).getY();
-          chosenSetpoint[2] = Constants.Physical.redCoralScoringPositions.get(i).getRotation().getRadians();
+          chosenSetpoint[0] = Constants.Reef.blueFrontPlacingPositions.get(i).getX();
+          chosenSetpoint[1] = Constants.Reef.blueFrontPlacingPositions.get(i).getY();
+          chosenSetpoint[2] = Constants.Reef.blueFrontPlacingPositions.get(i).getRotation().getRadians();
         }
       }
     }
@@ -1565,16 +1565,6 @@ public class Drive extends SubsystemBase {
       case ALGAE:
         break;
       case FEEDER:
-        /* *     if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 45
-            && Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 0)
-            ||
-            (Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 360
-                && Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 225)) {
-          driveToTheta(315);
-        } else {
-          driveToTheta(135);
-        } /* */
-
         if (getFieldSide() == "red") { // red side
           if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
             if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 324
