@@ -345,8 +345,8 @@ public final class Constants {
     public static final Rotation2d redRotationSetpoint3 = new Rotation2d(2.094);
     public static final Pose2d redSetpoint3 = new Pose2d(redTranslationSetpoint3, redRotationSetpoint3);
 
-    public static final Translation2d redTranslationSetpoint4 = new Translation2d(0, 0);
-    public static final Rotation2d redRotationSetpoint4 = new Rotation2d(0);
+    public static final Translation2d redTranslationSetpoint4 = new Translation2d(14.00, 3.00);
+    public static final Rotation2d redRotationSetpoint4 = new Rotation2d(2.094);
     public static final Pose2d redSetpoint4 = new Pose2d(redTranslationSetpoint4, redRotationSetpoint4);
 
     public static final Translation2d redTranslationSetpoint5 = new Translation2d(0, 0);
@@ -477,8 +477,8 @@ public final class Constants {
 
     public static final double PIVOT_L1_POSITION_D = 90.0;
     public static final double PIVOT_L23_POSITION_D = 55.0;
-    public static final double PIVOT_AUTO_L23_POSITION_D = 60.0;
-    public static final double PIVOT_AUTO_L4_POSITION_D = 60.0;
+    public static final double PIVOT_AUTO_L23_POSITION_D = 45.0;
+    public static final double PIVOT_AUTO_L4_POSITION_D = 45.0;
     public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 110;
     public static final double PIVOT_AUTO_L23_SCORE_POSITION_D = 110;
     public static final double PIVOT_L4_POSITION_D = 55.0;
@@ -486,6 +486,7 @@ public final class Constants {
     public static final double PIVOT_GROUND_ALGAE_POSITION_D = 135.0;
     public static final double PIVOT_GROUND_CORAL_POSITION_FRONT_D = 127.0;
     public static final double PIVOT_GROUND_CORAL_POSITION_BACK_D = -127.0;
+    public static final double PIVOT_GROUND_CORAL_PREP_BACK_D = -90;
     public static final double PIVOT_DEFAULT_POSITION_D = 30.0;
     public static final double PIVOT_FEEDER_POSITION_D = 39.37;
 
@@ -501,6 +502,8 @@ public final class Constants {
           Constants.degreesToRotations(PIVOT_GROUND_CORAL_POSITION_FRONT_D)),
       kGROUNDCORALBACK(PIVOT_GROUND_CORAL_POSITION_BACK_D,
           Constants.degreesToRotations(PIVOT_GROUND_CORAL_POSITION_BACK_D)),
+      kGROUNDCORALPREPBACK(PIVOT_GROUND_CORAL_PREP_BACK_D,
+          Constants.degreesToRotations(PIVOT_GROUND_CORAL_PREP_BACK_D)),
       kAUTOL23SCORE(PIVOT_AUTO_L23_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L23_SCORE_POSITION_D)),
       kAUTOL4SCORE(PIVOT_AUTO_L4_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L4_SCORE_POSITION_D)),
       kDEFAULT(PIVOT_DEFAULT_POSITION_D, Constants.degreesToRotations(PIVOT_DEFAULT_POSITION_D)),

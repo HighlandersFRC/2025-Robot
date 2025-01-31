@@ -78,6 +78,11 @@ public class Pivot extends SubsystemBase {
     pivotMotor.set(percent);
   }
 
+  public enum PivotFlip {
+    FRONT,
+    BACK,
+  }
+
   public enum PivotState {
     AUTO_L1,
     AUTO_L23,
@@ -87,9 +92,11 @@ public class Pivot extends SubsystemBase {
     L4,
     PROCESSOR,
     NET,
-    FEEDER_FRONT,
-    FEEDER_BACK,
+    // FEEDER_FRONT,
+    // FEEDER_BACK,
+    FEEDER,
     GROUND_CORAL_FRONT,
+    GROUND_CORAL_PREP_BACK,
     GROUND_CORAL_BACK,
     GROUND_ALGAE,
     REEF_ALGAE,
@@ -105,8 +112,26 @@ public class Pivot extends SubsystemBase {
   private PivotState wantedState = PivotState.DEFAULT;
   private PivotState systemState = PivotState.DEFAULT;
 
+  private PivotFlip wantedFlip = PivotFlip.FRONT;
+  private PivotFlip systemFlip = PivotFlip.FRONT;
+
   public void setWantedState(PivotState wantedState) {
     this.wantedState = wantedState;
+  }
+
+  public void setWantedFlip(PivotFlip wantedFlip) {
+    this.wantedFlip = wantedFlip;
+  }
+
+  private PivotFlip handleFlipTransition() {
+    switch (wantedFlip) {
+      case FRONT:
+        return PivotFlip.FRONT;
+      case BACK:
+        return PivotFlip.BACK;
+      default:
+        return PivotFlip.FRONT;
+    }
   }
 
   private PivotState handleStateTransition() {
@@ -125,16 +150,20 @@ public class Pivot extends SubsystemBase {
         return PivotState.AUTO_L23;
       case AUTO_L4:
         return PivotState.AUTO_L4;
-      case FEEDER_FRONT:
-        return PivotState.FEEDER_FRONT;
-      case FEEDER_BACK:
-        return PivotState.FEEDER_BACK;
+      // case FEEDER_FRONT:
+      //   return PivotState.FEEDER_FRONT;
+      // case FEEDER_BACK:
+      //   return PivotState.FEEDER_BACK;
+      case FEEDER:
+        return PivotState.FEEDER;
       case REEF_ALGAE:
         return PivotState.REEF_ALGAE;
       case GROUND_CORAL_FRONT:
         return PivotState.GROUND_CORAL_FRONT;
       case GROUND_CORAL_BACK:
         return PivotState.GROUND_CORAL_BACK;
+      case GROUND_CORAL_PREP_BACK:
+        return PivotState.GROUND_CORAL_PREP_BACK;
       case GROUND_ALGAE:
         return PivotState.GROUND_ALGAE;
       case PROCESSOR:
@@ -166,6 +195,7 @@ public class Pivot extends SubsystemBase {
     // Logger.recordOutput("Pivot Current",
     // pivotMotor.getStatorCurrent().getValueAsDouble());
     systemState = handleStateTransition();
+    systemFlip = handleFlipTransition();
     switch (systemState) {
       case DEFAULT:
         pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT.rotations);
@@ -178,6 +208,9 @@ public class Pivot extends SubsystemBase {
         break;
       case GROUND_CORAL_BACK:
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALBACK.rotations);
+        break;
+      case GROUND_CORAL_PREP_BACK:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALPREPBACK.rotations);
         break;
       case L1:
         pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
@@ -197,16 +230,49 @@ public class Pivot extends SubsystemBase {
         pivotToPosition(0.25);
         break;
       case AUTO_SCORE_L23:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
+            break;
+        }
         break;
       case AUTO_SCORE_L4:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+            break;
+        }
         break;
-      case FEEDER_FRONT:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-        break;
-      case FEEDER_BACK:
-        pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+      // case FEEDER_FRONT:
+      //   pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+      //   break;
+      // case FEEDER_BACK:
+      //   pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+      //   break;
+      case FEEDER:
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+            break;
+        }
         break;
       case AUTO_L1:
         break;

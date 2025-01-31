@@ -179,7 +179,6 @@ public class RobotContainer {
     OI.driverPOVRight.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L2));
 
     OI.driverX.whileTrue(new SetRobotStateOnce(superstructure, SuperState.AUTO_L2_PLACE));
-    OI.driverA.whileTrue(new SetRobotStateOnce(superstructure, SuperState.AUTO_L4_PLACE));
 
     OI.driverPOVUp.whileTrue(new SetRobotStateSimple(superstructure, SuperState.L3_PLACE));
     OI.driverPOVUp.onFalse(new SetRobotStateSimple(superstructure, SuperState.SCORE_L3));
