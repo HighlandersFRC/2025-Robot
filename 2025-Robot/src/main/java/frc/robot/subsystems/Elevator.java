@@ -48,7 +48,7 @@ public class Elevator extends SubsystemBase {
     SCORE_L3,
     SCORE_L4,
     NET,
-
+    OVER,
   }
 
   private double idleTime;
@@ -134,6 +134,8 @@ public class Elevator extends SubsystemBase {
     switch (wantedState) {
       case DEFAULT:
         return ElevatorState.DEFAULT;
+      case OVER:
+        return ElevatorState.OVER;
       case L1:
         return ElevatorState.L1;
       case L2:
@@ -191,6 +193,10 @@ public class Elevator extends SubsystemBase {
       case GROUND_INTAKE:
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kGROUNDPICKUP.meters);
+        break;
+      case OVER:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kOVER.meters);
         break;
       case L1:
         firstTimeIdle = true;

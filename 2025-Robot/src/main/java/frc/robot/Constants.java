@@ -176,6 +176,11 @@ public final class Constants {
     Logger.recordOutput("red positions", Constants.Reef.redFrontPlacingPositions.toString());
     Logger.recordOutput("blue back positions", Constants.Reef.blueBackPlacingPositions.toString());
     Logger.recordOutput("red back positions", Constants.Reef.redBackPlacingPositions.toString());
+
+    Logger.recordOutput("l4 blue positions", Constants.Reef.l4BlueFrontPlacingPositions.toString());
+    Logger.recordOutput("l4 red positions", Constants.Reef.l4RedFrontPlacingPositions.toString());
+    Logger.recordOutput("l4 blue back positions", Constants.Reef.l4BlueBackPlacingPositions.toString());
+    Logger.recordOutput("l4 red back positions", Constants.Reef.l4RedBackPlacingPositions.toString());
   }
 
   public static class Reef {
@@ -196,6 +201,11 @@ public final class Constants {
     public static final List<Pose2d> redFrontPlacingPositions = new ArrayList<>();
     public static final List<Pose2d> blueBackPlacingPositions = new ArrayList<>();
     public static final List<Pose2d> redBackPlacingPositions = new ArrayList<>();
+
+    public static final List<Pose2d> l4BlueFrontPlacingPositions = new ArrayList<>();
+    public static final List<Pose2d> l4RedFrontPlacingPositions = new ArrayList<>();
+    public static final List<Pose2d> l4BlueBackPlacingPositions = new ArrayList<>();
+    public static final List<Pose2d> l4RedBackPlacingPositions = new ArrayList<>();
 
     static {
       centerFaces[0] = new Pose2d(
@@ -228,6 +238,10 @@ public final class Constants {
         Pose2d fillLeft = new Pose2d();
         Pose2d backRight = new Pose2d();
         Pose2d backLeft = new Pose2d();
+        Pose2d l4FrontRight = new Pose2d();
+        Pose2d l4FrontLeft = new Pose2d();
+        Pose2d l4BackRight = new Pose2d();
+        Pose2d l4BackLeft = new Pose2d();
         Pose2d poseDirection = new Pose2d(center, Rotation2d.fromDegrees(180 - (60 * face)));
         double adjustX = inchesToMeters(30.738);
         double adjustY = inchesToMeters(6.469);
@@ -260,6 +274,35 @@ public final class Constants {
                     .getY()),
             new Rotation2d(
                 poseDirection.getRotation().getRadians()));
+        l4FrontRight = new Pose2d(
+            new Translation2d(
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.L4_INTAKE_X_OFFSET_FRONT, Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                        new Rotation2d(Math.PI)))
+                    .getX(),
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.L4_INTAKE_X_OFFSET_FRONT,
+                        Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                        new Rotation2d(Math.PI)))
+                    .getY()),
+            new Rotation2d(
+                poseDirection.getRotation().getRadians() - Math.PI));
+        l4BackRight = new Pose2d(
+            new Translation2d(
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.L4_INTAKE_X_OFFSET_BACK, Physical.L4_INTAKE_Y_OFFSET_BACK,
+                        new Rotation2d()))
+                    .getX(),
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.L4_INTAKE_X_OFFSET_BACK, Physical.L4_INTAKE_Y_OFFSET_BACK,
+                        new Rotation2d()))
+                    .getY()),
+            new Rotation2d(
+                poseDirection.getRotation().getRadians()));
         fillLeft = new Pose2d(
             new Translation2d(
                 poseDirection
@@ -288,10 +331,42 @@ public final class Constants {
                     .getY()),
             new Rotation2d(
                 poseDirection.getRotation().getRadians()));
+        l4FrontLeft = new Pose2d(
+            new Translation2d(
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.L4_INTAKE_X_OFFSET_FRONT, Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                        new Rotation2d(Math.PI)))
+                    .getX(),
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.L4_INTAKE_X_OFFSET_FRONT, Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                        new Rotation2d(Math.PI)))
+                    .getY()),
+            new Rotation2d(
+                poseDirection.getRotation().getRadians() - Math.PI));
+        l4BackLeft = new Pose2d(
+            new Translation2d(
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.L4_INTAKE_X_OFFSET_BACK, Physical.L4_INTAKE_Y_OFFSET_BACK,
+                        new Rotation2d()))
+                    .getX(),
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.L4_INTAKE_X_OFFSET_BACK, Physical.L4_INTAKE_Y_OFFSET_BACK,
+                        new Rotation2d()))
+                    .getY()),
+            new Rotation2d(
+                poseDirection.getRotation().getRadians()));
         blueFrontPlacingPositions.add(fillRight);
         blueFrontPlacingPositions.add(fillLeft);
         blueBackPlacingPositions.add(backRight);
         blueBackPlacingPositions.add(backLeft);
+        l4BlueFrontPlacingPositions.add(l4FrontRight);
+        l4BlueFrontPlacingPositions.add(l4FrontLeft);
+        l4BlueBackPlacingPositions.add(l4BackRight);
+        l4BlueBackPlacingPositions.add(l4BackLeft);
       }
 
       for (Pose2d bluePose : blueFrontPlacingPositions) {
@@ -315,6 +390,28 @@ public final class Constants {
         redPose = new Pose2d(mirroredTranslation, mirroredRotation);
         redBackPlacingPositions.add(redPose);
       }
+
+      for (Pose2d bluePose : l4BlueFrontPlacingPositions) {
+        Pose2d redPose = new Pose2d();
+        Translation2d mirroredTranslation = new Translation2d(
+            Constants.Physical.FIELD_LENGTH - bluePose.getX(),
+            Constants.Physical.FIELD_WIDTH - bluePose.getY());
+        Rotation2d mirroredRotation = new Rotation2d(
+            bluePose.getRotation().getRadians() + Math.PI);
+        redPose = new Pose2d(mirroredTranslation, mirroredRotation);
+        l4RedFrontPlacingPositions.add(redPose);
+      }
+
+      for (Pose2d bluePose : l4BlueBackPlacingPositions) {
+        Pose2d redPose = new Pose2d();
+        Translation2d mirroredTranslation = new Translation2d(
+            Constants.Physical.FIELD_LENGTH - bluePose.getX(),
+            Constants.Physical.FIELD_WIDTH - bluePose.getY());
+        Rotation2d mirroredRotation = new Rotation2d(
+            bluePose.getRotation().getRadians() - Math.PI);
+        redPose = new Pose2d(mirroredTranslation, mirroredRotation);
+        l4RedBackPlacingPositions.add(redPose);
+      }
     }
   }
 
@@ -334,10 +431,15 @@ public final class Constants {
     public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
         ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
 
-    public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(22.5);
-    public static final double INTAKE_Y_OFFSET_FRONT = inchesToMeters(5.6);
-    public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
-    public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-5.6);
+    public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(24.5);
+    public static final double INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.3);
+    public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(24.5);
+    public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
+
+    public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(22.5);
+    public static final double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.3);
+    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
+    public static final double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
 
     public static final double GRAVITY_ACCEL_MS2 = 9.806;
 
@@ -507,6 +609,7 @@ public final class Constants {
     public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8.0);
     public static final double ELEVATOR_GROUND_PICKUP_POSITION_M = inchesToMeters(6.0);
     public static final double ELEVATOR_FEEDER_POSITION_M = inchesToMeters(2);
+    public static final double ELEVATOR_OVER_POSITION_M = inchesToMeters(15);
 
     public enum ElevatorPosition {
       kDOWN(ELEVATOR_BOTTOM_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_BOTTOM_POSITION_M)),
@@ -522,7 +625,8 @@ public final class Constants {
       kALGAE(ELEVATOR_ALGAE_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_ALGAE_POSITION_M)),
       kFEEDER(ELEVATOR_FEEDER_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_FEEDER_POSITION_M)),
       kGROUNDPICKUP(ELEVATOR_GROUND_PICKUP_POSITION_M,
-          Ratios.elevatorMetersToRotations(ELEVATOR_GROUND_PICKUP_POSITION_M));
+          Ratios.elevatorMetersToRotations(ELEVATOR_GROUND_PICKUP_POSITION_M)),
+      kOVER(ELEVATOR_OVER_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_OVER_POSITION_M));
 
       public final double meters;
       public final double rotations;
