@@ -646,10 +646,12 @@ public final class Constants {
     public static double getTagDistStdDevScalar(double dist) {
       // double a = TAG_STANDARD_DEVIATION_FLATNESS;
       // double b = 1 - a * Math.pow(TAG_STANDARD_DEVIATION_DISTANCE, 2);
-      Logger.recordOutput("std devs",
-          -0.000277778 * Math.pow(dist, 3) + 0.00988095 * Math.pow(dist, 2) + 0.00444444 * dist + 0.0371429);
+      // Logger.recordOutput("std devs",
+      // -0.000277778 * Math.pow(dist, 3) + 0.00988095 * Math.pow(dist, 2) +
+      // 0.00444444 * dist + 0.0371429);
       // return Math.max(1, a * Math.pow(dist, 2) + b);
-      return 0 * Math.pow(dist, 3) + 0.0109524 * Math.pow(dist, 2) - 0.00119048 * dist + 0.0728571;
+      return -0.00045928 * Math.pow(dist, 4) + 0.0069476 * Math.pow(dist, 3) - 0.0216241 * Math.pow(dist, 2)
+          + 0.063534 * dist + 0.0317614;
     }
 
     /**
@@ -663,9 +665,9 @@ public final class Constants {
       if (numTags == 0) {
         return 99999;
       } else if (numTags == 1) {
-        return 2;
-      } else if (numTags == 2) {
         return 1;
+      } else if (numTags == 2) {
+        return 0.6;
       } else {
         return 0.75;
       }

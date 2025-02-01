@@ -8,6 +8,8 @@ import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonTrackedTarget;
+import org.photonvision.PhotonUtils;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -21,6 +23,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -181,6 +184,10 @@ public class Drive extends SubsystemBase {
       new Translation3d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.0),
           Constants.inchesToMeters(15.15)),
       new Rotation3d(Math.toRadians(2.3), Math.toRadians(1.9), Math.toRadians(32.0)));
+
+  Transform2d frontCamPos = new Transform2d(
+      new Translation2d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.0)),
+      new Rotation2d(Math.toRadians(32.0)));
 
   Transform3d backRobotToCam = new Transform3d(
       new Translation3d(Constants.inchesToMeters(-1.5), Constants.inchesToMeters(-11.0),
@@ -606,13 +613,23 @@ public class Drive extends SubsystemBase {
     var result = peripherals.getFrontCamResult();
     Optional<EstimatedRobotPose> multiTagResult = photonPoseEstimator.update(result);
     if (multiTagResult.isPresent()) {
+      PhotonTrackedTarget target = result.getBestTarget();
+      // Pose2d robotPose = PhotonUtils.estimateFieldToRobot(
+      // frontRobotToCam.getZ(),
+      // aprilTagFieldLayout.getTagPose(target.fiducialId).get().getZ(),
+      // -frontRobotToCam.getRotation().getY(),
+      // aprilTagFieldLayout.getTagPose(target.getFiducialId()).get().getRotation().getY(),
+      // Rotation2d.fromDegrees(-target.getYaw()),
+      // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())),
+      // aprilTagFieldLayout.getTagPose(target.fiducialId).get().toPose2d(),
+      // frontCamPos);
       if (result.getBestTarget().getPoseAmbiguity() < 0.3) {
         Pose3d robotPose = multiTagResult.get().estimatedPose;
         Logger.recordOutput("multitag result", robotPose);
         int numFrontTracks = result.getTargets().size();
         Pose3d tagPose = aprilTagFieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-        Logger.recordOutput("Distance to tag", distToTag);
+        // Logger.recordOutput("Distance to tag", distToTag);
         standardDeviation.set(0, 0,
             Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
                 * Constants.Vision.getTagDistStdDevScalar(distToTag));
@@ -660,7 +677,8 @@ public class Drive extends SubsystemBase {
     }
 
     var rightResult = peripherals.getRightCamResult();
-    Optional<EstimatedRobotPose> rightMultiTagResult = rightPhotonPoseEstimator.update(rightResult);
+    Optional<EstimatedRobotPose> rightMultiTagResult = rightPhotonPoseEstimator
+        .update(rightResult);
     if (rightMultiTagResult.isPresent()) {
       if (rightResult.getBestTarget().getPoseAmbiguity() < 0.3) {
         Pose3d robotPose = rightMultiTagResult.get().estimatedPose;
@@ -688,7 +706,8 @@ public class Drive extends SubsystemBase {
     }
 
     var leftResult = peripherals.getLeftCamResult();
-    Optional<EstimatedRobotPose> leftMultiTagResult = leftPhotonPoseEstimator.update(leftResult);
+    Optional<EstimatedRobotPose> leftMultiTagResult = leftPhotonPoseEstimator
+        .update(leftResult);
     if (leftMultiTagResult.isPresent()) {
       if (leftResult.getBestTarget().getPoseAmbiguity() < 0.3) {
         Pose3d robotPose = leftMultiTagResult.get().estimatedPose;

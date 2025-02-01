@@ -112,17 +112,20 @@ public class Twist extends SubsystemBase {
     systemState = handleStateTransition();
     Logger.recordOutput("Twist State", systemState);
     Logger.recordOutput("Twist Position", getTwistPosition());
-    System.out.println("Twist Position: " + getTwistPosition());
-    // Logger.recordOutput("Twist Error", twistMotor.getClosedLoopError().getValueAsDouble());
-    // Logger.recordOutput("Twist Current", twistMotor.getStatorCurrent().getValueAsDouble());
-    // Logger.recordOutput("Twist MPS", (twistMotor.getVelocity().getValueAsDouble()));
+    // System.out.println("Twist Position: " + getTwistPosition());
+    // Logger.recordOutput("Twist Error",
+    // twistMotor.getClosedLoopError().getValueAsDouble());
+    // Logger.recordOutput("Twist Current",
+    // twistMotor.getStatorCurrent().getValueAsDouble());
+    // Logger.recordOutput("Twist MPS",
+    // (twistMotor.getVelocity().getValueAsDouble()));
     switch (systemState) {
       case UP:
         if (!startedZero) {
           zeroInitTime = Timer.getFPGATimestamp();
           startedZero = true;
         }
-        if (Timer.getFPGATimestamp() - zeroInitTime > 2.0) {
+        if (Timer.getFPGATimestamp() - zeroInitTime > 1.3) {
           setTwistPercent(0.0);
           setTwistEncoderPosition(0.0);
         } else {
