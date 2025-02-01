@@ -190,12 +190,14 @@ public class Pivot extends SubsystemBase {
   @Override
   public void periodic() {
     Logger.recordOutput("Pivot Position", getPivotPosition());
+
     // Logger.recordOutput("Pivot Output",
     // pivotMotor.getClosedLoopOutput().getValueAsDouble());
     // Logger.recordOutput("Pivot Current",
     // pivotMotor.getStatorCurrent().getValueAsDouble());
     systemState = handleStateTransition();
     systemFlip = handleFlipTransition();
+    Logger.recordOutput("Pivot State", systemState);
     switch (systemState) {
       case DEFAULT:
         pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT.rotations);

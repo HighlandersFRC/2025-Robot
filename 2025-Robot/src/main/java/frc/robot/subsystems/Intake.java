@@ -101,10 +101,10 @@ public class Intake extends SubsystemBase {
         }
         break;
       case OUTAKE:
-        if (true/* logic for if it coral (true) or algae (false) */) {
-          setIntakePercent(-0.7);
+        if (true/* logic for if i coral (true) or algae (false) */) {
+          setIntakePercent(-0.2);
         } else {
-          setIntakePercent(0.7);
+          setIntakePercent(0.2);
         }
         break;
       case OFF:

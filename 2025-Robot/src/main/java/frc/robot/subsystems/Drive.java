@@ -823,13 +823,23 @@ public class Drive extends SubsystemBase {
     return autoPlacingFront;
   }
 
+  public double getAngleDifferenceDegrees(double angle1, double angle2) {
+    while (angle1 - angle2 > 180) {
+      angle2 += 360;
+    }
+    while (angle2 - angle1 > 180) {
+      angle2 -= 360;
+    }
+    return Math.abs(angle1 - angle2);
+  }
+
   public double[] getReefClosestSetpoint(double[] currentOdometry /* {x, y, thetaRadians} */) {
     double x = currentOdometry[0];
     double y = currentOdometry[1];
-    double theta = currentOdometry[2];
+    double theta = Constants.standardizeAngleDegrees(Math.toDegrees(currentOdometry[2]));
     double dist = 100.0;
     double currentDist = 100.0;
-    double[] chosenSetpoint = { x, y, theta };
+    double[] chosenSetpoint = { x, y, Math.toRadians(theta) };
     if (getFieldSide() == "red") {
       for (int i = 0; i < Constants.Reef.redFrontPlacingPositions.size(); i++) {
         // currentDist = Math.sqrt(Math.pow((x - Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
@@ -842,8 +852,8 @@ public class Drive extends SubsystemBase {
                 .getY()) / 2);
         if (currentDist < dist) {
           dist = currentDist;
-          if (Math.abs(theta - Constants.Reef.redFrontPlacingPositions.get(i).getRotation().getRadians()) <= Math.PI
-              / 2) {
+          if (getAngleDifferenceDegrees(theta,
+              Constants.Reef.redFrontPlacingPositions.get(i).getRotation().getDegrees()) <= 90) {
             autoPlacingFront = true;
             chosenSetpoint[0] = Constants.Reef.redFrontPlacingPositions.get(i).getX();
             chosenSetpoint[1] = Constants.Reef.redFrontPlacingPositions.get(i).getY();
@@ -866,8 +876,8 @@ public class Drive extends SubsystemBase {
                 .getY()) / 2);
         if (currentDist < dist) {
           dist = currentDist;
-          if (Math.abs(theta - Constants.Reef.blueFrontPlacingPositions.get(i).getRotation().getRadians()) <= Math.PI
-              / 2) {
+          if (getAngleDifferenceDegrees(theta,
+              Constants.Reef.blueFrontPlacingPositions.get(i).getRotation().getDegrees()) <= 90) {
             autoPlacingFront = true;
             chosenSetpoint[0] = Constants.Reef.blueFrontPlacingPositions.get(i).getX();
             chosenSetpoint[1] = Constants.Reef.blueFrontPlacingPositions.get(i).getY();
