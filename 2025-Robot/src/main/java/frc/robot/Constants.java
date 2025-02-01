@@ -537,8 +537,8 @@ public final class Constants {
     public static final double PIVOT_L23_POSITION_D = 55.0;
     public static final double PIVOT_AUTO_L23_POSITION_D = 45.0;
     public static final double PIVOT_AUTO_L4_POSITION_D = 45.0;
-    public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 110;
-    public static final double PIVOT_AUTO_L23_SCORE_POSITION_D = 110;
+    public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 100;
+    public static final double PIVOT_AUTO_L23_SCORE_POSITION_D = 100;
     public static final double PIVOT_L4_POSITION_D = 55.0;
     public static final double PIVOT_UPRIGHT_POSITION_D = 45.0;
     public static final double PIVOT_GROUND_ALGAE_POSITION_D = 135.0;
