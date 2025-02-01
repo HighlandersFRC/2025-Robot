@@ -93,31 +93,35 @@ public final class Constants {
 
   public static void init() {
 
-    Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint1);
-    Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint2);
-    Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint3); ///////
-    Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint4); // Only have these 4 now
-    Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint5); // The rest are 0, 0
-    Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint6); ///////
-    Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint7);
-    Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint8);
-    Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint9);
-    Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint10);
-    Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint11);
-    Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint12);
+    // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint1);
+    // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint2);
+    // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint3);
+    // ///////
+    // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint4);
+    // // Only have these 4 now
+    // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint5);
+    // // The rest are 0, 0
+    // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint6);
+    // ///////
+    // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint7);
+    // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint8);
+    // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint9);
+    // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint10);
+    // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint11);
+    // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint12);
 
-    Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint1);
-    Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint2);
-    Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint3);
-    Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint4);
-    Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint5);
-    Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint6);
-    Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint7);
-    Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint8);
-    Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint9);
-    Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint10);
-    Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint11);
-    Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint12);
+    // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint1);
+    // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint2);
+    // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint3);
+    // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint4);
+    // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint5);
+    // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint6);
+    // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint7);
+    // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint8);
+    // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint9);
+    // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint10);
+    // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint11);
+    // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint12);
 
     // for (int i = 0; i < Constants.Vision.redSideReefTags.length; i++) {
     // Vector tagVector = new Vector(Constants.Vision.redSideReefTags[i][0],
@@ -164,10 +168,14 @@ public final class Constants {
     // new Rotation2d(Constants.Vision.blueSideReefTags[i][3] + Math.PI)));
     // }
 
-    Logger.recordOutput("red side scoring", Constants.Physical.redCoralScoringPositions.toString());
-    Logger.recordOutput("blue side scoring", Constants.Physical.blueCoralScoringPositions.toString());
+    // Logger.recordOutput("red side scoring",
+    // Constants.Physical.redCoralScoringPositions.toString());
+    // Logger.recordOutput("blue side scoring",
+    // Constants.Physical.blueCoralScoringPositions.toString());
     Logger.recordOutput("blue positions", Constants.Reef.blueFrontPlacingPositions.toString());
     Logger.recordOutput("red positions", Constants.Reef.redFrontPlacingPositions.toString());
+    Logger.recordOutput("blue back positions", Constants.Reef.blueBackPlacingPositions.toString());
+    Logger.recordOutput("red back positions", Constants.Reef.redBackPlacingPositions.toString());
   }
 
   public static class Reef {
@@ -186,10 +194,8 @@ public final class Constants {
 
     public static final List<Pose2d> blueFrontPlacingPositions = new ArrayList<>();
     public static final List<Pose2d> redFrontPlacingPositions = new ArrayList<>();
-    // public static final List<Map<ReefHeight, Pose3d>> blueBackPlacingPositions =
-    // new ArrayList<>();
-    // public static final List<Map<ReefHeight, Pose3d>> redBackPlacingPositions =
-    // new ArrayList<>();
+    public static final List<Pose2d> blueBackPlacingPositions = new ArrayList<>();
+    public static final List<Pose2d> redBackPlacingPositions = new ArrayList<>();
 
     static {
       centerFaces[0] = new Pose2d(
@@ -220,6 +226,8 @@ public final class Constants {
       for (int face = 0; face < 6; face++) {
         Pose2d fillRight = new Pose2d();
         Pose2d fillLeft = new Pose2d();
+        Pose2d backRight = new Pose2d();
+        Pose2d backLeft = new Pose2d();
         Pose2d poseDirection = new Pose2d(center, Rotation2d.fromDegrees(180 - (60 * face)));
         double adjustX = inchesToMeters(30.738);
         double adjustY = inchesToMeters(6.469);
@@ -238,6 +246,20 @@ public final class Constants {
                     .getY()),
             new Rotation2d(
                 poseDirection.getRotation().getRadians() - Math.PI));
+        backRight = new Pose2d(
+            new Translation2d(
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_BACK, Physical.INTAKE_Y_OFFSET_BACK,
+                        new Rotation2d()))
+                    .getX(),
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_BACK, Physical.INTAKE_Y_OFFSET_BACK,
+                        new Rotation2d()))
+                    .getY()),
+            new Rotation2d(
+                poseDirection.getRotation().getRadians()));
         fillLeft = new Pose2d(
             new Translation2d(
                 poseDirection
@@ -252,8 +274,24 @@ public final class Constants {
                     .getY()),
             new Rotation2d(
                 poseDirection.getRotation().getRadians() - Math.PI));
+        backLeft = new Pose2d(
+            new Translation2d(
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_BACK, Physical.INTAKE_Y_OFFSET_BACK,
+                        new Rotation2d()))
+                    .getX(),
+                poseDirection
+                    .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
+                    .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_BACK, Physical.INTAKE_Y_OFFSET_BACK,
+                        new Rotation2d()))
+                    .getY()),
+            new Rotation2d(
+                poseDirection.getRotation().getRadians()));
         blueFrontPlacingPositions.add(fillRight);
         blueFrontPlacingPositions.add(fillLeft);
+        blueBackPlacingPositions.add(backRight);
+        blueBackPlacingPositions.add(backLeft);
       }
 
       for (Pose2d bluePose : blueFrontPlacingPositions) {
@@ -265,6 +303,17 @@ public final class Constants {
             bluePose.getRotation().getRadians() + Math.PI);
         redPose = new Pose2d(mirroredTranslation, mirroredRotation);
         redFrontPlacingPositions.add(redPose);
+      }
+
+      for (Pose2d bluePose : blueBackPlacingPositions) {
+        Pose2d redPose = new Pose2d();
+        Translation2d mirroredTranslation = new Translation2d(
+            Constants.Physical.FIELD_LENGTH - bluePose.getX(),
+            Constants.Physical.FIELD_WIDTH - bluePose.getY());
+        Rotation2d mirroredRotation = new Rotation2d(
+            bluePose.getRotation().getRadians() - Math.PI);
+        redPose = new Pose2d(mirroredTranslation, mirroredRotation);
+        redBackPlacingPositions.add(redPose);
       }
     }
   }
@@ -287,108 +336,160 @@ public final class Constants {
 
     public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(22.5);
     public static final double INTAKE_Y_OFFSET_FRONT = inchesToMeters(5.6);
+    public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
+    public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-5.6);
 
     public static final double GRAVITY_ACCEL_MS2 = 9.806;
 
-    public static final Translation2d redTranslationSetpoint1 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d redRotationSetpoint1 = new Rotation2d(0.0);
-    public static final Pose2d redSetpoint1 = new Pose2d(redTranslationSetpoint1, redRotationSetpoint1);
+    // public static final Translation2d redTranslationSetpoint1 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d redRotationSetpoint1 = new Rotation2d(0.0);
+    // public static final Pose2d redSetpoint1 = new Pose2d(redTranslationSetpoint1,
+    // redRotationSetpoint1);
 
-    public static final Translation2d redTranslationSetpoint2 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d redRotationSetpoint2 = new Rotation2d(0.0);
-    public static final Pose2d redSetpoint2 = new Pose2d(redTranslationSetpoint2, redRotationSetpoint2);
+    // public static final Translation2d redTranslationSetpoint2 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d redRotationSetpoint2 = new Rotation2d(0.0);
+    // public static final Pose2d redSetpoint2 = new Pose2d(redTranslationSetpoint2,
+    // redRotationSetpoint2);
 
-    public static final Translation2d redTranslationSetpoint3 = new Translation2d(13.70, 2.80);
-    public static final Rotation2d redRotationSetpoint3 = new Rotation2d(2.094);
-    public static final Pose2d redSetpoint3 = new Pose2d(redTranslationSetpoint3, redRotationSetpoint3);
+    // public static final Translation2d redTranslationSetpoint3 = new
+    // Translation2d(13.70, 2.80);
+    // public static final Rotation2d redRotationSetpoint3 = new Rotation2d(2.094);
+    // public static final Pose2d redSetpoint3 = new Pose2d(redTranslationSetpoint3,
+    // redRotationSetpoint3);
 
-    public static final Translation2d redTranslationSetpoint4 = new Translation2d(14.00, 3.00);
-    public static final Rotation2d redRotationSetpoint4 = new Rotation2d(2.094);
-    public static final Pose2d redSetpoint4 = new Pose2d(redTranslationSetpoint4, redRotationSetpoint4);
+    // public static final Translation2d redTranslationSetpoint4 = new
+    // Translation2d(14.00, 3.00);
+    // public static final Rotation2d redRotationSetpoint4 = new Rotation2d(2.094);
+    // public static final Pose2d redSetpoint4 = new Pose2d(redTranslationSetpoint4,
+    // redRotationSetpoint4);
 
-    public static final Translation2d redTranslationSetpoint5 = new Translation2d(0, 0);
-    public static final Rotation2d redRotationSetpoint5 = new Rotation2d(0);
-    public static final Pose2d redSetpoint5 = new Pose2d(redTranslationSetpoint5, redRotationSetpoint5);
+    // public static final Translation2d redTranslationSetpoint5 = new
+    // Translation2d(0, 0);
+    // public static final Rotation2d redRotationSetpoint5 = new Rotation2d(0);
+    // public static final Pose2d redSetpoint5 = new Pose2d(redTranslationSetpoint5,
+    // redRotationSetpoint5);
 
-    public static final Translation2d redTranslationSetpoint6 = new Translation2d(0, 0);
-    public static final Rotation2d redRotationSetpoint6 = new Rotation2d(0);
-    public static final Pose2d redSetpoint6 = new Pose2d(redTranslationSetpoint6, redRotationSetpoint6);
+    // public static final Translation2d redTranslationSetpoint6 = new
+    // Translation2d(0, 0);
+    // public static final Rotation2d redRotationSetpoint6 = new Rotation2d(0);
+    // public static final Pose2d redSetpoint6 = new Pose2d(redTranslationSetpoint6,
+    // redRotationSetpoint6);
 
-    public static final Translation2d redTranslationSetpoint7 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d redRotationSetpoint7 = new Rotation2d(0.0);
-    public static final Pose2d redSetpoint7 = new Pose2d(redTranslationSetpoint7, redRotationSetpoint7);
+    // public static final Translation2d redTranslationSetpoint7 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d redRotationSetpoint7 = new Rotation2d(0.0);
+    // public static final Pose2d redSetpoint7 = new Pose2d(redTranslationSetpoint7,
+    // redRotationSetpoint7);
 
-    public static final Translation2d redTranslationSetpoint8 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d redRotationSetpoint8 = new Rotation2d(0.0);
-    public static final Pose2d redSetpoint8 = new Pose2d(redTranslationSetpoint8, redRotationSetpoint8);
+    // public static final Translation2d redTranslationSetpoint8 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d redRotationSetpoint8 = new Rotation2d(0.0);
+    // public static final Pose2d redSetpoint8 = new Pose2d(redTranslationSetpoint8,
+    // redRotationSetpoint8);
 
-    public static final Translation2d redTranslationSetpoint9 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d redRotationSetpoint9 = new Rotation2d(0.0);
-    public static final Pose2d redSetpoint9 = new Pose2d(redTranslationSetpoint9, redRotationSetpoint9);
+    // public static final Translation2d redTranslationSetpoint9 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d redRotationSetpoint9 = new Rotation2d(0.0);
+    // public static final Pose2d redSetpoint9 = new Pose2d(redTranslationSetpoint9,
+    // redRotationSetpoint9);
 
-    public static final Translation2d redTranslationSetpoint10 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d redRotationSetpoint10 = new Rotation2d(0.0);
-    public static final Pose2d redSetpoint10 = new Pose2d(redTranslationSetpoint10, redRotationSetpoint10);
+    // public static final Translation2d redTranslationSetpoint10 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d redRotationSetpoint10 = new Rotation2d(0.0);
+    // public static final Pose2d redSetpoint10 = new
+    // Pose2d(redTranslationSetpoint10, redRotationSetpoint10);
 
-    public static final Translation2d redTranslationSetpoint11 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d redRotationSetpoint11 = new Rotation2d(0.0);
-    public static final Pose2d redSetpoint11 = new Pose2d(redTranslationSetpoint11, redRotationSetpoint11);
+    // public static final Translation2d redTranslationSetpoint11 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d redRotationSetpoint11 = new Rotation2d(0.0);
+    // public static final Pose2d redSetpoint11 = new
+    // Pose2d(redTranslationSetpoint11, redRotationSetpoint11);
 
-    public static final Translation2d redTranslationSetpoint12 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d redRotationSetpoint12 = new Rotation2d(0.0);
-    public static final Pose2d redSetpoint12 = new Pose2d(redTranslationSetpoint12, redRotationSetpoint12);
+    // public static final Translation2d redTranslationSetpoint12 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d redRotationSetpoint12 = new Rotation2d(0.0);
+    // public static final Pose2d redSetpoint12 = new
+    // Pose2d(redTranslationSetpoint12, redRotationSetpoint12);
 
-    public static final Translation2d blueTranslationSetpoint1 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d blueRotationSetpoint1 = new Rotation2d(0.0);
-    public static final Pose2d blueSetpoint1 = new Pose2d(blueTranslationSetpoint1, blueRotationSetpoint1);
+    // public static final Translation2d blueTranslationSetpoint1 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d blueRotationSetpoint1 = new Rotation2d(0.0);
+    // public static final Pose2d blueSetpoint1 = new
+    // Pose2d(blueTranslationSetpoint1, blueRotationSetpoint1);
 
-    public static final Translation2d blueTranslationSetpoint2 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d blueRotationSetpoint2 = new Rotation2d(0.0);
-    public static final Pose2d blueSetpoint2 = new Pose2d(blueTranslationSetpoint2, blueRotationSetpoint2);
+    // public static final Translation2d blueTranslationSetpoint2 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d blueRotationSetpoint2 = new Rotation2d(0.0);
+    // public static final Pose2d blueSetpoint2 = new
+    // Pose2d(blueTranslationSetpoint2, blueRotationSetpoint2);
 
-    public static final Translation2d blueTranslationSetpoint3 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d blueRotationSetpoint3 = new Rotation2d(0.0);
-    public static final Pose2d blueSetpoint3 = new Pose2d(blueTranslationSetpoint3, blueRotationSetpoint3);
+    // public static final Translation2d blueTranslationSetpoint3 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d blueRotationSetpoint3 = new Rotation2d(0.0);
+    // public static final Pose2d blueSetpoint3 = new
+    // Pose2d(blueTranslationSetpoint3, blueRotationSetpoint3);
 
-    public static final Translation2d blueTranslationSetpoint4 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d blueRotationSetpoint4 = new Rotation2d(0.0);
-    public static final Pose2d blueSetpoint4 = new Pose2d(blueTranslationSetpoint4, blueRotationSetpoint4);
+    // public static final Translation2d blueTranslationSetpoint4 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d blueRotationSetpoint4 = new Rotation2d(0.0);
+    // public static final Pose2d blueSetpoint4 = new
+    // Pose2d(blueTranslationSetpoint4, blueRotationSetpoint4);
 
-    public static final Translation2d blueTranslationSetpoint5 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d blueRotationSetpoint5 = new Rotation2d(0.0);
-    public static final Pose2d blueSetpoint5 = new Pose2d(blueTranslationSetpoint5, blueRotationSetpoint5);
+    // public static final Translation2d blueTranslationSetpoint5 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d blueRotationSetpoint5 = new Rotation2d(0.0);
+    // public static final Pose2d blueSetpoint5 = new
+    // Pose2d(blueTranslationSetpoint5, blueRotationSetpoint5);
 
-    public static final Translation2d blueTranslationSetpoint6 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d blueRotationSetpoint6 = new Rotation2d(0.0);
-    public static final Pose2d blueSetpoint6 = new Pose2d(blueTranslationSetpoint6, blueRotationSetpoint6);
+    // public static final Translation2d blueTranslationSetpoint6 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d blueRotationSetpoint6 = new Rotation2d(0.0);
+    // public static final Pose2d blueSetpoint6 = new
+    // Pose2d(blueTranslationSetpoint6, blueRotationSetpoint6);
 
-    public static final Translation2d blueTranslationSetpoint7 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d blueRotationSetpoint7 = new Rotation2d(0.0);
-    public static final Pose2d blueSetpoint7 = new Pose2d(blueTranslationSetpoint7, blueRotationSetpoint7);
+    // public static final Translation2d blueTranslationSetpoint7 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d blueRotationSetpoint7 = new Rotation2d(0.0);
+    // public static final Pose2d blueSetpoint7 = new
+    // Pose2d(blueTranslationSetpoint7, blueRotationSetpoint7);
 
-    public static final Translation2d blueTranslationSetpoint8 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d blueRotationSetpoint8 = new Rotation2d(0.0);
-    public static final Pose2d blueSetpoint8 = new Pose2d(blueTranslationSetpoint8, blueRotationSetpoint8);
+    // public static final Translation2d blueTranslationSetpoint8 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d blueRotationSetpoint8 = new Rotation2d(0.0);
+    // public static final Pose2d blueSetpoint8 = new
+    // Pose2d(blueTranslationSetpoint8, blueRotationSetpoint8);
 
-    public static final Translation2d blueTranslationSetpoint9 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d blueRotationSetpoint9 = new Rotation2d(0.0);
-    public static final Pose2d blueSetpoint9 = new Pose2d(blueTranslationSetpoint9, blueRotationSetpoint9);
+    // public static final Translation2d blueTranslationSetpoint9 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d blueRotationSetpoint9 = new Rotation2d(0.0);
+    // public static final Pose2d blueSetpoint9 = new
+    // Pose2d(blueTranslationSetpoint9, blueRotationSetpoint9);
 
-    public static final Translation2d blueTranslationSetpoint10 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d blueRotationSetpoint10 = new Rotation2d(0.0);
-    public static final Pose2d blueSetpoint10 = new Pose2d(blueTranslationSetpoint10, blueRotationSetpoint10);
+    // public static final Translation2d blueTranslationSetpoint10 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d blueRotationSetpoint10 = new Rotation2d(0.0);
+    // public static final Pose2d blueSetpoint10 = new
+    // Pose2d(blueTranslationSetpoint10, blueRotationSetpoint10);
 
-    public static final Translation2d blueTranslationSetpoint11 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d blueRotationSetpoint11 = new Rotation2d(0.0);
-    public static final Pose2d blueSetpoint11 = new Pose2d(blueTranslationSetpoint11, blueRotationSetpoint11);
+    // public static final Translation2d blueTranslationSetpoint11 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d blueRotationSetpoint11 = new Rotation2d(0.0);
+    // public static final Pose2d blueSetpoint11 = new
+    // Pose2d(blueTranslationSetpoint11, blueRotationSetpoint11);
 
-    public static final Translation2d blueTranslationSetpoint12 = new Translation2d(0.0, 0.0);
-    public static final Rotation2d blueRotationSetpoint12 = new Rotation2d(0.0);
-    public static final Pose2d blueSetpoint12 = new Pose2d(blueTranslationSetpoint12, blueRotationSetpoint12);
+    // public static final Translation2d blueTranslationSetpoint12 = new
+    // Translation2d(0.0, 0.0);
+    // public static final Rotation2d blueRotationSetpoint12 = new Rotation2d(0.0);
+    // public static final Pose2d blueSetpoint12 = new
+    // Pose2d(blueTranslationSetpoint12, blueRotationSetpoint12);
 
-    // x, y, theta
-    public static final ArrayList<Pose2d> redCoralScoringPositions = new ArrayList<Pose2d>();
-    public static final ArrayList<Pose2d> blueCoralScoringPositions = new ArrayList<Pose2d>();
+    // // x, y, theta
+    // public static final ArrayList<Pose2d> redCoralScoringPositions = new
+    // ArrayList<Pose2d>();
+    // public static final ArrayList<Pose2d> blueCoralScoringPositions = new
+    // ArrayList<Pose2d>();
   }
 
   // Subsystem setpoint constants
