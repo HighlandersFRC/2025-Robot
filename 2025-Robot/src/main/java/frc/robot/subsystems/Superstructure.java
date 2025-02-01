@@ -380,7 +380,11 @@ public class Superstructure extends SubsystemBase {
         drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
         && drive.getMT2OdometryAngle() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
       elevator.setWantedState(ElevatorState.AUTO_L2);
-      pivot.setWantedFlip(PivotFlip.FRONT);
+      if (drive.getAutoPlacementSideIsFront()) {
+        pivot.setWantedFlip(PivotFlip.FRONT);
+      } else {
+        pivot.setWantedFlip(PivotFlip.BACK);
+      }
       pivot.setWantedState(PivotState.AUTO_L23);
       twist.setWantedState(TwistState.SIDE);
     }
@@ -394,7 +398,11 @@ public class Superstructure extends SubsystemBase {
         drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
         && drive.getMT2OdometryAngle() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
       elevator.setWantedState(ElevatorState.AUTO_L3);
-      pivot.setWantedFlip(PivotFlip.FRONT);
+      if (drive.getAutoPlacementSideIsFront()) {
+        pivot.setWantedFlip(PivotFlip.FRONT);
+      } else {
+        pivot.setWantedFlip(PivotFlip.BACK);
+      }
       pivot.setWantedState(PivotState.AUTO_L23);
       twist.setWantedState(TwistState.SIDE);
     }
@@ -408,58 +416,11 @@ public class Superstructure extends SubsystemBase {
         drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1]) < 1
         && drive.getMT2OdometryAngle() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
       elevator.setWantedState(ElevatorState.AUTO_L4);
-      pivot.setWantedFlip(PivotFlip.FRONT);
-      pivot.setWantedState(PivotState.AUTO_L4);
-      twist.setWantedState(TwistState.SIDE);
-    }
-  }
-
-  public void handleAutoL1PlaceBackState() {
-    drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.AUTO_L1);
-    intake.setWantedState(IntakeState.DEFAULT);
-    pivot.setWantedFlip(PivotFlip.BACK);
-    pivot.setWantedState(PivotState.L1);
-    twist.setWantedState(TwistState.DOWN);
-  }
-
-  public void handleAutoL2PlaceBackState() {
-    drive.setWantedState(DriveState.REEF_BACK);
-    intake.setWantedState(IntakeState.DEFAULT);
-    if (Math.hypot(
-        drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0],
-        drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
-        && drive.getMT2OdometryAngle() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
-      elevator.setWantedState(ElevatorState.AUTO_L2);
-      pivot.setWantedFlip(PivotFlip.BACK);
-      pivot.setWantedState(PivotState.AUTO_L23);
-      twist.setWantedState(TwistState.SIDE);
-    }
-  }
-
-  public void handleAutoL3PlaceBackState() {
-    drive.setWantedState(DriveState.REEF_BACK);
-    intake.setWantedState(IntakeState.DEFAULT);
-    if (Math.hypot(
-        drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0],
-        drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
-        && drive.getMT2OdometryAngle() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
-      elevator.setWantedState(ElevatorState.AUTO_L3);
-      pivot.setWantedFlip(PivotFlip.BACK);
-      pivot.setWantedState(PivotState.AUTO_L23);
-      twist.setWantedState(TwistState.SIDE);
-    }
-  }
-
-  public void handleAutoL4PlaceBackState() {
-    drive.setWantedState(DriveState.REEF_BACK);
-    intake.setWantedState(IntakeState.DEFAULT);
-    if (Math.hypot(
-        drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0],
-        drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1]) < 1
-        && drive.getMT2OdometryAngle() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
-      elevator.setWantedState(ElevatorState.AUTO_L4);
-      pivot.setWantedFlip(PivotFlip.BACK);
+      if (drive.getAutoPlacementSideIsFront()) {
+        pivot.setWantedFlip(PivotFlip.FRONT);
+      } else {
+        pivot.setWantedFlip(PivotFlip.BACK);
+      }
       pivot.setWantedState(PivotState.AUTO_L4);
       twist.setWantedState(TwistState.SIDE);
     }
