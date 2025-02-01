@@ -277,10 +277,30 @@ public class Pivot extends SubsystemBase {
       case AUTO_L1:
         break;
       case AUTO_L23:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23.rotations);
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL23.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23.rotations);
+            break;
+        }
         break;
       case AUTO_L4:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
+            break;
+        }
         break;
       default:
         setPivotPercent(0.0);

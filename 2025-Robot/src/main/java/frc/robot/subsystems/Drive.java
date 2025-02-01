@@ -832,8 +832,14 @@ public class Drive extends SubsystemBase {
     double[] chosenSetpoint = { x, y, theta };
     if (getFieldSide() == "red") {
       for (int i = 0; i < Constants.Reef.redFrontPlacingPositions.size(); i++) {
-        currentDist = Math.sqrt(Math.pow((x - Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
-            + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
+        // currentDist = Math.sqrt(Math.pow((x - Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
+        //     + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
+        currentDist = Math.hypot(
+            x - (Constants.Reef.redFrontPlacingPositions.get(i).getX() + Constants.Reef.redBackPlacingPositions
+                .get(i)
+                .getX()) / 2,
+            y - (Constants.Reef.redFrontPlacingPositions.get(i).getY() + Constants.Reef.redBackPlacingPositions.get(i)
+                .getY()) / 2);
         if (currentDist < dist) {
           dist = currentDist;
           if (Math.abs(theta - Constants.Reef.redFrontPlacingPositions.get(i).getRotation().getRadians()) <= Math.PI
@@ -852,8 +858,12 @@ public class Drive extends SubsystemBase {
       }
     } else {
       for (int i = 0; i < Constants.Reef.blueFrontPlacingPositions.size(); i++) {
-        currentDist = Math.sqrt(Math.pow((x - Constants.Reef.blueFrontPlacingPositions.get(i).getX()), 2)
-            + Math.pow((y - Constants.Reef.blueFrontPlacingPositions.get(i).getY()), 2));
+        currentDist = Math.hypot(
+            x - (Constants.Reef.blueFrontPlacingPositions.get(i).getX() + Constants.Reef.blueBackPlacingPositions
+                .get(i)
+                .getX()) / 2,
+            y - (Constants.Reef.blueFrontPlacingPositions.get(i).getY() + Constants.Reef.blueBackPlacingPositions.get(i)
+                .getY()) / 2);
         if (currentDist < dist) {
           dist = currentDist;
           if (Math.abs(theta - Constants.Reef.blueFrontPlacingPositions.get(i).getRotation().getRadians()) <= Math.PI
@@ -871,7 +881,7 @@ public class Drive extends SubsystemBase {
         }
       }
     }
-    if (Math.hypot(x - getMT2OdometryX(), y - getMT2OdometryY()) > 5) {
+    if (Math.hypot(chosenSetpoint[0] - getMT2OdometryX(), chosenSetpoint[1] - getMT2OdometryY()) > 5) {
       return getMT2Odometry();
     } else {
       return chosenSetpoint;
