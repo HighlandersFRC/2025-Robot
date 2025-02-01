@@ -613,20 +613,20 @@ public class Drive extends SubsystemBase {
         Pose3d tagPose = aprilTagFieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
         Logger.recordOutput("Distance to tag", distToTag);
-        // standardDeviation.set(0, 0,
-        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-        // standardDeviation.set(1, 0,
-        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-        // standardDeviation.set(2, 0, 0.1);
-        Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-            new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-        mt2Odometry.addVisionMeasurement(poseWithoutAngle,
+        standardDeviation.set(0, 0,
+            Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        standardDeviation.set(1, 0,
+            Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        standardDeviation.set(2, 0, 0.9);
+        // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+        // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+        mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
             result.getTimestampSeconds());
       }
     }
@@ -641,20 +641,20 @@ public class Drive extends SubsystemBase {
         Pose3d tagPose = aprilTagFieldLayout.getTagPose(backResult.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
         Logger.recordOutput("Distance to tag", distToTag);
-        // standardDeviation.set(0, 0,
-        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-        // standardDeviation.set(1, 0,
-        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-        // standardDeviation.set(2, 0, 0.1);
-        Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-            new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-        mt2Odometry.addVisionMeasurement(poseWithoutAngle,
+        standardDeviation.set(0, 0,
+            Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        standardDeviation.set(1, 0,
+            Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        standardDeviation.set(2, 0, 0.9);
+        // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+        // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+        mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
             backResult.getTimestampSeconds());
       }
     }
@@ -669,20 +669,20 @@ public class Drive extends SubsystemBase {
         Pose3d tagPose = aprilTagFieldLayout.getTagPose(rightResult.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
         Logger.recordOutput("Distance to tag", distToTag);
-        // standardDeviation.set(0, 0,
-        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-        // standardDeviation.set(1, 0,
-        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-        // standardDeviation.set(2, 0, 0.1);
-        Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-            new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-        mt2Odometry.addVisionMeasurement(poseWithoutAngle,
+        standardDeviation.set(0, 0,
+            Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        standardDeviation.set(1, 0,
+            Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        standardDeviation.set(2, 0, 0.9);
+        // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+        // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+        mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
             rightResult.getTimestampSeconds());
       }
     }
@@ -697,20 +697,20 @@ public class Drive extends SubsystemBase {
         Pose3d tagPose = aprilTagFieldLayout.getTagPose(leftResult.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
         Logger.recordOutput("Distance to tag", distToTag);
-        // standardDeviation.set(0, 0,
-        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-        // standardDeviation.set(1, 0,
-        // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-        // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-        // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-        // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-        // standardDeviation.set(2, 0, 0.1);
-        Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-            new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-        mt2Odometry.addVisionMeasurement(poseWithoutAngle,
+        standardDeviation.set(0, 0,
+            Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        standardDeviation.set(1, 0,
+            Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                * Constants.Vision.getTagDistStdDevScalar(distToTag));
+        // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+        // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+        standardDeviation.set(2, 0, 0.9);
+        // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+        // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+        mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
             leftResult.getTimestampSeconds());
       }
     }
@@ -832,8 +832,9 @@ public class Drive extends SubsystemBase {
     double[] chosenSetpoint = { x, y, theta };
     if (getFieldSide() == "red") {
       for (int i = 0; i < Constants.Reef.redFrontPlacingPositions.size(); i++) {
-        // currentDist = Math.sqrt(Math.pow((x - Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
-        //     + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
+        // currentDist = Math.sqrt(Math.pow((x -
+        // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
+        // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
         currentDist = Math.hypot(
             x - (Constants.Reef.redFrontPlacingPositions.get(i).getX() + Constants.Reef.redBackPlacingPositions
                 .get(i)
