@@ -254,7 +254,7 @@ public class Elevator extends SubsystemBase {
           moveWithPercent(0.0);
           setElevatorEncoderPosition(0.0);
         } else {
-          moveWithTorque(-30, 0.4);
+          moveWithTorque(-50, 0.4);
         }
         break;
     }

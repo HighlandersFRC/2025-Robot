@@ -111,7 +111,8 @@ public class Twist extends SubsystemBase {
   public void periodic() {
     systemState = handleStateTransition();
     Logger.recordOutput("Twist State", systemState);
-    Logger.recordOutput("Twist Position Rotations", getTwistPosition());
+    Logger.recordOutput("Twist Position", getTwistPosition());
+    System.out.println("Twist Position: " + getTwistPosition());
     // Logger.recordOutput("Twist Error", twistMotor.getClosedLoopError().getValueAsDouble());
     // Logger.recordOutput("Twist Current", twistMotor.getStatorCurrent().getValueAsDouble());
     // Logger.recordOutput("Twist MPS", (twistMotor.getVelocity().getValueAsDouble()));

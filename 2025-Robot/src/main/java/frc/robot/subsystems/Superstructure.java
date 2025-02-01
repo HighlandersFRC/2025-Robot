@@ -356,7 +356,7 @@ public class Superstructure extends SubsystemBase {
       elevator.setWantedState(ElevatorState.L1);
     }
     intake.setWantedState(IntakeState.DEFAULT);
-    if (elevator.getElevatorPosition() > 10 / 39.37
+    if (elevator.getElevatorPosition() > 8 / 39.37
         || (pivot.getPivotPosition() < 0.3 && pivot.getPivotPosition() > 0.05)) {
       pivot.setWantedState(PivotState.DEFAULT);
     }
@@ -431,7 +431,7 @@ public class Superstructure extends SubsystemBase {
     elevator.setWantedState(ElevatorState.L1);
     intake.setWantedState(IntakeState.DEFAULT);
     pivot.setWantedState(PivotState.L1);
-    twist.setWantedState(TwistState.DOWN);
+    twist.setWantedState(TwistState.UP);
   }
 
   public void handleL2PlaceState() {
@@ -611,8 +611,8 @@ public class Superstructure extends SubsystemBase {
 
     if (twist.getTwistPosition() > 0.4 && pivot.getPivotPosition() < -0.1) {
       pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
-    } else if (twist.getTwistPosition() < 0.1 || pivot.getPivotPosition() < -0.1) {
-      pivot.setWantedState(PivotState.GROUND_CORAL_PREP_BACK);
+    } else if (twist.getTwistPosition() < -135 || pivot.getPivotPosition() < -0.1) {
+      pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
     }
 
     if (pivot.getPivotPosition() < 0.0) {
