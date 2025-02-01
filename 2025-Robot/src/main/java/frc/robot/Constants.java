@@ -224,17 +224,17 @@ public final class Constants {
         Pose2d fillLeft = new Pose2d();
         Pose2d poseDirection = new Pose2d(center, Rotation2d.fromDegrees(180 - (60 * face)));
         double adjustX = inchesToMeters(30.738);
-        double adjustYFront = inchesToMeters(6.469);
+        double adjustY = inchesToMeters(6.469);
 
         fillRight = new Pose2d(
             new Translation2d(
                 poseDirection
-                    .transformBy(new Transform2d(adjustX, adjustYFront, new Rotation2d()))
+                    .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
                     .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_FRONT, Physical.INTAKE_Y_OFFSET_FRONT,
                         new Rotation2d(Math.PI)))
                     .getX(),
                 poseDirection
-                    .transformBy(new Transform2d(adjustX, adjustYFront, new Rotation2d()))
+                    .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
                     .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_FRONT, Physical.INTAKE_Y_OFFSET_FRONT,
                         new Rotation2d(Math.PI)))
                     .getY()),
@@ -243,12 +243,12 @@ public final class Constants {
         fillLeft = new Pose2d(
             new Translation2d(
                 poseDirection
-                    .transformBy(new Transform2d(adjustX, -adjustYFront, new Rotation2d()))
+                    .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
                     .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_FRONT, Physical.INTAKE_Y_OFFSET_FRONT,
                         new Rotation2d(Math.PI)))
                     .getX(),
                 poseDirection
-                    .transformBy(new Transform2d(adjustX, -adjustYFront, new Rotation2d()))
+                    .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
                     .transformBy(new Transform2d(Physical.INTAKE_X_OFFSET_FRONT, Physical.INTAKE_Y_OFFSET_FRONT,
                         new Rotation2d(Math.PI)))
                     .getY()),
