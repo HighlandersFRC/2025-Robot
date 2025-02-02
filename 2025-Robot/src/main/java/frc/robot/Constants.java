@@ -602,7 +602,8 @@ public final class Constants {
     public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(9);
     public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(15);
     public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(17);
-    public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(35);
+    // public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(35);
+    public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(27);
     public static final double ELEVATOR_AUTO_L4_POSITION_M = inchesToMeters(57);
     public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(28);
     public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(57.0);
@@ -639,7 +640,8 @@ public final class Constants {
 
     public static final double PIVOT_L1_POSITION_D = 90.0;
     public static final double PIVOT_L23_POSITION_D = 55.0;
-    public static final double PIVOT_AUTO_L23_POSITION_D = 45.0;
+    // public static final double PIVOT_AUTO_L23_POSITION_D = 45.0;
+    public static final double PIVOT_AUTO_L23_POSITION_D = 30.0;
     public static final double PIVOT_AUTO_L4_POSITION_D = 45.0;
     public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 100;
     public static final double PIVOT_AUTO_L23_SCORE_POSITION_D = 100;
@@ -1017,25 +1019,25 @@ public final class Constants {
    * @return The standardized angle within the range [0, 360) degrees.
    */
   public static double standardizeAngleDegrees(double angleDegrees) {
-    System.out.println("initial angle degrees" + angleDegrees);
+    // System.out.println("initial angle degrees" + angleDegrees);
     if (angleDegrees >= 0 && angleDegrees < 360) {
-      System.out.println("standardized angle degrees" + angleDegrees);
+      // System.out.println("standardized angle degrees" + angleDegrees);
       return angleDegrees;
     } else if (angleDegrees < 0) {
       while (angleDegrees < 0) {
         angleDegrees += 360;
       }
-      System.out.println("standardized angle degrees" + angleDegrees);
+      // System.out.println("standardized angle degrees" + angleDegrees);
       return angleDegrees;
     } else if (angleDegrees >= 360) {
       while (angleDegrees >= 360) {
         angleDegrees -= 360;
       }
-      System.out.println("standardized angle degrees" + angleDegrees);
+      // System.out.println("standardized angle degrees" + angleDegrees);
       return angleDegrees;
     } else {
       // System.out.println("Weird ErroR");
-      System.out.println("standardized angle degrees" + angleDegrees);
+      // System.out.println("standardized angle degrees" + angleDegrees);
       return angleDegrees;
     }
   }

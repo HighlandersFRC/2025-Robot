@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import org.apache.commons.math3.optim.linear.PivotSelectionRule;
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -167,6 +168,8 @@ public class Superstructure extends SubsystemBase {
     }
   }
 
+  private double hitAutoSetpointTime = 0.0;
+
   /**
    * This function handles the state transitions of the Superstructure subsystem.
    * It updates the current state based on the wanted state and performs necessary
@@ -196,9 +199,12 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case AUTO_L3_PLACE:
-        if (drive.hitSetPoint() && elevator.getElevatorPosition() > 32 / 39.37) {
+        System.out.println(
+            "Hit Set Point: " + drive.hitSetPoint() + " Elevator Position: " + elevator.getElevatorPosition() * 39.37);
+        if (drive.hitSetPoint() && elevator.getElevatorPosition() > 23 / 39.37) {
           currentSuperState = SuperState.AUTO_SCORE_L3;
           wantedSuperState = SuperState.AUTO_SCORE_L3;
+          hitAutoSetpointTime = Timer.getFPGATimestamp();
         } else {
           currentSuperState = SuperState.AUTO_L3_PLACE;
         }
@@ -390,22 +396,31 @@ public class Superstructure extends SubsystemBase {
     }
   }
 
+  // public void handleAutoL3PlaceState() {
+  //   drive.setWantedState(DriveState.REEF);
+  //   intake.setWantedState(IntakeState.DEFAULT);
+  //   if (Math.hypot(
+  //       drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0],
+  //       drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
+  //       && drive.getMT2OdometryAngle() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
+  //     elevator.setWantedState(ElevatorState.AUTO_L3);
+  //     if (drive.getAutoPlacementSideIsFront()) {
+  //       pivot.setWantedFlip(PivotFlip.FRONT);
+  //     } else {
+  //       pivot.setWantedFlip(PivotFlip.BACK);
+  //     }
+  //     pivot.setWantedState(PivotState.AUTO_L23);
+  //     twist.setWantedState(TwistState.SIDE);
+  //   }
+  // }
+
   public void handleAutoL3PlaceState() {
+    pivot.setWantedFlip(PivotFlip.FRONT);
     drive.setWantedState(DriveState.REEF);
+    elevator.setWantedState(ElevatorState.AUTO_L3);
     intake.setWantedState(IntakeState.DEFAULT);
-    if (Math.hypot(
-        drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0],
-        drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
-        && drive.getMT2OdometryAngle() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
-      elevator.setWantedState(ElevatorState.AUTO_L3);
-      if (drive.getAutoPlacementSideIsFront()) {
-        pivot.setWantedFlip(PivotFlip.FRONT);
-      } else {
-        pivot.setWantedFlip(PivotFlip.BACK);
-      }
-      pivot.setWantedState(PivotState.AUTO_L23);
-      twist.setWantedState(TwistState.SIDE);
-    }
+    pivot.setWantedState(PivotState.AUTO_L23);
+    twist.setWantedState(TwistState.SIDE);
   }
 
   public void handleAutoL4PlaceState() {
@@ -666,9 +681,19 @@ public class Superstructure extends SubsystemBase {
     pivot.setWantedState(PivotState.AUTO_SCORE_L23);
   }
 
+  // public void handleAutoL3ScoreState() {
+  //   drive.setWantedState(DriveState.DEFAULT);
+  //   pivot.setWantedState(PivotState.AUTO_SCORE_L23);
+  // }
+
   public void handleAutoL3ScoreState() {
-    drive.setWantedState(DriveState.DEFAULT);
-    pivot.setWantedState(PivotState.AUTO_SCORE_L23);
+    if (Timer.getFPGATimestamp() - hitAutoSetpointTime < 1.5) {
+      drive.setWantedState(DriveState.SCORE_L23);
+      elevator.setWantedState(ElevatorState.AUTO_SCORE_L3);
+    } else {
+      drive.setWantedState(DriveState.DEFAULT);
+      pivot.setWantedState(PivotState.AUTO_SCORE_L23);
+    }
   }
 
   public void handleAutoL4ScoreState() {
@@ -709,6 +734,7 @@ public class Superstructure extends SubsystemBase {
   public void periodic() {
     currentSuperState = handleStateTransitions();
     Logger.recordOutput("Super State", currentSuperState);
+    Logger.recordOutput("Hit Time", hitAutoSetpointTime);
     applyStates();
   }
 }

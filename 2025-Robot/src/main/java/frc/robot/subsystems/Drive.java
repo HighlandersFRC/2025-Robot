@@ -260,6 +260,7 @@ public class Drive extends SubsystemBase {
     L4_REEF,
     ALGAE,
     FEEDER,
+    SCORE_L23,
   }
 
   private DriveState wantedState = DriveState.IDLE;
@@ -1326,10 +1327,15 @@ public class Drive extends SubsystemBase {
 
   private int hitNumber = 0;
 
-  public boolean hitSetPoint() {
+  public boolean hitSetPoint() { // adjust for l4 TODO:
     Logger.recordOutput("Error for setpoint",
         Math.sqrt(Math.pow((getReefClosestSetpoint(getMT2Odometry())[0] - getMT2OdometryX()), 2)
             + Math.pow((getReefClosestSetpoint(getMT2Odometry())[1] - getMT2OdometryY()), 2)));
+    System.out.println("X Y error: "
+        + Math.sqrt(Math.pow((getReefClosestSetpoint(getMT2Odometry())[0] - getMT2OdometryX()), 2)
+            + Math.pow((getReefClosestSetpoint(getMT2Odometry())[1] - getMT2OdometryY()), 2))
+        + " Angle error: " + Math.abs(getReefClosestSetpoint(getMT2Odometry())[2] - getMT2OdometryAngle()) + " Hits: "
+        + hitNumber);
     if (Math
         .sqrt(Math.pow((getReefClosestSetpoint(getMT2Odometry())[0] - getMT2OdometryX()), 2)
             + Math.pow((getReefClosestSetpoint(getMT2Odometry())[1] - getMT2OdometryY()), 2)) < 0.04
@@ -1664,10 +1670,14 @@ public class Drive extends SubsystemBase {
         return DriveState.ALGAE;
       case FEEDER:
         return DriveState.FEEDER;
+      case SCORE_L23:
+        return DriveState.SCORE_L23;
       default:
         return DriveState.IDLE;
     }
   }
+
+  Vector scoreL23Vector = new Vector(0.5, 0);
 
   @Override
   public void periodic() {
@@ -1699,6 +1709,9 @@ public class Drive extends SubsystemBase {
             getReefL4ClosestSetpoint(getMT2Odometry())[2]);
         break;
       case ALGAE:
+        break;
+      case SCORE_L23:
+        autoRobotCentricDrive(scoreL23Vector, 0);
         break;
       case FEEDER:
         if (getFieldSide() == "red") { // red side

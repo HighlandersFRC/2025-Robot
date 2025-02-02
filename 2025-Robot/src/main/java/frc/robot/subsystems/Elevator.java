@@ -34,6 +34,7 @@ public class Elevator extends SubsystemBase {
     AUTO_L2,
     AUTO_L3,
     AUTO_L4,
+    AUTO_SCORE_L3,
     L1,
     L2,
     L3,
@@ -152,6 +153,8 @@ public class Elevator extends SubsystemBase {
         return ElevatorState.AUTO_L3;
       case AUTO_L4:
         return ElevatorState.AUTO_L4;
+      case AUTO_SCORE_L3:
+        return ElevatorState.AUTO_SCORE_L3;
       case FEEDER_INTAKE:
         return ElevatorState.FEEDER_INTAKE;
       case L2_ALGAE:
@@ -246,6 +249,10 @@ public class Elevator extends SubsystemBase {
       case AUTO_L4:
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kAUTOL4.meters);
+        break;
+      case AUTO_SCORE_L3:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kAUTOL3.meters - 8 / 39.37);
         break;
       default:
         if (firstTimeIdle) {
