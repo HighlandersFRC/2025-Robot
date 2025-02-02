@@ -21,8 +21,8 @@ public class Pivot extends SubsystemBase {
       new CANBus(Constants.CANInfo.CANBUS_NAME));
 
   private final double pivotJerk = 0.0;
-  private final double pivotAcceleration = 7.0;
-  private final double pivotCruiseVelocity = 7.0;
+  private final double pivotAcceleration = 4.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
+  private final double pivotCruiseVelocity = 4.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
 
   private final double pivotProfileScalarFactor = 1;
 
@@ -37,9 +37,9 @@ public class Pivot extends SubsystemBase {
   public void init() {
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
     TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
-    pivotConfig.Slot0.kP = 150.0;
+    pivotConfig.Slot0.kP = 50.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
     pivotConfig.Slot0.kI = 0.0;
-    pivotConfig.Slot0.kD = 10.0;
+    pivotConfig.Slot0.kD = 10.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
     pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerk;
     pivotConfig.MotionMagic.MotionMagicAcceleration = this.pivotAcceleration;
     pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocity;
@@ -47,10 +47,10 @@ public class Pivot extends SubsystemBase {
     pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     pivotConfig.CurrentLimits.StatorCurrentLimit = 60;
     pivotConfig.CurrentLimits.SupplyCurrentLimit = 60;
-    pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-    pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
-    pivotConfig.Feedback.SensorToMechanismRatio = 1.0;
-    pivotConfig.Feedback.RotorToSensorRatio = Constants.Ratios.PIVOT_GEAR_RATIO;
+    // pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    // pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
+    // pivotConfig.Feedback.SensorToMechanismRatio = 1.0;
+    // pivotConfig.Feedback.RotorToSensorRatio = Constants.Ratios.PIVOT_GEAR_RATIO;
 
     pivotMotor.getConfigurator().apply(pivotConfig);
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
@@ -60,14 +60,14 @@ public class Pivot extends SubsystemBase {
   public void pivotToPosition(double pivotPosition) {
     Logger.recordOutput("Pivot Setpoint", (pivotPosition));
     pivotMotor.setControl(this.pivotMotionProfileRequest
-        .withPosition(pivotPosition)
+        .withPosition(pivotPosition * Constants.Ratios.PIVOT_GEAR_RATIO)
         .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
         .withJerk(
             this.pivotJerk * pivotProfileScalarFactor));
   }
 
   public double getPivotPosition() {
-    return (pivotMotor.getPosition().getValueAsDouble());
+    return (pivotMotor.getPosition().getValueAsDouble() / Constants.Ratios.PIVOT_GEAR_RATIO);
   }
 
   public void setpivotEncoderPosition(double position) {

@@ -431,9 +431,9 @@ public final class Constants {
     public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
         ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
 
-    public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(24.5);
+    public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(22.5);
     public static final double INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.3);
-    public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(24.5);
+    public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
     public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
 
     public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(22.5);
