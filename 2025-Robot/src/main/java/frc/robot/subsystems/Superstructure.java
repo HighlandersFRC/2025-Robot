@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.SetPoints.ElevatorPosition;
 import frc.robot.subsystems.Drive.DriveState;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Intake.IntakeState;
@@ -50,6 +51,7 @@ public class Superstructure extends SubsystemBase {
     AUTO_SCORE_L1,
     AUTO_SCORE_L2,
     AUTO_SCORE_L3,
+    AUTO_SCORE_MORE_L3,
     AUTO_SCORE_L4,
     IDLE,
   }
@@ -156,6 +158,9 @@ public class Superstructure extends SubsystemBase {
       case AUTO_SCORE_L3:
         handleAutoL3ScoreState();
         break;
+      case AUTO_SCORE_MORE_L3:
+        handleAutoL3ScoreMoreState();
+        break;
       case AUTO_SCORE_L4:
         handleAutoL4ScoreState();
         break;
@@ -201,7 +206,7 @@ public class Superstructure extends SubsystemBase {
       case AUTO_L3_PLACE:
         System.out.println(
             "Hit Set Point: " + drive.hitSetPoint() + " Elevator Position: " + elevator.getElevatorPosition() * 39.37);
-        if (drive.hitSetPoint() && elevator.getElevatorPosition() > 23 / 39.37) {
+        if (drive.hitSetPoint() && elevator.getElevatorPosition() > ElevatorPosition.kAUTOL3.meters - 2 / 39.37) {
           currentSuperState = SuperState.AUTO_SCORE_L3;
           wantedSuperState = SuperState.AUTO_SCORE_L3;
           hitAutoSetpointTime = Timer.getFPGATimestamp();
@@ -281,7 +286,15 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.AUTO_SCORE_L2;
         break;
       case AUTO_SCORE_L3:
-        currentSuperState = SuperState.AUTO_SCORE_L3;
+        if (drive.getDistanceFromL23Setpoint() < 13 / 39.37) {
+          currentSuperState = SuperState.AUTO_SCORE_L3;
+        } else {
+          currentSuperState = SuperState.AUTO_SCORE_MORE_L3;
+          wantedSuperState = SuperState.AUTO_SCORE_MORE_L3;
+        }
+        break;
+      case AUTO_SCORE_MORE_L3:
+        currentSuperState = SuperState.AUTO_SCORE_MORE_L3;
         break;
       case AUTO_SCORE_L4:
         currentSuperState = SuperState.AUTO_SCORE_L4;
@@ -687,13 +700,15 @@ public class Superstructure extends SubsystemBase {
   // }
 
   public void handleAutoL3ScoreState() {
-    if (Timer.getFPGATimestamp() - hitAutoSetpointTime < 1.5) {
-      drive.setWantedState(DriveState.SCORE_L23);
-      elevator.setWantedState(ElevatorState.AUTO_SCORE_L3);
-    } else {
-      drive.setWantedState(DriveState.DEFAULT);
-      pivot.setWantedState(PivotState.AUTO_SCORE_L23);
-    }
+    elevator.updateDistanceFromL23DriveSetpoint(drive.getDistanceFromL23Setpoint());
+    drive.setWantedState(DriveState.SCORE_L23);
+    elevator.setWantedState(ElevatorState.AUTO_SCORE_L3);
+  }
+
+  public void handleAutoL3ScoreMoreState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    pivot.setWantedState(PivotState.AUTO_SCORE_L23);
+    elevator.setWantedState(ElevatorState.AUTO_SCORE_MORE_L3);
   }
 
   public void handleAutoL4ScoreState() {

@@ -35,6 +35,7 @@ public class Elevator extends SubsystemBase {
     AUTO_L3,
     AUTO_L4,
     AUTO_SCORE_L3,
+    AUTO_SCORE_MORE_L3,
     L1,
     L2,
     L3,
@@ -56,6 +57,19 @@ public class Elevator extends SubsystemBase {
   private boolean firstTimeIdle = true;
   private ElevatorState wantedState = ElevatorState.DEFAULT;
   private ElevatorState systemState = ElevatorState.DEFAULT;
+  private double distanceFromL23DriveSetpoint = 0.0;
+
+  public void updateDistanceFromL23DriveSetpoint(double distanceFromL23DriveSetpoint) {
+    this.distanceFromL23DriveSetpoint = distanceFromL23DriveSetpoint;
+  }
+
+  public double getElevatorL3ScoreSetpoint() {
+    if (ElevatorPosition.kAUTOL3.meters - Math.tan(Math.PI / 6) * distanceFromL23DriveSetpoint * 1.2 > 0.0) {
+      return (ElevatorPosition.kAUTOL3.meters - 2 / 39.37 - Math.tan(Math.PI / 6) * distanceFromL23DriveSetpoint * 1.6);
+    } else {
+      return 0.0;
+    }
+  }
 
   public Elevator() {
 
@@ -155,6 +169,8 @@ public class Elevator extends SubsystemBase {
         return ElevatorState.AUTO_L4;
       case AUTO_SCORE_L3:
         return ElevatorState.AUTO_SCORE_L3;
+      case AUTO_SCORE_MORE_L3:
+        return ElevatorState.AUTO_SCORE_MORE_L3;
       case FEEDER_INTAKE:
         return ElevatorState.FEEDER_INTAKE;
       case L2_ALGAE:
@@ -250,9 +266,13 @@ public class Elevator extends SubsystemBase {
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kAUTOL4.meters);
         break;
+      case AUTO_SCORE_MORE_L3:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kAUTOL3SCORE.meters);
+        break;
       case AUTO_SCORE_L3:
         firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kAUTOL3.meters - 8 / 39.37);
+        moveElevatorToPosition(getElevatorL3ScoreSetpoint());
         break;
       default:
         if (firstTimeIdle) {

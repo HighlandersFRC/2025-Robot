@@ -45,8 +45,8 @@ public class Pivot extends SubsystemBase {
     pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocity;
     pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    pivotConfig.CurrentLimits.StatorCurrentLimit = 60;
-    pivotConfig.CurrentLimits.SupplyCurrentLimit = 60;
+    pivotConfig.CurrentLimits.StatorCurrentLimit = 40;
+    pivotConfig.CurrentLimits.SupplyCurrentLimit = 40;
     // pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     // pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
     // pivotConfig.Feedback.SensorToMechanismRatio = 1.0;
