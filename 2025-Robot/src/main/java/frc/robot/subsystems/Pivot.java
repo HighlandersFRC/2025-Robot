@@ -198,116 +198,116 @@ public class Pivot extends SubsystemBase {
     systemState = handleStateTransition();
     systemFlip = handleFlipTransition();
     Logger.recordOutput("Pivot State", systemState);
-    switch (systemState) {
-      case DEFAULT:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT.rotations);
-        break;
-      case GROUND_ALGAE:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
-        break;
-      case GROUND_CORAL_FRONT:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALFRONT.rotations);
-        break;
-      case GROUND_CORAL_BACK:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALBACK.rotations);
-        break;
-      case GROUND_CORAL_PREP_BACK:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALPREPBACK.rotations);
-        break;
-      case L1:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
-        break;
-      case SCORE_L1:
-        break;
-      case L23:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kL23.rotations);
-        break;
-      case SCORE_L23:
-        pivotToPosition(0.25);
-        break;
-      case L4:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kL4.rotations);
-        break;
-      case SCORE_L4:
-        pivotToPosition(0.25);
-        break;
-      case AUTO_SCORE_L23:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
-            break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
-            break;
-          default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
-            break;
-        }
-        break;
-      case AUTO_SCORE_L4:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
-            break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
-            break;
-          default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
-            break;
-        }
-        break;
-      // case FEEDER_FRONT:
-      //   pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-      //   break;
-      // case FEEDER_BACK:
-      //   pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-      //   break;
-      case FEEDER:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-            break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-            break;
-          default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-            break;
-        }
-        break;
-      case AUTO_L1:
-        break;
-      case AUTO_L23:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23.rotations);
-            break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL23.rotations);
-            break;
-          default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23.rotations);
-            break;
-        }
-        break;
-      case AUTO_L4:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
-            break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
-            break;
-          default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
-            break;
-        }
-        break;
-      default:
-        setPivotPercent(0.0);
-        break;
-    }
+    // switch (systemState) {
+    //   case DEFAULT:
+    //     pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT.rotations);
+    //     break;
+    //   case GROUND_ALGAE:
+    //     pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+    //     break;
+    //   case GROUND_CORAL_FRONT:
+    //     pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALFRONT.rotations);
+    //     break;
+    //   case GROUND_CORAL_BACK:
+    //     pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALBACK.rotations);
+    //     break;
+    //   case GROUND_CORAL_PREP_BACK:
+    //     pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALPREPBACK.rotations);
+    //     break;
+    //   case L1:
+    //     pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
+    //     break;
+    //   case SCORE_L1:
+    //     break;
+    //   case L23:
+    //     pivotToPosition(Constants.SetPoints.PivotPosition.kL23.rotations);
+    //     break;
+    //   case SCORE_L23:
+    //     pivotToPosition(0.25);
+    //     break;
+    //   case L4:
+    //     pivotToPosition(Constants.SetPoints.PivotPosition.kL4.rotations);
+    //     break;
+    //   case SCORE_L4:
+    //     pivotToPosition(0.25);
+    //     break;
+    //   case AUTO_SCORE_L23:
+    //     switch (systemFlip) {
+    //       case FRONT:
+    //         pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
+    //         break;
+    //       case BACK:
+    //         pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
+    //         break;
+    //       default:
+    //         pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
+    //         break;
+    //     }
+    //     break;
+    //   case AUTO_SCORE_L4:
+    //     switch (systemFlip) {
+    //       case FRONT:
+    //         pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+    //         break;
+    //       case BACK:
+    //         pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+    //         break;
+    //       default:
+    //         pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+    //         break;
+    //     }
+    //     break;
+    //   // case FEEDER_FRONT:
+    //   //   pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+    //   //   break;
+    //   // case FEEDER_BACK:
+    //   //   pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+    //   //   break;
+    //   case FEEDER:
+    //     switch (systemFlip) {
+    //       case FRONT:
+    //         pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+    //         break;
+    //       case BACK:
+    //         pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+    //         break;
+    //       default:
+    //         pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+    //         break;
+    //     }
+    //     break;
+    //   case AUTO_L1:
+    //     break;
+    //   case AUTO_L23:
+    //     switch (systemFlip) {
+    //       case FRONT:
+    //         pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23.rotations);
+    //         break;
+    //       case BACK:
+    //         pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL23.rotations);
+    //         break;
+    //       default:
+    //         pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23.rotations);
+    //         break;
+    //     }
+    //     break;
+    //   case AUTO_L4:
+    //     switch (systemFlip) {
+    //       case FRONT:
+    //         pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
+    //         break;
+    //       case BACK:
+    //         pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
+    //         break;
+    //       default:
+    //         pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
+    //         break;
+    //     }
+    //     break;
+    //   default:
+    //     setPivotPercent(0.0);
+    //     break;
+    // }
     // This method will be called once per scheduler run
   }
 }

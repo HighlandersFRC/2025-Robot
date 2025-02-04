@@ -208,88 +208,88 @@ public class Elevator extends SubsystemBase {
     // Logger.recordOutput("Elevator Velocity",
     // Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble()));
     Logger.recordOutput("Elevator Height", getElevatorPosition() * 39.37);
-    switch (systemState) {
-      case GROUND_INTAKE:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kGROUNDPICKUP.meters);
-        break;
-      case OVER:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kOVER.meters);
-        break;
-      case L1:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL1.meters);
-        break;
-      case SCORE_L1:
-        break;
-      case L2:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL2.meters);
-        break;
-      case SCORE_L2:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL2.meters - 0.07);
-        break;
-      case L3:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL3.meters);
-        break;
-      case SCORE_L3:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL3.meters - 0.1);
-        break;
-      case L4:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL4.meters);
-        break;
-      case SCORE_L4:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL4.meters - 0.1);
-        break;
-      case FEEDER_INTAKE:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kFEEDER.meters);
-        break;
-      case AUTO_L1:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL1.meters);
-      case AUTO_L2:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kAUTOL2.meters);
-        break;
-      case AUTO_L3:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kAUTOL3.meters);
-        break;
-      case AUTO_L4:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kAUTOL4.meters);
-        break;
-      case AUTO_SCORE_MORE_L3:
-        firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kAUTOL3SCORE.meters);
-        break;
-      case AUTO_SCORE_L3:
-        firstTimeIdle = true;
-        moveElevatorToPosition(getElevatorL3ScoreSetpoint());
-        break;
-      default:
-        if (firstTimeIdle) {
-          idleTime = Timer.getFPGATimestamp();
-          firstTimeIdle = false;
-        }
-        if (Math
-            .abs(
-                Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.05
-            && Timer.getFPGATimestamp() - idleTime > 0.3
-            && Math.abs(elevatorMotorMaster.getStatorCurrent().getValueAsDouble()) >= 0.0 && !firstTimeIdle) {
-          moveWithPercent(0.0);
-          setElevatorEncoderPosition(0.0);
-        } else {
-          moveWithTorque(-50, 0.4);
-        }
-        break;
-    }
+    // switch (systemState) {
+    //   case GROUND_INTAKE:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kGROUNDPICKUP.meters);
+    //     break;
+    //   case OVER:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kOVER.meters);
+    //     break;
+    //   case L1:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kL1.meters);
+    //     break;
+    //   case SCORE_L1:
+    //     break;
+    //   case L2:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kL2.meters);
+    //     break;
+    //   case SCORE_L2:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kL2.meters - 0.07);
+    //     break;
+    //   case L3:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kL3.meters);
+    //     break;
+    //   case SCORE_L3:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kL3.meters - 0.1);
+    //     break;
+    //   case L4:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kL4.meters);
+    //     break;
+    //   case SCORE_L4:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kL4.meters - 0.1);
+    //     break;
+    //   case FEEDER_INTAKE:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kFEEDER.meters);
+    //     break;
+    //   case AUTO_L1:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kL1.meters);
+    //   case AUTO_L2:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kAUTOL2.meters);
+    //     break;
+    //   case AUTO_L3:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kAUTOL3.meters);
+    //     break;
+    //   case AUTO_L4:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kAUTOL4.meters);
+    //     break;
+    //   case AUTO_SCORE_MORE_L3:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(ElevatorPosition.kAUTOL3SCORE.meters);
+    //     break;
+    //   case AUTO_SCORE_L3:
+    //     firstTimeIdle = true;
+    //     moveElevatorToPosition(getElevatorL3ScoreSetpoint());
+    //     break;
+    //   default:
+    //     if (firstTimeIdle) {
+    //       idleTime = Timer.getFPGATimestamp();
+    //       firstTimeIdle = false;
+    //     }
+    //     if (Math
+    //         .abs(
+    //             Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.05
+    //         && Timer.getFPGATimestamp() - idleTime > 0.3
+    //         && Math.abs(elevatorMotorMaster.getStatorCurrent().getValueAsDouble()) >= 0.0 && !firstTimeIdle) {
+    //       moveWithPercent(0.0);
+    //       setElevatorEncoderPosition(0.0);
+    //     } else {
+    //       moveWithTorque(-50, 0.4);
+    //     }
+    //     break;
+    // }
   }
 }

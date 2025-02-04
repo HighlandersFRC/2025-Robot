@@ -119,33 +119,33 @@ public class Twist extends SubsystemBase {
     // twistMotor.getStatorCurrent().getValueAsDouble());
     // Logger.recordOutput("Twist MPS",
     // (twistMotor.getVelocity().getValueAsDouble()));
-    switch (systemState) {
-      case UP:
-        if (!startedZero) {
-          zeroInitTime = Timer.getFPGATimestamp();
-          startedZero = true;
-        }
-        if (Timer.getFPGATimestamp() - zeroInitTime > 1.3) {
-          setTwistPercent(0.0);
-          setTwistEncoderPosition(0.0);
-        } else {
-          setTwistTorque(10, 0.3);
-        }
-        break;
-      case SIDE:
-        startedZero = false;
-        zeroInitTime = 0.0;
-        twistToPosition(0.25);
-        break;
-      case DOWN:
-        startedZero = false;
-        zeroInitTime = 0.0;
-        twistToPosition(0.5);
-        break;
-      default:
-        startedZero = false;
-        zeroInitTime = 0.0;
-        break;
-    }
+    // switch (systemState) {
+    //   case UP:
+    //     if (!startedZero) {
+    //       zeroInitTime = Timer.getFPGATimestamp();
+    //       startedZero = true;
+    //     }
+    //     if (Timer.getFPGATimestamp() - zeroInitTime > 1.3) {
+    //       setTwistPercent(0.0);
+    //       setTwistEncoderPosition(0.0);
+    //     } else {
+    //       setTwistTorque(10, 0.3);
+    //     }
+    //     break;
+    //   case SIDE:
+    //     startedZero = false;
+    //     zeroInitTime = 0.0;
+    //     twistToPosition(0.25);
+    //     break;
+    //   case DOWN:
+    //     startedZero = false;
+    //     zeroInitTime = 0.0;
+    //     twistToPosition(0.5);
+    //     break;
+    //   default:
+    //     startedZero = false;
+    //     zeroInitTime = 0.0;
+    //     break;
+    // }
   }
 }
