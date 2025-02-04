@@ -533,7 +533,7 @@ public final class Constants {
     public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
     public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
 
-    public static final double L3_INTAKE_X_OFFSET_FRONT = inchesToMeters(30);
+    public static final double L3_INTAKE_X_OFFSET_FRONT = inchesToMeters(27.5);
     public static final double L3_INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.3);
     public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
     public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);

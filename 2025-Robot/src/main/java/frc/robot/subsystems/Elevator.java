@@ -65,7 +65,8 @@ public class Elevator extends SubsystemBase {
 
   public double getElevatorL3ScoreSetpoint() {
     if (ElevatorPosition.kAUTOL3.meters - Math.tan(Math.PI / 6) * distanceFromL23DriveSetpoint * 1.2 > 0.0) {
-      return (ElevatorPosition.kAUTOL3.meters - 2 / 39.37 - Math.tan(Math.PI / 6) * distanceFromL23DriveSetpoint * 1.6);
+      return (ElevatorPosition.kAUTOL3.meters
+          - 3.5 / 39.37 - Math.tan(Math.PI / 6) * distanceFromL23DriveSetpoint * 1.5);
     } else {
       return 0.0;
     }

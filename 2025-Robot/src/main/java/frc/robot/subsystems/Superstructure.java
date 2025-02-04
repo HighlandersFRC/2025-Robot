@@ -286,7 +286,7 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.AUTO_SCORE_L2;
         break;
       case AUTO_SCORE_L3:
-        if (drive.getDistanceFromL23Setpoint() < 13 / 39.37) {
+        if (drive.getDistanceFromL23Setpoint() < 7 / 39.37) {
           currentSuperState = SuperState.AUTO_SCORE_L3;
         } else {
           currentSuperState = SuperState.AUTO_SCORE_MORE_L3;

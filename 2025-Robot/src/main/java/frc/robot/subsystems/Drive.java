@@ -643,9 +643,9 @@ public class Drive extends SubsystemBase {
         // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
         // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
         standardDeviation.set(2, 0, 0.9);
-        // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-        // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-        mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+        Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+            new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+        mt2Odometry.addVisionMeasurement(poseWithoutAngle,
             result.getTimestampSeconds());
       }
     }
@@ -671,9 +671,9 @@ public class Drive extends SubsystemBase {
         // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
         // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
         standardDeviation.set(2, 0, 0.9);
-        // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-        // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-        mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+        Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+            new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+        mt2Odometry.addVisionMeasurement(poseWithoutAngle,
             backResult.getTimestampSeconds());
       }
     }
@@ -700,9 +700,9 @@ public class Drive extends SubsystemBase {
         // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
         // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
         standardDeviation.set(2, 0, 0.9);
-        // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-        // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-        mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+        Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+            new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+        mt2Odometry.addVisionMeasurement(poseWithoutAngle,
             rightResult.getTimestampSeconds());
       }
     }
@@ -729,9 +729,9 @@ public class Drive extends SubsystemBase {
         // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
         // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
         standardDeviation.set(2, 0, 0.9);
-        // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-        // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-        mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+        Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+            new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+        mt2Odometry.addVisionMeasurement(poseWithoutAngle,
             leftResult.getTimestampSeconds());
       }
     }
@@ -1336,12 +1336,15 @@ public class Drive extends SubsystemBase {
     System.out.println("X Y error: "
         + Math.sqrt(Math.pow((getReefClosestSetpoint(getMT2Odometry())[0] - getMT2OdometryX()), 2)
             + Math.pow((getReefClosestSetpoint(getMT2Odometry())[1] - getMT2OdometryY()), 2))
-        + " Angle error: " + Math.abs(getReefClosestSetpoint(getMT2Odometry())[2] - getMT2OdometryAngle()) + " Hits: "
+        + " Angle error: " + getAngleDifferenceDegrees(Math.toDegrees(getReefClosestSetpoint(getMT2Odometry())[2]),
+            Math.toDegrees(getMT2OdometryAngle()))
+        + " Hits: "
         + hitNumber);
     if (Math
         .sqrt(Math.pow((getReefClosestSetpoint(getMT2Odometry())[0] - getMT2OdometryX()), 2)
             + Math.pow((getReefClosestSetpoint(getMT2Odometry())[1] - getMT2OdometryY()), 2)) < 0.04
-        && Math.abs(getReefClosestSetpoint(getMT2Odometry())[2] - getMT2OdometryAngle()) < 0.05) {
+        && getAngleDifferenceDegrees(Math.toDegrees(getReefClosestSetpoint(getMT2Odometry())[2]),
+            Math.toDegrees(getMT2OdometryAngle())) < 0.5) {
       hitNumber += 1;
     } else {
       hitNumber = 0;
@@ -1679,7 +1682,7 @@ public class Drive extends SubsystemBase {
     }
   }
 
-  Vector scoreL23Vector = new Vector(1, 0);
+  Vector scoreL23Vector = new Vector(2.5, 0);
   double[] l23Setpoint = { 0, 0, 0 };
 
   public double getDistanceFromL23Setpoint() {
