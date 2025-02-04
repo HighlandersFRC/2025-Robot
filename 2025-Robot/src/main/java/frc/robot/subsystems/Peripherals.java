@@ -48,6 +48,11 @@ public class Peripherals {
 
   double pigeonSetpoint = 0.0;
 
+  boolean frontCamTrack = false;
+  boolean backCamTrack = false;
+  boolean rightCamTrack = false;
+  boolean leftCamTrack = false;
+
   public Peripherals() {
   }
 
@@ -257,8 +262,10 @@ public class Peripherals {
   public PhotonPipelineResult getFrontCamResult() {
     var result = frontCam.getAllUnreadResults();
     if (!result.isEmpty()) {
+      frontCamTrack = true;
       return result.get(0);
     } else {
+      frontCamTrack = false;
       return new PhotonPipelineResult();
     }
   }
@@ -266,8 +273,10 @@ public class Peripherals {
   public PhotonPipelineResult getBackCamResult() {
     var result = backCam.getAllUnreadResults();
     if (!result.isEmpty()) {
+      backCamTrack = true;
       return result.get(0);
     } else {
+      backCamTrack = false;
       return new PhotonPipelineResult();
     }
   }
@@ -275,8 +284,10 @@ public class Peripherals {
   public PhotonPipelineResult getRightCamResult() {
     var result = rightCam.getAllUnreadResults();
     if (!result.isEmpty()) {
+      rightCamTrack = true;
       return result.get(0);
     } else {
+      rightCamTrack = false;
       return new PhotonPipelineResult();
     }
   }
@@ -284,8 +295,10 @@ public class Peripherals {
   public PhotonPipelineResult getLeftCamResult() {
     var result = leftCam.getAllUnreadResults();
     if (!result.isEmpty()) {
+      leftCamTrack = true;
       return result.get(0);
     } else {
+      leftCamTrack = false;
       return new PhotonPipelineResult();
     }
   }
@@ -382,6 +395,10 @@ public class Peripherals {
   }
 
   public void periodic() {
+    Logger.recordOutput("Front Cam Track", frontCamTrack);
+    Logger.recordOutput("Back Cam Track", backCamTrack);
+    Logger.recordOutput("Right Cam Track", rightCamTrack);
+    Logger.recordOutput("Left Cam Track", leftCamTrack);
     // getFrontCamPnPPose(); //TODO: uncomment when using camera
     // var result = frontCam.getLatestResult();
     // if (result.hasTargets()) {

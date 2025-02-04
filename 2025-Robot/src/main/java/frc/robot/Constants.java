@@ -423,7 +423,7 @@ public final class Constants {
     public static final double WHEEL_CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER;
     public static final double WHEEL_ROTATION_PER_METER = 1 / WHEEL_CIRCUMFERENCE;
     public static final double WHEEL_TO_FRAME_DISTANCE = inchesToMeters(2.5);
-    public static final double TOP_SPEED = feetToMeters(25);
+    public static final double TOP_SPEED = feetToMeters(30.0);
 
     public static final double ROBOT_LENGTH = inchesToMeters(26);
     public static final double ROBOT_WIDTH = inchesToMeters(26);

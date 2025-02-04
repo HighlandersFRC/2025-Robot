@@ -1181,12 +1181,12 @@ public class Drive extends SubsystemBase {
     // OI.getDriverLeftX()));
     double originalX = -(Math.copySign(oiLY * oiLY, oiLY));
     double originalY = -(Math.copySign(oiLX * oiLX, oiLX));
-    if (Math.abs(originalX) < 0.005) {
-      originalX = 0;
-    }
-    if (Math.abs(originalY) < 0.005) {
-      originalY = 0;
-    }
+    // if (Math.abs(originalX) < 0.005) {
+    // originalX = 0;
+    // }
+    // if (Math.abs(originalY) < 0.005) {
+    // originalY = 0;
+    // }
 
     // double turn = turnLimit * ((Math.copySign(OI.getDriverRightX() *
     // OI.getDriverRightX() * OI.getDriverRightX(), OI.getDriverRightX())) *
