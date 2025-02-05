@@ -40,7 +40,8 @@ public final class Constants {
     public static final double ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER = 1;
     public static final String[] paths = new String[] {
         "Test.polarauto",
-        "3piece.polarauto"
+        "3piece.polarauto",
+        "3PieceFeeder.polarauto",
     };
 
     public static int getSelectedPathIndex() {
@@ -538,9 +539,9 @@ public final class Constants {
     public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
     public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
 
-    public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(22.5);
+    public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(24.0);
     public static final double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.3);
-    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
+    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(24.0);
     public static final double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
 
     public static final double GRAVITY_ACCEL_MS2 = 9.806;

@@ -35,7 +35,11 @@ public class SetRobotState extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    superstructure.setWantedState(SuperState.DEFAULT);
+    if (DriverStation.isAutonomousEnabled()) {
+      superstructure.setWantedState(SuperState.IDLE);
+    } else {
+      superstructure.setWantedState(SuperState.DEFAULT);
+    }
   }
 
   // Returns true when the command should end.

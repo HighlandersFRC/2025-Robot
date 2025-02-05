@@ -4,52 +4,62 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.Elevator;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.SuperState;
+import frc.robot.tools.wrappers.AutoFollower;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class SetRobotStateSimple extends Command {
-  /** Creates a new L3Setup. */
+public class AutoPlaceL4Follower extends AutoFollower {
   Superstructure superstructure;
-  SuperState superState;
+  private int currentPathPointIndex = 0;
+  private JSONArray path;
+  private boolean reset = true;
+  private int endIndex = 0;
 
-  public SetRobotStateSimple(Superstructure superstructure, SuperState superState) {
+  /** Creates a new AutoPlaceL4Follower. */
+  public AutoPlaceL4Follower(Superstructure superstructure) {
     this.superstructure = superstructure;
-    this.superState = superState;
-    addRequirements(this.superstructure);
     // Use addRequirements() here to declare subsystem dependencies.
+  }
+
+  public int getPathPointIndex() {
+    return currentPathPointIndex;
+  }
+
+  public void from(int pointIndex, JSONObject pathJSON, int to) {
+    this.currentPathPointIndex = pointIndex;
+    path = pathJSON.getJSONArray("sampled_points");
+    endIndex = to;
+    reset = false;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    superstructure.setWantedState(superState);
-    System.out.println("Robot State Updating: " + superState);
-
+    superstructure.setWantedState(SuperState.AUTO_L4_PLACE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (DriverStation.isAutonomousEnabled()) {
-      superstructure.setWantedState(SuperState.IDLE);
-    } else {
-      superstructure.setWantedState(SuperState.DEFAULT);
-    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    superstructure.setWantedState(SuperState.IDLE);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (superstructure.placedCoralL4()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

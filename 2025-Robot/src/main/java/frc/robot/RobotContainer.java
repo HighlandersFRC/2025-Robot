@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AccurateFollower;
+import frc.robot.commands.AutoPlaceL4Follower;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.FullSendFollower;
 import frc.robot.commands.MoveToPiece;
@@ -83,6 +84,8 @@ public class RobotContainer {
 
   HashMap<String, Supplier<Command>> commandMap = new HashMap<String, Supplier<Command>>() {
     {
+      put("AutoPlaceL4", () -> new AutoPlaceL4Follower(superstructure));
+      put("FeederIntake", () -> new SetRobotState(superstructure, SuperState.FEEDER));
       // put("Instant", () -> new InstantCommand());
       // put("Outake", () -> new RunOutake(intake, superstructure));
       // put("Elevator Down", () -> new SetRobotStateSimple(superstructure,
