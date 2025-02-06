@@ -7,6 +7,8 @@ package frc.robot.commands;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import edu.wpi.first.wpilibj.Timer;
+import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.SuperState;
 import frc.robot.tools.wrappers.AutoFollower;
@@ -14,14 +16,17 @@ import frc.robot.tools.wrappers.AutoFollower;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoPlaceL4Follower extends AutoFollower {
   Superstructure superstructure;
+  Drive drive;
   private int currentPathPointIndex = 0;
   private JSONArray path;
   private boolean reset = true;
   private int endIndex = 0;
 
   /** Creates a new AutoPlaceL4Follower. */
-  public AutoPlaceL4Follower(Superstructure superstructure) {
+  public AutoPlaceL4Follower(Superstructure superstructure, Drive drive) {
     this.superstructure = superstructure;
+    this.drive = drive;
+    addRequirements(superstructure, drive);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -51,7 +56,7 @@ public class AutoPlaceL4Follower extends AutoFollower {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    superstructure.setWantedState(SuperState.IDLE);
+    superstructure.setWantedState(SuperState.OUTAKE_IDLE);
   }
 
   // Returns true when the command should end.

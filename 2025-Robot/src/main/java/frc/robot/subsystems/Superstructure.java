@@ -54,6 +54,7 @@ public class Superstructure extends SubsystemBase {
     AUTO_SCORE_MORE_L3,
     AUTO_SCORE_L4,
     IDLE,
+    OUTAKE_IDLE,
   }
 
   private SuperState wantedSuperState = SuperState.DEFAULT;
@@ -166,6 +167,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case IDLE:
         handleIdleState();
+        break;
+      case OUTAKE_IDLE:
+        handleOutakeIdleState();
         break;
       default:
         handleIdleState();
@@ -314,6 +318,9 @@ public class Superstructure extends SubsystemBase {
       case IDLE:
         currentSuperState = SuperState.IDLE;
         break;
+      case OUTAKE_IDLE:
+        currentSuperState = SuperState.OUTAKE_IDLE;
+        break;
       default:
         currentSuperState = SuperState.IDLE;
         break;
@@ -386,7 +393,10 @@ public class Superstructure extends SubsystemBase {
     // drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[2]) &&
     // elevator.getElevatorPosition() > 53 / 39.37
     // &&
-    return Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < 0.01388;
+
+    // Pivot has abs to account for placing backwards
+    return Math
+        .abs(Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < 0.01388;
   }
 
   public void handleDefaultState() {
@@ -774,6 +784,21 @@ public class Superstructure extends SubsystemBase {
       elevator.setWantedState(ElevatorState.OVER);
     }
     intake.setWantedState(IntakeState.DEFAULT);
+    if (elevator.getElevatorPosition() > 10 / 39.37
+        || (pivot.getPivotPosition() < 0.3 && pivot.getPivotPosition() > 0.05)) {
+      pivot.setWantedState(PivotState.DEFAULT);
+    }
+    twist.setWantedState(TwistState.UP);
+  }
+
+  public void handleOutakeIdleState() {
+    drive.setWantedState(DriveState.IDLE);
+    if (pivot.getPivotPosition() < 0.3 && pivot.getPivotPosition() > 0.05) {
+      elevator.setWantedState(ElevatorState.DEFAULT);
+    } else {
+      elevator.setWantedState(ElevatorState.OVER);
+    }
+    intake.setWantedState(IntakeState.OUTAKE);
     if (elevator.getElevatorPosition() > 10 / 39.37
         || (pivot.getPivotPosition() < 0.3 && pivot.getPivotPosition() > 0.05)) {
       pivot.setWantedState(PivotState.DEFAULT);

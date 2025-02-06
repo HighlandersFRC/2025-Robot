@@ -19,6 +19,7 @@ import frc.robot.subsystems.Drive;
 
 public class FullSendFollower extends AutoFollower {
   private Drive drive;
+
   private JSONArray path;
 
   private double initTime;
@@ -39,9 +40,9 @@ public class FullSendFollower extends AutoFollower {
   private int currentPathPointIndex = 0;
   private int returnPathPointIndex = 0;
   private int timesStagnated = 0;
-  private int endIndex = 0;
   private final int STAGNATE_THRESHOLD = 3;
   private boolean reset = true;
+  private int endIndex = 0;
 
   public int getPathPointIndex() {
     return currentPathPointIndex;
@@ -52,6 +53,8 @@ public class FullSendFollower extends AutoFollower {
     this.drive = drive;
     this.path = pathPoints;
     this.record = record;
+    if (pathPoints != null)
+      pathStartTime = pathPoints.getJSONObject(0).getDouble("time");
     addRequirements(drive);
   }
 
@@ -74,7 +77,7 @@ public class FullSendFollower extends AutoFollower {
 
   @Override
   public void execute() {
-    // System.out.println("Full Send");
+    // System.out.println("Variable Speed");
     drive.updateOdometryFusedArray();
     odometryFusedX = drive.getMT2OdometryX();
     odometryFusedY = drive.getMT2OdometryY();
@@ -168,7 +171,7 @@ public class FullSendFollower extends AutoFollower {
 
   @Override
   public boolean isFinished() {
-    if (returnPathPointIndex >= endIndex && readyToEnd(path.getJSONObject(returnPathPointIndex))) {
+    if (returnPathPointIndex >= path.length() - 1 && readyToEnd(path.getJSONObject(returnPathPointIndex))) {
       return true;
     } else {
       return false;

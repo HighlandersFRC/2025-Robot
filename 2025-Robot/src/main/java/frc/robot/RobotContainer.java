@@ -84,7 +84,7 @@ public class RobotContainer {
 
   HashMap<String, Supplier<Command>> commandMap = new HashMap<String, Supplier<Command>>() {
     {
-      put("AutoPlaceL4", () -> new AutoPlaceL4Follower(superstructure));
+      put("AutoPlaceL4", () -> new AutoPlaceL4Follower(superstructure, drive));
       put("FeederIntake", () -> new SetRobotState(superstructure, SuperState.FEEDER));
       // put("Instant", () -> new InstantCommand());
       // put("Outake", () -> new RunOutake(intake, superstructure));
@@ -96,7 +96,7 @@ public class RobotContainer {
       // SuperState.ELEVATOR_MID));
       // put("Wait", () -> new DoNothing());
       // put("Print", () -> new PrintCommand("10s"));
-      // put("Full Send", () -> new FullSendFollower(drive, null, false));
+      put("Full Send", () -> new FullSendFollower(drive, null, false));
       // put("Accurate", () -> new AccurateFollower(drive, false));
       // put("Place Coral High", () -> new SequentialCommandGroup(
       // new ParallelRaceGroup(
