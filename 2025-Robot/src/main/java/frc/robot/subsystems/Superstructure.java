@@ -380,10 +380,13 @@ public class Superstructure extends SubsystemBase {
   // }
 
   public boolean placedCoralL4() {
-    return drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[0],
-        drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[1],
-        drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[2]) && elevator.getElevatorPosition() > 53 / 39.37
-        && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < 0.01388;
+    // return
+    // drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[0],
+    // drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[1],
+    // drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[2]) &&
+    // elevator.getElevatorPosition() > 53 / 39.37
+    // &&
+    return Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < 0.01388;
   }
 
   public void handleDefaultState() {

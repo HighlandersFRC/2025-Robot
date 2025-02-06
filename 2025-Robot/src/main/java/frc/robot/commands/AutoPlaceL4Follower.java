@@ -30,6 +30,7 @@ public class AutoPlaceL4Follower extends AutoFollower {
   }
 
   public void from(int pointIndex, JSONObject pathJSON, int to) {
+    System.out.println("Running L4 in auto");
     this.currentPathPointIndex = pointIndex;
     path = pathJSON.getJSONArray("sampled_points");
     endIndex = to;
