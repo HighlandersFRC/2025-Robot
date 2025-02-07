@@ -47,7 +47,8 @@ public class Pivot extends SubsystemBase {
     pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     pivotConfig.CurrentLimits.StatorCurrentLimit = 40;
     pivotConfig.CurrentLimits.SupplyCurrentLimit = 40;
-    // pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    // pivotConfig.Feedback.FeedbackSensorSource =
+    // FeedbackSensorSourceValue.FusedCANcoder;
     // pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
     // pivotConfig.Feedback.SensorToMechanismRatio = 1.0;
     // pivotConfig.Feedback.RotorToSensorRatio = Constants.Ratios.PIVOT_GEAR_RATIO;
@@ -85,7 +86,8 @@ public class Pivot extends SubsystemBase {
 
   public enum PivotState {
     AUTO_L1,
-    AUTO_L23,
+    AUTO_L2,
+    AUTO_L3,
     AUTO_L4,
     L1,
     L23,
@@ -105,7 +107,8 @@ public class Pivot extends SubsystemBase {
     SCORE_L23,
     SCORE_L4,
     AUTO_SCORE_L1,
-    AUTO_SCORE_L23,
+    AUTO_SCORE_L2,
+    AUTO_SCORE_L3,
     AUTO_SCORE_L4,
   }
 
@@ -146,14 +149,16 @@ public class Pivot extends SubsystemBase {
         return PivotState.L4;
       case AUTO_L1:
         return PivotState.AUTO_L1;
-      case AUTO_L23:
-        return PivotState.AUTO_L23;
+      case AUTO_L2:
+        return PivotState.AUTO_L2;
+      case AUTO_L3:
+        return PivotState.AUTO_L3;
       case AUTO_L4:
         return PivotState.AUTO_L4;
       // case FEEDER_FRONT:
-      //   return PivotState.FEEDER_FRONT;
+      // return PivotState.FEEDER_FRONT;
       // case FEEDER_BACK:
-      //   return PivotState.FEEDER_BACK;
+      // return PivotState.FEEDER_BACK;
       case FEEDER:
         return PivotState.FEEDER;
       case REEF_ALGAE:
@@ -178,8 +183,10 @@ public class Pivot extends SubsystemBase {
         return PivotState.SCORE_L4;
       case AUTO_SCORE_L1:
         return PivotState.AUTO_SCORE_L1;
-      case AUTO_SCORE_L23:
-        return PivotState.AUTO_SCORE_L23;
+      case AUTO_SCORE_L2:
+        return PivotState.AUTO_SCORE_L2;
+      case AUTO_SCORE_L3:
+        return PivotState.AUTO_SCORE_L3;
       case AUTO_SCORE_L4:
         return PivotState.AUTO_SCORE_L4;
       default:
@@ -231,16 +238,29 @@ public class Pivot extends SubsystemBase {
       case SCORE_L4:
         pivotToPosition(0.25);
         break;
-      case AUTO_SCORE_L23:
+      case AUTO_SCORE_L2:
         switch (systemFlip) {
           case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations);
             break;
           case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations);
             break;
           default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23SCORE.rotations);
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations);
+            break;
+        }
+        break;
+      case AUTO_SCORE_L3:
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations);
             break;
         }
         break;
@@ -258,11 +278,11 @@ public class Pivot extends SubsystemBase {
         }
         break;
       // case FEEDER_FRONT:
-      //   pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-      //   break;
+      // pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+      // break;
       // case FEEDER_BACK:
-      //   pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-      //   break;
+      // pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+      // break;
       case FEEDER:
         switch (systemFlip) {
           case FRONT:
@@ -278,16 +298,29 @@ public class Pivot extends SubsystemBase {
         break;
       case AUTO_L1:
         break;
-      case AUTO_L23:
+      case AUTO_L2:
         switch (systemFlip) {
           case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23.rotations);
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2.rotations);
             break;
           case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL23.rotations);
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL2.rotations);
             break;
           default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL23.rotations);
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2.rotations);
+            break;
+        }
+        break;
+      case AUTO_L3:
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL3.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL3.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL3.rotations);
             break;
         }
         break;

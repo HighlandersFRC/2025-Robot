@@ -436,7 +436,7 @@ public class Superstructure extends SubsystemBase {
       } else {
         pivot.setWantedFlip(PivotFlip.BACK);
       }
-      pivot.setWantedState(PivotState.AUTO_L23);
+      pivot.setWantedState(PivotState.AUTO_L2);
       twist.setWantedState(TwistState.SIDE);
     }
   }
@@ -467,7 +467,7 @@ public class Superstructure extends SubsystemBase {
     drive.setWantedState(DriveState.L3_REEF);
     elevator.setWantedState(ElevatorState.AUTO_L3);
     intake.setWantedState(IntakeState.DEFAULT);
-    pivot.setWantedState(PivotState.AUTO_L23);
+    pivot.setWantedState(PivotState.AUTO_L3);
     twist.setWantedState(TwistState.SIDE);
   }
 
@@ -726,7 +726,7 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoL2ScoreState() {
     drive.setWantedState(DriveState.DEFAULT);
-    pivot.setWantedState(PivotState.AUTO_SCORE_L23);
+    pivot.setWantedState(PivotState.AUTO_SCORE_L2);
   }
 
   // public void handleAutoL3ScoreState() {
@@ -742,7 +742,7 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoL3ScoreMoreState() {
     drive.setWantedState(DriveState.DEFAULT);
-    pivot.setWantedState(PivotState.AUTO_SCORE_L23);
+    pivot.setWantedState(PivotState.AUTO_SCORE_L3);
     elevator.setWantedState(ElevatorState.AUTO_SCORE_MORE_L3);
   }
 

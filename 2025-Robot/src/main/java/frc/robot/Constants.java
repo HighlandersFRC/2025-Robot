@@ -539,9 +539,9 @@ public final class Constants {
     public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
     public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
 
-    public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(24.0);
+    public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(24.5);
     public static final double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.3);
-    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(24.0);
+    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(24.5);
     public static final double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
 
     public static final double GRAVITY_ACCEL_MS2 = 9.806;
@@ -702,7 +702,7 @@ public final class Constants {
     public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
     public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
     public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
-    public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(9);
+    public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(11);
     public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(15);
     public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(17);
     // public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(35);
@@ -747,10 +747,12 @@ public final class Constants {
     public static final double PIVOT_L1_POSITION_D = 90.0;
     public static final double PIVOT_L23_POSITION_D = 55.0;
     // public static final double PIVOT_AUTO_L23_POSITION_D = 45.0;
-    public static final double PIVOT_AUTO_L23_POSITION_D = 30.0;
+    public static final double PIVOT_AUTO_L2_POSITION_D = 45.0;
+    public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
     public static final double PIVOT_AUTO_L4_POSITION_D = 45.0;
     public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 100;
-    public static final double PIVOT_AUTO_L23_SCORE_POSITION_D = 90;
+    public static final double PIVOT_AUTO_L3_SCORE_POSITION_D = 90;
+    public static final double PIVOT_AUTO_L2_SCORE_POSITION_D = 100;
     public static final double PIVOT_L4_POSITION_D = 55.0;
     public static final double PIVOT_UPRIGHT_POSITION_D = 45.0;
     public static final double PIVOT_GROUND_ALGAE_POSITION_D = 135.0;
@@ -763,7 +765,8 @@ public final class Constants {
     public enum PivotPosition {
       kL1(PIVOT_L1_POSITION_D, Constants.degreesToRotations(PIVOT_L1_POSITION_D)),
       kL23(PIVOT_L23_POSITION_D, Constants.degreesToRotations(PIVOT_L23_POSITION_D)),
-      kAUTOL23(PIVOT_AUTO_L23_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L23_POSITION_D)),
+      kAUTOL2(PIVOT_AUTO_L2_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L2_POSITION_D)),
+      kAUTOL3(PIVOT_AUTO_L3_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L3_POSITION_D)),
       kAUTOL4(PIVOT_AUTO_L4_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L4_POSITION_D)),
       kL4(PIVOT_L4_POSITION_D, Constants.degreesToRotations(PIVOT_L4_POSITION_D)),
       kUP(PIVOT_UPRIGHT_POSITION_D, Constants.degreesToRotations(PIVOT_UPRIGHT_POSITION_D)),
@@ -774,7 +777,8 @@ public final class Constants {
           Constants.degreesToRotations(PIVOT_GROUND_CORAL_POSITION_BACK_D)),
       kGROUNDCORALPREPBACK(PIVOT_GROUND_CORAL_PREP_BACK_D,
           Constants.degreesToRotations(PIVOT_GROUND_CORAL_PREP_BACK_D)),
-      kAUTOL23SCORE(PIVOT_AUTO_L23_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L23_SCORE_POSITION_D)),
+      kAUTOL2SCORE(PIVOT_AUTO_L2_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L2_SCORE_POSITION_D)),
+      kAUTOL3SCORE(PIVOT_AUTO_L3_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L3_SCORE_POSITION_D)),
       kAUTOL4SCORE(PIVOT_AUTO_L4_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L4_SCORE_POSITION_D)),
       kDEFAULT(PIVOT_DEFAULT_POSITION_D, Constants.degreesToRotations(PIVOT_DEFAULT_POSITION_D)),
       kFEEDER(PIVOT_FEEDER_POSITION_D, Constants.degreesToRotations(PIVOT_FEEDER_POSITION_D));
