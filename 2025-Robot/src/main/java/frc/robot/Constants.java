@@ -539,10 +539,10 @@ public final class Constants {
     public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
     public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
 
-    public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(24.5);
+    public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(24.2);
     public static final double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.3);
-    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(24.5);
-    public static final double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
+    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(24.2);
+    public static final double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-3.3);
 
     public static final double GRAVITY_ACCEL_MS2 = 9.806;
 
@@ -750,7 +750,7 @@ public final class Constants {
     public static final double PIVOT_AUTO_L2_POSITION_D = 45.0;
     public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
     public static final double PIVOT_AUTO_L4_POSITION_D = 45.0;
-    public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 100;
+    public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 115;
     public static final double PIVOT_AUTO_L3_SCORE_POSITION_D = 90;
     public static final double PIVOT_AUTO_L2_SCORE_POSITION_D = 100;
     public static final double PIVOT_L4_POSITION_D = 55.0;
@@ -956,7 +956,7 @@ public final class Constants {
     public static final double PIVOT_GEAR_RATIO = 91.4285714;
 
     // drive
-    public static final double DRIVE_GEAR_RATIO = 6.5;
+    public static final double DRIVE_GEAR_RATIO = 6.12;
     public static final double STEER_GEAR_RATIO = 21.43;
 
     // elevator

@@ -476,7 +476,7 @@ public class Superstructure extends SubsystemBase {
     intake.setWantedState(IntakeState.DEFAULT);
     if (Math.hypot(
         drive.getMT2OdometryX() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[0],
-        drive.getMT2OdometryY() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[1]) < 1
+        drive.getMT2OdometryY() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
         && drive.getMT2OdometryAngle() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
       elevator.setWantedState(ElevatorState.AUTO_L4);
       if (drive.getAutoPlacementSideIsFront()) {
