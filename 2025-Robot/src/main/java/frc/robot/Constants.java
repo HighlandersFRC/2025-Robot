@@ -750,7 +750,7 @@ public final class Constants {
     public static final double PIVOT_AUTO_L2_POSITION_D = 45.0;
     public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
     public static final double PIVOT_AUTO_L4_POSITION_D = 45.0;
-    public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 115;
+    public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 100;
     public static final double PIVOT_AUTO_L3_SCORE_POSITION_D = 90;
     public static final double PIVOT_AUTO_L2_SCORE_POSITION_D = 100;
     public static final double PIVOT_L4_POSITION_D = 55.0;

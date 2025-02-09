@@ -799,8 +799,8 @@ public class Superstructure extends SubsystemBase {
       elevator.setWantedState(ElevatorState.OVER);
     }
     intake.setWantedState(IntakeState.OUTAKE);
-    if (elevator.getElevatorPosition() > 10 / 39.37
-        || (pivot.getPivotPosition() < 0.3 && pivot.getPivotPosition() > 0.05)) {
+    if ((elevator.getElevatorPosition() > 10.0 / 39.37 && elevator.getElevatorPosition() < 50.0 / 39.37)
+        || (pivot.getPivotPosition() < 0.25 && pivot.getPivotPosition() > 0.05)) {
       pivot.setWantedState(PivotState.DEFAULT);
     }
     twist.setWantedState(TwistState.UP);
