@@ -255,6 +255,7 @@ public class Elevator extends SubsystemBase {
       case AUTO_L1:
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kL1.meters);
+        break;
       case AUTO_L2:
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kAUTOL2.meters);

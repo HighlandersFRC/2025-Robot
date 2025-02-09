@@ -11,14 +11,12 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.MotorTest;
 import frc.robot.subsystems.Superstructure.SuperState;
 
 public class Robot extends LoggedRobot {
   private RobotContainer m_robotContainer = new RobotContainer();
   private Command m_autonomousCommand;
 
-  private MotorTest motortest = new MotorTest();
   String m_fieldSide = "blue";
   boolean rjPressed = false;
 
@@ -39,7 +37,6 @@ public class Robot extends LoggedRobot {
     m_robotContainer.elevator.init();
     m_robotContainer.pivot.init();
     m_robotContainer.twist.init();
-    motortest.init();
     Constants.init();
 
     PortForwarder.add(5800, "orangepi1.local", 5800);

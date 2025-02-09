@@ -420,7 +420,7 @@ public class Superstructure extends SubsystemBase {
     intake.setWantedState(IntakeState.DEFAULT);
     pivot.setWantedFlip(PivotFlip.FRONT);
     pivot.setWantedState(PivotState.L1);
-    twist.setWantedState(TwistState.DOWN);
+    twist.setWantedState(TwistState.UP);
   }
 
   public void handleAutoL2PlaceState() {

@@ -42,6 +42,7 @@ public final class Constants {
         "Test.polarauto",
         "3piece.polarauto",
         "3PieceFeeder.polarauto",
+        "4PieceFeeder.polarauto",
     };
 
     public static int getSelectedPathIndex() {
@@ -702,7 +703,7 @@ public final class Constants {
     public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
     public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
     public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
-    public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(11);
+    public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(13.0);
     public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(15);
     public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(17);
     // public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(35);
@@ -744,7 +745,7 @@ public final class Constants {
       }
     }
 
-    public static final double PIVOT_L1_POSITION_D = 90.0;
+    public static final double PIVOT_L1_POSITION_D = 85.0;
     public static final double PIVOT_L23_POSITION_D = 55.0;
     // public static final double PIVOT_AUTO_L23_POSITION_D = 45.0;
     public static final double PIVOT_AUTO_L2_POSITION_D = 45.0;

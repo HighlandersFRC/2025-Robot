@@ -47,7 +47,6 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lights;
-import frc.robot.subsystems.MotorTest;
 import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Superstructure;
@@ -71,7 +70,6 @@ public class RobotContainer {
   Peripherals peripherals = new Peripherals();
   Elevator elevator = new Elevator();
   Drive drive = new Drive(peripherals, elevator);
-  MotorTest motorTest = new MotorTest();
   Intake intake = new Intake();
   Lights lights = new Lights();
   Pivot pivot = new Pivot();
@@ -86,6 +84,9 @@ public class RobotContainer {
     {
       put("AutoPlaceL4", () -> new AutoPlaceL4Follower(superstructure, drive));
       put("FeederIntake", () -> new SetRobotState(superstructure, SuperState.FEEDER));
+      put("Outake", () -> new SetRobotStateSimple(superstructure, SuperState.OUTAKE));
+      put("L1", () -> new SetRobotStateSimple(superstructure, SuperState.AUTO_L1_PLACE));
+      put("Idle", () -> new SetRobotStateSimple(superstructure, SuperState.IDLE));
       // put("Instant", () -> new InstantCommand());
       // put("Outake", () -> new RunOutake(intake, superstructure));
       // put("Elevator Down", () -> new SetRobotStateSimple(superstructure,
