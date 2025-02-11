@@ -28,7 +28,8 @@ public class Twist extends SubsystemBase {
   private boolean startedZero = false;
   private double zeroInitTime = 0.0;
 
-  private final MotionMagicExpoVoltage twistTorqueCurrentFOC = new MotionMagicExpoVoltage(0.0);
+  private final MotionMagicExpoVoltage twistTorqueCurrentFOC = new MotionMagicExpoVoltage(
+      0.0);
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
 
   public Twist() {
@@ -87,8 +88,8 @@ public class Twist extends SubsystemBase {
     DOWN,
   }
 
-  private TwistState wantedState = TwistState.UP;
-  private TwistState systemState = TwistState.UP;
+  private TwistState wantedState = TwistState.SIDE;
+  private TwistState systemState = TwistState.SIDE;
 
   public void setWantedState(TwistState wantedState) {
     this.wantedState = wantedState;
@@ -109,8 +110,9 @@ public class Twist extends SubsystemBase {
 
   @Override
   public void periodic() {
+    System.out.println("Position" + getTwistPosition());
     systemState = handleStateTransition();
-    Logger.recordOutput("Twist State", systemState);
+    Logger.recordOutput("Twist State: ", systemState);
     Logger.recordOutput("Twist Position", getTwistPosition());
     // System.out.println("Twist Position: " + getTwistPosition());
     // Logger.recordOutput("Twist Error",
@@ -125,26 +127,30 @@ public class Twist extends SubsystemBase {
           zeroInitTime = Timer.getFPGATimestamp();
           startedZero = true;
         }
-        if (Timer.getFPGATimestamp() - zeroInitTime > 1.3) {
-          setTwistPercent(0.0);
-          setTwistEncoderPosition(0.0);
-        } else {
-          setTwistTorque(10, 0.3);
-        }
+        // if (Timer.getFPGATimestamp() - zeroInitTime > 1.3) {
+        //   setTwistPercent(0.0);
+        //   setTwistEncoderPosition(0.0);
+        // } else {
+        //   setTwistTorque(10, 0.3);
+        // }
+        startedZero = false;
+        zeroInitTime = 0.0;
+        twistToPosition(0. - 0.25);
         break;
       case SIDE:
         startedZero = false;
         zeroInitTime = 0.0;
-        twistToPosition(0.25);
+        twistToPosition(0.0);
         break;
       case DOWN:
         startedZero = false;
         zeroInitTime = 0.0;
-        twistToPosition(0.5);
+        twistToPosition(0.25);
         break;
       default:
         startedZero = false;
         zeroInitTime = 0.0;
+        twistToPosition(0.0);
         break;
     }
   }

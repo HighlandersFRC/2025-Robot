@@ -399,19 +399,27 @@ public class Superstructure extends SubsystemBase {
         .abs(Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < 0.01388;
   }
 
+  // public void handleDefaultState() {
+  //   drive.setWantedState(DriveState.DEFAULT);
+  //   if (Math.abs(pivot.getPivotPosition()) > 0.05) {
+  //     elevator.setWantedState(ElevatorState.DEFAULT);
+  //   } else {
+  //     elevator.setWantedState(ElevatorState.OVER);
+  //   }
+  //   intake.setWantedState(IntakeState.DEFAULT);
+  //   if (elevator.getElevatorPosition() > 10 / 39.37
+  //       || (Math.abs(pivot.getPivotPosition()) > 0.05)) {
+  //     pivot.setWantedState(PivotState.DEFAULT);
+  //   }
+  //   twist.setWantedState(TwistState.SIDE);
+  // }
+
   public void handleDefaultState() {
     drive.setWantedState(DriveState.DEFAULT);
-    if (pivot.getPivotPosition() < 0.3 && pivot.getPivotPosition() > 0.05) {
-      elevator.setWantedState(ElevatorState.DEFAULT);
-    } else {
-      elevator.setWantedState(ElevatorState.OVER);
-    }
+    elevator.setWantedState(ElevatorState.OVER);
     intake.setWantedState(IntakeState.DEFAULT);
-    if (elevator.getElevatorPosition() > 10 / 39.37
-        || (pivot.getPivotPosition() < 0.3 && pivot.getPivotPosition() > 0.05)) {
-      pivot.setWantedState(PivotState.DEFAULT);
-    }
-    twist.setWantedState(TwistState.UP);
+    pivot.setWantedState(PivotState.DEFAULT);
+    twist.setWantedState(TwistState.SIDE);
   }
 
   public void handleAutoL1PlaceState() {
@@ -688,7 +696,7 @@ public class Superstructure extends SubsystemBase {
     elevator.setWantedState(ElevatorState.GROUND_INTAKE);
     intake.setWantedState(IntakeState.ALGAE_INTAKE);
     pivot.setWantedState(PivotState.GROUND_ALGAE);
-    twist.setWantedState(TwistState.UP);
+    twist.setWantedState(TwistState.DOWN);
   }
 
   public void handleL2AlgaePickupState() {

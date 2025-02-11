@@ -756,11 +756,12 @@ public final class Constants {
     public static final double PIVOT_AUTO_L2_SCORE_POSITION_D = 100;
     public static final double PIVOT_L4_POSITION_D = 55.0;
     public static final double PIVOT_UPRIGHT_POSITION_D = 45.0;
-    public static final double PIVOT_GROUND_ALGAE_POSITION_D = 135.0;
+    public static final double PIVOT_GROUND_ALGAE_POSITION_D = 115.0;
     public static final double PIVOT_GROUND_CORAL_POSITION_FRONT_D = 127.0;
     public static final double PIVOT_GROUND_CORAL_POSITION_BACK_D = -127.0;
     public static final double PIVOT_GROUND_CORAL_PREP_BACK_D = -90;
-    public static final double PIVOT_DEFAULT_POSITION_D = 30.0;
+    // public static final double PIVOT_DEFAULT_POSITION_D = 30.0;
+    public static final double PIVOT_DEFAULT_POSITION_D = 0.0;
     public static final double PIVOT_FEEDER_POSITION_D = 39.37;
 
     public enum PivotPosition {
@@ -951,7 +952,8 @@ public final class Constants {
   public static final class Ratios {
 
     // twist
-    public static final double TWIST_GEAR_RATIO = 33.75;
+    // public static final double TWIST_GEAR_RATIO = 33.75;
+    public static final double TWIST_GEAR_RATIO = 9;
 
     // pivot
     public static final double PIVOT_GEAR_RATIO = 91.4285714;

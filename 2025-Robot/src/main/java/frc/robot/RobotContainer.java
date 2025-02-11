@@ -211,6 +211,8 @@ public class RobotContainer {
     // OI.driverX.whileTrue(new SetRobotState(superstructure, SuperState.FEEDER));
     // OI.driverB.whileTrue(new SetPivotState(pivot, PivotState.GROUND_CORAL));
 
+    OI.driverA.whileTrue(new SetRobotState(superstructure, SuperState.GROUND_ALGAE_PICKUP));
+
     // OI.driverY.whileTrue(new SetClimberPivotTorque(climber, 60, 0.2));
     // OI.driverA.whileTrue(new SetClimberPivotTorque(climber, -60, 0.2));
     // OI.driverB.whileTrue(new SetClimberPivotTorque(climber, 20, 0.15));
@@ -218,8 +220,7 @@ public class RobotContainer {
     // OI.driverLB.whileTrue(new SetClimberRollerTorque(climber, -70, 0.8));
 
     // ********OFFICIAL COMPETITION CONTROLS*********
-    // DO NOT DELET
-    // NEED TO TEST
+    // DO NOT DELETE
 
     OI.driverPOVUp.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.L1_PLACE),
         new ConditionalCommand(new SetRobotState(superstructure,

@@ -95,9 +95,9 @@ public class Intake extends SubsystemBase {
         break;
       case ALGAE_INTAKE:
         if (hasCoral()) {
-          setIntakeTorque(10, 0.2);
+          setIntakeTorque(-10, 0.2);
         } else {
-          setIntakePercent(0.7);
+          setIntakePercent(-0.7);
         }
         break;
       case OUTAKE:
