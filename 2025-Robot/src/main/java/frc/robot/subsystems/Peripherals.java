@@ -86,7 +86,7 @@ public class Peripherals {
   public double getFrontCamYaw() {
     double yaw = 0.0;
     var result = frontCam.getLatestResult();
-    Logger.recordOutput("has target", result.hasTargets());
+    // Logger.recordOutput("has target", result.hasTargets());
     if (result.hasTargets()) {
       PhotonTrackedTarget target = result.getBestTarget();
       yaw = target.getYaw();
@@ -108,7 +108,7 @@ public class Peripherals {
   public double getGamePieceCamYaw() {
     double yaw = 0.0;
     var result = gamePieceCamera.getLatestResult();
-    Logger.recordOutput("has target", result.hasTargets());
+    // Logger.recordOutput("has target", result.hasTargets());
     if (result.hasTargets()) {
       PhotonTrackedTarget target = result.getBestTarget();
       yaw = target.getYaw();
@@ -119,7 +119,7 @@ public class Peripherals {
   public List<TargetCorner> getGamePieceCamCorners() {
     List<TargetCorner> corners = new ArrayList<TargetCorner>();
     var result = gamePieceCamera.getLatestResult();
-    Logger.recordOutput("has target", result.hasTargets());
+    // Logger.recordOutput("has target", result.hasTargets());
     if (result.hasTargets()) {
       PhotonTrackedTarget target = result.getBestTarget();
       corners = target.getDetectedCorners();
@@ -395,10 +395,12 @@ public class Peripherals {
   }
 
   public void periodic() {
-    Logger.recordOutput("Front Cam Track", frontCamTrack);
-    Logger.recordOutput("Back Cam Track", backCamTrack);
-    Logger.recordOutput("Right Cam Track", rightCamTrack);
-    Logger.recordOutput("Left Cam Track", leftCamTrack);
+    //TODO: uncomment if you want to see if the cameras have a track
+    // Logger.recordOutput("Front Cam Track", frontCamTrack);
+    // Logger.recordOutput("Back Cam Track", backCamTrack);
+    // Logger.recordOutput("Right Cam Track", rightCamTrack);
+    // Logger.recordOutput("Left Cam Track", leftCamTrack);
+
     // getFrontCamPnPPose(); //TODO: uncomment when using camera
     // var result = frontCam.getLatestResult();
     // if (result.hasTargets()) {

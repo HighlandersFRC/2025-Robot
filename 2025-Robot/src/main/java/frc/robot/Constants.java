@@ -174,20 +174,20 @@ public final class Constants {
     // Constants.Physical.redCoralScoringPositions.toString());
     // Logger.recordOutput("blue side scoring",
     // Constants.Physical.blueCoralScoringPositions.toString());
-    Logger.recordOutput("blue positions", Constants.Reef.blueFrontPlacingPositions.toString());
-    Logger.recordOutput("red positions", Constants.Reef.redFrontPlacingPositions.toString());
-    Logger.recordOutput("blue back positions", Constants.Reef.blueBackPlacingPositions.toString());
-    Logger.recordOutput("red back positions", Constants.Reef.redBackPlacingPositions.toString());
+    System.out.println("blue positions: " + Constants.Reef.blueFrontPlacingPositions.toString());
+    System.out.println("red positions: " + Constants.Reef.redFrontPlacingPositions.toString());
+    System.out.println("blue back positions: " + Constants.Reef.blueBackPlacingPositions.toString());
+    System.out.println("red back positions: " + Constants.Reef.redBackPlacingPositions.toString());
 
-    Logger.recordOutput("l4 blue positions", Constants.Reef.l4BlueFrontPlacingPositions.toString());
-    Logger.recordOutput("l4 red positions", Constants.Reef.l4RedFrontPlacingPositions.toString());
-    Logger.recordOutput("l4 blue back positions", Constants.Reef.l4BlueBackPlacingPositions.toString());
-    Logger.recordOutput("l4 red back positions", Constants.Reef.l4RedBackPlacingPositions.toString());
+    System.out.println("l4 blue positions: " + Constants.Reef.l4BlueFrontPlacingPositions.toString());
+    System.out.println("l4 red positions: " + Constants.Reef.l4RedFrontPlacingPositions.toString());
+    System.out.println("l4 blue back positions: " + Constants.Reef.l4BlueBackPlacingPositions.toString());
+    System.out.println("l4 red back positions: " + Constants.Reef.l4RedBackPlacingPositions.toString());
 
-    Logger.recordOutput("l3 blue positions", Constants.Reef.l3BlueFrontPlacingPositions.toString());
-    Logger.recordOutput("l3 red positions", Constants.Reef.l3RedFrontPlacingPositions.toString());
-    Logger.recordOutput("l3 blue back positions", Constants.Reef.l3BlueBackPlacingPositions.toString());
-    Logger.recordOutput("l3 red back positions", Constants.Reef.l3RedBackPlacingPositions.toString());
+    System.out.println("l3 blue positions: " + Constants.Reef.l3BlueFrontPlacingPositions.toString());
+    System.out.println("l3 red positions: " + Constants.Reef.l3RedFrontPlacingPositions.toString());
+    System.out.println("l3 blue back positions: " + Constants.Reef.l3BlueBackPlacingPositions.toString());
+    System.out.println("l3 red back positions: " + Constants.Reef.l3RedBackPlacingPositions.toString());
   }
 
   public static class Reef {
@@ -713,9 +713,11 @@ public final class Constants {
     public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(28);
     public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(57.0);
     public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8.0);
-    public static final double ELEVATOR_GROUND_PICKUP_POSITION_M = inchesToMeters(6.0);
+    public static final double ELEVATOR_GROUND_CORAL_POSITION_M = inchesToMeters(6.0);
+    public static final double ELEVATOR_GROUND_ALGAE_POSITION_M = inchesToMeters(0.0);
     public static final double ELEVATOR_FEEDER_POSITION_M = inchesToMeters(2);
     public static final double ELEVATOR_OVER_POSITION_M = inchesToMeters(15);
+    public static final double ELEVATOR_NET_POSITION_M = inchesToMeters(64);
 
     public enum ElevatorPosition {
       kDOWN(ELEVATOR_BOTTOM_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_BOTTOM_POSITION_M)),
@@ -732,8 +734,12 @@ public final class Constants {
       kL4(ELEVATOR_L4_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_L4_POSITION_M)),
       kALGAE(ELEVATOR_ALGAE_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_ALGAE_POSITION_M)),
       kFEEDER(ELEVATOR_FEEDER_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_FEEDER_POSITION_M)),
-      kGROUNDPICKUP(ELEVATOR_GROUND_PICKUP_POSITION_M,
-          Ratios.elevatorMetersToRotations(ELEVATOR_GROUND_PICKUP_POSITION_M)),
+      kGROUNDCORAL(ELEVATOR_GROUND_CORAL_POSITION_M,
+          Ratios.elevatorMetersToRotations(ELEVATOR_GROUND_CORAL_POSITION_M)),
+      kGROUNDALGAE(ELEVATOR_GROUND_ALGAE_POSITION_M,
+          Ratios.elevatorMetersToRotations(ELEVATOR_GROUND_ALGAE_POSITION_M)),
+      kNET(ELEVATOR_NET_POSITION_M,
+          Ratios.elevatorMetersToRotations(ELEVATOR_NET_POSITION_M)),
       kOVER(ELEVATOR_OVER_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_OVER_POSITION_M));
 
       public final double meters;
@@ -756,13 +762,15 @@ public final class Constants {
     public static final double PIVOT_AUTO_L2_SCORE_POSITION_D = 100;
     public static final double PIVOT_L4_POSITION_D = 55.0;
     public static final double PIVOT_UPRIGHT_POSITION_D = 45.0;
-    public static final double PIVOT_GROUND_ALGAE_POSITION_D = 115.0;
+    public static final double PIVOT_GROUND_ALGAE_POSITION_D = 100.0;
     public static final double PIVOT_GROUND_CORAL_POSITION_FRONT_D = 127.0;
     public static final double PIVOT_GROUND_CORAL_POSITION_BACK_D = -127.0;
     public static final double PIVOT_GROUND_CORAL_PREP_BACK_D = -90;
     // public static final double PIVOT_DEFAULT_POSITION_D = 30.0;
     public static final double PIVOT_DEFAULT_POSITION_D = 0.0;
+    public static final double PIVOT_PREP_POSITION_D = 80.0;
     public static final double PIVOT_FEEDER_POSITION_D = 39.37;
+    public static final double PIVOT_NET_D = 10.0;
 
     public enum PivotPosition {
       kL1(PIVOT_L1_POSITION_D, Constants.degreesToRotations(PIVOT_L1_POSITION_D)),
@@ -779,11 +787,14 @@ public final class Constants {
           Constants.degreesToRotations(PIVOT_GROUND_CORAL_POSITION_BACK_D)),
       kGROUNDCORALPREPBACK(PIVOT_GROUND_CORAL_PREP_BACK_D,
           Constants.degreesToRotations(PIVOT_GROUND_CORAL_PREP_BACK_D)),
+      kNET(PIVOT_NET_D,
+          Constants.degreesToRotations(PIVOT_NET_D)),
       kAUTOL2SCORE(PIVOT_AUTO_L2_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L2_SCORE_POSITION_D)),
       kAUTOL3SCORE(PIVOT_AUTO_L3_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L3_SCORE_POSITION_D)),
       kAUTOL4SCORE(PIVOT_AUTO_L4_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L4_SCORE_POSITION_D)),
       kDEFAULT(PIVOT_DEFAULT_POSITION_D, Constants.degreesToRotations(PIVOT_DEFAULT_POSITION_D)),
-      kFEEDER(PIVOT_FEEDER_POSITION_D, Constants.degreesToRotations(PIVOT_FEEDER_POSITION_D));
+      kFEEDER(PIVOT_FEEDER_POSITION_D, Constants.degreesToRotations(PIVOT_FEEDER_POSITION_D)),
+      kPREP(PIVOT_PREP_POSITION_D, Constants.degreesToRotations(PIVOT_PREP_POSITION_D));
 
       public final double degrees;
       public final double rotations;

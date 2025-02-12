@@ -21,8 +21,8 @@ public class Pivot extends SubsystemBase {
       new CANBus(Constants.CANInfo.CANBUS_NAME));
 
   private final double pivotJerk = 0.0;
-  private final double pivotAcceleration = 4.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
-  private final double pivotCruiseVelocity = 4.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
+  private final double pivotAcceleration = 6.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
+  private final double pivotCruiseVelocity = 6.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
 
   private final double pivotProfileScalarFactor = 1;
 
@@ -37,9 +37,9 @@ public class Pivot extends SubsystemBase {
   public void init() {
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
     TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
-    pivotConfig.Slot0.kP = 50.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
+    pivotConfig.Slot0.kP = 200.0;
     pivotConfig.Slot0.kI = 0.0;
-    pivotConfig.Slot0.kD = 10.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
+    pivotConfig.Slot0.kD = 5.0;
     pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerk;
     pivotConfig.MotionMagic.MotionMagicAcceleration = this.pivotAcceleration;
     pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocity;
@@ -47,6 +47,10 @@ public class Pivot extends SubsystemBase {
     pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     pivotConfig.CurrentLimits.StatorCurrentLimit = 40;
     pivotConfig.CurrentLimits.SupplyCurrentLimit = 40;
+    pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
+    pivotConfig.Feedback.SensorToMechanismRatio = 1.0;
+    pivotConfig.Feedback.RotorToSensorRatio = Constants.Ratios.PIVOT_GEAR_RATIO;
     // pivotConfig.Feedback.FeedbackSensorSource =
     // FeedbackSensorSourceValue.FusedCANcoder;
     // pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
@@ -55,25 +59,25 @@ public class Pivot extends SubsystemBase {
 
     pivotMotor.getConfigurator().apply(pivotConfig);
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
-    pivotMotor.setPosition(0.0);
+    // pivotMotor.setPosition(0.0);
   }
 
   public void pivotToPosition(double pivotPosition) {
-    Logger.recordOutput("Pivot Setpoint", (pivotPosition));
+    // Logger.recordOutput("Pivot Setpoint", (pivotPosition));
     pivotMotor.setControl(this.pivotMotionProfileRequest
-        .withPosition(pivotPosition * Constants.Ratios.PIVOT_GEAR_RATIO)
+        .withPosition(pivotPosition/*Constants.Ratios.PIVOT_GEAR_RATIO*/)
         .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
         .withJerk(
             this.pivotJerk * pivotProfileScalarFactor));
   }
 
   public double getPivotPosition() {
-    return (pivotMotor.getPosition().getValueAsDouble() / Constants.Ratios.PIVOT_GEAR_RATIO);
+    return (pivotMotor.getPosition().getValueAsDouble());
   }
 
-  public void setpivotEncoderPosition(double position) {
-    pivotMotor.setPosition(position);
-  }
+  // public void setpivotEncoderPosition(double position) {
+  //   pivotMotor.setPosition(position);
+  // }
 
   public void setPivotPercent(double percent) {
     pivotMotor.set(percent);
@@ -85,6 +89,7 @@ public class Pivot extends SubsystemBase {
   }
 
   public enum PivotState {
+    PREP,
     AUTO_L1,
     AUTO_L2,
     AUTO_L3,
@@ -196,6 +201,8 @@ public class Pivot extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // System.out.println("Pivot Current: " + pivotMotor.getStatorCurrent().getValueAsDouble());
+    // System.out.println("Pivot Position: " + getPivotPosition());
     Logger.recordOutput("Pivot Position", getPivotPosition());
 
     // Logger.recordOutput("Pivot Output",
@@ -208,6 +215,16 @@ public class Pivot extends SubsystemBase {
     switch (systemState) {
       case DEFAULT:
         pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT.rotations);
+        break;
+      case NET:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kNET.rotations);
+        break;
+      case PREP:
+        if (getPivotPosition() > 0) {
+          pivotToPosition(Constants.SetPoints.PivotPosition.kPREP.rotations);
+        } else {
+          pivotToPosition(-Constants.SetPoints.PivotPosition.kPREP.rotations);
+        }
         break;
       case GROUND_ALGAE:
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);

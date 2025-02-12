@@ -236,8 +236,8 @@ public class PolarPathFollower extends ParallelCommandGroup {
       retval = pathJSON.getJSONArray("sampled_points")
           .getJSONObject(follower.getPathPointIndex()).getDouble("time");
     }
-    Logger.recordOutput("Path Time", retval);
-    Logger.recordOutput("Path Start Time", defaultFollower.pathStartTime);
+    // Logger.recordOutput("Path Time", retval);
+    // Logger.recordOutput("Path Start Time", defaultFollower.pathStartTime);
     return retval;
   }
 

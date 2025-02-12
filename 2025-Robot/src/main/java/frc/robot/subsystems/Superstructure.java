@@ -416,9 +416,13 @@ public class Superstructure extends SubsystemBase {
 
   public void handleDefaultState() {
     drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.OVER);
-    intake.setWantedState(IntakeState.DEFAULT);
-    pivot.setWantedState(PivotState.DEFAULT);
+    elevator.setWantedState(ElevatorState.DEFAULT);
+    // intake.setWantedState(IntakeState.DEFAULT);
+    if (Math.abs(twist.getTwistPosition()) < 60) {
+      pivot.setWantedState(PivotState.DEFAULT);
+    } else {
+      pivot.setWantedState(PivotState.PREP);
+    }
     twist.setWantedState(TwistState.SIDE);
   }
 
@@ -669,15 +673,17 @@ public class Superstructure extends SubsystemBase {
    */
   public void handleGroundCoralPickupFrontState() {
     drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.GROUND_INTAKE);
+    elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
     pivot.setWantedState(PivotState.GROUND_CORAL_FRONT);
-    twist.setWantedState(TwistState.UP);
+    if (pivot.getPivotPosition() > 80 / 360) {
+      twist.setWantedState(TwistState.UP);
+    }
   }
 
   public void handleGroundCoralPickupBackState() {
     drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.GROUND_INTAKE);
+    elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
 
     if (twist.getTwistPosition() < -135 && pivot.getPivotPosition() < -0.1) {
@@ -693,10 +699,10 @@ public class Superstructure extends SubsystemBase {
 
   public void handleGroundAlgaePickupState() {
     drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.GROUND_INTAKE);
+    elevator.setWantedState(ElevatorState.GROUND_ALGAE_INTAKE);
     intake.setWantedState(IntakeState.ALGAE_INTAKE);
     pivot.setWantedState(PivotState.GROUND_ALGAE);
-    twist.setWantedState(TwistState.DOWN);
+    twist.setWantedState(TwistState.SIDE);
   }
 
   public void handleL2AlgaePickupState() {
@@ -818,7 +824,7 @@ public class Superstructure extends SubsystemBase {
   public void periodic() {
     currentSuperState = handleStateTransitions();
     Logger.recordOutput("Super State", currentSuperState);
-    Logger.recordOutput("Hit Time", hitAutoSetpointTime);
+    // Logger.recordOutput("Hit Time", hitAutoSetpointTime);
     applyStates();
   }
 }

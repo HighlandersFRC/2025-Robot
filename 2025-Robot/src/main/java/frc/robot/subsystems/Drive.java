@@ -315,7 +315,7 @@ public class Drive extends SubsystemBase {
 
   public void setSetpointAngle(double angle) {
     this.angleSetpoint = angle;
-    Logger.recordOutput("Setpoint Theta: ", angle);
+    // Logger.recordOutput("Setpoint Theta: ", angle);
   }
 
   /**
@@ -556,7 +556,7 @@ public class Drive extends SubsystemBase {
   }
 
   public void setOdometry(Pose2d pose) {
-    Logger.recordOutput("Odometry Reset to:", pose.toString());
+    // Logger.recordOutput("Odometry Reset to:", pose.toString());
     System.out.println("New Odometry Pose: " + pose.toString());
     m_odometry.resetPose(pose);
     loggingOdometry.resetPose(pose);
@@ -612,7 +612,7 @@ public class Drive extends SubsystemBase {
         int numFrontTracks = result.getTargets().size();
         Pose3d tagPose = aprilTagFieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-        Logger.recordOutput("Distance to tag", distToTag);
+        // Logger.recordOutput("Distance to tag", distToTag);
         if (distToTag < 3.2) {
           standardDeviation.set(0, 0,
               Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
@@ -642,7 +642,7 @@ public class Drive extends SubsystemBase {
         int numFrontTracks = backResult.getTargets().size();
         Pose3d tagPose = aprilTagFieldLayout.getTagPose(backResult.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-        Logger.recordOutput("Distance to tag", distToTag);
+        // Logger.recordOutput("Distance to tag", distToTag);
         if (distToTag < 3.2) {
           standardDeviation.set(0, 0,
               Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
@@ -674,7 +674,7 @@ public class Drive extends SubsystemBase {
         Pose3d tagPose = aprilTagFieldLayout.getTagPose(rightResult.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
         if (distToTag < 3.2) {
-          Logger.recordOutput("Distance to tag", distToTag);
+          // Logger.recordOutput("Distance to tag", distToTag);
           standardDeviation.set(0, 0,
               Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
@@ -705,7 +705,7 @@ public class Drive extends SubsystemBase {
         Pose3d tagPose = aprilTagFieldLayout.getTagPose(leftResult.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
         if (distToTag < 3.2) {
-          Logger.recordOutput("Distance to tag", distToTag);
+          // Logger.recordOutput("Distance to tag", distToTag);
           standardDeviation.set(0, 0,
               Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
@@ -1211,7 +1211,7 @@ public class Drive extends SubsystemBase {
     double oiLX = OI.getDriverLeftX();
     double oiRY = OI.getDriverRightY();
     double oiLY = OI.getDriverLeftY();
-    double speedMultiplier = (((60 - Constants.metersToInches(elevator.getElevatorPosition())) * 0.8 / 50) + 0.2);
+    double speedMultiplier = (((60 - Constants.metersToInches(elevator.getElevatorPosition())) * 0.7 / 50) + 0.3);
 
     if (elevator.getElevatorPosition() > Constants.inchesToMeters(10)) {
       oiRX = oiRX * speedMultiplier;
@@ -1220,10 +1220,10 @@ public class Drive extends SubsystemBase {
       oiLY = oiLY * speedMultiplier;
     }
 
-    Logger.recordOutput("Adjusted Right X", oiRX);
-    Logger.recordOutput("Adjusted Left X", oiLX);
-    Logger.recordOutput("Adjusted Right Y", oiRY);
-    Logger.recordOutput("Adjusted Left Y", oiLY);
+    // Logger.recordOutput("Adjusted Right X", oiRX);
+    // Logger.recordOutput("Adjusted Left X", oiLX);
+    // Logger.recordOutput("Adjusted Right Y", oiRY);
+    // Logger.recordOutput("Adjusted Left Y", oiLY);
 
     updateOdometryFusedArray();
     double turnLimit = 0.17;
@@ -1276,7 +1276,7 @@ public class Drive extends SubsystemBase {
     angleSetpoint = peripherals.getPigeonAngle();
     double compensation = peripherals.getPigeonAngularVelocityW() * 0.050;
     angleSetpoint += compensation;
-    Logger.recordOutput("setpoint", angleSetpoint);
+    // Logger.recordOutput("setpoint", angleSetpoint);
     turningPID.setSetPoint(angleSetpoint);
     double pigeonAngle = Math.toRadians(peripherals.getPigeonAngle());
     double xPower = getAdjustedX(originalX, originalY);
@@ -1335,7 +1335,7 @@ public class Drive extends SubsystemBase {
         }
       }
       double result = -2 * turningPID.updatePID(yaw);
-      Logger.recordOutput("result", result);
+      // Logger.recordOutput("result", result);
       updateOdometryFusedArray();
 
       double x = -(Math.copySign(OI.getDriverLeftY() * OI.getDriverLeftY(), OI.getDriverLeftY()));
@@ -1365,7 +1365,7 @@ public class Drive extends SubsystemBase {
       angleSetpoint = peripherals.getPigeonAngle();
       double compensation = peripherals.getPigeonAngularVelocityW() * 0.050;
       angleSetpoint += compensation;
-      Logger.recordOutput("setpoint", angleSetpoint);
+      // Logger.recordOutput("setpoint", angleSetpoint);
       turningPID.setSetPoint(angleSetpoint);
       double pigeonAngle = Math.toRadians(peripherals.getPigeonAngle());
       double xPower = getAdjustedX(originalX, originalY);
@@ -1389,16 +1389,16 @@ public class Drive extends SubsystemBase {
   private int hitNumber = 0;
 
   public boolean hitSetPoint(double x, double y, double theta) { // adjust for l4 TODO:
-    Logger.recordOutput("Error for setpoint",
-        Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
-            + Math.pow((y - getMT2OdometryY()), 2)));
-    System.out.println("X Y error: "
-        + Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
-            + Math.pow((y - getMT2OdometryY()), 2))
-        + " Angle error: " + getAngleDifferenceDegrees(Math.toDegrees(theta),
-            Math.toDegrees(getMT2OdometryAngle()))
-        + " Hits: "
-        + hitNumber);
+    // Logger.recordOutput("Error for setpoint",
+    //     Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
+    //         + Math.pow((y - getMT2OdometryY()), 2)));
+    // System.out.println("X Y error: "
+    //     + Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
+    //         + Math.pow((y - getMT2OdometryY()), 2))
+    //     + " Angle error: " + getAngleDifferenceDegrees(Math.toDegrees(theta),
+    //         Math.toDegrees(getMT2OdometryAngle()))
+    //     + " Hits: "
+    //     + hitNumber);
     if (Math
         .sqrt(Math.pow((x - getMT2OdometryX()), 2)
             + Math.pow((y - getMT2OdometryY()), 2)) < 0.04
@@ -1417,9 +1417,9 @@ public class Drive extends SubsystemBase {
 
   public void driveToPoint(double x, double y, double theta) {
 
-    Logger.recordOutput("Magnitude Error Inches",
-        Constants.metersToInches(Math.sqrt(Math.pow(x - getMT2OdometryX(), 2) + Math.pow(y - getMT2OdometryY(), 2))));
-    Logger.recordOutput("Theta Error Degrees", Math.toDegrees(theta - getMT2OdometryAngle()));
+    // Logger.recordOutput("Magnitude Error Inches",
+    //     Constants.metersToInches(Math.sqrt(Math.pow(x - getMT2OdometryX(), 2) + Math.pow(y - getMT2OdometryY(), 2))));
+    // Logger.recordOutput("Theta Error Degrees", Math.toDegrees(theta - getMT2OdometryAngle()));
 
     while (Math.abs(theta - getMT2OdometryAngle()) > Math.PI) {
       if (theta - getMT2OdometryAngle() > Math.PI) {
@@ -1480,7 +1480,7 @@ public class Drive extends SubsystemBase {
       theta -= 360;
     }
 
-    Logger.recordOutput("Drive Angle Setpoint", theta);
+    // Logger.recordOutput("Drive Angle Setpoint", theta);
     turningPID.setSetPoint(theta);
     turningPID.updatePID(peripherals.getPigeonAngle());
 
@@ -1682,22 +1682,22 @@ public class Drive extends SubsystemBase {
 
     double velocityMag = Math
         .sqrt(Math.pow(targetPoint.getDouble("x_velocity"), 2) + Math.pow(targetPoint.getDouble("y_velocity"), 2));
-    Logger.recordOutput("x-vel", velocityArray[0].doubleValue());
-    Logger.recordOutput("y-vel", velocityArray[1].doubleValue());
-    Logger.recordOutput("theta-vel", velocityArray[2].doubleValue());
-    Logger.recordOutput("wanted-theta-vel", targetPoint.getDouble("angular_velocity"));
-    Logger.recordOutput("pid-theta-vel", thetaVelNoFF);
-    Logger.recordOutput("FF-theta-vel", feedForwardTheta);
-    Logger.recordOutput("current point idx", currentIndex);
-    Logger.recordOutput("point idx", velocityArray[3].intValue());
-    Logger.recordOutput("look-ahead", Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_DISTANCE * velocityMag + 0.01);
+    // Logger.recordOutput("x-vel", velocityArray[0].doubleValue());
+    // Logger.recordOutput("y-vel", velocityArray[1].doubleValue());
+    // Logger.recordOutput("theta-vel", velocityArray[2].doubleValue());
+    // Logger.recordOutput("wanted-theta-vel", targetPoint.getDouble("angular_velocity"));
+    // Logger.recordOutput("pid-theta-vel", thetaVelNoFF);
+    // Logger.recordOutput("FF-theta-vel", feedForwardTheta);
+    // Logger.recordOutput("current point idx", currentIndex);
+    // Logger.recordOutput("point idx", velocityArray[3].intValue());
+    // Logger.recordOutput("look-ahead", Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_DISTANCE * velocityMag + 0.01);
     return velocityArray;
   }
 
   public boolean insideRadius(double deltaX, double deltaY, double deltaTheta, double radius) {
-    Logger.recordOutput("deltax", deltaX);
-    Logger.recordOutput("deltay", deltaY);
-    Logger.recordOutput("deltaTheta", deltaTheta);
+    // Logger.recordOutput("deltax", deltaX);
+    // Logger.recordOutput("deltay", deltaY);
+    // Logger.recordOutput("deltaTheta", deltaTheta);
     return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) + Math.pow(deltaTheta, 2)) < radius;
   }
 
@@ -1753,7 +1753,7 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     l23Setpoint = getReefClosestSetpoint(getMT2Odometry());
-    Logger.recordOutput("Robot Odometry", getMT2Odometry());
+    // Logger.recordOutput("Robot Odometry", getMT2Odometry());
     updateOdometryFusedArray();
     // process inputs
     DriveState newState = handleStateTransition();

@@ -37,17 +37,17 @@ public class Twist extends SubsystemBase {
 
   public void init() {
     TalonFXConfiguration twistConfig = new TalonFXConfiguration();
-    twistConfig.Slot0.kP = 90.0;
+    twistConfig.Slot0.kP = 10.0;
     twistConfig.Slot0.kI = 0.0;
     twistConfig.Slot0.kD = 0.0;
-    twistConfig.Slot0.kS = 2.0;
+    twistConfig.Slot0.kS = 1.0;
     twistConfig.MotionMagic.MotionMagicJerk = this.twistJerk;
     twistConfig.MotionMagic.MotionMagicAcceleration = this.twistAcceleration;
     twistConfig.MotionMagic.MotionMagicCruiseVelocity = this.twistCruiseVelocity;
     twistConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     twistConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    twistConfig.CurrentLimits.StatorCurrentLimit = 60;
-    twistConfig.CurrentLimits.SupplyCurrentLimit = 60;
+    twistConfig.CurrentLimits.StatorCurrentLimit = 40;
+    twistConfig.CurrentLimits.SupplyCurrentLimit = 40;
     twistConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
     twistConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     twistTorqueCurrentFOC.EnableFOC = true;
@@ -61,7 +61,7 @@ public class Twist extends SubsystemBase {
   }
 
   public void twistToPosition(double rotations) {
-    Logger.recordOutput("Twist Setpoint", rotations);
+    // Logger.recordOutput("Twist Setpoint", rotations);
     twistMotor.setControl(this.twistTorqueCurrentFOC
         .withPosition(-rotations * Constants.Ratios.TWIST_GEAR_RATIO).withEnableFOC(true));
   }
@@ -110,8 +110,9 @@ public class Twist extends SubsystemBase {
 
   @Override
   public void periodic() {
-    System.out.println("Position" + getTwistPosition());
+    // System.out.println("Position" + getTwistPosition());
     systemState = handleStateTransition();
+    // System.out.println("Twist Current: " + twistMotor.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput("Twist State: ", systemState);
     Logger.recordOutput("Twist Position", getTwistPosition());
     // System.out.println("Twist Position: " + getTwistPosition());
@@ -135,7 +136,7 @@ public class Twist extends SubsystemBase {
         // }
         startedZero = false;
         zeroInitTime = 0.0;
-        twistToPosition(0. - 0.25);
+        twistToPosition(0.25);
         break;
       case SIDE:
         startedZero = false;
@@ -145,7 +146,7 @@ public class Twist extends SubsystemBase {
       case DOWN:
         startedZero = false;
         zeroInitTime = 0.0;
-        twistToPosition(0.25);
+        twistToPosition(-0.25);
         break;
       default:
         startedZero = false;

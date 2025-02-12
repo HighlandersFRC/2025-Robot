@@ -82,36 +82,36 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     systemState = handleStateTransition();
-
+    // System.out.println("Intake Current: " + intakeMotor.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput("Intake State", systemState);
-    Logger.recordOutput("Has Coral", hasCoral());
+    // Logger.recordOutput("Has Coral", hasCoral());
     switch (systemState) {
       case CORAL_INTAKE:
         if (hasCoral()) {
-          setIntakeTorque(10, 0.2);
+          setIntakeTorque(25, 0.2);
         } else {
-          setIntakePercent(0.6);
+          setIntakePercent(1.0);
         }
         break;
       case ALGAE_INTAKE:
         if (hasCoral()) {
-          setIntakeTorque(-10, 0.2);
+          setIntakeTorque(-25, 0.2);
         } else {
-          setIntakePercent(-0.7);
+          setIntakePercent(-1.0);
         }
         break;
       case OUTAKE:
-        if (true/* logic for if i coral (true) or algae (false) */) {
-          setIntakePercent(-0.2);
+        if (!false/* logic for if i coral (true) or algae (false) */) {
+          setIntakePercent(-0.5);
         } else {
-          setIntakePercent(0.2);
+          setIntakePercent(0.5);
         }
         break;
       case OFF:
         setIntakePercent(0.0);
         break;
       default:
-        setIntakeTorque(20, 0.2);
+        setIntakeTorque(25, 0.2);
     }
   }
 }

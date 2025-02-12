@@ -212,7 +212,7 @@ public class RobotContainer {
     // OI.driverB.whileTrue(new SetPivotState(pivot, PivotState.GROUND_CORAL));
 
     OI.driverA.whileTrue(new SetRobotState(superstructure, SuperState.GROUND_ALGAE_PICKUP));
-
+    OI.driverB.whileTrue(new SetRobotState(superstructure, SuperState.NET));
     // OI.driverY.whileTrue(new SetClimberPivotTorque(climber, 60, 0.2));
     // OI.driverA.whileTrue(new SetClimberPivotTorque(climber, -60, 0.2));
     // OI.driverB.whileTrue(new SetClimberPivotTorque(climber, 20, 0.15));

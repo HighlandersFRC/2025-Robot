@@ -64,15 +64,15 @@ public class MoveToPoint extends Command {
   @Override
   public void execute() {
 
-    if(Math.hypot(x - drive.getMT2OdometryX(), y - drive.getMT2OdometryY()) < 2) {
+    if (Math.hypot(x - drive.getMT2OdometryX(), y - drive.getMT2OdometryY()) < 2) {
       elevator.setWantedState(ElevatorState.L2);
     }
 
     drive.setWantedState(DriveState.IDLE);
     drive.driveToPoint(x, y, theta);
-    Logger.recordOutput("Setpoint X", x);
-    Logger.recordOutput("Setpoint Y", y);
-    Logger.recordOutput("Setpoint Theta", theta);
+    // Logger.recordOutput("Setpoint X", x);
+    // Logger.recordOutput("Setpoint Y", y);
+    // Logger.recordOutput("Setpoint Theta", theta);
     if (auto
         && Math.sqrt(Math.pow((x - drive.getMT2OdometryX()), 2) + Math.pow((y - drive.getMT2OdometryY()), 2)) < 0.03
         && Math.abs(theta - drive.getMT2OdometryAngle()) < 0.05) {

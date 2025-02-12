@@ -43,7 +43,8 @@ public class Elevator extends SubsystemBase {
     FEEDER_INTAKE,
     L2_ALGAE,
     L3_ALGAE,
-    GROUND_INTAKE,
+    GROUND_CORAL_INTAKE,
+    GROUND_ALGAE_INTAKE,
     PROCESSOR,
     SCORE_L1,
     SCORE_L2,
@@ -82,10 +83,10 @@ public class Elevator extends SubsystemBase {
 
   public void init() {
     TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
-    elevatorConfig.Slot0.kP = 14.10;
+    elevatorConfig.Slot0.kP = 17.30;
     elevatorConfig.Slot0.kI = 0.0;
-    elevatorConfig.Slot0.kD = 1.6; // bomb squad finna get cooked by their own number
-    elevatorConfig.Slot0.kG = 1.6;
+    elevatorConfig.Slot0.kD = 2.7;
+    elevatorConfig.Slot0.kG = 2.7;
     elevatorConfig.Slot1.kP = 44.99;
     elevatorConfig.Slot1.kI = 0.0;
     elevatorConfig.Slot1.kD = 3.937; // W breakaway
@@ -99,7 +100,7 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.CurrentLimits.StatorCurrentLimit = 60;
     elevatorConfig.CurrentLimits.SupplyCurrentLimit = 60;
 
-    elevatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     elevatorMotorMaster.getConfigurator().apply(elevatorConfig);
     elevatorMotorFollower.getConfigurator().apply(elevatorConfig);
@@ -178,8 +179,10 @@ public class Elevator extends SubsystemBase {
         return ElevatorState.L2_ALGAE;
       case L3_ALGAE:
         return ElevatorState.L3_ALGAE;
-      case GROUND_INTAKE:
-        return ElevatorState.GROUND_INTAKE;
+      case GROUND_CORAL_INTAKE:
+        return ElevatorState.GROUND_CORAL_INTAKE;
+      case GROUND_ALGAE_INTAKE:
+        return ElevatorState.GROUND_ALGAE_INTAKE;
       case PROCESSOR:
         return ElevatorState.PROCESSOR;
       case SCORE_L1:
@@ -200,7 +203,7 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     systemState = handleStateTransition();
-
+    // System.out.println("Elevator Current: " + elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
     // Logger.recordOutput("Elevator Current",
     // elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
     // Logger.recordOutput("Elevator Idle Time", idleTime);
@@ -210,9 +213,17 @@ public class Elevator extends SubsystemBase {
     // Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble()));
     Logger.recordOutput("Elevator Height", getElevatorPosition() * 39.37);
     switch (systemState) {
-      case GROUND_INTAKE:
+      case GROUND_CORAL_INTAKE:
         firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kGROUNDPICKUP.meters);
+        moveElevatorToPosition(ElevatorPosition.kGROUNDCORAL.meters);
+        break;
+      case NET:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kNET.meters);
+        break;
+      case GROUND_ALGAE_INTAKE:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kGROUNDALGAE.meters);
         break;
       case OVER:
         firstTimeIdle = true;
@@ -223,6 +234,7 @@ public class Elevator extends SubsystemBase {
         moveElevatorToPosition(ElevatorPosition.kL1.meters);
         break;
       case SCORE_L1:
+        firstTimeIdle = true;
         break;
       case L2:
         firstTimeIdle = true;
@@ -246,7 +258,7 @@ public class Elevator extends SubsystemBase {
         break;
       case SCORE_L4:
         firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL4.meters - 0.1);
+        moveElevatorToPosition(ElevatorPosition.kL4.meters - 0.37);
         break;
       case FEEDER_INTAKE:
         firstTimeIdle = true;
@@ -277,15 +289,18 @@ public class Elevator extends SubsystemBase {
         moveElevatorToPosition(getElevatorL3ScoreSetpoint());
         break;
       default:
+        // Logger.recordOutput("Elevator Velocity", Math
+        //     .abs(
+        //         Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())));
         if (firstTimeIdle) {
           idleTime = Timer.getFPGATimestamp();
           firstTimeIdle = false;
         }
         if (Math
             .abs(
-                Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.05
+                Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
             && Timer.getFPGATimestamp() - idleTime > 0.3
-            && Math.abs(elevatorMotorMaster.getStatorCurrent().getValueAsDouble()) >= 0.0 && !firstTimeIdle) {
+            && !firstTimeIdle) {
           moveWithPercent(0.0);
           setElevatorEncoderPosition(0.0);
         } else {

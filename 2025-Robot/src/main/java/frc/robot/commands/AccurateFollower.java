@@ -111,9 +111,9 @@ public class AccurateFollower extends AutoFollower {
         // create velocity vector and set desired theta change
 
         drive.autoDrive(velocityVector, desiredThetaChange);
-        Logger.recordOutput("pursuing?", true);
-        Logger.recordOutput("Path Time", path
-                .getJSONObject(getPathPointIndex()).getDouble("time"));
+        // Logger.recordOutput("pursuing?", true);
+        // Logger.recordOutput("Path Time", path
+        //         .getJSONObject(getPathPointIndex()).getDouble("time"));
     }
 
     @Override
@@ -128,7 +128,7 @@ public class AccurateFollower extends AutoFollower {
         odometryFusedY = drive.getFusedOdometryY();
         odometryFusedTheta = drive.getFusedOdometryTheta();
         currentTime = Timer.getFPGATimestamp() - initTime;
-        Logger.recordOutput("pursuing?", false);
+        // Logger.recordOutput("pursuing?", false);
         if (this.record) {
             recordedOdometry.add(new double[] { currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta });
             try {

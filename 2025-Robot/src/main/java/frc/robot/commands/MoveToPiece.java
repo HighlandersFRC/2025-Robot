@@ -74,8 +74,8 @@ public class MoveToPiece extends Command {
     double pieceXFromIntake = noteX - intakeXOffset;
     double pieceYFromIntake = noteY - intakeYOffset;
 
-    Logger.recordOutput("Piece X", Constants.metersToInches(pieceXFromIntake));
-    Logger.recordOutput("Piece Y", Constants.metersToInches(pieceYFromIntake));
+    // Logger.recordOutput("Piece X", Constants.metersToInches(pieceXFromIntake));
+    // Logger.recordOutput("Piece Y", Constants.metersToInches(pieceYFromIntake));
 
     // drive.driveToPoint(noteX,
     // noteY, Math.toRadians(-tx + 1.6));
