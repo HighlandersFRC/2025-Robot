@@ -83,14 +83,14 @@ public class Elevator extends SubsystemBase {
 
   public void init() {
     TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
-    elevatorConfig.Slot0.kP = 17.30;
+    elevatorConfig.Slot0.kP = 33.39;
     elevatorConfig.Slot0.kI = 0.0;
     elevatorConfig.Slot0.kD = 2.7;
-    elevatorConfig.Slot0.kG = 2.7;
-    elevatorConfig.Slot1.kP = 44.99;
+    elevatorConfig.Slot0.kG = 4.499;
+    elevatorConfig.Slot1.kP = 60.36;
     elevatorConfig.Slot1.kI = 0.0;
-    elevatorConfig.Slot1.kD = 3.937; // W breakaway
-    elevatorConfig.Slot1.kG = 3.937;
+    elevatorConfig.Slot1.kD = 1.690;
+    elevatorConfig.Slot1.kG = 8.033;
     elevatorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
     elevatorConfig.Slot1.GravityType = GravityTypeValue.Elevator_Static;
     elevatorConfig.MotionMagic.MotionMagicAcceleration = this.elevatorAcceleration;
@@ -221,6 +221,18 @@ public class Elevator extends SubsystemBase {
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kNET.meters);
         break;
+      case PROCESSOR:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kPROCESSOR.meters);
+        break;
+      case L2_ALGAE:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kL2ALGAE.meters);
+        break;
+      case L3_ALGAE:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kL3ALGAE.meters);
+        break;
       case GROUND_ALGAE_INTAKE:
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kGROUNDALGAE.meters);
@@ -242,7 +254,7 @@ public class Elevator extends SubsystemBase {
         break;
       case SCORE_L2:
         firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL2.meters - 0.07);
+        moveElevatorToPosition(ElevatorPosition.kL2.meters - 0.1);
         break;
       case L3:
         firstTimeIdle = true;
@@ -250,7 +262,7 @@ public class Elevator extends SubsystemBase {
         break;
       case SCORE_L3:
         firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL3.meters - 0.1);
+        moveElevatorToPosition(ElevatorPosition.kL3.meters - 0.2);
         break;
       case L4:
         firstTimeIdle = true;
@@ -258,7 +270,7 @@ public class Elevator extends SubsystemBase {
         break;
       case SCORE_L4:
         firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL4.meters - 0.37);
+        moveElevatorToPosition(ElevatorPosition.kL4.meters - 0.2);
         break;
       case FEEDER_INTAKE:
         firstTimeIdle = true;

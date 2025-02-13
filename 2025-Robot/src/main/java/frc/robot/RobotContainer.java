@@ -75,7 +75,7 @@ public class RobotContainer {
   Pivot pivot = new Pivot();
   Twist twist = new Twist();
   Climber climber = new Climber();
-  Superstructure superstructure = new Superstructure(drive, elevator, intake, pivot, twist);
+  Superstructure superstructure = new Superstructure(drive, elevator, intake, pivot, twist, this);
 
   boolean algaeMode = false;
   boolean manualMode = false;
@@ -222,41 +222,44 @@ public class RobotContainer {
     // ********OFFICIAL COMPETITION CONTROLS*********
     // DO NOT DELETE
 
-    OI.driverPOVUp.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.L1_PLACE),
-        new ConditionalCommand(new SetRobotState(superstructure,
-            SuperState.GROUND_ALGAE_PICKUP),
-            new SetRobotStateOnce(superstructure, SuperState.AUTO_L1_PLACE), () -> algaeMode),
-        () -> manualMode));
+    OI.driverPOVUp.whileTrue(
+        new ConditionalCommand(
+            new SetRobotStateSimple(superstructure, SuperState.L1_PLACE),
+            new ConditionalCommand(
+                new SetRobotState(superstructure, SuperState.PROCESSOR),
+                new SetRobotStateOnce(superstructure, SuperState.AUTO_L1_PLACE),
+                () -> algaeMode),
+            () -> (manualMode && !algaeMode)));
 
     OI.driverPOVUp.onFalse(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.SCORE_L1),
-        new InstantCommand(), () -> manualMode));
+        new InstantCommand(), () -> (manualMode && !algaeMode)));
 
     OI.driverPOVLeft.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.L2_PLACE),
         new ConditionalCommand(new SetRobotState(superstructure,
-            SuperState.GROUND_ALGAE_PICKUP),
+            SuperState.L2_ALGAE_PICKUP),
             new SetRobotStateOnce(superstructure, SuperState.AUTO_L2_PLACE), () -> algaeMode),
-        () -> manualMode));
+        () -> (manualMode && !algaeMode)));
 
     OI.driverPOVLeft.onFalse(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.SCORE_L2),
-        new InstantCommand(), () -> manualMode));
+        new InstantCommand(), () -> (manualMode && !algaeMode)));
 
     OI.driverPOVDown.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.L3_PLACE),
         new ConditionalCommand(new SetRobotState(superstructure,
-            SuperState.GROUND_ALGAE_PICKUP),
+            SuperState.L3_ALGAE_PICKUP),
             new SetRobotStateOnce(superstructure, SuperState.AUTO_L3_PLACE), () -> algaeMode),
-        () -> manualMode));
+        () -> (manualMode && !algaeMode)));
 
     OI.driverPOVDown.onFalse(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.SCORE_L3),
-        new InstantCommand(), () -> manualMode));
+        new InstantCommand(), () -> (manualMode && !algaeMode)));
 
     OI.driverPOVRight.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.L4_PLACE),
         new ConditionalCommand(new SetRobotState(superstructure,
-            SuperState.GROUND_ALGAE_PICKUP),
+            SuperState.NET),
             new SetRobotStateOnce(superstructure, SuperState.AUTO_L4_PLACE), () -> algaeMode),
-        () -> manualMode));
+        () -> (manualMode && !algaeMode)));
 
     OI.driverPOVRight.onFalse(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.SCORE_L4),
-        new InstantCommand(), () -> manualMode));
+        new InstantCommand(), () -> (manualMode && !algaeMode)));
   }
 
   /**

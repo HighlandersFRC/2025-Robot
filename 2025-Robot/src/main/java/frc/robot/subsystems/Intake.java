@@ -6,17 +6,48 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   private final TalonFX intakeMotor = new TalonFX(Constants.CANInfo.INTAKE_MOTOR_ID, Constants.CANInfo.CANBUS_NAME);
 
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
+
+  private boolean algaeMode = false;
+  private double timeSinceItemSwitch = 0.0;
+  private double itemSwitchTime = Timer.getFPGATimestamp();
+  private IntakeItem intakeItem = IntakeItem.NONE;
+
+  public void updateAlgaeMode(boolean algaeMode) {
+    this.algaeMode = algaeMode;
+  }
+
+  public enum IntakeItem {
+    CORAL,
+    ALGAE,
+    NONE,
+  }
+
+  public void init() {
+    TalonFXConfiguration intakeConfig = new TalonFXConfiguration();
+    intakeConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    intakeConfig.CurrentLimits.StatorCurrentLimit = 40;
+    intakeConfig.CurrentLimits.SupplyCurrentLimit = 40;
+    intakeMotor.getConfigurator().apply(intakeConfig);
+    intakeMotor.setNeutralMode(NeutralModeValue.Brake);
+  }
 
   public enum IntakeState {
     CORAL_INTAKE,
@@ -46,6 +77,32 @@ public class Intake extends SubsystemBase {
       return true;
     } else {
       return false;
+    }
+  }
+
+  public IntakeItem getIntakeItem() {
+    if (intakeMotor.getTorqueCurrent().getValueAsDouble() > 1.0) {
+      if (Math.abs(intakeMotor.getVelocity().getValueAsDouble()) < 5.0) {
+        if (Math.abs(intakeMotor.getAcceleration().getValueAsDouble()) < 10.0) {
+          return IntakeItem.CORAL;
+        } else {
+          return IntakeItem.NONE;
+        }
+      } else {
+        return IntakeItem.NONE;
+      }
+    } else if (intakeMotor.getTorqueCurrent().getValueAsDouble() < -1.0) {
+      if (Math.abs(intakeMotor.getVelocity().getValueAsDouble()) < 5.0) {
+        if (Math.abs(intakeMotor.getAcceleration().getValueAsDouble()) < 10.0) {
+          return IntakeItem.ALGAE;
+        } else {
+          return IntakeItem.NONE;
+        }
+      } else {
+        return IntakeItem.NONE;
+      }
+    } else {
+      return IntakeItem.NONE;
     }
   }
 
@@ -81,37 +138,70 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (intakeItem != getIntakeItem()) {
+      itemSwitchTime = Timer.getFPGATimestamp();
+      intakeItem = getIntakeItem();
+    }
+    timeSinceItemSwitch = Timer.getFPGATimestamp() - itemSwitchTime;
     systemState = handleStateTransition();
     // System.out.println("Intake Current: " + intakeMotor.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput("Intake State", systemState);
     // Logger.recordOutput("Has Coral", hasCoral());
     switch (systemState) {
       case CORAL_INTAKE:
-        if (hasCoral()) {
-          setIntakeTorque(25, 0.2);
-        } else {
-          setIntakePercent(1.0);
+        switch (intakeItem) {
+          case CORAL:
+            if (timeSinceItemSwitch > 1.0) {
+              setIntakeTorque(30, 0.2);
+            } else {
+              setIntakePercent(1.0);
+            }
+            break;
+          default:
+            setIntakePercent(1.0);
+            break;
         }
         break;
       case ALGAE_INTAKE:
-        if (hasCoral()) {
-          setIntakeTorque(-25, 0.2);
-        } else {
-          setIntakePercent(-1.0);
+        switch (intakeItem) {
+          case ALGAE:
+            if (timeSinceItemSwitch > 1.0) {
+              setIntakeTorque(-30, 0.2);
+            } else {
+              setIntakePercent(-1.0);
+            }
+            break;
+          default:
+            setIntakePercent(-1.0);
+            break;
         }
         break;
       case OUTAKE:
-        if (!false/* logic for if i coral (true) or algae (false) */) {
-          setIntakePercent(-0.5);
-        } else {
-          setIntakePercent(0.5);
+        switch (intakeItem) {
+          case CORAL:
+            setIntakePercent(-0.5);
+            break;
+          case ALGAE:
+            setIntakePercent(0.5);
+            break;
+          default:
+            if (algaeMode) {
+              setIntakePercent(0.5);
+            } else {
+              setIntakePercent(-0.5);
+            }
+            break;
         }
         break;
       case OFF:
         setIntakePercent(0.0);
         break;
       default:
-        setIntakeTorque(25, 0.2);
+        if (algaeMode) {
+          setIntakeTorque(-25, 0.2);
+        } else {
+          setIntakeTorque(25, 0.2);
+        }
     }
   }
 }

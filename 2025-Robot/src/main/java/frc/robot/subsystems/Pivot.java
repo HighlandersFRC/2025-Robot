@@ -216,8 +216,14 @@ public class Pivot extends SubsystemBase {
       case DEFAULT:
         pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT.rotations);
         break;
+      case REEF_ALGAE:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+        break;
       case NET:
         pivotToPosition(Constants.SetPoints.PivotPosition.kNET.rotations);
+        break;
+      case PROCESSOR:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
         break;
       case PREP:
         if (getPivotPosition() > 0) {

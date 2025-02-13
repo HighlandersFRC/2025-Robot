@@ -704,20 +704,22 @@ public final class Constants {
     public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
     public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
     public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(13.0);
-    public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(15);
+    public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(18);
     public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(17);
-    // public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(35);
     public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(25);
     public static final double ELEVATOR_AUTO_SCORE_L3_POSITION_M = inchesToMeters(20);
     public static final double ELEVATOR_AUTO_L4_POSITION_M = inchesToMeters(57);
-    public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(28);
-    public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(57.0);
+    public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(31);
+    public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(60.0);
     public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8.0);
     public static final double ELEVATOR_GROUND_CORAL_POSITION_M = inchesToMeters(6.0);
     public static final double ELEVATOR_GROUND_ALGAE_POSITION_M = inchesToMeters(0.0);
     public static final double ELEVATOR_FEEDER_POSITION_M = inchesToMeters(2);
-    public static final double ELEVATOR_OVER_POSITION_M = inchesToMeters(15);
+    public static final double ELEVATOR_OVER_POSITION_M = inchesToMeters(20);
     public static final double ELEVATOR_NET_POSITION_M = inchesToMeters(64);
+    public static final double ELEVATOR_L2_ALGAE_POSITION_M = inchesToMeters(21);
+    public static final double ELEVATOR_L3_ALGAE_POSITION_M = inchesToMeters(37);
+    public static final double ELEVATOR_PROCESSOR_POSITION_M = inchesToMeters(5);
 
     public enum ElevatorPosition {
       kDOWN(ELEVATOR_BOTTOM_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_BOTTOM_POSITION_M)),
@@ -740,6 +742,12 @@ public final class Constants {
           Ratios.elevatorMetersToRotations(ELEVATOR_GROUND_ALGAE_POSITION_M)),
       kNET(ELEVATOR_NET_POSITION_M,
           Ratios.elevatorMetersToRotations(ELEVATOR_NET_POSITION_M)),
+      kPROCESSOR(ELEVATOR_PROCESSOR_POSITION_M,
+          Ratios.elevatorMetersToRotations(ELEVATOR_PROCESSOR_POSITION_M)),
+      kL2ALGAE(ELEVATOR_L2_ALGAE_POSITION_M,
+          Ratios.elevatorMetersToRotations(ELEVATOR_L2_ALGAE_POSITION_M)),
+      kL3ALGAE(ELEVATOR_L3_ALGAE_POSITION_M,
+          Ratios.elevatorMetersToRotations(ELEVATOR_L3_ALGAE_POSITION_M)),
       kOVER(ELEVATOR_OVER_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_OVER_POSITION_M));
 
       public final double meters;
@@ -770,7 +778,9 @@ public final class Constants {
     public static final double PIVOT_DEFAULT_POSITION_D = 0.0;
     public static final double PIVOT_PREP_POSITION_D = 80.0;
     public static final double PIVOT_FEEDER_POSITION_D = 39.37;
-    public static final double PIVOT_NET_D = 10.0;
+    public static final double PIVOT_NET_POSITION_D = 10.0;
+    public static final double PIVOT_PROCESSOR_POSITION_D = 90.0;
+    public static final double PIVOT_REEF_ALGAE_POSITION_D = 105.0;
 
     public enum PivotPosition {
       kL1(PIVOT_L1_POSITION_D, Constants.degreesToRotations(PIVOT_L1_POSITION_D)),
@@ -787,13 +797,16 @@ public final class Constants {
           Constants.degreesToRotations(PIVOT_GROUND_CORAL_POSITION_BACK_D)),
       kGROUNDCORALPREPBACK(PIVOT_GROUND_CORAL_PREP_BACK_D,
           Constants.degreesToRotations(PIVOT_GROUND_CORAL_PREP_BACK_D)),
-      kNET(PIVOT_NET_D,
-          Constants.degreesToRotations(PIVOT_NET_D)),
+      kNET(PIVOT_NET_POSITION_D,
+          Constants.degreesToRotations(PIVOT_NET_POSITION_D)),
+      kPROCESSOR(PIVOT_PROCESSOR_POSITION_D,
+          Constants.degreesToRotations(PIVOT_PROCESSOR_POSITION_D)),
       kAUTOL2SCORE(PIVOT_AUTO_L2_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L2_SCORE_POSITION_D)),
       kAUTOL3SCORE(PIVOT_AUTO_L3_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L3_SCORE_POSITION_D)),
       kAUTOL4SCORE(PIVOT_AUTO_L4_SCORE_POSITION_D, Constants.degreesToRotations(PIVOT_AUTO_L4_SCORE_POSITION_D)),
       kDEFAULT(PIVOT_DEFAULT_POSITION_D, Constants.degreesToRotations(PIVOT_DEFAULT_POSITION_D)),
       kFEEDER(PIVOT_FEEDER_POSITION_D, Constants.degreesToRotations(PIVOT_FEEDER_POSITION_D)),
+      kREEFALGAE(PIVOT_REEF_ALGAE_POSITION_D, Constants.degreesToRotations(PIVOT_REEF_ALGAE_POSITION_D)),
       kPREP(PIVOT_PREP_POSITION_D, Constants.degreesToRotations(PIVOT_PREP_POSITION_D));
 
       public final double degrees;

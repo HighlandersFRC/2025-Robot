@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.SetPoints.ElevatorPosition;
 import frc.robot.subsystems.Drive.DriveState;
 import frc.robot.subsystems.Elevator.ElevatorState;
@@ -22,6 +23,7 @@ public class Superstructure extends SubsystemBase {
   private Intake intake;
   private Pivot pivot;
   private Twist twist;
+  private RobotContainer robotContainer;
 
   public enum SuperState {
     DEFAULT,
@@ -60,12 +62,14 @@ public class Superstructure extends SubsystemBase {
   private SuperState wantedSuperState = SuperState.DEFAULT;
   private SuperState currentSuperState = SuperState.DEFAULT;
 
-  public Superstructure(Drive drive, Elevator elevator, Intake intake, Pivot pivot, Twist twist) {
+  public Superstructure(Drive drive, Elevator elevator, Intake intake, Pivot pivot, Twist twist,
+      RobotContainer robotContainer) {
     this.drive = drive;
     this.elevator = elevator;
     this.intake = intake;
     this.pivot = pivot;
     this.twist = twist;
+    this.robotContainer = robotContainer;
   }
 
   public void setWantedState(SuperState wantedState) {
@@ -416,8 +420,12 @@ public class Superstructure extends SubsystemBase {
 
   public void handleDefaultState() {
     drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.DEFAULT);
-    // intake.setWantedState(IntakeState.DEFAULT);
+    if (twist.getTwistPosition() < 45) {
+      elevator.setWantedState(ElevatorState.DEFAULT);
+    } else {
+      elevator.setWantedState(ElevatorState.OVER);
+    }
+    intake.setWantedState(IntakeState.DEFAULT);
     if (Math.abs(twist.getTwistPosition()) < 60) {
       pivot.setWantedState(PivotState.DEFAULT);
     } else {
@@ -676,7 +684,7 @@ public class Superstructure extends SubsystemBase {
     elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
     pivot.setWantedState(PivotState.GROUND_CORAL_FRONT);
-    if (pivot.getPivotPosition() > 80 / 360) {
+    if (pivot.getPivotPosition() > 70 / 360) {
       twist.setWantedState(TwistState.UP);
     }
   }
@@ -685,17 +693,29 @@ public class Superstructure extends SubsystemBase {
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
-
-    if (twist.getTwistPosition() < -135 && pivot.getPivotPosition() < -0.1) {
-      pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
-    } else if (twist.getTwistPosition() > -45 || pivot.getPivotPosition() < -0.1) {
-      pivot.setWantedState(PivotState.GROUND_CORAL_PREP_BACK);
-    }
-
-    if (pivot.getPivotPosition() < 0.1) {
+    pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
+    if (pivot.getPivotPosition() < 45 / 360) {
       twist.setWantedState(TwistState.DOWN);
+    } else {
+      twist.setWantedState(TwistState.SIDE);
     }
   }
+
+  // public void handleGroundCoralPickupBackState() {
+  //   drive.setWantedState(DriveState.DEFAULT);
+  //   elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+  //   intake.setWantedState(IntakeState.CORAL_INTAKE);
+
+  //   if (twist.getTwistPosition() < -135 && pivot.getPivotPosition() < -0.1) {
+  //     pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
+  //   } else if (twist.getTwistPosition() > -45 || pivot.getPivotPosition() < -0.1) {
+  //     pivot.setWantedState(PivotState.GROUND_CORAL_PREP_BACK);
+  //   }
+
+  //   if (pivot.getPivotPosition() < 0.1) {
+  //     twist.setWantedState(TwistState.DOWN);
+  //   }
+  // }
 
   public void handleGroundAlgaePickupState() {
     drive.setWantedState(DriveState.DEFAULT);

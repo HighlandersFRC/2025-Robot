@@ -37,6 +37,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.elevator.init();
     m_robotContainer.pivot.init();
     m_robotContainer.twist.init();
+    m_robotContainer.intake.init();
     Constants.init();
 
     PortForwarder.add(5800, "orangepi1.local", 5800);
@@ -86,6 +87,8 @@ public class Robot extends LoggedRobot {
     } else {
       rjPressed = true;
     }
+
+    m_robotContainer.intake.updateAlgaeMode(m_robotContainer.algaeMode);
 
     Logger.recordOutput("Algae Mode", m_robotContainer.algaeMode);
     Logger.recordOutput("Manual Mode", m_robotContainer.manualMode);
