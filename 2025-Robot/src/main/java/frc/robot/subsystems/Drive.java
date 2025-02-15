@@ -180,29 +180,29 @@ public class Drive extends SubsystemBase {
   PhotonPoseEstimator leftPhotonPoseEstimator;
   AprilTagFieldLayout aprilTagFieldLayout;
 
-  Transform3d frontRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.0),
-          Constants.inchesToMeters(15.15)),
-      new Rotation3d(Math.toRadians(2.3), Math.toRadians(1.9), Math.toRadians(32.0)));
+  Transform3d frontRobotToCam = new Transform3d( // bottom/barge/feeder front cam
+      new Translation3d(Constants.inchesToMeters(3.25), Constants.inchesToMeters(-12.0),
+          Constants.inchesToMeters(18.75)),
+      new Rotation3d(Math.toRadians(-1.5), Math.toRadians(-47.1), Math.toRadians(-20.0)));
 
-  Transform2d frontCamPos = new Transform2d(
-      new Translation2d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.0)),
-      new Rotation2d(Math.toRadians(32.0)));
+  // Transform2d frontCamPos = new Transform2d(
+  //     new Translation2d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.0)),
+  //     new Rotation2d(Math.toRadians(32.0)));
 
-  Transform3d backRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(-1.5), Constants.inchesToMeters(-11.0),
-          Constants.inchesToMeters(15.15)),
-      new Rotation3d(Math.toRadians(-0.9), Math.toRadians(7.0), Math.toRadians(148.0)));
+  Transform3d backRobotToCam = new Transform3d( // bottom/barge/feeder back cam
+      new Translation3d(Constants.inchesToMeters(-2.25), Constants.inchesToMeters(-11.25),
+          Constants.inchesToMeters(18.75)),
+      new Rotation3d(Math.toRadians(3.0), Math.toRadians(-44.1), Math.toRadians(200.0)));
 
-  Transform3d rightRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(3.0), Constants.inchesToMeters(-12.5), // mead to get yaw
-          Constants.inchesToMeters(17.75)),
-      new Rotation3d(0, Math.toRadians(5.7), Math.toRadians(313.0)));
+  Transform3d rightRobotToCam = new Transform3d( // top/reef front cam
+      new Translation3d(Constants.inchesToMeters(2.75), Constants.inchesToMeters(-12.5), // mead to get yaw
+          Constants.inchesToMeters(22.25)),
+      new Rotation3d(Math.toRadians(4.1), Math.toRadians(14.4), Math.toRadians(15.0)));
 
-  Transform3d leftRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(-2.0), Constants.inchesToMeters(-12.5),
-          Constants.inchesToMeters(17.7)),
-      new Rotation3d(0, Math.toRadians(6.2), Math.toRadians(227.0)));
+  Transform3d leftRobotToCam = new Transform3d( // top/reef back cam
+      new Translation3d(Constants.inchesToMeters(-1.75), Constants.inchesToMeters(-11.25),
+          Constants.inchesToMeters(22.25)),
+      new Rotation3d(Math.toRadians(-5.0), Math.toRadians(14.0), Math.toRadians(165.0)));
 
   double initAngle;
   double setAngle;
