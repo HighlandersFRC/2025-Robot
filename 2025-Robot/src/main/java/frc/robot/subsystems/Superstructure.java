@@ -734,6 +734,12 @@ public class Superstructure extends SubsystemBase {
   public void handleAutoL2ScoreState() {
     drive.setWantedState(DriveState.DEFAULT);
     pivot.setWantedState(PivotState.AUTO_SCORE_L2);
+    if (Math.hypot((drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0]),
+        (drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 1.5 / 39.37) {
+      intake.setWantedState(IntakeState.OUTAKE);
+    } else {
+      intake.setWantedState(IntakeState.OFF);
+    }
   }
 
   // public void handleAutoL3ScoreState() {
