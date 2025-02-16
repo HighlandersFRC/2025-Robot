@@ -28,7 +28,7 @@ import frc.robot.commands.PolarAutoFollower;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunOutake;
 import frc.robot.commands.SetClimberPivotTorque;
-import frc.robot.commands.SetClimberRollerTorque;
+// import frc.robot.commands.SetClimberRollerTorque;
 import frc.robot.commands.SetElevatorPercent;
 import frc.robot.commands.SetElevatorState;
 import frc.robot.commands.SetIntake;
@@ -162,10 +162,10 @@ public class RobotContainer {
 
     OI.driverViewButton.whileTrue(new ZeroAngleMidMatch(drive)); // zero pidgeon
 
-    OI.driverRT.whileTrue(new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_FRONT));
+    // OI.driverRT.whileTrue(new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_FRONT));
     // OI.driverRB.whileTrue(new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_BACK));
 
-    OI.driverLT.whileTrue(new SetRobotStateSimple(superstructure, SuperState.OUTAKE));
+    // OI.driverLT.whileTrue(new SetRobotStateSimple(superstructure, SuperState.OUTAKE));
 
     // OI.driverY.whileTrue(new SetElevatorPercent(elevator, 0.3));
     // OI.driverA.whileTrue(new SetElevatorPercent(elevator, 0.3));
@@ -195,11 +195,11 @@ public class RobotContainer {
     // OI.driverX.whileTrue(new SetRobotState(superstructure, SuperState.FEEDER));
     // OI.driverB.whileTrue(new SetPivotState(pivot, PivotState.GROUND_CORAL));
 
-    OI.driverY.whileTrue(new SetClimberPivotTorque(climber, 60, 0.2));
-    OI.driverA.whileTrue(new SetClimberPivotTorque(climber, -60, 0.2));
-    OI.driverB.whileTrue(new SetClimberPivotTorque(climber, 20, 0.15));
-    OI.driverRB.whileTrue(new SetClimberRollerTorque(climber, 70, 0.8));
-    OI.driverLB.whileTrue(new SetClimberRollerTorque(climber, -70, 0.8));
+    OI.driverY.whileTrue(new SetClimberPivotTorque(climber, 80, 1.0));
+    OI.driverA.whileTrue(new SetClimberPivotTorque(climber, -80, 1.0));
+    // OI.driverB.whileTrue(new SetClimberPivotTorque(climber, 20, 0.15));
+    // OI.driverRB.whileTrue(new SetClimberRollerTorque(climber, 70, 0.8));
+    // OI.driverLB.whileTrue(new SetClimberRollerTorque(climber, -70, 0.8));
 
     // ********OFFICIAL COMPETITION CONTROLS*********
     // DO NOT DELET
