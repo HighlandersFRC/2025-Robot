@@ -38,6 +38,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.pivot.init();
     m_robotContainer.twist.init();
     m_robotContainer.intake.init();
+    m_robotContainer.climber.init();
     Constants.init();
 
     PortForwarder.add(5800, "orangepi1.local", 5800);

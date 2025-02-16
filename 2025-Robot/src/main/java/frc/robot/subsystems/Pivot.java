@@ -65,7 +65,7 @@ public class Pivot extends SubsystemBase {
   public void pivotToPosition(double pivotPosition) {
     // Logger.recordOutput("Pivot Setpoint", (pivotPosition));
     pivotMotor.setControl(this.pivotMotionProfileRequest
-        .withPosition(pivotPosition/*Constants.Ratios.PIVOT_GEAR_RATIO*/)
+        .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
         .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
         .withJerk(
             this.pivotJerk * pivotProfileScalarFactor));
@@ -76,7 +76,7 @@ public class Pivot extends SubsystemBase {
   }
 
   // public void setpivotEncoderPosition(double position) {
-  //   pivotMotor.setPosition(position);
+  // pivotMotor.setPosition(position);
   // }
 
   public void setPivotPercent(double percent) {
@@ -115,6 +115,7 @@ public class Pivot extends SubsystemBase {
     AUTO_SCORE_L2,
     AUTO_SCORE_L3,
     AUTO_SCORE_L4,
+    CLIMB,
   }
 
   private PivotState wantedState = PivotState.DEFAULT;
@@ -194,6 +195,8 @@ public class Pivot extends SubsystemBase {
         return PivotState.AUTO_SCORE_L3;
       case AUTO_SCORE_L4:
         return PivotState.AUTO_SCORE_L4;
+      case CLIMB:
+        return PivotState.CLIMB;
       default:
         return PivotState.DEFAULT;
     }
@@ -201,7 +204,8 @@ public class Pivot extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // System.out.println("Pivot Current: " + pivotMotor.getStatorCurrent().getValueAsDouble());
+    // System.out.println("Pivot Current: " +
+    // pivotMotor.getStatorCurrent().getValueAsDouble());
     // System.out.println("Pivot Position: " + getPivotPosition());
     Logger.recordOutput("Pivot Position", getPivotPosition());
 
@@ -246,6 +250,9 @@ public class Pivot extends SubsystemBase {
         break;
       case L1:
         pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
+        break;
+      case CLIMB:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kCLIMB.rotations);
         break;
       case SCORE_L1:
         break;

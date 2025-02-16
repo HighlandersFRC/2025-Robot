@@ -75,7 +75,7 @@ public class RobotContainer {
   Pivot pivot = new Pivot();
   Twist twist = new Twist();
   Climber climber = new Climber();
-  Superstructure superstructure = new Superstructure(drive, elevator, intake, pivot, twist, this);
+  Superstructure superstructure = new Superstructure(drive, elevator, intake, pivot, twist, climber, this);
 
   boolean algaeMode = false;
   boolean manualMode = false;
@@ -213,6 +213,8 @@ public class RobotContainer {
 
     OI.driverA.whileTrue(new SetRobotState(superstructure, SuperState.GROUND_ALGAE_PICKUP));
     OI.driverB.whileTrue(new SetRobotState(superstructure, SuperState.NET));
+    OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.CLIMB));
+    OI.driverX.whileTrue(new SetRobotState(superstructure, SuperState.DEPLOY_CLIMBER));
     // OI.driverY.whileTrue(new SetClimberPivotTorque(climber, 60, 0.2));
     // OI.driverA.whileTrue(new SetClimberPivotTorque(climber, -60, 0.2));
     // OI.driverB.whileTrue(new SetClimberPivotTorque(climber, 20, 0.15));

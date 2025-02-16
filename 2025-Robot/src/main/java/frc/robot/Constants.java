@@ -786,6 +786,7 @@ public final class Constants {
     public static final double PIVOT_NET_POSITION_D = 10.0;
     public static final double PIVOT_PROCESSOR_POSITION_D = 90.0;
     public static final double PIVOT_REEF_ALGAE_POSITION_D = 105.0;
+    public static final double PIVOT_CLIMB_POSITION_D = 90.0;
 
     public enum PivotPosition {
       kL1(PIVOT_L1_POSITION_D, Constants.degreesToRotations(PIVOT_L1_POSITION_D)),
@@ -812,7 +813,8 @@ public final class Constants {
       kDEFAULT(PIVOT_DEFAULT_POSITION_D, Constants.degreesToRotations(PIVOT_DEFAULT_POSITION_D)),
       kFEEDER(PIVOT_FEEDER_POSITION_D, Constants.degreesToRotations(PIVOT_FEEDER_POSITION_D)),
       kREEFALGAE(PIVOT_REEF_ALGAE_POSITION_D, Constants.degreesToRotations(PIVOT_REEF_ALGAE_POSITION_D)),
-      kPREP(PIVOT_PREP_POSITION_D, Constants.degreesToRotations(PIVOT_PREP_POSITION_D));
+      kPREP(PIVOT_PREP_POSITION_D, Constants.degreesToRotations(PIVOT_PREP_POSITION_D)),
+      kCLIMB(PIVOT_CLIMB_POSITION_D, Constants.degreesToRotations(PIVOT_CLIMB_POSITION_D));
 
       public final double degrees;
       public final double rotations;
