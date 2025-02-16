@@ -251,6 +251,8 @@ public class Pivot extends SubsystemBase {
             break;
         }
         break;
+      case AUTO_SCORE_L1:
+        break;
       case AUTO_SCORE_L3:
         switch (systemFlip) {
           case FRONT:
@@ -297,6 +299,17 @@ public class Pivot extends SubsystemBase {
         }
         break;
       case AUTO_L1:
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kL1.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
+            break;
+        }
         break;
       case AUTO_L2:
         switch (systemFlip) {
