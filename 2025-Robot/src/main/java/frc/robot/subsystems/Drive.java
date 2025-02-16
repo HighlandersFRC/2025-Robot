@@ -1229,9 +1229,9 @@ public class Drive extends SubsystemBase {
     double turnLimit = 0.17;
     // 0.35 before
 
-    if (OI.driverController.getLeftBumper()) {
+    if (OI.driverController.getRightTriggerAxis() > 0.1) {
       // activate speedy spin
-      // turnLimit = 1;
+      turnLimit = 0.1;
     }
 
     // this is correct, X is forward in field, so originalX should be the y on the
