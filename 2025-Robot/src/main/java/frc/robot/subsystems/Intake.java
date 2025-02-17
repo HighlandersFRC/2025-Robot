@@ -65,12 +65,16 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean hasCoral() {
-    // Logger.recordOutput("Has Coral", (intakeMotor.getVelocity().getValueAsDouble() > -10
+    // Logger.recordOutput("Has Coral",
+    // (intakeMotor.getVelocity().getValueAsDouble() > -10
     // && intakeMotor.getTorqueCurrent().getValueAsDouble() < -15
     // && intakeMotor.getAcceleration().getValueAsDouble() < -100));
-    // Logger.recordOutput("Intake Velocity", intakeMotor.getVelocity().getValueAsDouble());
-    // Logger.recordOutput("Intake Torque", intakeMotor.getTorqueCurrent().getValueAsDouble());
-    // Logger.recordOutput("Intake Acceleration", intakeMotor.getAcceleration().getValueAsDouble());
+    // Logger.recordOutput("Intake Velocity",
+    // intakeMotor.getVelocity().getValueAsDouble());
+    // Logger.recordOutput("Intake Torque",
+    // intakeMotor.getTorqueCurrent().getValueAsDouble());
+    // Logger.recordOutput("Intake Acceleration",
+    // intakeMotor.getAcceleration().getValueAsDouble());
     if (Math.abs(intakeMotor.getVelocity().getValueAsDouble()) < 1
         && Math.abs(intakeMotor.getTorqueCurrent().getValueAsDouble()) > 8
         && Math.abs(intakeMotor.getAcceleration().getValueAsDouble()) < 10) {
@@ -144,7 +148,8 @@ public class Intake extends SubsystemBase {
     }
     timeSinceItemSwitch = Timer.getFPGATimestamp() - itemSwitchTime;
     systemState = handleStateTransition();
-    // System.out.println("Intake Current: " + intakeMotor.getStatorCurrent().getValueAsDouble());
+    // System.out.println("Intake Current: " +
+    // intakeMotor.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput("Intake State", systemState);
     // Logger.recordOutput("Has Coral", hasCoral());
     switch (systemState) {
@@ -163,15 +168,19 @@ public class Intake extends SubsystemBase {
         }
         break;
       case ALGAE_INTAKE:
+        System.out.println("algae running");
         switch (intakeItem) {
           case ALGAE:
             if (timeSinceItemSwitch > 1.0) {
-              setIntakeTorque(-30, 0.2);
+              System.out.println("intake running");
+              setIntakeTorque(-30, 0.5);
             } else {
+              System.out.println("2");
               setIntakePercent(-1.0);
             }
             break;
           default:
+            System.out.println("3");
             setIntakePercent(-1.0);
             break;
         }

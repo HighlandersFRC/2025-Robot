@@ -69,7 +69,7 @@ public class Climber extends SubsystemBase {
       systemState = newState;
     }
 
-    Logger.recordOutput("Intake State", systemState);
+    Logger.recordOutput("Climber State", systemState);
 
     switch (systemState) {
       case EXTENDING:

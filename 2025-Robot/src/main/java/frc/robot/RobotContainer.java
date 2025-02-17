@@ -216,7 +216,7 @@ public class RobotContainer {
     OI.driverY.whileTrue(new SetRobotState(superstructure, SuperState.CLIMB));
     OI.driverX.whileTrue(new SetRobotState(superstructure, SuperState.DEPLOY_CLIMBER));
     // OI.driverY.whileTrue(new SetClimberPivotTorque(climber, 60, 0.2));
-    // OI.driverA.whileTrue(new SetClimberPivotTorque(climber, -60, 0.2));
+    // OI.driverA.whileTrue(new SetClimberPivotTorque(climber, -6]\[0, 0.2));
     // OI.driverB.whileTrue(new SetClimberPivotTorque(climber, 20, 0.15));
     // OI.driverRB.whileTrue(new SetClimberRollerTorque(climber, 70, 0.8));
     // OI.driverLB.whileTrue(new SetClimberRollerTorque(climber, -70, 0.8));

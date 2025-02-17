@@ -112,10 +112,12 @@ public class Twist extends SubsystemBase {
   public void periodic() {
     // System.out.println("Position" + getTwistPosition());
     systemState = handleStateTransition();
-    // System.out.println("Twist Current: " + twistMotor.getStatorCurrent().getValueAsDouble());
+    // System.out.println("Twist Current: " +
+    // twistMotor.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput("Twist State: ", systemState);
     Logger.recordOutput("Twist Position", getTwistPosition());
     // System.out.println("Twist Position: " + getTwistPosition());
+    // System.out.println("Twist State: " + systemState);
     // Logger.recordOutput("Twist Error",
     // twistMotor.getClosedLoopError().getValueAsDouble());
     // Logger.recordOutput("Twist Current",
@@ -129,10 +131,10 @@ public class Twist extends SubsystemBase {
           startedZero = true;
         }
         // if (Timer.getFPGATimestamp() - zeroInitTime > 1.3) {
-        //   setTwistPercent(0.0);
-        //   setTwistEncoderPosition(0.0);
+        // setTwistPercent(0.0);
+        // setTwistEncoderPosition(0.0);
         // } else {
-        //   setTwistTorque(10, 0.3);
+        // setTwistTorque(10, 0.3);
         // }
         startedZero = false;
         zeroInitTime = 0.0;
