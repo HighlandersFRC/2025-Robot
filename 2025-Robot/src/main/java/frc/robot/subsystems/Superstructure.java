@@ -42,11 +42,13 @@ public class Superstructure extends SubsystemBase {
     FEEDER,
     GROUND_CORAL_PICKUP_FRONT,
     GROUND_CORAL_PICKUP_BACK,
-    GROUND_ALGAE_PICKUP,
+    GROUND_ALGAE_PICKUP_FRONT,
+    GROUND_ALGAE_PICKUP_BACK,
     L2_ALGAE_PICKUP,
     L3_ALGAE_PICKUP,
     DEPLOY_CLIMBER,
     CLIMB,
+    CLIMBER_IDLE,
     OUTAKE,
     SCORE_L1,
     SCORE_L2,
@@ -127,8 +129,11 @@ public class Superstructure extends SubsystemBase {
       case GROUND_CORAL_PICKUP_BACK:
         handleGroundCoralPickupBackState();
         break;
-      case GROUND_ALGAE_PICKUP:
-        handleGroundAlgaePickupState();
+      case GROUND_ALGAE_PICKUP_FRONT:
+        handleGroundAlgaePickupFrontState();
+        break;
+      case GROUND_ALGAE_PICKUP_BACK:
+        handleGroundAlgaePickupBackState();
         break;
       case L2_ALGAE_PICKUP:
         handleL2AlgaePickupState();
@@ -141,6 +146,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case CLIMB:
         handleClimbState();
+        break;
+      case CLIMBER_IDLE:
+        handleClimberIdleState();
         break;
       case OUTAKE:
         handleOutakeState();
@@ -272,8 +280,11 @@ public class Superstructure extends SubsystemBase {
       case GROUND_CORAL_PICKUP_BACK:
         currentSuperState = SuperState.GROUND_CORAL_PICKUP_BACK;
         break;
-      case GROUND_ALGAE_PICKUP:
-        currentSuperState = SuperState.GROUND_ALGAE_PICKUP;
+      case GROUND_ALGAE_PICKUP_FRONT:
+        currentSuperState = SuperState.GROUND_ALGAE_PICKUP_FRONT;
+        break;
+      case GROUND_ALGAE_PICKUP_BACK:
+        currentSuperState = SuperState.GROUND_ALGAE_PICKUP_BACK;
         break;
       case L2_ALGAE_PICKUP:
         currentSuperState = SuperState.L2_ALGAE_PICKUP;
@@ -282,10 +293,23 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.L3_ALGAE_PICKUP;
         break;
       case DEPLOY_CLIMBER:
-        currentSuperState = SuperState.DEPLOY_CLIMBER;
+        if (climber.getPosition() > -350) {
+          currentSuperState = SuperState.DEPLOY_CLIMBER;
+        } else {
+          wantedSuperState = SuperState.CLIMBER_IDLE;
+          currentSuperState = SuperState.CLIMBER_IDLE;
+        }
         break;
       case CLIMB:
-        currentSuperState = SuperState.CLIMB;
+        if (climber.getPosition() < -150) {
+          currentSuperState = SuperState.CLIMB;
+        } else {
+          wantedSuperState = SuperState.CLIMBER_IDLE;
+          currentSuperState = SuperState.CLIMBER_IDLE;
+        }
+        break;
+      case CLIMBER_IDLE:
+        currentSuperState = SuperState.CLIMBER_IDLE;
         break;
       case OUTAKE:
         currentSuperState = SuperState.OUTAKE;
@@ -429,7 +453,7 @@ public class Superstructure extends SubsystemBase {
       elevator.setWantedState(ElevatorState.OVER);
     }
     intake.setWantedState(IntakeState.DEFAULT);
-    if (Math.abs(twist.getTwistPosition()) < 60) {
+    if (Math.abs(twist.getTwistPosition()) < 30) {
       pivot.setWantedState(PivotState.DEFAULT);
     } else {
       pivot.setWantedState(PivotState.PREP);
@@ -698,7 +722,7 @@ public class Superstructure extends SubsystemBase {
     elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
     pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
-    if (pivot.getPivotPosition() < 45 / 360) {
+    if (pivot.getPivotPosition() < 70 / 360) {
       twist.setWantedState(TwistState.DOWN);
     } else {
       twist.setWantedState(TwistState.SIDE);
@@ -722,10 +746,20 @@ public class Superstructure extends SubsystemBase {
   // }
   // }
 
-  public void handleGroundAlgaePickupState() {
+  public void handleGroundAlgaePickupFrontState() {
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_ALGAE_INTAKE);
     intake.setWantedState(IntakeState.ALGAE_INTAKE);
+    pivot.setWantedFlip(PivotFlip.FRONT);
+    pivot.setWantedState(PivotState.GROUND_ALGAE);
+    twist.setWantedState(TwistState.SIDE);
+  }
+
+  public void handleGroundAlgaePickupBackState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.GROUND_ALGAE_INTAKE);
+    intake.setWantedState(IntakeState.ALGAE_INTAKE);
+    pivot.setWantedFlip(PivotFlip.BACK);
     pivot.setWantedState(PivotState.GROUND_ALGAE);
     twist.setWantedState(TwistState.SIDE);
   }
@@ -756,6 +790,11 @@ public class Superstructure extends SubsystemBase {
     pivot.setWantedState(PivotState.CLIMB);
   }
 
+  public void handleClimberIdleState() {
+    climber.setWantedState(ClimbState.IDLE);
+    pivot.setWantedState(PivotState.CLIMB);
+  }
+
   public void handleOutakeState() {
     intake.setWantedState(IntakeState.OUTAKE);
   }
@@ -768,6 +807,12 @@ public class Superstructure extends SubsystemBase {
   public void handleAutoL2ScoreState() {
     drive.setWantedState(DriveState.DEFAULT);
     pivot.setWantedState(PivotState.AUTO_SCORE_L2);
+    if (Math.hypot((drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0]),
+        (drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
+      intake.setWantedState(IntakeState.OUTAKE);
+    } else {
+      intake.setWantedState(IntakeState.OFF);
+    }
   }
 
   // public void handleAutoL3ScoreState() {
@@ -801,13 +846,23 @@ public class Superstructure extends SubsystemBase {
 
   public void handleScoreL2State() {
     drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.SCORE_L2);
+    if (Math.hypot((drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0]),
+        (drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
+      intake.setWantedState(IntakeState.OUTAKE);
+    } else {
+      intake.setWantedState(IntakeState.OFF);
+    }
     pivot.setWantedState(PivotState.SCORE_L23);
   }
 
   public void handleScoreL3State() {
     drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.SCORE_L3);
+    if (Math.hypot((drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0]),
+        (drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
+      intake.setWantedState(IntakeState.OUTAKE);
+    } else {
+      intake.setWantedState(IntakeState.OFF);
+    }
     pivot.setWantedState(PivotState.SCORE_L23);
   }
 
@@ -815,6 +870,12 @@ public class Superstructure extends SubsystemBase {
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.SCORE_L4);
     pivot.setWantedState(PivotState.SCORE_L4);
+    if (Math.hypot((drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0]),
+        (drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
+      intake.setWantedState(IntakeState.OUTAKE);
+    } else {
+      intake.setWantedState(IntakeState.OFF);
+    }
   }
 
   public void handleIdleState() {

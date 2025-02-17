@@ -63,6 +63,9 @@ public class Pivot extends SubsystemBase {
   }
 
   public void pivotToPosition(double pivotPosition) {
+    if (Math.abs(pivotPosition) * 360 > 130) {
+      pivotPosition = 130 / 360;
+    }
     // Logger.recordOutput("Pivot Setpoint", (pivotPosition));
     pivotMotor.setControl(this.pivotMotionProfileRequest
         .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
@@ -237,7 +240,17 @@ public class Pivot extends SubsystemBase {
         }
         break;
       case GROUND_ALGAE:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+            break;
+        }
         break;
       case GROUND_CORAL_FRONT:
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALFRONT.rotations);
@@ -260,13 +273,13 @@ public class Pivot extends SubsystemBase {
         pivotToPosition(Constants.SetPoints.PivotPosition.kL23.rotations);
         break;
       case SCORE_L23:
-        pivotToPosition(0.25);
+        pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations);
         break;
       case L4:
         pivotToPosition(Constants.SetPoints.PivotPosition.kL4.rotations);
         break;
       case SCORE_L4:
-        pivotToPosition(0.25);
+        pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
         break;
       case AUTO_SCORE_L2:
         switch (systemFlip) {
