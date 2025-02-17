@@ -25,19 +25,24 @@ public class Lights extends SubsystemBase {
   private double timeout = 0.0;
   private boolean timedFlashes = false;
   CANdle candle = new CANdle(Constants.CANInfo.CANDLE_ID, "rio");
+  CANdle caNdle2 = new CANdle(Constants.CANInfo.CANDLE_ID2,"rio");
 
   RgbFadeAnimation rgbFade = new RgbFadeAnimation(1, 0.2, 308);
   RainbowAnimation rainbowAnimation = new RainbowAnimation(1, 0.4, 308, true, 0);
   StrobeAnimation flashGreen = new StrobeAnimation(0, 255, 0, 0, 0.7, 308, 0);
+  StrobeAnimation solidGreen = new StrobeAnimation(0, 255, 0);
   StrobeAnimation flashPurple = new StrobeAnimation(255, 0, 255, 0, 0.7, 308, 0);
   StrobeAnimation flashYellow = new StrobeAnimation(255, 255, 0, 0, 0.5, 308, 0);
-
+  StrobeAnimation solidRed = new StrobeAnimation(255, 0, 0);
+  StrobeAnimation solidBlue = new StrobeAnimation(0, 0, 255);
   public enum LightsState {
     CORAL,
     ALGAE,
     RED,
     BLUE,
     HAS_PIECE,
+    MANUAL
+    
   }
 
   private LightsState wantedState = LightsState.CORAL;
@@ -90,6 +95,8 @@ public class Lights extends SubsystemBase {
         return LightsState.RED;
       case BLUE:
         return LightsState.BLUE;
+      case MANUAL:
+        return LightsState.MANUAL;
       default:
         return LightsState.CORAL;
     }
@@ -104,6 +111,7 @@ public class Lights extends SubsystemBase {
    */
   public void setCandleRGB(int r, int g, int b) { // sets the RGB values of the lights
     candle.setLEDs(r, g, b);
+    caNdle2.setLEDs(r, g, b);
   }
 
   @Override
@@ -111,6 +119,7 @@ public class Lights extends SubsystemBase {
     LightsState newState = handleStateTransition();
     if (newState != systemState) {
       candle.clearAnimation(0);
+      caNdle2.clearAnimation(0);
       systemState = newState;
     }
     Logger.recordOutput("Lights State", systemState);
@@ -119,13 +128,16 @@ public class Lights extends SubsystemBase {
         blinkGreen(2.0);
         break;
       case ALGAE:
-        setCandleRGB(0, 255, 0);
+      setStrobePurple();
         break;
       case RED:
-        setCandleRGB(255, 0, 0);
+       Red();
         break;
       case BLUE:
-        setCandleRGB(0, 0, 255);
+        Blue();
+        break;
+      case MANUAL:
+        setStrobeGreen();
         break;
       default:
         setRainbow();
@@ -180,6 +192,7 @@ public class Lights extends SubsystemBase {
       timedFlashes = true;
     }
     candle.animate(flashGreen);
+    caNdle2.animate(flashGreen);
   }
 
   public void blinkYellow(double seconds) { // blinks yellow for a certain amount of time
@@ -191,22 +204,45 @@ public class Lights extends SubsystemBase {
       timedFlashes = true;
     }
     candle.animate(flashYellow);
+    caNdle2.animate(flashYellow);
+  }
+
+  public void Green(){
+    
+    candle.animate(solidGreen);
+    caNdle2.animate(solidGreen);
+  }
+
+  public void Red(){
+   
+    candle.animate(solidRed);
+    caNdle2.animate(solidRed);
+  }
+
+  public void Blue(){
+   
+    candle.animate(solidBlue);
+    caNdle2.animate(solidBlue);
   }
 
   public void clearAnimations() { // clears all animations currently running
     candle.clearAnimation(0);
+    caNdle2.clearAnimation(0);
   }
 
   public void setStrobeGreen() { // flashing green animation
     candle.animate(flashGreen);
+    caNdle2.animate(flashGreen);
   }
 
   public void setRainbow() {
     candle.animate(rainbowAnimation);
+    caNdle2.animate(rainbowAnimation);
   }
 
   public void setStrobePurple() { // flashing purple animation
     candle.animate(flashPurple);
+    caNdle2.animate(flashPurple);
   }
 
   /**
@@ -215,10 +251,12 @@ public class Lights extends SubsystemBase {
    */
   public void setStrobeYellow() { // flashing yellow animation
     candle.animate(flashYellow);
+    caNdle2.animate(flashYellow);
   }
 
   public void setRGBFade() {
     candle.animate(rgbFade);
+    caNdle2.animate(rgbFade);
   }
 
   /**
@@ -230,5 +268,6 @@ public class Lights extends SubsystemBase {
   public void init(String fieldSide) {
     this.fieldSide = fieldSide;
     candle.clearAnimation(0);
+    caNdle2.clearAnimation(0);
   }
 }

@@ -188,6 +188,8 @@ public class RobotContainer {
     OI.driverA.whileTrue(new SetLightsState(lights, LightsState.BLUE));
     OI.driverY.whileTrue(new SetLightsState(lights, LightsState.RED));
     OI.driverB.whileTrue(new SetLightsState(lights, LightsState.HAS_PIECE));
+    OI.driverX.whileTrue(new SetLightsState(lights, LightsState.MANUAL));
+    
     // OI.driverX.whileTrue(new SetRobotState(superstructure, SuperState.FEEDER));
     // OI.driverB.whileTrue(new SetPivotState(pivot, PivotState.GROUND_CORAL));
 

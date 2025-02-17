@@ -556,6 +556,7 @@ public final class Constants {
 
     // Lights
     public static final int CANDLE_ID = 0;
+    public static final int CANDLE_ID2 = 1;
 
     // Elevator
     public static final int MASTER_ELEVATOR_MOTOR_ID = 9;
