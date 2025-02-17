@@ -14,8 +14,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
-  private final TalonFX climberRoller = new TalonFX(Constants.CANInfo.CLIMBER_ROLLER_MOTOR_ID,
-      Constants.CANInfo.CANBUS_NAME);
   private final TalonFX climberPivot = new TalonFX(Constants.CANInfo.CLIMBER_PIVOT_MOTOR_ID,
       Constants.CANInfo.CANBUS_NAME);
 
@@ -28,16 +26,22 @@ public class Climber extends SubsystemBase {
 
   public void init() {
     climberPivot.setNeutralMode(NeutralModeValue.Brake);
+    climberPivot.setPosition(0.0);
+  }
+
+  public double getPosition() {
+    return climberPivot.getPosition().getValueAsDouble();
   }
 
   public enum ClimbState {
     EXTENDING,
     RETRACTING,
     IDLE,
+    DEFAULT,
   }
 
-  private ClimbState wantedState = ClimbState.IDLE;
-  private ClimbState systemState = ClimbState.IDLE;
+  private ClimbState wantedState = ClimbState.DEFAULT;
+  private ClimbState systemState = ClimbState.DEFAULT;
 
   private ClimbState handleStateTransition() {
     switch (wantedState) {
@@ -45,13 +49,11 @@ public class Climber extends SubsystemBase {
         return ClimbState.EXTENDING;
       case RETRACTING:
         return ClimbState.RETRACTING;
-      default:
+      case IDLE:
         return ClimbState.IDLE;
+      default:
+        return ClimbState.DEFAULT;
     }
-  }
-
-  public void setRollerTorque(double current, double maxPercent) {
-    climberRoller.setControl(rollerTorqueCurrentFOCRequest.withOutput(current).withMaxAbsDutyCycle(maxPercent));
   }
 
   public void setPivotTorque(double current, double maxPercent) {
@@ -70,19 +72,18 @@ public class Climber extends SubsystemBase {
     }
 
     Logger.recordOutput("Climber State", systemState);
-
     switch (systemState) {
       case EXTENDING:
-        setPivotTorque(-60.0, 0.2);
+        setPivotTorque(-80.0, 1.0);
         break;
       case RETRACTING:
-        setPivotTorque(60.0, 0.2);
+        setPivotTorque(80.0, 1.0);
         break;
       case IDLE:
         setPivotTorque(0, 0);
         break;
       default:
-        setPivotTorque(0, 0);
+        // setPivotTorque(0, 0);
         break;
     }
     // This method will be called once per scheduler run

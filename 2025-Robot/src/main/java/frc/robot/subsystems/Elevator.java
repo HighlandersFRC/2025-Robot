@@ -270,7 +270,7 @@ public class Elevator extends SubsystemBase {
         break;
       case SCORE_L4:
         firstTimeIdle = true;
-        moveElevatorToPosition(ElevatorPosition.kL4.meters - 0.2);
+        moveElevatorToPosition(ElevatorPosition.kL4.meters - 10 / 39.37);
         break;
       case FEEDER_INTAKE:
         firstTimeIdle = true;

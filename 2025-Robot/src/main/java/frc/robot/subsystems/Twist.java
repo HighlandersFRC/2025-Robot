@@ -6,6 +6,7 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -18,6 +19,8 @@ import frc.robot.Constants;
 public class Twist extends SubsystemBase {
 
   private final TalonFX twistMotor = new TalonFX(Constants.CANInfo.TWIST_MOTOR_ID,
+      new CANBus(Constants.CANInfo.CANBUS_NAME));
+  private final CANcoder twistCANcoder = new CANcoder(Constants.CANInfo.TWIST_CANCODER_ID,
       new CANBus(Constants.CANInfo.CANBUS_NAME));
 
   private final double twistJerk = 20.0;
@@ -37,10 +40,10 @@ public class Twist extends SubsystemBase {
 
   public void init() {
     TalonFXConfiguration twistConfig = new TalonFXConfiguration();
-    twistConfig.Slot0.kP = 10.0;
+    twistConfig.Slot0.kP = 60.0;
     twistConfig.Slot0.kI = 0.0;
-    twistConfig.Slot0.kD = 0.0;
-    twistConfig.Slot0.kS = 1.0;
+    twistConfig.Slot0.kD = 1.6;
+    twistConfig.Slot0.kS = 16.0;
     twistConfig.MotionMagic.MotionMagicJerk = this.twistJerk;
     twistConfig.MotionMagic.MotionMagicAcceleration = this.twistAcceleration;
     twistConfig.MotionMagic.MotionMagicCruiseVelocity = this.twistCruiseVelocity;
@@ -48,8 +51,11 @@ public class Twist extends SubsystemBase {
     twistConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     twistConfig.CurrentLimits.StatorCurrentLimit = 40;
     twistConfig.CurrentLimits.SupplyCurrentLimit = 40;
-    twistConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-    twistConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    twistConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    twistConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    twistConfig.Feedback.FeedbackRemoteSensorID = twistCANcoder.getDeviceID();
+    twistConfig.Feedback.SensorToMechanismRatio = 1.0;
+    twistConfig.Feedback.RotorToSensorRatio = Constants.Ratios.TWIST_GEAR_RATIO;
     twistTorqueCurrentFOC.EnableFOC = true;
     twistMotor.getConfigurator().apply(twistConfig);
     twistMotor.setNeutralMode(NeutralModeValue.Brake);
@@ -63,7 +69,7 @@ public class Twist extends SubsystemBase {
   public void twistToPosition(double rotations) {
     // Logger.recordOutput("Twist Setpoint", rotations);
     twistMotor.setControl(this.twistTorqueCurrentFOC
-        .withPosition(-rotations * Constants.Ratios.TWIST_GEAR_RATIO).withEnableFOC(true));
+        .withPosition(rotations).withEnableFOC(true));
   }
 
   public void setTwistPercent(double percent) {
@@ -75,7 +81,7 @@ public class Twist extends SubsystemBase {
   }
 
   public double getTwistPosition() {
-    return 360 * twistMotor.getPosition().getValueAsDouble() / Constants.Ratios.TWIST_GEAR_RATIO;
+    return 360 * twistMotor.getPosition().getValueAsDouble();
   }
 
   public void setTwistEncoderPosition(double position) {

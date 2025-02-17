@@ -535,20 +535,20 @@ public final class Constants {
     // public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
     // public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
 
-    public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(24.5);
-    public static final double INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.5);
-    public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(26.0);
-    public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.5);
+    public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(23.5);
+    public static final double INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.2);
+    public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(23.5);
+    public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.2);
 
     public static final double L3_INTAKE_X_OFFSET_FRONT = inchesToMeters(29.5);
-    public static final double L3_INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.5);
-    public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(26.0);
-    public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.5);
+    public static final double L3_INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.2);
+    public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(29.5);
+    public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.2);
 
     public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.5);
-    public static final double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.5);
-    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(28.0);
-    public static final double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-3.5);
+    public static final double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.2);
+    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(26.6);
+    public static final double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.2);
 
     public static final double GRAVITY_ACCEL_MS2 = 9.806;
 
@@ -713,11 +713,11 @@ public final class Constants {
     public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(17);
     public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(25);
     public static final double ELEVATOR_AUTO_SCORE_L3_POSITION_M = inchesToMeters(20);
-    public static final double ELEVATOR_AUTO_L4_POSITION_M = inchesToMeters(57);
+    public static final double ELEVATOR_AUTO_L4_POSITION_M = inchesToMeters(65.0);
     public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(31);
-    public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(60.0);
+    public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(65.0);
     public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8.0);
-    public static final double ELEVATOR_GROUND_CORAL_POSITION_M = inchesToMeters(6.5);
+    public static final double ELEVATOR_GROUND_CORAL_POSITION_M = inchesToMeters(7.5);
     public static final double ELEVATOR_GROUND_ALGAE_POSITION_M = inchesToMeters(0.0);
     public static final double ELEVATOR_FEEDER_POSITION_M = inchesToMeters(2);
     public static final double ELEVATOR_OVER_POSITION_M = inchesToMeters(20);
@@ -769,15 +769,15 @@ public final class Constants {
     // public static final double PIVOT_AUTO_L23_POSITION_D = 45.0;
     public static final double PIVOT_AUTO_L2_POSITION_D = 45.0;
     public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
-    public static final double PIVOT_AUTO_L4_POSITION_D = 45.0;
-    public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 100;
-    public static final double PIVOT_AUTO_L3_SCORE_POSITION_D = 90;
-    public static final double PIVOT_AUTO_L2_SCORE_POSITION_D = 100;
-    public static final double PIVOT_L4_POSITION_D = 55.0;
+    public static final double PIVOT_AUTO_L4_POSITION_D = 65.0;
+    public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 90.0;
+    public static final double PIVOT_AUTO_L3_SCORE_POSITION_D = 90.0;
+    public static final double PIVOT_AUTO_L2_SCORE_POSITION_D = 90.0;
+    public static final double PIVOT_L4_POSITION_D = 65.0;
     public static final double PIVOT_UPRIGHT_POSITION_D = 45.0;
-    public static final double PIVOT_GROUND_ALGAE_POSITION_D = 100.0;
-    public static final double PIVOT_GROUND_CORAL_POSITION_FRONT_D = 127.0;
-    public static final double PIVOT_GROUND_CORAL_POSITION_BACK_D = -127.0;
+    public static final double PIVOT_GROUND_ALGAE_POSITION_D = 90.0;
+    public static final double PIVOT_GROUND_CORAL_POSITION_FRONT_D = 130.0;
+    public static final double PIVOT_GROUND_CORAL_POSITION_BACK_D = -130.0;
     public static final double PIVOT_GROUND_CORAL_PREP_BACK_D = -90;
     // public static final double PIVOT_DEFAULT_POSITION_D = 30.0;
     public static final double PIVOT_DEFAULT_POSITION_D = 0.0;
@@ -786,7 +786,7 @@ public final class Constants {
     public static final double PIVOT_NET_POSITION_D = 10.0;
     public static final double PIVOT_PROCESSOR_POSITION_D = 90.0;
     public static final double PIVOT_REEF_ALGAE_POSITION_D = 105.0;
-    public static final double PIVOT_CLIMB_POSITION_D = 90.0;
+    public static final double PIVOT_CLIMB_POSITION_D = 45.0;
 
     public enum PivotPosition {
       kL1(PIVOT_L1_POSITION_D, Constants.degreesToRotations(PIVOT_L1_POSITION_D)),
@@ -1039,6 +1039,7 @@ public final class Constants {
 
     // Twist
     public static final int TWIST_MOTOR_ID = 12;
+    public static final int TWIST_CANCODER_ID = 6;
 
     // Intake
     public static final int INTAKE_MOTOR_ID = 13;

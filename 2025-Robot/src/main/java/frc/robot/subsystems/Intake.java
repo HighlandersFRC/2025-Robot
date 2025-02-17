@@ -151,13 +151,14 @@ public class Intake extends SubsystemBase {
     // System.out.println("Intake Current: " +
     // intakeMotor.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput("Intake State", systemState);
+    Logger.recordOutput("Intake Item", intakeItem);
     // Logger.recordOutput("Has Coral", hasCoral());
     switch (systemState) {
       case CORAL_INTAKE:
         switch (intakeItem) {
           case CORAL:
             if (timeSinceItemSwitch > 1.0) {
-              setIntakeTorque(30, 0.2);
+              setIntakeTorque(35, 0.2);
             } else {
               setIntakePercent(1.0);
             }
@@ -168,14 +169,14 @@ public class Intake extends SubsystemBase {
         }
         break;
       case ALGAE_INTAKE:
-        System.out.println("algae running");
+        // System.out.println("algae running");
         switch (intakeItem) {
           case ALGAE:
             if (timeSinceItemSwitch > 1.0) {
-              System.out.println("intake running");
-              setIntakeTorque(-30, 0.5);
+              // System.out.println("intake running");
+              setIntakeTorque(-40, 1.0);
             } else {
-              System.out.println("2");
+              // System.out.println("2");
               setIntakePercent(-1.0);
             }
             break;
@@ -206,6 +207,7 @@ public class Intake extends SubsystemBase {
         setIntakePercent(0.0);
         break;
       default:
+        // System.out.println("Motor Current: " + intakeMotor.getTorqueCurrent());
         if (algaeMode) {
           setIntakeTorque(-25, 0.2);
         } else {
