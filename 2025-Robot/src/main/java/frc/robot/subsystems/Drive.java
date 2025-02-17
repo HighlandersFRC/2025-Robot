@@ -180,29 +180,29 @@ public class Drive extends SubsystemBase {
   PhotonPoseEstimator leftPhotonPoseEstimator;
   AprilTagFieldLayout aprilTagFieldLayout;
 
-  Transform3d frontRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.0),
-          Constants.inchesToMeters(15.15)),
-      new Rotation3d(Math.toRadians(2.3), Math.toRadians(1.9), Math.toRadians(32.0)));
+  Transform3d frontReefRobotToCam = new Transform3d( // top front reef cam
+      new Translation3d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.125),
+          Constants.inchesToMeters(22.25)),
+      new Rotation3d(Math.toRadians(0.0), Math.toRadians(26.0), Math.toRadians(15.0)));
 
-  Transform2d frontCamPos = new Transform2d(
-      new Translation2d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.0)),
-      new Rotation2d(Math.toRadians(32.0)));
+  // Transform2d frontReefCamPos = new Transform2d(
+  //     new Translation2d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.0)),
+  //     new Rotation2d(Math.toRadians(32.0)));
 
-  Transform3d backRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(-1.5), Constants.inchesToMeters(-11.0),
-          Constants.inchesToMeters(15.15)),
-      new Rotation3d(Math.toRadians(-0.9), Math.toRadians(7.0), Math.toRadians(148.0)));
+  Transform3d backReefRobotToCam = new Transform3d( // top back reef cam
+      new Translation3d(Constants.inchesToMeters(-2.25), Constants.inchesToMeters(-11.125),
+          Constants.inchesToMeters(22.25)),
+      new Rotation3d(Math.toRadians(-0.9), Math.toRadians(24.3), Math.toRadians(165.0)));
 
-  Transform3d rightRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(3.0), Constants.inchesToMeters(-12.5), // mead to get yaw
-          Constants.inchesToMeters(17.75)),
-      new Rotation3d(0, Math.toRadians(5.7), Math.toRadians(313.0)));
+  Transform3d frontBargeRobotToCam = new Transform3d( // bottom 
+      new Translation3d(Constants.inchesToMeters(3.0), Constants.inchesToMeters(-12.125), // mead to get yaw
+          Constants.inchesToMeters(17.5)),
+      new Rotation3d(Math.toRadians(0.0), Math.toRadians(-35.0), Math.toRadians(-20.0)));
 
-  Transform3d leftRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(-2.0), Constants.inchesToMeters(-12.5),
-          Constants.inchesToMeters(17.7)),
-      new Rotation3d(0, Math.toRadians(6.2), Math.toRadians(227.0)));
+  Transform3d backBargeRobotToCam = new Transform3d(
+      new Translation3d(Constants.inchesToMeters(-3.0), Constants.inchesToMeters(-12.125),
+          Constants.inchesToMeters(17.5)),
+      new Rotation3d(Math.toRadians(0.0), Math.toRadians(-34.6), Math.toRadians(200.0)));
 
   double initAngle;
   double setAngle;
@@ -339,16 +339,16 @@ public class Drive extends SubsystemBase {
       System.out.println("error with april tag: " + e.getMessage());
     }
     photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontRobotToCam);
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontReefRobotToCam);
 
     backPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backRobotToCam);
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backReefRobotToCam);
 
     rightPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, rightRobotToCam);
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontBargeRobotToCam);
 
     leftPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, leftRobotToCam);
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backBargeRobotToCam);
 
     frontRight.init();
     frontLeft.init();
@@ -603,7 +603,7 @@ public class Drive extends SubsystemBase {
 
     Matrix<N3, N1> standardDeviation = new Matrix<>(Nat.N3(), Nat.N1());
 
-    var result = peripherals.getFrontCamResult();
+    var result = peripherals.getFrontReefCamResult();
     Optional<EstimatedRobotPose> multiTagResult = photonPoseEstimator.update(result);
     if (multiTagResult.isPresent()) {
       if (result.getBestTarget().getPoseAmbiguity() < 0.3) {
@@ -633,7 +633,7 @@ public class Drive extends SubsystemBase {
       }
     }
 
-    var backResult = peripherals.getBackCamResult();
+    var backResult = peripherals.getBackReefCamResult();
     Optional<EstimatedRobotPose> backMultiTagResult = backPhotonPoseEstimator.update(backResult);
     if (backMultiTagResult.isPresent()) {
       if (backResult.getBestTarget().getPoseAmbiguity() < 0.3) {
@@ -663,7 +663,7 @@ public class Drive extends SubsystemBase {
       }
     }
 
-    var rightResult = peripherals.getRightCamResult();
+    var rightResult = peripherals.getFrontBargeCamResult();
     Optional<EstimatedRobotPose> rightMultiTagResult = rightPhotonPoseEstimator
         .update(rightResult);
     if (rightMultiTagResult.isPresent()) {
@@ -694,7 +694,7 @@ public class Drive extends SubsystemBase {
       }
     }
 
-    var leftResult = peripherals.getLeftCamResult();
+    var leftResult = peripherals.getBackBargeCamResult();
     Optional<EstimatedRobotPose> leftMultiTagResult = leftPhotonPoseEstimator
         .update(leftResult);
     if (leftMultiTagResult.isPresent()) {
@@ -724,10 +724,10 @@ public class Drive extends SubsystemBase {
         }
       }
     }
-    // if (isPoseInField(frontCamPnPPose) && !frontCamPnPPose.equals(defaultPose)) {
-    // // peripherals.setPigeonAngle(frontCamPnPPose.getRotation().getRadians());
-    // mt2Odometry.addVisionMeasurement(frontCamPnPPose,
-    // peripherals.getFrontCamLatency());
+    // if (isPoseInField(frontReefCamPnPPose) && !frontReefCamPnPPose.equals(defaultPose)) {
+    // // peripherals.setPigeonAngle(frontReefCamPnPPose.getRotation().getRadians());
+    // mt2Odometry.addVisionMeasurement(frontReefCamPnPPose,
+    // peripherals.getFrontReefCamLatency());
     // }
 
     m_currentTime = Timer.getFPGATimestamp() - m_initTime;
@@ -1229,10 +1229,10 @@ public class Drive extends SubsystemBase {
     double turnLimit = 0.17;
     // 0.35 before
 
-    if (OI.driverController.getLeftBumper()) {
-      // activate speedy spin
-      // turnLimit = 1;
-    }
+    // if (OI.driverController.getRightTriggerAxis() > 0.2) {
+    //   // activate slowy spin
+    //   turnLimit = 0.1;
+    // }
 
     // this is correct, X is forward in field, so originalX should be the y on the
     // // joystick

@@ -30,10 +30,10 @@ import frc.robot.Constants;
 import frc.robot.tools.math.Vector;
 
 public class Peripherals {
-  private PhotonCamera frontCam = new PhotonCamera("Front_Cam");
-  private PhotonCamera backCam = new PhotonCamera("Back_Cam");
-  private PhotonCamera rightCam = new PhotonCamera("Right_Cam");
-  private PhotonCamera leftCam = new PhotonCamera("Left_Cam");
+  private PhotonCamera frontReefCam = new PhotonCamera("Front_Reef");
+  private PhotonCamera backReefCam = new PhotonCamera("Back_Reef");
+  private PhotonCamera frontBargeCam = new PhotonCamera("Front_Barge");
+  private PhotonCamera backBargeCam = new PhotonCamera("Back_Barge");
   private PhotonCamera gamePieceCamera = new PhotonCamera("Game_Piece_Cam");
 
   AprilTagFieldLayout aprilTagFieldLayout;
@@ -48,10 +48,10 @@ public class Peripherals {
 
   double pigeonSetpoint = 0.0;
 
-  boolean frontCamTrack = false;
-  boolean backCamTrack = false;
-  boolean rightCamTrack = false;
-  boolean leftCamTrack = false;
+  boolean frontReefCamTrack = false;
+  boolean backReefCamTrack = false;
+  boolean frontBargeCamTrack = false;
+  boolean backBargeCamTrack = false;
 
   public Peripherals() {
   }
@@ -83,9 +83,9 @@ public class Peripherals {
     zeroPigeon();
   }
 
-  public double getFrontCamYaw() {
+  public double getFrontReefCamYaw() {
     double yaw = 0.0;
-    var result = frontCam.getLatestResult();
+    var result = frontReefCam.getLatestResult();
     // Logger.recordOutput("has target", result.hasTargets());
     if (result.hasTargets()) {
       PhotonTrackedTarget target = result.getBestTarget();
@@ -94,9 +94,9 @@ public class Peripherals {
     return yaw;
   }
 
-  public double getFrontCamPitch() {
+  public double getFrontReefCamPitch() {
     double pitch = 0.0;
-    var result = frontCam.getLatestResult();
+    var result = frontReefCam.getLatestResult();
     if (result.hasTargets()) {
       PhotonTrackedTarget target = result.getBestTarget();
       pitch = target.getPitch();
@@ -236,8 +236,8 @@ public class Peripherals {
   // return new Pose3d(robotTranslation, new Rotation3d(0, 0, robotYaw));
   // }
 
-  // public Pose2d getFrontCamTrigPose() {
-  // var result = frontCam.getLatestResult();
+  // public Pose2d getFrontReefCamTrigPose() {
+  // var result = frontReefCam.getLatestResult();
   // if (result.hasTargets() && result.getBestTarget().getPoseAmbiguity() < 0.3) {
   // PhotonTrackedTarget target = result.getBestTarget();
   // // Pose3d robotPose = calculateRobotPosition(cameraOffset, target.getYaw(),
@@ -259,53 +259,53 @@ public class Peripherals {
   // }
   // }
 
-  public PhotonPipelineResult getFrontCamResult() {
-    var result = frontCam.getAllUnreadResults();
+  public PhotonPipelineResult getFrontReefCamResult() {
+    var result = frontReefCam.getAllUnreadResults();
     if (!result.isEmpty()) {
-      frontCamTrack = true;
+      frontReefCamTrack = true;
       return result.get(0);
     } else {
-      frontCamTrack = false;
+      frontReefCamTrack = false;
       return new PhotonPipelineResult();
     }
   }
 
-  public PhotonPipelineResult getBackCamResult() {
-    var result = backCam.getAllUnreadResults();
+  public PhotonPipelineResult getBackReefCamResult() {
+    var result = backReefCam.getAllUnreadResults();
     if (!result.isEmpty()) {
-      backCamTrack = true;
+      backReefCamTrack = true;
       return result.get(0);
     } else {
-      backCamTrack = false;
+      backReefCamTrack = false;
       return new PhotonPipelineResult();
     }
   }
 
-  public PhotonPipelineResult getRightCamResult() {
-    var result = rightCam.getAllUnreadResults();
+  public PhotonPipelineResult getFrontBargeCamResult() {
+    var result = frontBargeCam.getAllUnreadResults();
     if (!result.isEmpty()) {
-      rightCamTrack = true;
+      frontBargeCamTrack = true;
       return result.get(0);
     } else {
-      rightCamTrack = false;
+      frontBargeCamTrack = false;
       return new PhotonPipelineResult();
     }
   }
 
-  public PhotonPipelineResult getLeftCamResult() {
-    var result = leftCam.getAllUnreadResults();
+  public PhotonPipelineResult getBackBargeCamResult() {
+    var result = backBargeCam.getAllUnreadResults();
     if (!result.isEmpty()) {
-      leftCamTrack = true;
+      backBargeCamTrack = true;
       return result.get(0);
     } else {
-      leftCamTrack = false;
+      backBargeCamTrack = false;
       return new PhotonPipelineResult();
     }
   }
 
-  // public Pose3d getFrontCamPnPPose() {
+  // public Pose3d getFrontReefCamPnPPose() {
   // // Logger.recordOutput("April Tag", aprilTagFieldLayout.getTagPose(1).get());
-  // var result = frontCam.getLatestResult();
+  // var result = frontReefCam.getLatestResult();
   // Optional<EstimatedRobotPose> multiTagResult =
   // photonPoseEstimator.update(result);
   // if (multiTagResult.isPresent()) {
@@ -316,7 +316,7 @@ public class Peripherals {
   // Pose3d robotPose = new Pose3d();
   // return robotPose;
   // }
-  // // var result = frontCam.getLatestResult();
+  // // var result = frontReefCam.getLatestResult();
   // // Logger.recordOutput("Is presetn", result.getMultiTagResult().isPresent());
   // // if (result.getMultiTagResult().isPresent()) {
   // // Transform3d fieldToCamera =
@@ -329,8 +329,8 @@ public class Peripherals {
   // // }
   // }
 
-  public double getFrontCamLatency() {
-    return frontCam.getLatestResult().getTimestampSeconds();
+  public double getFrontReefCamLatency() {
+    return frontReefCam.getLatestResult().getTimestampSeconds();
   }
 
   /**
@@ -396,13 +396,13 @@ public class Peripherals {
 
   public void periodic() {
     //TODO: uncomment if you want to see if the cameras have a track
-    // Logger.recordOutput("Front Cam Track", frontCamTrack);
-    // Logger.recordOutput("Back Cam Track", backCamTrack);
-    // Logger.recordOutput("Right Cam Track", rightCamTrack);
-    // Logger.recordOutput("Left Cam Track", leftCamTrack);
+    // Logger.recordOutput("Front Cam Track", frontReefCamTrack);
+    // Logger.recordOutput("Back Cam Track", backReefCamTrack);
+    // Logger.recordOutput("Right Cam Track", frontBargeCamTrack);
+    // Logger.recordOutput("Left Cam Track", backBargeCamTrack);
 
-    // getFrontCamPnPPose(); //TODO: uncomment when using camera
-    // var result = frontCam.getLatestResult();
+    // getFrontReefCamPnPPose(); //TODO: uncomment when using camera
+    // var result = frontReefCam.getLatestResult();
     // if (result.hasTargets()) {
     // PhotonTrackedTarget target = result.getBestTarget();
     // Pose2d robotPose = getRobotPoseViaTrig(target,
