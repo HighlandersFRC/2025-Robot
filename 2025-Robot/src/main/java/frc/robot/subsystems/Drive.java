@@ -183,18 +183,19 @@ public class Drive extends SubsystemBase {
   Transform3d frontReefRobotToCam = new Transform3d( // top front reef cam
       new Translation3d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.125),
           Constants.inchesToMeters(22.25)),
-      new Rotation3d(Math.toRadians(0.0), Math.toRadians(26.0), Math.toRadians(15.0)));
+      new Rotation3d(Math.toRadians(1.4), Math.toRadians(24.7), Math.toRadians(15.0)));
 
   // Transform2d frontReefCamPos = new Transform2d(
-  //     new Translation2d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.0)),
-  //     new Rotation2d(Math.toRadians(32.0)));
+  // new Translation2d(Constants.inchesToMeters(2.25),
+  // Constants.inchesToMeters(-11.0)),
+  // new Rotation2d(Math.toRadians(32.0)));
 
   Transform3d backReefRobotToCam = new Transform3d( // top back reef cam
       new Translation3d(Constants.inchesToMeters(-2.25), Constants.inchesToMeters(-11.125),
           Constants.inchesToMeters(22.25)),
       new Rotation3d(Math.toRadians(-0.9), Math.toRadians(24.3), Math.toRadians(165.0)));
 
-  Transform3d frontBargeRobotToCam = new Transform3d( // bottom 
+  Transform3d frontBargeRobotToCam = new Transform3d( // bottom
       new Translation3d(Constants.inchesToMeters(3.0), Constants.inchesToMeters(-12.125), // mead to get yaw
           Constants.inchesToMeters(17.5)),
       new Rotation3d(Math.toRadians(0.0), Math.toRadians(-35.0), Math.toRadians(-20.0)));
@@ -724,8 +725,10 @@ public class Drive extends SubsystemBase {
         }
       }
     }
-    // if (isPoseInField(frontReefCamPnPPose) && !frontReefCamPnPPose.equals(defaultPose)) {
-    // // peripherals.setPigeonAngle(frontReefCamPnPPose.getRotation().getRadians());
+    // if (isPoseInField(frontReefCamPnPPose) &&
+    // !frontReefCamPnPPose.equals(defaultPose)) {
+    // //
+    // peripherals.setPigeonAngle(frontReefCamPnPPose.getRotation().getRadians());
     // mt2Odometry.addVisionMeasurement(frontReefCamPnPPose,
     // peripherals.getFrontReefCamLatency());
     // }
@@ -1230,8 +1233,8 @@ public class Drive extends SubsystemBase {
     // 0.35 before
 
     // if (OI.driverController.getRightTriggerAxis() > 0.2) {
-    //   // activate slowy spin
-    //   turnLimit = 0.1;
+    // // activate slowy spin
+    // turnLimit = 0.1;
     // }
 
     // this is correct, X is forward in field, so originalX should be the y on the
@@ -1390,15 +1393,15 @@ public class Drive extends SubsystemBase {
 
   public boolean hitSetPoint(double x, double y, double theta) { // adjust for l4 TODO:
     // Logger.recordOutput("Error for setpoint",
-    //     Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
-    //         + Math.pow((y - getMT2OdometryY()), 2)));
+    // Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
+    // + Math.pow((y - getMT2OdometryY()), 2)));
     // System.out.println("X Y error: "
-    //     + Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
-    //         + Math.pow((y - getMT2OdometryY()), 2))
-    //     + " Angle error: " + getAngleDifferenceDegrees(Math.toDegrees(theta),
-    //         Math.toDegrees(getMT2OdometryAngle()))
-    //     + " Hits: "
-    //     + hitNumber);
+    // + Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
+    // + Math.pow((y - getMT2OdometryY()), 2))
+    // + " Angle error: " + getAngleDifferenceDegrees(Math.toDegrees(theta),
+    // Math.toDegrees(getMT2OdometryAngle()))
+    // + " Hits: "
+    // + hitNumber);
     if (Math
         .sqrt(Math.pow((x - getMT2OdometryX()), 2)
             + Math.pow((y - getMT2OdometryY()), 2)) < 0.04
@@ -1418,8 +1421,10 @@ public class Drive extends SubsystemBase {
   public void driveToPoint(double x, double y, double theta) {
 
     // Logger.recordOutput("Magnitude Error Inches",
-    //     Constants.metersToInches(Math.sqrt(Math.pow(x - getMT2OdometryX(), 2) + Math.pow(y - getMT2OdometryY(), 2))));
-    // Logger.recordOutput("Theta Error Degrees", Math.toDegrees(theta - getMT2OdometryAngle()));
+    // Constants.metersToInches(Math.sqrt(Math.pow(x - getMT2OdometryX(), 2) +
+    // Math.pow(y - getMT2OdometryY(), 2))));
+    // Logger.recordOutput("Theta Error Degrees", Math.toDegrees(theta -
+    // getMT2OdometryAngle()));
 
     while (Math.abs(theta - getMT2OdometryAngle()) > Math.PI) {
       if (theta - getMT2OdometryAngle() > Math.PI) {
@@ -1685,12 +1690,14 @@ public class Drive extends SubsystemBase {
     // Logger.recordOutput("x-vel", velocityArray[0].doubleValue());
     // Logger.recordOutput("y-vel", velocityArray[1].doubleValue());
     // Logger.recordOutput("theta-vel", velocityArray[2].doubleValue());
-    // Logger.recordOutput("wanted-theta-vel", targetPoint.getDouble("angular_velocity"));
+    // Logger.recordOutput("wanted-theta-vel",
+    // targetPoint.getDouble("angular_velocity"));
     // Logger.recordOutput("pid-theta-vel", thetaVelNoFF);
     // Logger.recordOutput("FF-theta-vel", feedForwardTheta);
     // Logger.recordOutput("current point idx", currentIndex);
     // Logger.recordOutput("point idx", velocityArray[3].intValue());
-    // Logger.recordOutput("look-ahead", Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_DISTANCE * velocityMag + 0.01);
+    // Logger.recordOutput("look-ahead",
+    // Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_DISTANCE * velocityMag + 0.01);
     return velocityArray;
   }
 
