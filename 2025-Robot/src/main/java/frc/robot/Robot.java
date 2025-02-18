@@ -39,6 +39,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.twist.init();
     m_robotContainer.intake.init();
     m_robotContainer.climber.init();
+    m_robotContainer.lights.init(m_fieldSide);
     Constants.init();
 
     PortForwarder.add(5800, "orangepi1.local", 5800);
@@ -49,7 +50,7 @@ public class Robot extends LoggedRobot {
 
     m_robotContainer.lights.clearAnimations();
     m_robotContainer.lights.setCommandRunning(true);
-    m_robotContainer.lights.setRGBFade();
+    m_robotContainer.lights.setFlashYellow();
   }
 
   @Override
@@ -88,9 +89,10 @@ public class Robot extends LoggedRobot {
     } else {
       rjPressed = true;
     }
-
+    m_robotContainer.lights.updateIntakeItem(m_robotContainer.intake.getIntakeItem());
     m_robotContainer.intake.updateAlgaeMode(m_robotContainer.algaeMode);
-
+    m_robotContainer.lights.updateAlgaeMode(m_robotContainer.algaeMode);
+    m_robotContainer.lights.updateManualMode(m_robotContainer.manualMode);
     Logger.recordOutput("Algae Mode", m_robotContainer.algaeMode);
     Logger.recordOutput("Manual Mode", m_robotContainer.manualMode);
     Logger.recordOutput("Swerve Module States", m_robotContainer.drive.getModuleStates());
@@ -107,7 +109,7 @@ public class Robot extends LoggedRobot {
     OI.operatorController.setRumble(RumbleType.kBothRumble, 0);
     m_robotContainer.lights.clearAnimations();
     m_robotContainer.lights.setCommandRunning(true);
-    m_robotContainer.lights.setRainbow();
+    m_robotContainer.lights.setFlashYellow();
   }
 
   @Override

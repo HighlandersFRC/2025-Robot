@@ -75,7 +75,7 @@ public class RobotContainer {
   Pivot pivot = new Pivot();
   Twist twist = new Twist();
   Climber climber = new Climber();
-  Superstructure superstructure = new Superstructure(drive, elevator, intake, pivot, twist, climber, this);
+  Superstructure superstructure = new Superstructure(drive, elevator, intake, pivot, twist, climber, lights, this);
 
   boolean algaeMode = false;
   boolean manualMode = false;

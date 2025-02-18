@@ -1027,7 +1027,9 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_CANCODER_ID = 4;
 
     // Lights
-    public static final int CANDLE_ID = 0;
+    public static final int CANDLE_ID_0 = 0;
+    public static final int CANDLE_ID_1 = 1;
+    public static final int CANDLE_ID_2 = 2;
 
     // Elevator
     public static final int MASTER_ELEVATOR_MOTOR_ID = 9;

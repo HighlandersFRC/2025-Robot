@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import org.apache.commons.math3.optim.linear.PivotSelectionRule;
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -14,6 +15,7 @@ import frc.robot.subsystems.Climber.ClimbState;
 import frc.robot.subsystems.Drive.DriveState;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Intake.IntakeState;
+import frc.robot.subsystems.Lights.LightsState;
 import frc.robot.subsystems.Pivot.PivotFlip;
 import frc.robot.subsystems.Pivot.PivotState;
 import frc.robot.subsystems.Twist.TwistState;
@@ -25,6 +27,7 @@ public class Superstructure extends SubsystemBase {
   private Pivot pivot;
   private Twist twist;
   private Climber climber;
+  private Lights lights;
   private RobotContainer robotContainer;
 
   public enum SuperState {
@@ -67,6 +70,7 @@ public class Superstructure extends SubsystemBase {
   private SuperState currentSuperState = SuperState.DEFAULT;
 
   public Superstructure(Drive drive, Elevator elevator, Intake intake, Pivot pivot, Twist twist, Climber climber,
+      Lights lights,
       RobotContainer robotContainer) {
     this.drive = drive;
     this.elevator = elevator;
@@ -74,6 +78,7 @@ public class Superstructure extends SubsystemBase {
     this.pivot = pivot;
     this.twist = twist;
     this.climber = climber;
+    this.lights = lights;
     this.robotContainer = robotContainer;
   }
 
@@ -446,6 +451,7 @@ public class Superstructure extends SubsystemBase {
   // }
 
   public void handleDefaultState() {
+    lights.setWantedState(LightsState.DEFAULT);
     drive.setWantedState(DriveState.DEFAULT);
     if (twist.getTwistPosition() < 45) {
       elevator.setWantedState(ElevatorState.DEFAULT);
@@ -463,6 +469,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoL1PlaceState() {
+    lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.AUTO_L1);
     intake.setWantedState(IntakeState.DEFAULT);
@@ -472,6 +479,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoL2PlaceState() {
+    lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.REEF);
     intake.setWantedState(IntakeState.DEFAULT);
     if (Math.hypot(
@@ -511,6 +519,7 @@ public class Superstructure extends SubsystemBase {
   // }
 
   public void handleAutoL3PlaceState() {
+    lights.setWantedState(LightsState.PLACING);
     pivot.setWantedFlip(PivotFlip.FRONT);
     drive.setWantedState(DriveState.L3_REEF);
     elevator.setWantedState(ElevatorState.AUTO_L3);
@@ -520,6 +529,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoL4PlaceState() {
+    lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.L4_REEF);
     intake.setWantedState(IntakeState.DEFAULT);
     if (Math.hypot(
@@ -538,6 +548,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleL1PlaceState() {
+    lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L1);
     intake.setWantedState(IntakeState.DEFAULT);
@@ -546,6 +557,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleL2PlaceState() {
+    lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L2);
     intake.setWantedState(IntakeState.DEFAULT);
@@ -554,6 +566,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleL3PlaceState() {
+    lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L3);
     intake.setWantedState(IntakeState.DEFAULT);
@@ -562,6 +575,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleL4PlaceState() {
+    lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L4);
     intake.setWantedState(IntakeState.DEFAULT);
@@ -570,6 +584,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleProcessorState() {
+    lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.PROCESSOR);
     intake.setWantedState(IntakeState.DEFAULT);
@@ -578,6 +593,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleNetState() {
+    lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.NET);
     intake.setWantedState(IntakeState.DEFAULT);
@@ -588,6 +604,7 @@ public class Superstructure extends SubsystemBase {
   public void handleFeederState() { // function for an actual field, comment
     // out the function above when running on
     // an actual field
+    lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.FEEDER);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
     if (drive.getFieldSide() == "red") { // red side
@@ -708,6 +725,7 @@ public class Superstructure extends SubsystemBase {
   /*
    */
   public void handleGroundCoralPickupFrontState() {
+    lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
@@ -718,6 +736,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleGroundCoralPickupBackState() {
+    lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
@@ -729,24 +748,8 @@ public class Superstructure extends SubsystemBase {
     }
   }
 
-  // public void handleGroundCoralPickupBackState() {
-  // drive.setWantedState(DriveState.DEFAULT);
-  // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
-  // intake.setWantedState(IntakeState.CORAL_INTAKE);
-
-  // if (twist.getTwistPosition() < -135 && pivot.getPivotPosition() < -0.1) {
-  // pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
-  // } else if (twist.getTwistPosition() > -45 || pivot.getPivotPosition() < -0.1)
-  // {
-  // pivot.setWantedState(PivotState.GROUND_CORAL_PREP_BACK);
-  // }
-
-  // if (pivot.getPivotPosition() < 0.1) {
-  // twist.setWantedState(TwistState.DOWN);
-  // }
-  // }
-
   public void handleGroundAlgaePickupFrontState() {
+    lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_ALGAE_INTAKE);
     intake.setWantedState(IntakeState.ALGAE_INTAKE);
@@ -756,6 +759,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleGroundAlgaePickupBackState() {
+    lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_ALGAE_INTAKE);
     intake.setWantedState(IntakeState.ALGAE_INTAKE);
@@ -765,6 +769,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleL2AlgaePickupState() {
+    lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L2_ALGAE);
     intake.setWantedState(IntakeState.ALGAE_INTAKE);
@@ -773,6 +778,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleL3AlgaePickupState() {
+    lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L3_ALGAE);
     intake.setWantedState(IntakeState.ALGAE_INTAKE);
@@ -781,30 +787,36 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleDeployClimberState() {
+    lights.setWantedState(LightsState.CLIMB_DEPLOY);
     climber.setWantedState(ClimbState.EXTENDING);
     pivot.setWantedState(PivotState.CLIMB);
   }
 
   public void handleClimbState() {
+    lights.setWantedState(LightsState.CLIMB);
     climber.setWantedState(ClimbState.RETRACTING);
     pivot.setWantedState(PivotState.CLIMB);
   }
 
   public void handleClimberIdleState() {
+    lights.setWantedState(LightsState.CLIMB_IDLE);
     climber.setWantedState(ClimbState.IDLE);
     pivot.setWantedState(PivotState.CLIMB);
   }
 
   public void handleOutakeState() {
+    lights.setWantedState(LightsState.SCORING);
     intake.setWantedState(IntakeState.OUTAKE);
   }
 
   public void handleAutoL1ScoreState() {
+    lights.setWantedState(LightsState.SCORING);
     drive.setWantedState(DriveState.DEFAULT);
     intake.setWantedState(IntakeState.OUTAKE);
   }
 
   public void handleAutoL2ScoreState() {
+    lights.setWantedState(LightsState.SCORING);
     drive.setWantedState(DriveState.DEFAULT);
     pivot.setWantedState(PivotState.AUTO_SCORE_L2);
     if (Math.hypot((drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0]),
@@ -821,23 +833,27 @@ public class Superstructure extends SubsystemBase {
   // }
 
   public void handleAutoL3ScoreState() {
+    lights.setWantedState(LightsState.SCORING);
     elevator.updateDistanceFromL23DriveSetpoint(drive.getDistanceFromL23Setpoint());
     drive.setWantedState(DriveState.SCORE_L23);
     elevator.setWantedState(ElevatorState.AUTO_SCORE_L3);
   }
 
   public void handleAutoL3ScoreMoreState() {
+    lights.setWantedState(LightsState.SCORING);
     drive.setWantedState(DriveState.DEFAULT);
     pivot.setWantedState(PivotState.AUTO_SCORE_L3);
     elevator.setWantedState(ElevatorState.AUTO_SCORE_MORE_L3);
   }
 
   public void handleAutoL4ScoreState() {
+    lights.setWantedState(LightsState.SCORING);
     drive.setWantedState(DriveState.DEFAULT);
     pivot.setWantedState(PivotState.AUTO_SCORE_L4);
   }
 
   public void handleScoreL1State() {
+    lights.setWantedState(LightsState.SCORING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.SCORE_L1);
     intake.setWantedState(IntakeState.OUTAKE);
@@ -845,6 +861,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleScoreL2State() {
+    lights.setWantedState(LightsState.SCORING);
     drive.setWantedState(DriveState.DEFAULT);
     if (Math.hypot((drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0]),
         (drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
@@ -856,6 +873,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleScoreL3State() {
+    lights.setWantedState(LightsState.SCORING);
     drive.setWantedState(DriveState.DEFAULT);
     if (Math.hypot((drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0]),
         (drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
@@ -867,6 +885,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleScoreL4State() {
+    lights.setWantedState(LightsState.SCORING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.SCORE_L4);
     pivot.setWantedState(PivotState.SCORE_L4);
@@ -879,6 +898,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleIdleState() {
+    lights.setWantedState(LightsState.DEFAULT);
     drive.setWantedState(DriveState.IDLE);
     if (pivot.getPivotPosition() < 0.3 && pivot.getPivotPosition() > 0.05) {
       elevator.setWantedState(ElevatorState.DEFAULT);
