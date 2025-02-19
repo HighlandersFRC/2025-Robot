@@ -535,20 +535,20 @@ public final class Constants {
     // public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
     // public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
 
-    public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(23.2);
-    public static final double INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.2);
+    public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(24.5);
+    public static final double INTAKE_Y_OFFSET_FRONT = inchesToMeters(2.5);
     public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(24.5);
-    public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.2);
+    public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-2.5);
 
     public static final double L3_INTAKE_X_OFFSET_FRONT = inchesToMeters(29.5);
     public static final double L3_INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.2);
     public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(29.5);
     public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.2);
 
-    public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.5);
-    public static final double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.2);
-    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(26.6);
-    public static final double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.2);
+    public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(25.5);
+    public static final double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(3.2);
+    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(25.5);
+    public static final double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-3.2);
 
     public static final double GRAVITY_ACCEL_MS2 = 9.806;
 
@@ -713,9 +713,9 @@ public final class Constants {
     public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(17);
     public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(25);
     public static final double ELEVATOR_AUTO_SCORE_L3_POSITION_M = inchesToMeters(20);
-    public static final double ELEVATOR_AUTO_L4_POSITION_M = inchesToMeters(65.0);
+    public static final double ELEVATOR_AUTO_L4_POSITION_M = inchesToMeters(63.0);
     public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(31);
-    public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(65.0);
+    public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(63.0);
     public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8.0);
     public static final double ELEVATOR_GROUND_CORAL_POSITION_M = inchesToMeters(7.5);
     public static final double ELEVATOR_GROUND_ALGAE_POSITION_M = inchesToMeters(0.0);

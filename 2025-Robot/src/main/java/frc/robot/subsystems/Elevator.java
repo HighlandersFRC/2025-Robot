@@ -203,7 +203,8 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     systemState = handleStateTransition();
-    // System.out.println("Elevator Current: " + elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
+    // System.out.println("Elevator Current: " +
+    // elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
     // Logger.recordOutput("Elevator Current",
     // elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
     // Logger.recordOutput("Elevator Idle Time", idleTime);
@@ -302,8 +303,8 @@ public class Elevator extends SubsystemBase {
         break;
       default:
         // Logger.recordOutput("Elevator Velocity", Math
-        //     .abs(
-        //         Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())));
+        // .abs(
+        // Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())));
         if (firstTimeIdle) {
           idleTime = Timer.getFPGATimestamp();
           firstTimeIdle = false;
@@ -316,7 +317,7 @@ public class Elevator extends SubsystemBase {
           moveWithPercent(0.0);
           setElevatorEncoderPosition(0.0);
         } else {
-          moveWithTorque(-50, 0.4);
+          moveWithTorque(-50, 0.6);
         }
         break;
     }
