@@ -30,7 +30,7 @@ public class Lights extends SubsystemBase {
   private double timeout = 0.0;
   private boolean timedFlashes = false;
   private double strobeSpeed = 0.4;
-  private double flashSpeed = 0.1;
+  private double flashSpeed = 0.05;
   CANdle candle0 = new CANdle(Constants.CANInfo.CANDLE_ID_0, "rio");
   CANdle candle1 = new CANdle(Constants.CANInfo.CANDLE_ID_1, "rio");
   CANdle candle2 = new CANdle(Constants.CANInfo.CANDLE_ID_2, "rio");
@@ -52,30 +52,30 @@ public class Lights extends SubsystemBase {
   StrobeAnimation blueFlash = new StrobeAnimation(0, 0, 255, 0, 0.1, ledNumber, 0);
 
   StrobeAnimation greenStrobe = new StrobeAnimation(0, 255, 0, 0, strobeSpeed, ledNumber, 0);
-  StrobeAnimation purpleStrobe = new StrobeAnimation(255, 0, 255, 0, strobeSpeed, ledNumber, 0);
-  StrobeAnimation yellowStrobe = new StrobeAnimation(255, 255, 0, 0, strobeSpeed, ledNumber, 0);
+  StrobeAnimation purpleStrobe = new StrobeAnimation(100, 0, 100, 0, strobeSpeed, ledNumber, 0);
+  StrobeAnimation yellowStrobe = new StrobeAnimation(100, 100, 0, 0, strobeSpeed, ledNumber, 0);
 
   StrobeAnimation greenFlash = new StrobeAnimation(0, 255, 0, 0, flashSpeed, ledNumber, 0);
-  StrobeAnimation purpleFlash = new StrobeAnimation(255, 0, 255, 0, flashSpeed, ledNumber, 0);
-  StrobeAnimation yellowFlash = new StrobeAnimation(255, 255, 0, 0, flashSpeed, ledNumber, 0);
+  StrobeAnimation purpleFlash = new StrobeAnimation(100, 0, 100, 0, flashSpeed, ledNumber, 0);
+  StrobeAnimation yellowFlash = new StrobeAnimation(100, 100, 0, 0, flashSpeed, ledNumber, 0);
 
   // ColorFlowAnimation algaeSolid = new ColorFlowAnimation(0, 255, 150, 0, 0.0, ledNumber, Direction.Forward, 0);
   // ColorFlowAnimation coralSolid = new ColorFlowAnimation(255, 255, 255, 255, 0.0, ledNumber, Direction.Forward, 0);
-  StrobeAnimation algaeFlashing = new StrobeAnimation(0, 255, 150, 0, flashSpeed, ledNumber, 0);
-  StrobeAnimation coralFlashing = new StrobeAnimation(255, 255, 255, 255, flashSpeed, ledNumber, 0);
-  StrobeAnimation algaeStrobing = new StrobeAnimation(0, 255, 150, 0, strobeSpeed, ledNumber, 0);
-  StrobeAnimation coralStrobing = new StrobeAnimation(255, 255, 255, 255, strobeSpeed, ledNumber, 0);
+  StrobeAnimation algaeFlashing = new StrobeAnimation(0, 75, 25, 0, flashSpeed, ledNumber, 0);
+  StrobeAnimation coralFlashing = new StrobeAnimation(50, 50, 50, 50, flashSpeed, ledNumber, 0);
+  StrobeAnimation algaeStrobing = new StrobeAnimation(0, 75, 25, 0, strobeSpeed, ledNumber, 0);
+  StrobeAnimation coralStrobing = new StrobeAnimation(50, 50, 50, 50, strobeSpeed, ledNumber, 0);
 
-  LarsonAnimation coralKnightRiderAnimation = new LarsonAnimation(255, 255, 255, 0, flashSpeed, ledNumber,
+  LarsonAnimation coralKnightRiderAnimation = new LarsonAnimation(255, 255, 255, 0, 0.8, ledNumber,
       BounceMode.Back,
       100, 0);
-  LarsonAnimation algaeKnightRiderAnimation = new LarsonAnimation(0, 255, 100, 0, flashSpeed, ledNumber,
+  LarsonAnimation algaeKnightRiderAnimation = new LarsonAnimation(0, 255, 100, 0, 0.8, ledNumber,
       BounceMode.Back,
       100, 0);
 
-  LarsonAnimation redCylonAnimation = new LarsonAnimation(255, 0, 0, 0, flashSpeed, ledNumber, BounceMode.Back,
+  LarsonAnimation redCylonAnimation = new LarsonAnimation(255, 0, 0, 0, 0.8, ledNumber, BounceMode.Back,
       100, 0);
-  LarsonAnimation blueCylonAnimation = new LarsonAnimation(0, 0, 255, 0, flashSpeed, ledNumber, BounceMode.Back,
+  LarsonAnimation blueCylonAnimation = new LarsonAnimation(0, 0, 255, 0, 0.8, ledNumber, BounceMode.Back,
       100, 0);
 
   public enum LightsState {
@@ -458,7 +458,7 @@ public class Lights extends SubsystemBase {
     // candle1.animate(coralSolid);
     // candle2.animate(coralSolid);
     clearAnimations();
-    setCandleRGB(50, 50, 50);
+    setCandleRGB(30, 30, 30);
   }
 
   public void setAlgaeSolid() {
@@ -466,7 +466,7 @@ public class Lights extends SubsystemBase {
     // candle1.animate(algaeSolid);
     // candle2.animate(algaeSolid);
     clearAnimations();
-    setCandleRGB(0, 127, 50);
+    setCandleRGB(0, 75, 25);
   }
 
   public void setCoralFlashing() {
