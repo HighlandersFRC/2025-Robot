@@ -29,8 +29,8 @@ public class Lights extends SubsystemBase {
   private double time = Timer.getFPGATimestamp();
   private double timeout = 0.0;
   private boolean timedFlashes = false;
-  private double strobeSpeed = 0.9;
-  private double flashSpeed = 0.2;
+  private double strobeSpeed = 0.4;
+  private double flashSpeed = 0.1;
   CANdle candle0 = new CANdle(Constants.CANInfo.CANDLE_ID_0, "rio");
   CANdle candle1 = new CANdle(Constants.CANInfo.CANDLE_ID_1, "rio");
   CANdle candle2 = new CANdle(Constants.CANInfo.CANDLE_ID_2, "rio");
@@ -65,6 +65,18 @@ public class Lights extends SubsystemBase {
   StrobeAnimation coralFlashing = new StrobeAnimation(255, 255, 255, 255, flashSpeed, ledNumber, 0);
   StrobeAnimation algaeStrobing = new StrobeAnimation(0, 255, 150, 0, strobeSpeed, ledNumber, 0);
   StrobeAnimation coralStrobing = new StrobeAnimation(255, 255, 255, 255, strobeSpeed, ledNumber, 0);
+
+  LarsonAnimation coralKnightRiderAnimation = new LarsonAnimation(255, 255, 255, 0, flashSpeed, ledNumber,
+      BounceMode.Back,
+      100, 0);
+  LarsonAnimation algaeKnightRiderAnimation = new LarsonAnimation(0, 255, 100, 0, flashSpeed, ledNumber,
+      BounceMode.Back,
+      100, 0);
+
+  LarsonAnimation redCylonAnimation = new LarsonAnimation(255, 0, 0, 0, flashSpeed, ledNumber, BounceMode.Back,
+      100, 0);
+  LarsonAnimation blueCylonAnimation = new LarsonAnimation(0, 0, 255, 0, flashSpeed, ledNumber, BounceMode.Back,
+      100, 0);
 
   public enum LightsState {
     DISABLED,
@@ -234,10 +246,10 @@ public class Lights extends SubsystemBase {
       case DEFAULT:
         switch (itemState) {
           case CORAL:
-            setAlgaeFlashing();
+            setCoralBouncing();
             break;
           case ALGAE:
-            setAlgaeFlashing();
+            setAlgaeBouncing();
             break;
           default:
             switch (algaeState) {
@@ -254,10 +266,10 @@ public class Lights extends SubsystemBase {
       case INTAKING:
         switch (itemState) {
           case CORAL:
-            setCoralStrobing();
+            setFlashGreen();
             break;
           case ALGAE:
-            setAlgaeStrobing();
+            setFlashGreen();
           default:
             setFlashPurple();
             break;
@@ -284,10 +296,10 @@ public class Lights extends SubsystemBase {
       default:
         switch (allianceState) {
           case RED:
-            setRedDim();
+            setRedBouncing();
             break;
           default:
-            setBlueDim();
+            setBlueBouncing();
             break;
         }
         ;
@@ -410,33 +422,21 @@ public class Lights extends SubsystemBase {
   }
 
   public void setRedDim() {
-    // candle0.animate(redSolidDim);
-    // candle1.animate(redSolidDim);
-    // candle2.animate(redSolidDim);
     clearAnimations();
     setCandleRGB(100, 0, 0);
   }
 
   public void setBlueBright() {
-    // candle0.animate(blueSolidBright);
-    // candle1.animate(blueSolidBright);
-    // candle2.animate(blueSolidBright);
     clearAnimations();
     setCandleRGB(0, 0, 255);
   }
 
   public void setBlueDim() {
-    // candle0.animate(blueSolidDim);
-    // candle1.animate(blueSolidDim);
-    // candle2.animate(blueSolidDim);
     clearAnimations();
     setCandleRGB(0, 0, 100);
   }
 
   public void setWhiteBright() {
-    // candle0.animate(whiteSolidBright);
-    // candle1.animate(whiteSolidBright);
-    // candle2.animate(whiteSolidBright);
     clearAnimations();
     setCandleRGB(255, 255, 255);
   }
@@ -458,7 +458,7 @@ public class Lights extends SubsystemBase {
     // candle1.animate(coralSolid);
     // candle2.animate(coralSolid);
     clearAnimations();
-    setCandleRGB(200, 200, 200);
+    setCandleRGB(50, 50, 50);
   }
 
   public void setAlgaeSolid() {
@@ -466,7 +466,7 @@ public class Lights extends SubsystemBase {
     // candle1.animate(algaeSolid);
     // candle2.animate(algaeSolid);
     clearAnimations();
-    setCandleRGB(0, 255, 100);
+    setCandleRGB(0, 127, 50);
   }
 
   public void setCoralFlashing() {
@@ -491,6 +491,30 @@ public class Lights extends SubsystemBase {
     candle0.animate(algaeStrobing);
     candle1.animate(algaeStrobing);
     candle2.animate(algaeStrobing);
+  }
+
+  public void setCoralBouncing() {
+    candle0.animate(coralKnightRiderAnimation);
+    candle1.animate(coralKnightRiderAnimation);
+    candle2.animate(coralKnightRiderAnimation);
+  }
+
+  public void setAlgaeBouncing() {
+    candle0.animate(algaeKnightRiderAnimation);
+    candle1.animate(algaeKnightRiderAnimation);
+    candle2.animate(algaeKnightRiderAnimation);
+  }
+
+  public void setRedBouncing() {
+    candle0.animate(redCylonAnimation);
+    candle1.animate(redCylonAnimation);
+    candle2.animate(redCylonAnimation);
+  }
+
+  public void setBlueBouncing() {
+    candle0.animate(blueCylonAnimation);
+    candle1.animate(blueCylonAnimation);
+    candle2.animate(blueCylonAnimation);
   }
 
   /*
