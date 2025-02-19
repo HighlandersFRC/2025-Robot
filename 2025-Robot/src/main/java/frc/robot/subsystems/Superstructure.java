@@ -850,8 +850,8 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.SCORING);
     drive.setWantedState(DriveState.DEFAULT);
     pivot.setWantedState(PivotState.AUTO_SCORE_L4);
-    if (Math.hypot((drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0]),
-        (drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
+    if (Math.hypot((drive.getMT2OdometryX() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[0]),
+        (drive.getMT2OdometryY() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
       intake.setWantedState(IntakeState.OUTAKE);
     } else {
       intake.setWantedState(IntakeState.OFF);
