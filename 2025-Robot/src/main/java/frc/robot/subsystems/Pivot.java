@@ -64,7 +64,7 @@ public class Pivot extends SubsystemBase {
 
   public void pivotToPosition(double pivotPosition) {
     if (Math.abs(pivotPosition) * 360 > 130) {
-      pivotPosition = 130 / 360;
+      pivotPosition = Math.copySign(130.0 / 360.0, pivotPosition);
     }
     // Logger.recordOutput("Pivot Setpoint", (pivotPosition));
     pivotMotor.setControl(this.pivotMotionProfileRequest
@@ -119,6 +119,7 @@ public class Pivot extends SubsystemBase {
     AUTO_SCORE_L3,
     AUTO_SCORE_L4,
     CLIMB,
+    UP,
   }
 
   private PivotState wantedState = PivotState.DEFAULT;
@@ -150,6 +151,8 @@ public class Pivot extends SubsystemBase {
     switch (wantedState) {
       case DEFAULT:
         return PivotState.DEFAULT;
+      case UP:
+        return PivotState.UP;
       case L1:
         return PivotState.L1;
       case L23:
@@ -251,6 +254,18 @@ public class Pivot extends SubsystemBase {
             pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
             break;
         }
+      case UP:
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kUP.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kUP.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kUP.rotations);
+            break;
+        }
         break;
       case GROUND_CORAL_FRONT:
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALFRONT.rotations);
@@ -262,7 +277,17 @@ public class Pivot extends SubsystemBase {
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALPREPBACK.rotations);
         break;
       case L1:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kL1.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
+            break;
+        }
         break;
       case CLIMB:
         pivotToPosition(Constants.SetPoints.PivotPosition.kCLIMB.rotations);

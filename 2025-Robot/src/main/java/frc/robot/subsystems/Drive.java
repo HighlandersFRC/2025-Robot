@@ -1214,7 +1214,7 @@ public class Drive extends SubsystemBase {
     double oiLX = OI.getDriverLeftX();
     double oiRY = OI.getDriverRightY();
     double oiLY = OI.getDriverLeftY();
-    double speedMultiplier = (((60 - Constants.metersToInches(elevator.getElevatorPosition())) * 0.7 / 50) + 0.3);
+    double speedMultiplier = (((60 - Constants.metersToInches(elevator.getElevatorPosition())) * 0.4 / 50) + 0.6);
 
     if (elevator.getElevatorPosition() > Constants.inchesToMeters(10)) {
       oiRX = oiRX * speedMultiplier;
