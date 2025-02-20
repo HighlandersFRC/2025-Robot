@@ -644,20 +644,20 @@ public class Superstructure extends SubsystemBase {
           pivot.setWantedState(PivotState.FEEDER);
           elevator.setWantedState(ElevatorState.DEFAULT);
         } else { // robot back side redside left feeder (fieldside top right)
-          if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
-            elevator.setWantedState(ElevatorState.OVER);
-          } else if (elevator.getElevatorPosition() >= 13 / 39.37 &&
-              pivot.getPivotPosition() > -0.08) {
-            twist.setWantedState(TwistState.DOWN);
-            elevator.setWantedState(ElevatorState.OVER);
-            pivot.setWantedFlip(PivotFlip.BACK);
-            pivot.setWantedState(PivotState.FEEDER);
-          } else {
-            elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
-            twist.setWantedState(TwistState.DOWN);
-            pivot.setWantedFlip(PivotFlip.BACK);
-            pivot.setWantedState(PivotState.FEEDER);
-          }
+          // if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
+          //   elevator.setWantedState(ElevatorState.OVER);
+          // } else if (elevator.getElevatorPosition() >= 13 / 39.37 &&
+          //     pivot.getPivotPosition() > -0.08) {
+          //   twist.setWantedState(TwistState.DOWN);
+          //   elevator.setWantedState(ElevatorState.OVER);
+          //   pivot.setWantedFlip(PivotFlip.BACK);
+          //   pivot.setWantedState(PivotState.FEEDER);
+          // } else {
+          elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
+          twist.setWantedState(TwistState.DOWN);
+          pivot.setWantedFlip(PivotFlip.BACK);
+          pivot.setWantedState(PivotState.FEEDER);
+          // }
         }
       } else { // redside left feeder (fieldside bottom right)
         if ((Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 36
@@ -672,20 +672,20 @@ public class Superstructure extends SubsystemBase {
           pivot.setWantedState(PivotState.FEEDER);
           elevator.setWantedState(ElevatorState.DEFAULT);
         } else { // robot back side redside left (fieldside bottom right)
-          if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
-            elevator.setWantedState(ElevatorState.OVER);
-          } else if (elevator.getElevatorPosition() >= 13 / 39.37 &&
-              pivot.getPivotPosition() > -0.08) {
-            twist.setWantedState(TwistState.DOWN);
-            elevator.setWantedState(ElevatorState.OVER);
-            pivot.setWantedFlip(PivotFlip.BACK);
-            pivot.setWantedState(PivotState.FEEDER);
-          } else {
-            elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
-            twist.setWantedState(TwistState.DOWN);
-            pivot.setWantedFlip(PivotFlip.BACK);
-            pivot.setWantedState(PivotState.FEEDER);
-          }
+          // if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
+          //   elevator.setWantedState(ElevatorState.OVER);
+          // } else if (elevator.getElevatorPosition() >= 13 / 39.37 &&
+          //     pivot.getPivotPosition() > -0.08) {
+          //   twist.setWantedState(TwistState.DOWN);
+          //   elevator.setWantedState(ElevatorState.OVER);
+          //   pivot.setWantedFlip(PivotFlip.BACK);
+          //   pivot.setWantedState(PivotState.FEEDER);
+          // } else {
+          elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
+          twist.setWantedState(TwistState.DOWN);
+          pivot.setWantedFlip(PivotFlip.BACK);
+          pivot.setWantedState(PivotState.FEEDER);
+          // }
         }
       }
     } else { // blue side
@@ -699,23 +699,23 @@ public class Superstructure extends SubsystemBase {
           pivot.setWantedState(PivotState.FEEDER);
           elevator.setWantedState(ElevatorState.DEFAULT);
         } else { // robot back side blueside right (fieldside bottom left)
-          if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
-            elevator.setWantedState(ElevatorState.OVER);
-            System.out.println("part 1");
-          } else if (elevator.getElevatorPosition() >= 13 / 39.37 &&
-              pivot.getPivotPosition() > -0.08) {
-            twist.setWantedState(TwistState.DOWN);
-            System.out.println("part 2");
-            elevator.setWantedState(ElevatorState.OVER);
-            pivot.setWantedFlip(PivotFlip.BACK);
-            pivot.setWantedState(PivotState.FEEDER);
-          } else {
-            elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
-            System.out.println("part 3");
-            twist.setWantedState(TwistState.DOWN);
-            pivot.setWantedFlip(PivotFlip.BACK);
-            pivot.setWantedState(PivotState.FEEDER);
-          }
+          // if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
+          //   elevator.setWantedState(ElevatorState.OVER);
+          //   System.out.println("part 1");
+          // } else if (elevator.getElevatorPosition() >= 13 / 39.37 &&
+          //     pivot.getPivotPosition() > -0.08) {
+          //   twist.setWantedState(TwistState.DOWN);
+          //   System.out.println("part 2");
+          //   elevator.setWantedState(ElevatorState.OVER);
+          //   pivot.setWantedFlip(PivotFlip.BACK);
+          //   pivot.setWantedState(PivotState.FEEDER);
+          // } else {
+          elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
+          // System.out.println("part 3");
+          twist.setWantedState(TwistState.DOWN);
+          pivot.setWantedFlip(PivotFlip.BACK);
+          pivot.setWantedState(PivotState.FEEDER);
+          // }
         }
       } else { // blue side left feeder (fieldside top left)
         if (!((Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 36
@@ -730,20 +730,20 @@ public class Superstructure extends SubsystemBase {
           pivot.setWantedState(PivotState.FEEDER);
           elevator.setWantedState(ElevatorState.DEFAULT);
         } else { // robot back side blueside left (fieldside top left)
-          if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
-            elevator.setWantedState(ElevatorState.OVER);
-          } else if (elevator.getElevatorPosition() >= 13 / 39.37 &&
-              pivot.getPivotPosition() > -0.08) {
-            twist.setWantedState(TwistState.DOWN);
-            elevator.setWantedState(ElevatorState.OVER);
-            pivot.setWantedFlip(PivotFlip.BACK);
-            pivot.setWantedState(PivotState.FEEDER);
-          } else {
-            elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
-            twist.setWantedState(TwistState.DOWN);
-            pivot.setWantedFlip(PivotFlip.BACK);
-            pivot.setWantedState(PivotState.FEEDER);
-          }
+          // if (elevator.getElevatorPosition() <= 13 / 39.37 && pivot.getPivotPosition() > -0.08) {
+          //   elevator.setWantedState(ElevatorState.OVER);
+          // } else if (elevator.getElevatorPosition() >= 13 / 39.37 &&
+          //     pivot.getPivotPosition() > -0.08) {
+          //   twist.setWantedState(TwistState.DOWN);
+          //   elevator.setWantedState(ElevatorState.OVER);
+          //   pivot.setWantedFlip(PivotFlip.BACK);
+          //   pivot.setWantedState(PivotState.FEEDER);
+          // } else {
+          elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
+          twist.setWantedState(TwistState.DOWN);
+          pivot.setWantedFlip(PivotFlip.BACK);
+          pivot.setWantedState(PivotState.FEEDER);
+          // }
         }
       }
     }
