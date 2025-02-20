@@ -181,9 +181,9 @@ public class Drive extends SubsystemBase {
   AprilTagFieldLayout aprilTagFieldLayout;
 
   Transform3d frontReefRobotToCam = new Transform3d( // top front reef cam
-      new Translation3d(Constants.inchesToMeters(2.0), Constants.inchesToMeters(-11.5),
-          Constants.inchesToMeters(24.25)),
-      new Rotation3d(Math.toRadians(1.5), Math.toRadians(25.0), Math.toRadians(15.0)));
+      new Translation3d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.5),
+          Constants.inchesToMeters(23.75)),
+      new Rotation3d(Math.toRadians(1.0), Math.toRadians(25.0), Math.toRadians(15.0)));
 
   // Transform2d frontReefCamPos = new Transform2d(
   // new Translation2d(Constants.inchesToMeters(2.25),
@@ -191,9 +191,9 @@ public class Drive extends SubsystemBase {
   // new Rotation2d(Math.toRadians(32.0)));
 
   Transform3d backReefRobotToCam = new Transform3d( // top back reef cam
-      new Translation3d(Constants.inchesToMeters(-2.25), Constants.inchesToMeters(-11.125),
-          Constants.inchesToMeters(22.25)),
-      new Rotation3d(Math.toRadians(0.0), Math.toRadians(25.0), Math.toRadians(165.0)));
+      new Translation3d(Constants.inchesToMeters(-2.25), Constants.inchesToMeters(-11.5),
+          Constants.inchesToMeters(23.75)),
+      new Rotation3d(Math.toRadians(1.2), Math.toRadians(25.2), Math.toRadians(165.0)));
 
   Transform3d frontBargeRobotToCam = new Transform3d( // bottom
       new Translation3d(Constants.inchesToMeters(3.0), Constants.inchesToMeters(-12.125), // mead to get yaw
@@ -605,6 +605,10 @@ public class Drive extends SubsystemBase {
     Matrix<N3, N1> standardDeviation = new Matrix<>(Nat.N3(), Nat.N1());
 
     var result = peripherals.getFrontReefCamResult();
+    if (systemState == DriveState.L4_REEF || systemState == DriveState.L3_REEF || systemState == DriveState.REEF) {
+      photonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+      backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    }
     Optional<EstimatedRobotPose> multiTagResult = photonPoseEstimator.update(result);
     if (multiTagResult.isPresent()) {
       if (result.getBestTarget().getPoseAmbiguity() < 0.3) {
@@ -667,7 +671,8 @@ public class Drive extends SubsystemBase {
     var rightResult = peripherals.getFrontBargeCamResult();
     Optional<EstimatedRobotPose> rightMultiTagResult = rightPhotonPoseEstimator
         .update(rightResult);
-    if (rightMultiTagResult.isPresent()) {
+    if (rightMultiTagResult.isPresent()
+        && (systemState != DriveState.L4_REEF && systemState != DriveState.L3_REEF && systemState != DriveState.REEF)) {
       if (rightResult.getBestTarget().getPoseAmbiguity() < 0.3) {
         Pose3d robotPose = rightMultiTagResult.get().estimatedPose;
         Logger.recordOutput("multitag result", robotPose);
@@ -698,7 +703,8 @@ public class Drive extends SubsystemBase {
     var leftResult = peripherals.getBackBargeCamResult();
     Optional<EstimatedRobotPose> leftMultiTagResult = leftPhotonPoseEstimator
         .update(leftResult);
-    if (leftMultiTagResult.isPresent()) {
+    if (leftMultiTagResult.isPresent()
+        && (systemState != DriveState.L4_REEF && systemState != DriveState.L3_REEF && systemState != DriveState.REEF)) {
       if (leftResult.getBestTarget().getPoseAmbiguity() < 0.3) {
         Pose3d robotPose = leftMultiTagResult.get().estimatedPose;
         Logger.recordOutput("multitag result", robotPose);
