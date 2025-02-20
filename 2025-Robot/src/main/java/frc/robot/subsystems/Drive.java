@@ -196,14 +196,14 @@ public class Drive extends SubsystemBase {
       new Rotation3d(Math.toRadians(1.2), Math.toRadians(25.2), Math.toRadians(165.0)));
 
   Transform3d frontBargeRobotToCam = new Transform3d( // bottom
-      new Translation3d(Constants.inchesToMeters(3.0), Constants.inchesToMeters(-12.125), // mead to get yaw
-          Constants.inchesToMeters(17.5)),
-      new Rotation3d(Math.toRadians(0.0), Math.toRadians(-35.0), Math.toRadians(-20.0)));
+      new Translation3d(Constants.inchesToMeters(3.0), Constants.inchesToMeters(-12.0), // mead to get yaw
+          Constants.inchesToMeters(17.68)),
+      new Rotation3d(Math.toRadians(1.7), Math.toRadians(-35.0), Math.toRadians(-20.0)));
 
   Transform3d backBargeRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(-3.0), Constants.inchesToMeters(-12.125),
-          Constants.inchesToMeters(17.5)),
-      new Rotation3d(Math.toRadians(0.0), Math.toRadians(-34.6), Math.toRadians(200.0)));
+      new Translation3d(Constants.inchesToMeters(-3.0), Constants.inchesToMeters(-12.0),
+          Constants.inchesToMeters(17.68)),
+      new Rotation3d(Math.toRadians(1.2), Math.toRadians(-34.2), Math.toRadians(200.0)));
 
   double initAngle;
   double setAngle;
@@ -1417,7 +1417,7 @@ public class Drive extends SubsystemBase {
     } else {
       hitNumber = 0;
     }
-    if (hitNumber > 6) {
+    if (hitNumber > 9) {
       return true;
     } else {
       return false;

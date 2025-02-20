@@ -45,6 +45,7 @@ public class Intake extends SubsystemBase {
     intakeConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     intakeConfig.CurrentLimits.StatorCurrentLimit = 40;
     intakeConfig.CurrentLimits.SupplyCurrentLimit = 40;
+    intakeConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     intakeMotor.getConfigurator().apply(intakeConfig);
     intakeMotor.setNeutralMode(NeutralModeValue.Brake);
   }
@@ -187,22 +188,22 @@ public class Intake extends SubsystemBase {
         }
         break;
       case OUTAKE:
-        switch (intakeItem) {
-          case CORAL:
-            setIntakePercent(-0.5);
-            break;
-          case ALGAE:
-            setIntakePercent(0.5);
-            break;
-          default:
-            if (algaeMode) {
-              setIntakePercent(0.5);
-            } else {
-              setIntakePercent(-0.5);
-            }
-            break;
-        }
-        break;
+        // switch (intakeItem) {
+        // case CORAL:
+        setIntakePercent(-0.5);
+        // break;
+        // case ALGAE:
+        // setIntakePercent(0.5);
+        // break;
+        // default:
+        // if (algaeMode) {
+        // setIntakePercent(0.5);
+        // } else {
+        // setIntakePercent(-0.5);
+        // }
+        // break;
+        // }
+        // break;
       case OFF:
         setIntakePercent(0.0);
         break;
