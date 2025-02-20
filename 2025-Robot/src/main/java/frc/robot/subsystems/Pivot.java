@@ -254,6 +254,7 @@ public class Pivot extends SubsystemBase {
             pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
             break;
         }
+        break;
       case UP:
         switch (systemFlip) {
           case FRONT:
