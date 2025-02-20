@@ -203,7 +203,7 @@ public class Intake extends SubsystemBase {
         // }
         // break;
         // }
-        // break;
+        break;
       case OFF:
         setIntakePercent(0.0);
         break;
