@@ -181,9 +181,9 @@ public class Drive extends SubsystemBase {
   AprilTagFieldLayout aprilTagFieldLayout;
 
   Transform3d frontReefRobotToCam = new Transform3d( // top front reef cam
-      new Translation3d(Constants.inchesToMeters(2.0), Constants.inchesToMeters(-11.5),
-          Constants.inchesToMeters(24.25)),
-      new Rotation3d(Math.toRadians(1.5), Math.toRadians(25.0), Math.toRadians(15.0)));
+      new Translation3d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.5),
+          Constants.inchesToMeters(23.75)),
+      new Rotation3d(Math.toRadians(1.0), Math.toRadians(25.0), Math.toRadians(15.0)));
 
   // Transform2d frontReefCamPos = new Transform2d(
   // new Translation2d(Constants.inchesToMeters(2.25),
@@ -191,9 +191,9 @@ public class Drive extends SubsystemBase {
   // new Rotation2d(Math.toRadians(32.0)));
 
   Transform3d backReefRobotToCam = new Transform3d( // top back reef cam
-      new Translation3d(Constants.inchesToMeters(-2.25), Constants.inchesToMeters(-11.125),
-          Constants.inchesToMeters(22.25)),
-      new Rotation3d(Math.toRadians(0.0), Math.toRadians(25.0), Math.toRadians(165.0)));
+      new Translation3d(Constants.inchesToMeters(-2.25), Constants.inchesToMeters(-11.5),
+          Constants.inchesToMeters(23.75)),
+      new Rotation3d(Math.toRadians(-2.4), Math.toRadians(25.2), Math.toRadians(165.0)));
 
   Transform3d frontBargeRobotToCam = new Transform3d( // bottom
       new Translation3d(Constants.inchesToMeters(3.0), Constants.inchesToMeters(-12.125), // mead to get yaw
