@@ -548,7 +548,7 @@ public final class Constants {
 
     public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(25.5);
     public static final double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(3.0);
-    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(25.5);
+    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(26.5);
     public static final double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-3.0);
 
     public static final double GRAVITY_ACCEL_MS2 = 9.806;

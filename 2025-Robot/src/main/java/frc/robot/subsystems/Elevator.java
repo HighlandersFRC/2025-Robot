@@ -87,7 +87,7 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.Slot0.kI = 0.0;
     elevatorConfig.Slot0.kD = 2.7;
     elevatorConfig.Slot0.kG = 4.499;
-    elevatorConfig.Slot1.kP = 60.36;
+    elevatorConfig.Slot1.kP = 94.83;
     elevatorConfig.Slot1.kI = 0.0;
     elevatorConfig.Slot1.kD = 1.690;
     elevatorConfig.Slot1.kG = 8.033;
