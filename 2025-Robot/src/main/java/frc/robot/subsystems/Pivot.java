@@ -37,7 +37,7 @@ public class Pivot extends SubsystemBase {
   public void init() {
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
     TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
-    pivotConfig.Slot0.kP = 200.0;
+    pivotConfig.Slot0.kP = 130.0;
     pivotConfig.Slot0.kI = 0.0;
     pivotConfig.Slot0.kD = 5.0;
     pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerk;
