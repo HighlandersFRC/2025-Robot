@@ -196,14 +196,14 @@ public class Drive extends SubsystemBase {
       new Rotation3d(Math.toRadians(1.2), Math.toRadians(25.2), Math.toRadians(165.0)));
 
   Transform3d frontBargeRobotToCam = new Transform3d( // bottom
-      new Translation3d(Constants.inchesToMeters(3.0), Constants.inchesToMeters(-12.0), // mead to get yaw
-          Constants.inchesToMeters(17.68)),
-      new Rotation3d(Math.toRadians(1.7), Math.toRadians(-35.0), Math.toRadians(-20.0)));
+      new Translation3d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.5), // mead to get yaw
+          Constants.inchesToMeters(17.5)),
+      new Rotation3d(Math.toRadians(-0.5), Math.toRadians(-35.2), Math.toRadians(15.0)));
 
   Transform3d backBargeRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(-3.0), Constants.inchesToMeters(-12.0),
-          Constants.inchesToMeters(17.68)),
-      new Rotation3d(Math.toRadians(1.2), Math.toRadians(-34.2), Math.toRadians(200.0)));
+      new Translation3d(Constants.inchesToMeters(-2.25), Constants.inchesToMeters(-11.5),
+          Constants.inchesToMeters(17.5)),
+      new Rotation3d(Math.toRadians(-0.1), Math.toRadians(-34.8), Math.toRadians(165.0)));
 
   double initAngle;
   double setAngle;
@@ -487,7 +487,8 @@ public class Drive extends SubsystemBase {
     // the same for autos on either side
     if (this.m_fieldSide == "blue") {
       firstPointX = Constants.Physical.FIELD_LENGTH - firstPointX;
-      firstPointAngle = Math.PI - firstPointAngle;
+      firstPointY = Constants.Physical.FIELD_WIDTH - firstPointY;
+      firstPointAngle = Math.PI + firstPointAngle;
     }
 
     peripherals.setPigeonAngle(Math.toDegrees(firstPointAngle));
@@ -1410,14 +1411,14 @@ public class Drive extends SubsystemBase {
     // + hitNumber);
     if (Math
         .sqrt(Math.pow((x - getMT2OdometryX()), 2)
-            + Math.pow((y - getMT2OdometryY()), 2)) < 0.04
+            + Math.pow((y - getMT2OdometryY()), 2)) < 0.03
         && getAngleDifferenceDegrees(Math.toDegrees(theta),
             Math.toDegrees(getMT2OdometryAngle())) < 0.5) {
       hitNumber += 1;
     } else {
       hitNumber = 0;
     }
-    if (hitNumber > 9) {
+    if (hitNumber > 7) {
       return true;
     } else {
       return false;
@@ -1462,10 +1463,10 @@ public class Drive extends SubsystemBase {
     double finalX = xVelNoFF;
     double finalY = yVelNoFF;
     double finalTheta = thetaVelNoFF;
-    if (m_fieldSide == "blue") {
-      finalX = -finalX;
-      finalTheta = -finalTheta;
-    }
+    // if (m_fieldSide == "blue") {
+    // finalX = -finalX;
+    // finalTheta = -finalTheta;
+    // }
     Number[] velocityArray = new Number[] {
         finalX,
         -finalY,
@@ -1619,7 +1620,8 @@ public class Drive extends SubsystemBase {
     int targetIndex = pathPoints.length() - 1;
     if (this.m_fieldSide == "blue") {
       currentX = Constants.Physical.FIELD_LENGTH - currentX;
-      currentTheta = Math.PI - currentTheta;
+      currentY = Constants.Physical.FIELD_WIDTH - currentY;
+      currentTheta = Math.PI + currentTheta;
     }
     for (int i = currentIndex; i < pathPoints.length(); i++) {
       JSONObject point = pathPoints.getJSONObject(i);
@@ -1682,7 +1684,8 @@ public class Drive extends SubsystemBase {
     double finalTheta = thetaVelNoFF + feedForwardTheta;
     if (m_fieldSide == "blue") {
       finalX = -finalX;
-      finalTheta = -finalTheta;
+      finalY = -finalY;
+      finalTheta = finalTheta;
     }
     Number[] velocityArray = new Number[] {
         finalX,

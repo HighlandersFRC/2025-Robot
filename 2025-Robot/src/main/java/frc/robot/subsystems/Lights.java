@@ -31,22 +31,30 @@ public class Lights extends SubsystemBase {
   private boolean timedFlashes = false;
   private double strobeSpeed = 0.4;
   private double flashSpeed = 0.05;
-  CANdle candle0 = new CANdle(Constants.CANInfo.CANDLE_ID_0, "rio");
+  CANdle candle0 = new CANdle(Constants.CANInfo.CANDLE_ID_0, "Canivore");
   CANdle candle1 = new CANdle(Constants.CANInfo.CANDLE_ID_1, "rio");
   CANdle candle2 = new CANdle(Constants.CANInfo.CANDLE_ID_2, "rio");
   private int ledNumber = 2000;
 
-  // ColorFlowAnimation redSolidDim = new ColorFlowAnimation(100, 0, 0, 0, 1.0, ledNumber, Direction.Forward, 0);
-  // ColorFlowAnimation redSolidBright = new ColorFlowAnimation(255, 0, 0, 0, 0.0, ledNumber, Direction.Forward, 0);
-  // ColorFlowAnimation blueSolidDim = new ColorFlowAnimation(0, 0, 100, 0, 0.0, ledNumber, Direction.Forward, 0);
-  // ColorFlowAnimation blueSolidBright = new ColorFlowAnimation(0, 0, 255, 0, 0.0, ledNumber, Direction.Forward, 0);
+  // ColorFlowAnimation redSolidDim = new ColorFlowAnimation(100, 0, 0, 0, 1.0,
+  // ledNumber, Direction.Forward, 0);
+  // ColorFlowAnimation redSolidBright = new ColorFlowAnimation(255, 0, 0, 0, 0.0,
+  // ledNumber, Direction.Forward, 0);
+  // ColorFlowAnimation blueSolidDim = new ColorFlowAnimation(0, 0, 100, 0, 0.0,
+  // ledNumber, Direction.Forward, 0);
+  // ColorFlowAnimation blueSolidBright = new ColorFlowAnimation(0, 0, 255, 0,
+  // 0.0, ledNumber, Direction.Forward, 0);
 
-  // FireAnimation redSolidDim = new FireAnimation(0.5, 1.0, ledNumber, 0.0, 0.0, false, 0);
-  // LarsonAnimation redSolidDim = new LarsonAnimation(100, 0, 0, 0, 0.5, ledNumber, BounceMode.Back, 1000, 0);
+  // FireAnimation redSolidDim = new FireAnimation(0.5, 1.0, ledNumber, 0.0, 0.0,
+  // false, 0);
+  // LarsonAnimation redSolidDim = new LarsonAnimation(100, 0, 0, 0, 0.5,
+  // ledNumber, BounceMode.Back, 1000, 0);
 
-  // ColorFlowAnimation greenSolidBright = new ColorFlowAnimation(0, 255, 0, 0, 0.0, ledNumber, Direction.Forward, 0);
-  // ColorFlowAnimation whiteSolidBright = new ColorFlowAnimation(255, 255, 255, 255, 0.0, ledNumber, Direction.Forward,
-  //     0);
+  // ColorFlowAnimation greenSolidBright = new ColorFlowAnimation(0, 255, 0, 0,
+  // 0.0, ledNumber, Direction.Forward, 0);
+  // ColorFlowAnimation whiteSolidBright = new ColorFlowAnimation(255, 255, 255,
+  // 255, 0.0, ledNumber, Direction.Forward,
+  // 0);
 
   StrobeAnimation redFlash = new StrobeAnimation(255, 0, 0, 0, 0.1, ledNumber, 0);
   StrobeAnimation blueFlash = new StrobeAnimation(0, 0, 255, 0, 0.1, ledNumber, 0);
@@ -59,8 +67,10 @@ public class Lights extends SubsystemBase {
   StrobeAnimation purpleFlash = new StrobeAnimation(100, 0, 100, 0, flashSpeed, ledNumber, 0);
   StrobeAnimation yellowFlash = new StrobeAnimation(100, 100, 0, 0, flashSpeed, ledNumber, 0);
 
-  // ColorFlowAnimation algaeSolid = new ColorFlowAnimation(0, 255, 150, 0, 0.0, ledNumber, Direction.Forward, 0);
-  // ColorFlowAnimation coralSolid = new ColorFlowAnimation(255, 255, 255, 255, 0.0, ledNumber, Direction.Forward, 0);
+  // ColorFlowAnimation algaeSolid = new ColorFlowAnimation(0, 255, 150, 0, 0.0,
+  // ledNumber, Direction.Forward, 0);
+  // ColorFlowAnimation coralSolid = new ColorFlowAnimation(255, 255, 255, 255,
+  // 0.0, ledNumber, Direction.Forward, 0);
   StrobeAnimation algaeFlashing = new StrobeAnimation(0, 75, 25, 0, flashSpeed, ledNumber, 0);
   StrobeAnimation coralFlashing = new StrobeAnimation(50, 50, 50, 50, flashSpeed, ledNumber, 0);
   StrobeAnimation algaeStrobing = new StrobeAnimation(0, 75, 25, 0, strobeSpeed, ledNumber, 0);
@@ -345,30 +355,32 @@ public class Lights extends SubsystemBase {
     this.timedFlashes = timedFlashes;
   }
 
-  // public void flashGreen(double seconds) { // blinks green for a certain amount of time
-  //   setCommandRunning(true);
-  //   candle0.clearAnimation(0);
-  //   candle1.clearAnimation(0);
-  //   if (seconds != -1) {
-  //     time = Timer.getFPGATimestamp();
-  //     timeout = seconds;
-  //     timedFlashes = true;
-  //   }
-  //   candle0.animate(greenFlash);
-  //   candle1.animate(greenFlash);
+  // public void flashGreen(double seconds) { // blinks green for a certain amount
+  // of time
+  // setCommandRunning(true);
+  // candle0.clearAnimation(0);
+  // candle1.clearAnimation(0);
+  // if (seconds != -1) {
+  // time = Timer.getFPGATimestamp();
+  // timeout = seconds;
+  // timedFlashes = true;
+  // }
+  // candle0.animate(greenFlash);
+  // candle1.animate(greenFlash);
   // }
 
-  // public void blinkYellow(double seconds) { // blinks yellow for a certain amount of time
-  //   setCommandRunning(true);
-  //   candle0.clearAnimation(0);
-  //   candle1.clearAnimation(0);
-  //   if (seconds != -1) {
-  //     time = Timer.getFPGATimestamp();
-  //     timeout = seconds;
-  //     timedFlashes = true;
-  //   }
-  //   candle0.animate(yellowFlash);
-  //   candle1.animate(yellowFlash);
+  // public void blinkYellow(double seconds) { // blinks yellow for a certain
+  // amount of time
+  // setCommandRunning(true);
+  // candle0.clearAnimation(0);
+  // candle1.clearAnimation(0);
+  // if (seconds != -1) {
+  // time = Timer.getFPGATimestamp();
+  // timeout = seconds;
+  // timedFlashes = true;
+  // }
+  // candle0.animate(yellowFlash);
+  // candle1.animate(yellowFlash);
   // }
 
   public void clearAnimations() { // clears all animations currently running

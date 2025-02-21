@@ -29,6 +29,8 @@ public class Superstructure extends SubsystemBase {
   private Climber climber;
   private Lights lights;
   private RobotContainer robotContainer;
+  double outakeIdleInitTime = 0;
+  boolean outakeIdleInit = false;
 
   public enum SuperState {
     DEFAULT,
@@ -455,17 +457,15 @@ public class Superstructure extends SubsystemBase {
   public void handleDefaultState() {
     lights.setWantedState(LightsState.DEFAULT);
     drive.setWantedState(DriveState.DEFAULT);
-    pivot.setWantedFlip(PivotFlip.FRONT);
+    // pivot.setWantedFlip(PivotFlip.FRONT);
     if (twist.getTwistPosition() < 45) {
       elevator.setWantedState(ElevatorState.DEFAULT);
     } else {
       elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     }
     intake.setWantedState(IntakeState.DEFAULT);
-    if (Math.abs(twist.getTwistPosition()) < 30) {
+    if (Math.abs(twist.getTwistPosition()) < 15) {
       pivot.setWantedState(PivotState.DEFAULT);
-    } else {
-      pivot.setWantedState(PivotState.PREP);
     }
     twist.setWantedState(TwistState.SIDE);
     climber.setWantedState(ClimbState.IDLE);
@@ -938,45 +938,50 @@ public class Superstructure extends SubsystemBase {
   public void handleIdleState() {
     lights.setWantedState(LightsState.DEFAULT);
     drive.setWantedState(DriveState.IDLE);
-    pivot.setWantedFlip(PivotFlip.FRONT);
+    // pivot.setWantedFlip(PivotFlip.FRONT);
     if (twist.getTwistPosition() < 45) {
       elevator.setWantedState(ElevatorState.DEFAULT);
     } else {
       elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     }
     intake.setWantedState(IntakeState.DEFAULT);
-    if (Math.abs(twist.getTwistPosition()) < 30) {
+    if (Math.abs(twist.getTwistPosition()) < 15) {
       pivot.setWantedState(PivotState.DEFAULT);
-    } else {
-      pivot.setWantedState(PivotState.PREP);
     }
     twist.setWantedState(TwistState.SIDE);
     climber.setWantedState(ClimbState.IDLE);
   }
 
   public void handleOutakeIdleState() {
-    lights.setWantedState(LightsState.DEFAULT);
-    drive.setWantedState(DriveState.IDLE);
-    pivot.setWantedFlip(PivotFlip.FRONT);
-    if (twist.getTwistPosition() < 45) {
-      elevator.setWantedState(ElevatorState.DEFAULT);
-    } else {
-      elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
-    }
     intake.setWantedState(IntakeState.OUTAKE);
-    if (Math.abs(twist.getTwistPosition()) < 30) {
-      pivot.setWantedState(PivotState.DEFAULT);
-    } else {
-      pivot.setWantedState(PivotState.PREP);
+    if (!outakeIdleInit) {
+      outakeIdleInitTime = Timer.getFPGATimestamp();
+      outakeIdleInit = true;
     }
-    twist.setWantedState(TwistState.SIDE);
-    climber.setWantedState(ClimbState.IDLE);
+    if (Timer.getFPGATimestamp() - outakeIdleInitTime > 0.25) {
+      lights.setWantedState(LightsState.DEFAULT);
+      drive.setWantedState(DriveState.IDLE);
+      // pivot.setWantedFlip(PivotFlip.FRONT);
+      if (twist.getTwistPosition() < 45) {
+        elevator.setWantedState(ElevatorState.DEFAULT);
+      } else {
+        elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+      }
+      if (Math.abs(twist.getTwistPosition()) < 15) {
+        pivot.setWantedState(PivotState.DEFAULT);
+      }
+      twist.setWantedState(TwistState.SIDE);
+      climber.setWantedState(ClimbState.IDLE);
+    }
   }
 
   @Override
   public void periodic() {
     currentSuperState = handleStateTransitions();
     Logger.recordOutput("Super State", currentSuperState);
+    if (currentSuperState != SuperState.OUTAKE_IDLE) {
+      outakeIdleInit = false;
+    }
     // Logger.recordOutput("Hit Time", hitAutoSetpointTime);
     applyStates();
   }
