@@ -546,9 +546,9 @@ public final class Constants {
     public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(29.5);
     public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.2);
 
-    public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(25.5);
+    public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.3);
     public static final double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(3.0);
-    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(26.5);
+    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(26.3);
     public static final double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-3.0);
 
     public static final double GRAVITY_ACCEL_MS2 = 9.806;
@@ -773,7 +773,7 @@ public final class Constants {
     public static final double PIVOT_AUTO_L3_POSITION_D = 45.0;
     // public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
     public static final double PIVOT_AUTO_L4_POSITION_D = 65.0;
-    public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 90.0;
+    public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 100.0;
     public static final double PIVOT_AUTO_L3_SCORE_POSITION_D = 90.0;
     public static final double PIVOT_AUTO_L2_SCORE_POSITION_D = 90.0;
     public static final double PIVOT_L4_POSITION_D = 65.0;

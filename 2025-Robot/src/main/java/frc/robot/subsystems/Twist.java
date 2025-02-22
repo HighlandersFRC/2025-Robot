@@ -40,10 +40,10 @@ public class Twist extends SubsystemBase {
 
   public void init() {
     TalonFXConfiguration twistConfig = new TalonFXConfiguration();
-    twistConfig.Slot0.kP = 60.0;
+    twistConfig.Slot0.kP = 30.0;
     twistConfig.Slot0.kI = 0.0;
     twistConfig.Slot0.kD = 1.6;
-    twistConfig.Slot0.kS = 16.0;
+    twistConfig.Slot0.kS = 8.0;
     twistConfig.MotionMagic.MotionMagicJerk = this.twistJerk;
     twistConfig.MotionMagic.MotionMagicAcceleration = this.twistAcceleration;
     twistConfig.MotionMagic.MotionMagicCruiseVelocity = this.twistCruiseVelocity;
