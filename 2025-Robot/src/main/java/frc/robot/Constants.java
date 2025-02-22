@@ -712,7 +712,8 @@ public final class Constants {
     public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(13.0);
     public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(18);
     public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(17);
-    public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(25);
+    public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(33);
+    // public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(25);
     public static final double ELEVATOR_AUTO_SCORE_L3_POSITION_M = inchesToMeters(20);
     public static final double ELEVATOR_AUTO_L4_POSITION_M = inchesToMeters(63.0);
     public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(31);
@@ -769,7 +770,8 @@ public final class Constants {
     public static final double PIVOT_L23_POSITION_D = 55.0;
     // public static final double PIVOT_AUTO_L23_POSITION_D = 45.0;
     public static final double PIVOT_AUTO_L2_POSITION_D = 45.0;
-    public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
+    public static final double PIVOT_AUTO_L3_POSITION_D = 45.0;
+    // public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
     public static final double PIVOT_AUTO_L4_POSITION_D = 65.0;
     public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 90.0;
     public static final double PIVOT_AUTO_L3_SCORE_POSITION_D = 90.0;

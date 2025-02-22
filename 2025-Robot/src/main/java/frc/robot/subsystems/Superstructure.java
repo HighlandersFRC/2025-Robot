@@ -222,7 +222,8 @@ public class Superstructure extends SubsystemBase {
       case AUTO_L2_PLACE:
         if (drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry())[0],
             drive.getReefClosestSetpoint(drive.getMT2Odometry())[1],
-            drive.getReefClosestSetpoint(drive.getMT2Odometry())[2]) && elevator.getElevatorPosition() > 15 / 39.37) {
+            drive.getReefClosestSetpoint(drive.getMT2Odometry())[2])
+            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 5.0 / 39.37) {
           currentSuperState = SuperState.AUTO_SCORE_L2;
           wantedSuperState = SuperState.AUTO_SCORE_L2;
         } else {
@@ -236,14 +237,24 @@ public class Superstructure extends SubsystemBase {
         //         drive.getReefL3ClosestSetpoint(
         //             drive.getMT2Odometry())[2])
         //         + " Elevator Position: " + elevator.getElevatorPosition() * 39.37);
-        if (drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[0],
-            drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[1],
-            drive.getReefL3ClosestSetpoint(drive
-                .getMT2Odometry())[2])
-            && elevator.getElevatorPosition() > ElevatorPosition.kAUTOL3.meters - 2 / 39.37) {
+        // if (drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[0],
+        //     drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[1],
+        //     drive.getReefL3ClosestSetpoint(drive
+        //         .getMT2Odometry())[2])
+        //     && elevator.getElevatorPosition() > ElevatorPosition.kAUTOL3.meters - 2 / 39.37) {
+        //   currentSuperState = SuperState.AUTO_SCORE_L3;
+        //   wantedSuperState = SuperState.AUTO_SCORE_L3;
+        //   // hitAutoSetpointTime = Timer.getFPGATimestamp();
+        // } else {
+        //   currentSuperState = SuperState.AUTO_L3_PLACE;
+        // }
+        // break;        
+        if (drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry())[0],
+            drive.getReefClosestSetpoint(drive.getMT2Odometry())[1],
+            drive.getReefClosestSetpoint(drive.getMT2Odometry())[2])
+            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 5.0 / 39.37) {
           currentSuperState = SuperState.AUTO_SCORE_L3;
           wantedSuperState = SuperState.AUTO_SCORE_L3;
-          // hitAutoSetpointTime = Timer.getFPGATimestamp();
         } else {
           currentSuperState = SuperState.AUTO_L3_PLACE;
         }
@@ -339,12 +350,12 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.AUTO_SCORE_L2;
         break;
       case AUTO_SCORE_L3:
-        if (drive.getDistanceFromL23Setpoint() < 7 / 39.37) {
-          currentSuperState = SuperState.AUTO_SCORE_L3;
-        } else {
-          currentSuperState = SuperState.AUTO_SCORE_MORE_L3;
-          wantedSuperState = SuperState.AUTO_SCORE_MORE_L3;
-        }
+        // if (drive.getDistanceFromL23Setpoint() < 7 / 39.37) {
+        currentSuperState = SuperState.AUTO_SCORE_L3;
+        // } else {
+        //   currentSuperState = SuperState.AUTO_SCORE_MORE_L3;
+        //   wantedSuperState = SuperState.AUTO_SCORE_MORE_L3;
+        // }
         break;
       case AUTO_SCORE_MORE_L3:
         currentSuperState = SuperState.AUTO_SCORE_MORE_L3;
@@ -503,6 +514,27 @@ public class Superstructure extends SubsystemBase {
     }
   }
 
+  public void handleAutoL3PlaceState() {
+    lights.setWantedState(LightsState.PLACING);
+    drive.setWantedState(DriveState.REEF);
+    intake.setWantedState(IntakeState.DEFAULT);
+    if (Math.hypot(
+        drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0],
+        drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
+        && drive.getMT2OdometryAngle() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
+      elevator.setWantedState(ElevatorState.AUTO_L3);
+      if (drive.getAutoPlacementSideIsFront()) {
+        pivot.setWantedFlip(PivotFlip.FRONT);
+      } else {
+        pivot.setWantedFlip(PivotFlip.BACK);
+      }
+      if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 10 / 39.37) {
+        pivot.setWantedState(PivotState.AUTO_L3);
+      }
+      twist.setWantedState(TwistState.SIDE);
+    }
+  }
+
   // public void handleAutoL3PlaceState() {
   // drive.setWantedState(DriveState.REEF);
   // intake.setWantedState(IntakeState.DEFAULT);
@@ -524,32 +556,32 @@ public class Superstructure extends SubsystemBase {
   // }
   // }
 
-  public void handleAutoL3PlaceState() {
-    lights.setWantedState(LightsState.PLACING);
-    pivot.setWantedFlip(PivotFlip.FRONT);
-    drive.setWantedState(DriveState.L3_REEF);
-    elevator.setWantedState(ElevatorState.AUTO_L3);
-    intake.setWantedState(IntakeState.DEFAULT);
-    if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 10 / 39.37) {
-      pivot.setWantedState(PivotState.AUTO_L3);
-    }
-    twist.setWantedState(TwistState.SIDE);
-    if (Math.hypot(
-        drive.getMT2OdometryX() - drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[0],
-        drive.getMT2OdometryY() - drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
-        && drive.getMT2OdometryAngle() - drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
-      elevator.setWantedState(ElevatorState.AUTO_L3);
-      if (drive.getAutoPlacementSideIsFront()) {
-        pivot.setWantedFlip(PivotFlip.FRONT);
-      } else {
-        pivot.setWantedFlip(PivotFlip.BACK);
-      }
-      if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 10 / 39.37) {
-        pivot.setWantedState(PivotState.AUTO_L3);
-      }
-      twist.setWantedState(TwistState.SIDE);
-    }
-  }
+  // public void handleAutoL3PlaceState() {
+  //   lights.setWantedState(LightsState.PLACING);
+  //   pivot.setWantedFlip(PivotFlip.FRONT);
+  //   drive.setWantedState(DriveState.L3_REEF);
+  //   elevator.setWantedState(ElevatorState.AUTO_L3);
+  //   intake.setWantedState(IntakeState.DEFAULT);
+  //   if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 10 / 39.37) {
+  //     pivot.setWantedState(PivotState.AUTO_L3);
+  //   }
+  //   twist.setWantedState(TwistState.SIDE);
+  //   if (Math.hypot(
+  //       drive.getMT2OdometryX() - drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[0],
+  //       drive.getMT2OdometryY() - drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
+  //       && drive.getMT2OdometryAngle() - drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
+  //     elevator.setWantedState(ElevatorState.AUTO_L3);
+  //     if (drive.getAutoPlacementSideIsFront()) {
+  //       pivot.setWantedFlip(PivotFlip.FRONT);
+  //     } else {
+  //       pivot.setWantedFlip(PivotFlip.BACK);
+  //     }
+  //     if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 10 / 39.37) {
+  //       pivot.setWantedState(PivotState.AUTO_L3);
+  //     }
+  //     twist.setWantedState(TwistState.SIDE);
+  //   }
+  // }
 
   public void handleAutoL4PlaceState() {
     lights.setWantedState(LightsState.PLACING);
@@ -872,10 +904,19 @@ public class Superstructure extends SubsystemBase {
   // }
 
   public void handleAutoL3ScoreState() {
+    // lights.setWantedState(LightsState.SCORING);
+    // elevator.updateDistanceFromL23DriveSetpoint(drive.getDistanceFromL23Setpoint());
+    // drive.setWantedState(DriveState.SCORE_L23);
+    // elevator.setWantedState(ElevatorState.AUTO_SCORE_L3);
     lights.setWantedState(LightsState.SCORING);
-    elevator.updateDistanceFromL23DriveSetpoint(drive.getDistanceFromL23Setpoint());
-    drive.setWantedState(DriveState.SCORE_L23);
-    elevator.setWantedState(ElevatorState.AUTO_SCORE_L3);
+    drive.setWantedState(DriveState.DEFAULT);
+    pivot.setWantedState(PivotState.AUTO_SCORE_L3);
+    if (Math.hypot((drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0]),
+        (drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
+      intake.setWantedState(IntakeState.OUTAKE);
+    } else {
+      intake.setWantedState(IntakeState.OFF);
+    }
   }
 
   public void handleAutoL3ScoreMoreState() {
