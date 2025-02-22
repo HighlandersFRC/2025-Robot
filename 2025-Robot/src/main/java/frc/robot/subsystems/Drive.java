@@ -1707,6 +1707,8 @@ public class Drive extends SubsystemBase {
     // Logger.recordOutput("point idx", velocityArray[3].intValue());
     // Logger.recordOutput("look-ahead",
     // Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_DISTANCE * velocityMag + 0.01);
+    // Logger.recordOutput("Velocity Array",
+    //     "X: " + finalX + " Y: " + -finalY + " Theta: " + finalTheta + " Index: " + targetIndex);
     return velocityArray;
   }
 

@@ -183,7 +183,8 @@ public class VariableSpeedFollower extends AutoFollower {
     double odometryFusedTheta = drive.getMT2OdometryAngle();
     if (drive.getFieldSide() == "blue") {
       odometryFusedX = Constants.Physical.FIELD_LENGTH - odometryFusedX;
-      odometryFusedTheta = Math.PI - odometryFusedTheta;
+      odometryFusedY = Constants.Physical.FIELD_WIDTH - odometryFusedY;
+      odometryFusedTheta = Math.PI + odometryFusedTheta;
     }
     while (Math.abs(odometryFusedTheta - point.getDouble("angle")) > Math.PI) {
       if (odometryFusedTheta - point.getDouble("angle") > Math.PI) {
