@@ -63,8 +63,8 @@ public class Pivot extends SubsystemBase {
   }
 
   public void pivotToPosition(double pivotPosition) {
-    if (Math.abs(pivotPosition) * 360 > 130) {
-      pivotPosition = Math.copySign(130.0 / 360.0, pivotPosition);
+    if (Math.abs(pivotPosition) * 360.0 > 135.0) {
+      pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
     }
     // Logger.recordOutput("Pivot Setpoint", (pivotPosition));
     pivotMotor.setControl(this.pivotMotionProfileRequest

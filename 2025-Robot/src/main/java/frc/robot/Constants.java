@@ -779,12 +779,12 @@ public final class Constants {
     public static final double PIVOT_L4_POSITION_D = 65.0;
     public static final double PIVOT_UPRIGHT_POSITION_D = 45.0;
     public static final double PIVOT_GROUND_ALGAE_POSITION_D = 90.0;
-    public static final double PIVOT_GROUND_CORAL_POSITION_FRONT_D = 130.0;
-    public static final double PIVOT_GROUND_CORAL_POSITION_BACK_D = -130.0;
+    public static final double PIVOT_GROUND_CORAL_POSITION_FRONT_D = 135.0;
+    public static final double PIVOT_GROUND_CORAL_POSITION_BACK_D = -135.0;
     public static final double PIVOT_GROUND_CORAL_PREP_BACK_D = -90;
     // public static final double PIVOT_DEFAULT_POSITION_D = 30.0;
     public static final double PIVOT_DEFAULT_POSITION_D = 0.0;
-    public static final double PIVOT_PREP_POSITION_D = 15.0;
+    public static final double PIVOT_PREP_POSITION_D = 30.0;
     public static final double PIVOT_FEEDER_POSITION_D = 39.37;
     public static final double PIVOT_NET_POSITION_D = 10.0;
     public static final double PIVOT_PROCESSOR_POSITION_D = 90.0;
