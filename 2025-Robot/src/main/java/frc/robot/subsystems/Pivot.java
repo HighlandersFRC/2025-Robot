@@ -203,6 +203,8 @@ public class Pivot extends SubsystemBase {
         return PivotState.AUTO_SCORE_L4;
       case CLIMB:
         return PivotState.CLIMB;
+      case PREP:
+        return PivotState.PREP;
       default:
         return PivotState.DEFAULT;
     }
@@ -366,6 +368,17 @@ public class Pivot extends SubsystemBase {
         }
         break;
       case AUTO_L1:
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kL1.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
+            break;
+        }
         break;
       case AUTO_L2:
         switch (systemFlip) {

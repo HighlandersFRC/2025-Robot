@@ -468,16 +468,20 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.DEFAULT);
     drive.setWantedState(DriveState.DEFAULT);
     // pivot.setWantedFlip(PivotFlip.FRONT);
-    if (twist.getTwistPosition() < 45) {
+    if (/*Math.abs(twist.getTwistPosition()) < 45 &&*/ Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
       elevator.setWantedState(ElevatorState.DEFAULT);
     } else {
       elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     }
     intake.setWantedState(IntakeState.DEFAULT);
-    if (Math.abs(twist.getTwistPosition()) < 15) {
+    if (Math.abs(twist.getTwistPosition()) < 10) {
       pivot.setWantedState(PivotState.DEFAULT);
+    } else {
+      pivot.setWantedState(PivotState.PREP);
     }
-    twist.setWantedState(TwistState.SIDE);
+    if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      twist.setWantedState(TwistState.SIDE);
+    }
     climber.setWantedState(ClimbState.IDLE);
   }
 
@@ -671,7 +675,9 @@ public class Superstructure extends SubsystemBase {
         if (!(Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 324
             &&
             Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 144)) {
-          twist.setWantedState(TwistState.UP);
+          if (Math.abs(pivot.getPivotPosition()) > 15.0 / 360.0) {
+            twist.setWantedState(TwistState.UP);
+          }
           pivot.setWantedFlip(PivotFlip.FRONT);
           pivot.setWantedState(PivotState.FEEDER);
           elevator.setWantedState(ElevatorState.DEFAULT);
@@ -687,7 +693,9 @@ public class Superstructure extends SubsystemBase {
           // pivot.setWantedState(PivotState.FEEDER);
           // } else {
           elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
-          twist.setWantedState(TwistState.DOWN);
+          if (Math.abs(pivot.getPivotPosition()) > 15.0 / 360.0) {
+            twist.setWantedState(TwistState.DOWN);
+          }
           pivot.setWantedFlip(PivotFlip.BACK);
           pivot.setWantedState(PivotState.FEEDER);
           // }
@@ -700,7 +708,9 @@ public class Superstructure extends SubsystemBase {
             (Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 360
                 &&
                 Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 216)) {
-          twist.setWantedState(TwistState.UP);
+          if (Math.abs(pivot.getPivotPosition()) > 15.0 / 360.0) {
+            twist.setWantedState(TwistState.UP);
+          }
           pivot.setWantedFlip(PivotFlip.FRONT);
           pivot.setWantedState(PivotState.FEEDER);
           elevator.setWantedState(ElevatorState.DEFAULT);
@@ -716,7 +726,9 @@ public class Superstructure extends SubsystemBase {
           // pivot.setWantedState(PivotState.FEEDER);
           // } else {
           elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
-          twist.setWantedState(TwistState.DOWN);
+          if (Math.abs(pivot.getPivotPosition()) > 15.0 / 360.0) {
+            twist.setWantedState(TwistState.DOWN);
+          }
           pivot.setWantedFlip(PivotFlip.BACK);
           pivot.setWantedState(PivotState.FEEDER);
           // }
@@ -727,8 +739,9 @@ public class Superstructure extends SubsystemBase {
         if ((Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 324
             &&
             Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 144)) {
-          twist.setWantedState(TwistState.UP);
-          System.out.println("front");
+          if (Math.abs(pivot.getPivotPosition()) > 15.0 / 360.0) {
+            twist.setWantedState(TwistState.UP);
+          } // System.out.println("front");
           pivot.setWantedFlip(PivotFlip.FRONT);
           pivot.setWantedState(PivotState.FEEDER);
           elevator.setWantedState(ElevatorState.DEFAULT);
@@ -747,7 +760,9 @@ public class Superstructure extends SubsystemBase {
           // } else {
           elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
           // System.out.println("part 3");
-          twist.setWantedState(TwistState.DOWN);
+          if (Math.abs(pivot.getPivotPosition()) > 15.0 / 360.0) {
+            twist.setWantedState(TwistState.DOWN);
+          }
           pivot.setWantedFlip(PivotFlip.BACK);
           pivot.setWantedState(PivotState.FEEDER);
           // }
@@ -760,7 +775,9 @@ public class Superstructure extends SubsystemBase {
             (Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 360
                 &&
                 Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) >= 216))) {
-          twist.setWantedState(TwistState.UP);
+          if (Math.abs(pivot.getPivotPosition()) > 15.0 / 360.0) {
+            twist.setWantedState(TwistState.UP);
+          }
           pivot.setWantedFlip(PivotFlip.FRONT);
           pivot.setWantedState(PivotState.FEEDER);
           elevator.setWantedState(ElevatorState.DEFAULT);
@@ -776,7 +793,9 @@ public class Superstructure extends SubsystemBase {
           // pivot.setWantedState(PivotState.FEEDER);
           // } else {
           elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
-          twist.setWantedState(TwistState.DOWN);
+          if (Math.abs(pivot.getPivotPosition()) > 15.0 / 360.0) {
+            twist.setWantedState(TwistState.DOWN);
+          }
           pivot.setWantedFlip(PivotFlip.BACK);
           pivot.setWantedState(PivotState.FEEDER);
           // }
@@ -793,7 +812,7 @@ public class Superstructure extends SubsystemBase {
     elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
     pivot.setWantedState(PivotState.GROUND_CORAL_FRONT);
-    if (pivot.getPivotPosition() > 70 / 360) {
+    if (pivot.getPivotPosition() > 15.0 / 360.0) {
       twist.setWantedState(TwistState.UP);
     }
   }
@@ -804,10 +823,8 @@ public class Superstructure extends SubsystemBase {
     elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
     pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
-    if (pivot.getPivotPosition() < 70 / 360) {
+    if (pivot.getPivotPosition() < -15.0 / 360.0) {
       twist.setWantedState(TwistState.DOWN);
-    } else {
-      twist.setWantedState(TwistState.SIDE);
     }
   }
 

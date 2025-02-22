@@ -182,27 +182,27 @@ public class Intake extends SubsystemBase {
             }
             break;
           default:
-            System.out.println("3");
+            // System.out.println("3");
             setIntakePercent(-1.0);
             break;
         }
         break;
       case OUTAKE:
-        // switch (intakeItem) {
-        // case CORAL:
-        setIntakePercent(-0.5);
-        // break;
-        // case ALGAE:
-        // setIntakePercent(0.5);
-        // break;
-        // default:
-        // if (algaeMode) {
-        // setIntakePercent(0.5);
-        // } else {
-        // setIntakePercent(-0.5);
-        // }
-        // break;
-        // }
+        switch (intakeItem) {
+          // case CORAL:
+          //   setIntakePercent(-0.5);
+          //   break;
+          // case ALGAE:
+          //   setIntakePercent(0.5);
+          //   break;
+          default:
+            if (algaeMode) {
+              setIntakePercent(0.5);
+            } else {
+              setIntakePercent(-0.5);
+            }
+            break;
+        }
         break;
       case OFF:
         setIntakePercent(0.0);
