@@ -89,6 +89,9 @@ public class Robot extends LoggedRobot {
     } else {
       rjPressed = true;
     }
+
+    m_robotContainer.twist.setAlgaeMode(m_robotContainer.algaeMode);
+    m_robotContainer.pivot.setAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateIntakeItem(m_robotContainer.intake.getIntakeItem());
     m_robotContainer.intake.updateAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateAlgaeMode(m_robotContainer.algaeMode);

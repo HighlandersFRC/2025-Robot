@@ -31,6 +31,8 @@ public class Pivot extends SubsystemBase {
       pivotAcceleration,
       pivotJerk);
 
+  private boolean algaeMode = false;
+
   public Pivot() {
   }
 
@@ -40,6 +42,9 @@ public class Pivot extends SubsystemBase {
     pivotConfig.Slot0.kP = 130.0;
     pivotConfig.Slot0.kI = 0.0;
     pivotConfig.Slot0.kD = 5.0;
+    pivotConfig.Slot1.kP = 70.0;
+    pivotConfig.Slot1.kI = 0.0;
+    pivotConfig.Slot1.kD = 5.0;
     pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerk;
     pivotConfig.MotionMagic.MotionMagicAcceleration = this.pivotAcceleration;
     pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocity;
@@ -67,11 +72,21 @@ public class Pivot extends SubsystemBase {
       pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
     }
     // Logger.recordOutput("Pivot Setpoint", (pivotPosition));
-    pivotMotor.setControl(this.pivotMotionProfileRequest
-        .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
-        .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
-        .withJerk(
-            this.pivotJerk * pivotProfileScalarFactor));
+    if (algaeMode) {
+      pivotMotor.setControl(this.pivotMotionProfileRequest
+          .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
+          .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
+          .withJerk(
+              this.pivotJerk * pivotProfileScalarFactor)
+          .withSlot(1));
+    } else {
+      pivotMotor.setControl(this.pivotMotionProfileRequest
+          .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
+          .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
+          .withJerk(
+              this.pivotJerk * pivotProfileScalarFactor)
+          .withSlot(0));
+    }
   }
 
   public double getPivotPosition() {
@@ -120,6 +135,9 @@ public class Pivot extends SubsystemBase {
     AUTO_SCORE_L4,
     CLIMB,
     UP,
+    MANUAL_PLACE,
+    MANUAL_RESET,
+    IDLE,
   }
 
   private PivotState wantedState = PivotState.DEFAULT;
@@ -130,6 +148,10 @@ public class Pivot extends SubsystemBase {
 
   public void setWantedState(PivotState wantedState) {
     this.wantedState = wantedState;
+  }
+
+  public void setAlgaeMode(boolean algaeMode) {
+    this.algaeMode = algaeMode;
   }
 
   public void setWantedFlip(PivotFlip wantedFlip) {
@@ -205,6 +227,12 @@ public class Pivot extends SubsystemBase {
         return PivotState.CLIMB;
       case PREP:
         return PivotState.PREP;
+      case MANUAL_PLACE:
+        return PivotState.MANUAL_PLACE;
+      case MANUAL_RESET:
+        return PivotState.MANUAL_RESET;
+      case IDLE:
+        return PivotState.IDLE;
       default:
         return PivotState.DEFAULT;
     }
@@ -418,6 +446,15 @@ public class Pivot extends SubsystemBase {
             pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
             break;
         }
+        break;
+      case MANUAL_PLACE:
+        setPivotPercent(0.2);
+        break;
+      case MANUAL_RESET:
+        setPivotPercent(-0.2);
+        break;
+      case IDLE:
+        setPivotPercent(0.0);
         break;
       default:
         setPivotPercent(0.0);

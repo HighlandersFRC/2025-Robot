@@ -612,7 +612,10 @@ public class Drive extends SubsystemBase {
     }
     Optional<EstimatedRobotPose> multiTagResult = photonPoseEstimator.update(result);
     if (multiTagResult.isPresent()) {
-      if (result.getBestTarget().getPoseAmbiguity() < 0.3) {
+      if (result.getBestTarget().getPoseAmbiguity() < 0.3 && result.getBestTarget().fiducialId != 5
+          && result.getBestTarget().fiducialId != 4 && result.getBestTarget().fiducialId != 14
+          && result.getBestTarget().fiducialId != 15 && result.getBestTarget().fiducialId != 3
+          && result.getBestTarget().fiducialId != 16) {
         Pose3d robotPose = multiTagResult.get().estimatedPose;
         Logger.recordOutput("multitag result", robotPose);
         int numFrontTracks = result.getTargets().size();
@@ -642,7 +645,10 @@ public class Drive extends SubsystemBase {
     var backResult = peripherals.getBackReefCamResult();
     Optional<EstimatedRobotPose> backMultiTagResult = backPhotonPoseEstimator.update(backResult);
     if (backMultiTagResult.isPresent()) {
-      if (backResult.getBestTarget().getPoseAmbiguity() < 0.3) {
+      if (backResult.getBestTarget().getPoseAmbiguity() < 0.3 && backResult.getBestTarget().fiducialId != 5
+          && backResult.getBestTarget().fiducialId != 4 && backResult.getBestTarget().fiducialId != 14
+          && backResult.getBestTarget().fiducialId != 15 && backResult.getBestTarget().fiducialId != 3
+          && backResult.getBestTarget().fiducialId != 16) {
         Pose3d robotPose = backMultiTagResult.get().estimatedPose;
         Logger.recordOutput("multitag result", robotPose);
         int numFrontTracks = backResult.getTargets().size();
@@ -674,7 +680,10 @@ public class Drive extends SubsystemBase {
         .update(rightResult);
     if (rightMultiTagResult.isPresent()
         && (systemState != DriveState.L4_REEF && systemState != DriveState.L3_REEF && systemState != DriveState.REEF)) {
-      if (rightResult.getBestTarget().getPoseAmbiguity() < 0.3) {
+      if (rightResult.getBestTarget().getPoseAmbiguity() < 0.3 && rightResult.getBestTarget().fiducialId != 5
+          && rightResult.getBestTarget().fiducialId != 4 && rightResult.getBestTarget().fiducialId != 14
+          && rightResult.getBestTarget().fiducialId != 15 && rightResult.getBestTarget().fiducialId != 3
+          && rightResult.getBestTarget().fiducialId != 16) {
         Pose3d robotPose = rightMultiTagResult.get().estimatedPose;
         Logger.recordOutput("multitag result", robotPose);
         int numFrontTracks = rightResult.getTargets().size();
@@ -706,7 +715,10 @@ public class Drive extends SubsystemBase {
         .update(leftResult);
     if (leftMultiTagResult.isPresent()
         && (systemState != DriveState.L4_REEF && systemState != DriveState.L3_REEF && systemState != DriveState.REEF)) {
-      if (leftResult.getBestTarget().getPoseAmbiguity() < 0.3) {
+      if (leftResult.getBestTarget().getPoseAmbiguity() < 0.3 && leftResult.getBestTarget().fiducialId != 5
+          && leftResult.getBestTarget().fiducialId != 4 && leftResult.getBestTarget().fiducialId != 14
+          && leftResult.getBestTarget().fiducialId != 15 && leftResult.getBestTarget().fiducialId != 3
+          && leftResult.getBestTarget().fiducialId != 16) {
         Pose3d robotPose = leftMultiTagResult.get().estimatedPose;
         Logger.recordOutput("multitag result", robotPose);
         int numFrontTracks = leftResult.getTargets().size();
@@ -1708,7 +1720,8 @@ public class Drive extends SubsystemBase {
     // Logger.recordOutput("look-ahead",
     // Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_DISTANCE * velocityMag + 0.01);
     // Logger.recordOutput("Velocity Array",
-    //     "X: " + finalX + " Y: " + -finalY + " Theta: " + finalTheta + " Index: " + targetIndex);
+    // "X: " + finalX + " Y: " + -finalY + " Theta: " + finalTheta + " Index: " +
+    // targetIndex);
     return velocityArray;
   }
 

@@ -30,6 +30,7 @@ public class Twist extends SubsystemBase {
   private final double twistProfileScalarFactor = 3;
   private boolean startedZero = false;
   private double zeroInitTime = 0.0;
+  private boolean algaeMode = false;
 
   private final MotionMagicExpoVoltage twistTorqueCurrentFOC = new MotionMagicExpoVoltage(
       0.0);
@@ -44,6 +45,10 @@ public class Twist extends SubsystemBase {
     twistConfig.Slot0.kI = 0.0;
     twistConfig.Slot0.kD = 1.6;
     twistConfig.Slot0.kS = 8.0;
+    twistConfig.Slot1.kP = 15.0;
+    twistConfig.Slot1.kI = 0.0;
+    twistConfig.Slot1.kD = 1.6;
+    twistConfig.Slot1.kS = 4.0;
     twistConfig.MotionMagic.MotionMagicJerk = this.twistJerk;
     twistConfig.MotionMagic.MotionMagicAcceleration = this.twistAcceleration;
     twistConfig.MotionMagic.MotionMagicCruiseVelocity = this.twistCruiseVelocity;
@@ -67,9 +72,16 @@ public class Twist extends SubsystemBase {
   }
 
   public void twistToPosition(double rotations) {
+    if (algaeMode) {
+      twistMotor.setControl(this.twistTorqueCurrentFOC
+          .withPosition(rotations).withEnableFOC(true).withSlot(1));
+    } else {
+      twistMotor.setControl(this.twistTorqueCurrentFOC
+          .withPosition(rotations).withEnableFOC(true).withSlot(0));
+    }
     // Logger.recordOutput("Twist Setpoint", rotations);
-    twistMotor.setControl(this.twistTorqueCurrentFOC
-        .withPosition(rotations).withEnableFOC(true));
+    // twistMotor.setControl(this.twistTorqueCurrentFOC
+    // .withPosition(rotations).withEnableFOC(true));
   }
 
   public void setTwistPercent(double percent) {
@@ -99,6 +111,10 @@ public class Twist extends SubsystemBase {
 
   public void setWantedState(TwistState wantedState) {
     this.wantedState = wantedState;
+  }
+
+  public void setAlgaeMode(boolean algaeMode) {
+    this.algaeMode = algaeMode;
   }
 
   private TwistState handleStateTransition() {

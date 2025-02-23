@@ -32,6 +32,7 @@ import frc.robot.commands.SetClimberPivotTorque;
 import frc.robot.commands.SetElevatorPercent;
 import frc.robot.commands.SetElevatorState;
 import frc.robot.commands.SetIntake;
+import frc.robot.commands.SetIntakeState;
 import frc.robot.commands.SetPivotPercent;
 import frc.robot.commands.SetPivotState;
 import frc.robot.commands.SetRobotPose;
@@ -51,6 +52,7 @@ import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Twist;
+import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.Pivot.PivotState;
 import frc.robot.subsystems.Superstructure.SuperState;
 import frc.robot.subsystems.Twist.TwistState;
@@ -166,24 +168,50 @@ public class RobotContainer {
 
     OI.driverViewButton.whileTrue(new ZeroAngleMidMatch(drive)); // zero pidgeon
 
-    // OI.driverRT.whileTrue(new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_FRONT));
+    // OI.driverRT.whileTrue(new SetRobotState(superstructure,
+    // SuperState.GROUND_CORAL_PICKUP_FRONT));
     OI.driverRT.whileTrue(new ConditionalCommand(new SetRobotState(superstructure,
         SuperState.GROUND_ALGAE_PICKUP_FRONT), new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_FRONT),
         () -> (algaeMode)));
-    // OI.driverRB.whileTrue(new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_BACK));
-    OI.driverRB.whileTrue(new ConditionalCommand(new SetRobotState(superstructure,
-        SuperState.GROUND_ALGAE_PICKUP_BACK), new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_BACK),
-        () -> (algaeMode)));
+    // OI.driverRB.whileTrue(new SetRobotState(superstructure,
+    // SuperState.GROUND_CORAL_PICKUP_BACK));
+    OI.driverRB.whileTrue(new ConditionalCommand(new SetRobotState(superstructure, SuperState.MANUAL_RESET),
+        new ConditionalCommand(new SetRobotState(superstructure,
+            SuperState.GROUND_ALGAE_PICKUP_BACK),
+            new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_BACK),
+            () -> (algaeMode)),
+        () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE || superstructure
+            .getCurrentSuperState() == SuperState.L3_PLACE
+            || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
+
+    OI.driverRB
+        .onFalse(new ConditionalCommand(new SetPivotState(pivot, PivotState.IDLE), new InstantCommand(),
+            () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE || superstructure
+                .getCurrentSuperState() == SuperState.L3_PLACE
+                || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
+
+    OI.driverLB
+        .onFalse(new ConditionalCommand(new SetPivotState(pivot, PivotState.IDLE), new InstantCommand(),
+            () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE || superstructure
+                .getCurrentSuperState() == SuperState.L3_PLACE
+                || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
 
     OI.driverLT.whileTrue(new SetRobotStateSimple(superstructure, SuperState.OUTAKE));
+    OI.driverLT.onFalse(new SetIntakeState(intake, IntakeState.DEFAULT));
 
-    OI.driverLB.whileTrue(new SetRobotState(superstructure, SuperState.FEEDER));
+    OI.driverLB.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.MANUAL_PLACE),
+        new SetRobotState(superstructure, SuperState.FEEDER),
+        () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE || superstructure
+            .getCurrentSuperState() == SuperState.L3_PLACE
+            || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
     OI.driverMenuButton.whileTrue(new SetRobotState(superstructure, SuperState.DEFAULT));
 
-    // OI.driverA.onTrue(new SetRobotStateSimpleOnce(superstructure, SuperState.CLIMB));
+    // OI.driverA.onTrue(new SetRobotStateSimpleOnce(superstructure,
+    // SuperState.CLIMB));
     OI.driverA.whileTrue(new ConditionalCommand(new SetRobotStateSimpleOnce(superstructure, SuperState.CLIMB),
         new SetClimberPivotTorque(climber, 80, 1.0), () -> (!manualMode)));
-    // OI.driverY.onTrue(new SetRobotStateSimpleOnce(superstructure, SuperState.DEPLOY_CLIMBER));
+    // OI.driverY.onTrue(new SetRobotStateSimpleOnce(superstructure,
+    // SuperState.DEPLOY_CLIMBER));
     OI.driverY.whileTrue(new ConditionalCommand(new SetRobotStateSimpleOnce(superstructure, SuperState.DEPLOY_CLIMBER),
         new SetClimberPivotTorque(climber, -80, 1.0), () -> (!manualMode)));
     // OI.driverY.whileTrue(new SetClimberPivotTorque(climber, 60, 0.2));

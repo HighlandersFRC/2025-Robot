@@ -190,11 +190,11 @@ public class Intake extends SubsystemBase {
       case OUTAKE:
         switch (intakeItem) {
           // case CORAL:
-          //   setIntakePercent(-0.5);
-          //   break;
+          // setIntakePercent(-0.5);
+          // break;
           // case ALGAE:
-          //   setIntakePercent(0.5);
-          //   break;
+          // setIntakePercent(0.5);
+          // break;
           default:
             if (algaeMode) {
               setIntakePercent(0.5);
@@ -210,7 +210,7 @@ public class Intake extends SubsystemBase {
       default:
         // System.out.println("Motor Current: " + intakeMotor.getTorqueCurrent());
         if (algaeMode) {
-          setIntakeTorque(-25, 0.2);
+          setIntakeTorque(-35, 0.5);
         } else {
           setIntakeTorque(25, 0.2);
         }
