@@ -37,6 +37,7 @@ import frc.robot.commands.SetPivotPercent;
 import frc.robot.commands.SetPivotState;
 import frc.robot.commands.SetRobotPose;
 import frc.robot.commands.SetRobotState;
+import frc.robot.commands.SetRobotStateComplicated;
 import frc.robot.commands.SetRobotStateOnce;
 import frc.robot.commands.SetRobotStateSimple;
 import frc.robot.commands.SetRobotStateSimpleOnce;
@@ -196,7 +197,7 @@ public class RobotContainer {
                 .getCurrentSuperState() == SuperState.L3_PLACE
                 || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
 
-    OI.driverLT.whileTrue(new SetRobotStateSimple(superstructure, SuperState.OUTAKE));
+    OI.driverLT.whileTrue(new SetRobotStateSimple(superstructure, SuperState.OUTAKE_DRIVE));
     OI.driverLT.onFalse(new SetIntakeState(intake, IntakeState.DEFAULT));
 
     OI.driverLB.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.MANUAL_PLACE),
@@ -225,7 +226,11 @@ public class RobotContainer {
         new ConditionalCommand(
             new SetRobotStateSimple(superstructure, SuperState.L1_PLACE),
             new ConditionalCommand(
-                new SetRobotState(superstructure, SuperState.PROCESSOR),
+                new ConditionalCommand(
+                    new SetRobotState(superstructure, SuperState.PROCESSOR),
+                    new SetRobotStateComplicated(superstructure,
+                        SuperState.AUTO_PROCESSOR, SuperState.DEFAULT),
+                    () -> manualMode),
                 new SetRobotStateOnce(superstructure, SuperState.AUTO_L1_PLACE),
                 () -> algaeMode),
             () -> (manualMode && !algaeMode)));
@@ -234,8 +239,11 @@ public class RobotContainer {
         new InstantCommand(), () -> (manualMode && !algaeMode)));
 
     OI.driverPOVLeft.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.L2_PLACE),
-        new ConditionalCommand(new SetRobotState(superstructure,
-            SuperState.L2_ALGAE_PICKUP),
+        new ConditionalCommand(new ConditionalCommand(
+            new SetRobotState(superstructure, SuperState.L2_ALGAE_PICKUP),
+            new SetRobotStateOnce(superstructure,
+                SuperState.AUTO_ALGAE_PICKUP),
+            () -> manualMode),
             new SetRobotStateOnce(superstructure, SuperState.AUTO_L2_PLACE), () -> algaeMode),
         () -> (manualMode && !algaeMode)));
 
@@ -243,8 +251,11 @@ public class RobotContainer {
         new InstantCommand(), () -> (manualMode && !algaeMode)));
 
     OI.driverPOVDown.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.L3_PLACE),
-        new ConditionalCommand(new SetRobotState(superstructure,
-            SuperState.L3_ALGAE_PICKUP),
+        new ConditionalCommand(new ConditionalCommand(
+            new SetRobotState(superstructure, SuperState.L3_ALGAE_PICKUP),
+            new SetRobotStateOnce(superstructure,
+                SuperState.AUTO_ALGAE_PICKUP),
+            () -> manualMode),
             new SetRobotStateOnce(superstructure, SuperState.AUTO_L3_PLACE), () -> algaeMode),
         () -> (manualMode && !algaeMode)));
 
@@ -252,8 +263,11 @@ public class RobotContainer {
         new InstantCommand(), () -> (manualMode && !algaeMode)));
 
     OI.driverPOVRight.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.L4_PLACE),
-        new ConditionalCommand(new SetRobotState(superstructure,
-            SuperState.NET),
+        new ConditionalCommand(new ConditionalCommand(
+            new SetRobotState(superstructure, SuperState.NET),
+            new SetRobotStateOnce(superstructure,
+                SuperState.AUTO_NET),
+            () -> manualMode),
             new SetRobotStateOnce(superstructure, SuperState.AUTO_L4_PLACE), () -> algaeMode),
         () -> (manualMode && !algaeMode)));
 

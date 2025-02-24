@@ -257,7 +257,17 @@ public class Pivot extends SubsystemBase {
         pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT.rotations);
         break;
       case REEF_ALGAE:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+            break;
+        }
         break;
       case NET:
         pivotToPosition(Constants.SetPoints.PivotPosition.kNET.rotations);
