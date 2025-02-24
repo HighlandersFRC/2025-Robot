@@ -235,7 +235,7 @@ public class RobotContainer {
                 () -> algaeMode),
             () -> (manualMode && !algaeMode)));
 
-    OI.driverPOVUp.onFalse(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.SCORE_L1),
+    OI.driverPOVUp.onFalse(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.DEFAULT),
         new InstantCommand(), () -> (manualMode && !algaeMode)));
 
     OI.driverPOVLeft.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.L2_PLACE),

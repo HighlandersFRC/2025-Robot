@@ -24,7 +24,7 @@ public class Elevator extends SubsystemBase {
 
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
   private final double elevatorAcceleration = 500.0;
-  private final double elevatorCruiseVelocity = 125.0;
+  private final double elevatorCruiseVelocity = 400.0;
 
   private final MotionMagicTorqueCurrentFOC elevatorMotionProfileRequest = new MotionMagicTorqueCurrentFOC(0);
 
@@ -127,10 +127,16 @@ public class Elevator extends SubsystemBase {
       elevatorMotorFollower.setControl(
           elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
     } else {
-      elevatorMotorMaster.setControl(
-          elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(1));
-      elevatorMotorFollower.setControl(
-          elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(1));
+      if (position > Constants.inchesToMeters(63.0) && getElevatorPosition() > Constants.inchesToMeters(62.0)) {
+        moveWithTorque(30, 0.3);
+      } else {
+        elevatorMotorMaster.setControl(
+            elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))
+                .withSlot(1));
+        elevatorMotorFollower.setControl(
+            elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position))
+                .withSlot(1));
+      }
     }
   }
 
