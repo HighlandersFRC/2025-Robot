@@ -209,7 +209,10 @@ public final class Constants {
     // public static final List<Map<ReefHeight, Pose3d>> redBranchPositions = new
     // ArrayList<>(); // Starting at the right
 
-    public static final Translation2d processorBlueFrontPlacingTranslation = new Translation2d(4.475, 6.055); //TODO: actually measure these
+    public static final Translation2d processorBlueFrontPlacingTranslation = new Translation2d(4.475, 6.055); // TODO:
+                                                                                                              // actually
+                                                                                                              // measure
+                                                                                                              // these
     public static final Rotation2d processorBlueFrontPlacingRotation = new Rotation2d(degreesToRadians(270));
 
     public static final Translation2d processorRedFrontPlacingTranslation = new Translation2d(4.475, 6.055);
@@ -720,10 +723,10 @@ public final class Constants {
     public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(29.5);
     public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.2);
 
-    public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.9);
+    public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.3);
     // public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.3);
     public static final double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(3.0);
-    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.2);
+    public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.1);
     // public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.1);
     public static final double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-3.0);
 

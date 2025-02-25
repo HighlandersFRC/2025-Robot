@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
@@ -159,6 +160,7 @@ public class Intake extends SubsystemBase {
         switch (intakeItem) {
           case CORAL:
             if (timeSinceItemSwitch > 1.0) {
+              double percent = Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) + 0.05;
               setIntakeTorque(35, 0.2);
             } else {
               setIntakePercent(1.0);
