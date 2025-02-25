@@ -909,6 +909,66 @@ public class Drive extends SubsystemBase {
     }
   }
 
+  public double[] getAlgaeMoreClosestSetpoint(double[] currentOdometry /* {x, y, thetaRadians} */) {
+    double x = currentOdometry[0];
+    double y = currentOdometry[1];
+    double theta = Constants.standardizeAngleDegrees(Math.toDegrees(currentOdometry[2]));
+    double dist = 100.0;
+    double currentDist = 100.0;
+    double[] chosenSetpoint = { x, y, Math.toRadians(theta) };
+    if (getFieldSide() == "red") {
+      for (int i = 0; i < Constants.Reef.algaeRedFrontPlacingPositionsMore.size(); i++) {
+        // currentDist = Math.sqrt(Math.pow((x -
+        // Constants.Reef.redFrontPlacingPositionsMore.get(i).getX()), 2)
+        // + Math.pow((y - Constants.Reef.redFrontPlacingPositionsMore.get(i).getY()), 2));
+        currentDist = Math.hypot(
+            x - Constants.Reef.algaeRedFrontPlacingPositionsMore.get(i).getX(),
+            y - Constants.Reef.algaeRedFrontPlacingPositionsMore.get(i).getY());
+        if (currentDist < dist) {
+          dist = currentDist;
+          if (getAngleDifferenceDegrees(theta,
+              Constants.Reef.algaeRedFrontPlacingPositionsMore.get(i).getRotation().getDegrees()) <= 90) {
+            autoPlacingFront = true;
+            chosenSetpoint[0] = Constants.Reef.algaeRedFrontPlacingPositionsMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.algaeRedFrontPlacingPositionsMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.algaeRedFrontPlacingPositionsMore.get(i).getRotation().getRadians();
+          } else {
+            autoPlacingFront = false;
+            chosenSetpoint[0] = Constants.Reef.algaeRedBackPlacingPositionsMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.algaeRedBackPlacingPositionsMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.algaeRedBackPlacingPositionsMore.get(i).getRotation().getRadians();
+          }
+        }
+      }
+    } else {
+      for (int i = 0; i < Constants.Reef.algaeBlueFrontPlacingPositionsMore.size(); i++) {
+        currentDist = Math.hypot(
+            x - Constants.Reef.algaeBlueFrontPlacingPositionsMore.get(i).getX(),
+            y - Constants.Reef.algaeBlueFrontPlacingPositionsMore.get(i).getY());
+        if (currentDist < dist) {
+          dist = currentDist;
+          if (getAngleDifferenceDegrees(theta,
+              Constants.Reef.algaeBlueFrontPlacingPositionsMore.get(i).getRotation().getDegrees()) <= 90) {
+            autoPlacingFront = true;
+            chosenSetpoint[0] = Constants.Reef.algaeBlueFrontPlacingPositionsMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.algaeBlueFrontPlacingPositionsMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.algaeBlueFrontPlacingPositionsMore.get(i).getRotation().getRadians();
+          } else {
+            autoPlacingFront = false;
+            chosenSetpoint[0] = Constants.Reef.algaeBlueBackPlacingPositionsMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.algaeBlueBackPlacingPositionsMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.algaeBlueBackPlacingPositionsMore.get(i).getRotation().getRadians();
+          }
+        }
+      }
+    }
+    if (Math.hypot(chosenSetpoint[0] - getMT2OdometryX(), chosenSetpoint[1] - getMT2OdometryY()) > 5) {
+      return getMT2Odometry();
+    } else {
+      return chosenSetpoint;
+    }
+  }
+
   public double[] getAlgaeClosestSetpoint(double[] currentOdometry /* {x, y, thetaRadians} */) {
     double x = currentOdometry[0];
     double y = currentOdometry[1];
@@ -1529,12 +1589,39 @@ public class Drive extends SubsystemBase {
         .sqrt(Math.pow((x - getMT2OdometryX()), 2)
             + Math.pow((y - getMT2OdometryY()), 2)) < 0.03
         && getAngleDifferenceDegrees(Math.toDegrees(theta),
-            Math.toDegrees(getMT2OdometryAngle())) < 0.5) {
+            Math.toDegrees(getMT2OdometryAngle())) < 1.5) {
       hitNumber += 1;
     } else {
       hitNumber = 0;
     }
-    if (hitNumber > 7) {
+    if (hitNumber > 4) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean hitSetPointGenerous(double x, double y, double theta) { // adjust for l4 TODO:
+    // Logger.recordOutput("Error for setpoint",
+    // Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
+    // + Math.pow((y - getMT2OdometryY()), 2)));
+    // System.out.println("X Y error: "
+    // + Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
+    // + Math.pow((y - getMT2OdometryY()), 2))
+    // + " Angle error: " + getAngleDifferenceDegrees(Math.toDegrees(theta),
+    // Math.toDegrees(getMT2OdometryAngle()))
+    // + " Hits: "
+    // + hitNumber);
+    if (Math
+        .sqrt(Math.pow((x - getMT2OdometryX()), 2)
+            + Math.pow((y - getMT2OdometryY()), 2)) < 0.10
+        && getAngleDifferenceDegrees(Math.toDegrees(theta),
+            Math.toDegrees(getMT2OdometryAngle())) < 2.5) {
+      hitNumber += 1;
+    } else {
+      hitNumber = 0;
+    }
+    if (hitNumber > 3) {
       return true;
     } else {
       return false;
@@ -1997,12 +2084,14 @@ public class Drive extends SubsystemBase {
             getAlgaeClosestSetpoint(getMT2Odometry())[2]);
         break;
       case ALGAE_MORE:
-        if (getAngleDifferenceDegrees(Math.toDegrees(getAlgaeClosestSetpoint(getMT2Odometry())[2]),
-            Math.toDegrees(getMT2OdometryAngle())) <= 90) {
-          autoRobotCentricDrive(scoreL23Vector, 0);
-        } else {
-          autoRobotCentricDrive(scoreL23Vector, 0);
-        }
+        // if (getAngleDifferenceDegrees(Math.toDegrees(getAlgaeClosestSetpoint(getMT2Odometry())[2]),
+        //     Math.toDegrees(getMT2OdometryAngle())) <= 90) {
+        //   autoRobotCentricDrive(scoreL23Vector, 0);
+        // } else {
+        //   autoRobotCentricDrive(scoreL23Vector, 0);
+        // }
+        driveToPoint(getAlgaeMoreClosestSetpoint(getMT2Odometry())[0],
+            getAlgaeMoreClosestSetpoint(getMT2Odometry())[1], getAlgaeMoreClosestSetpoint(getMT2Odometry())[2]);
         break;
       case PROCESSOR:
         if (OI.isBlueSide()) {

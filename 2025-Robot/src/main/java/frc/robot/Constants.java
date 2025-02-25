@@ -258,6 +258,11 @@ public final class Constants {
     public static final List<Pose2d> algaeBlueBackPlacingPositions = new ArrayList<>();
     public static final List<Pose2d> algaeRedBackPlacingPositions = new ArrayList<>();
 
+    public static final List<Pose2d> algaeBlueFrontPlacingPositionsMore = new ArrayList<>();
+    public static final List<Pose2d> algaeRedFrontPlacingPositionsMore = new ArrayList<>();
+    public static final List<Pose2d> algaeBlueBackPlacingPositionsMore = new ArrayList<>();
+    public static final List<Pose2d> algaeRedBackPlacingPositionsMore = new ArrayList<>();
+
     static {
       centerFaces[0] = new Pose2d(
           inchesToMeters(144.003),
@@ -299,11 +304,15 @@ public final class Constants {
         Pose2d l4BackLeft = new Pose2d();
         Pose2d algaeFront = new Pose2d();
         Pose2d algaeBack = new Pose2d();
+        Pose2d algaeFrontMore = new Pose2d();
+        Pose2d algaeBackMore = new Pose2d();
         Pose2d poseDirection = new Pose2d(center, Rotation2d.fromDegrees(180 - (60 * face)));
         double adjustX = inchesToMeters(30.738);
         double adjustY = inchesToMeters(6.469);
         double adjustAlgaeX = inchesToMeters(35.738);
         double adjustAlgaeY = inchesToMeters(0.0);
+        double adjustAlgaeMoreX = inchesToMeters(16.738);
+        double adjustAlgaeMoreY = inchesToMeters(0.0);
 
         algaeFront = new Pose2d(
             new Translation2d(
@@ -332,6 +341,39 @@ public final class Constants {
                     .getX(),
                 poseDirection
                     .transformBy(new Transform2d(adjustAlgaeX, adjustAlgaeY, new Rotation2d()))
+                    .transformBy(
+                        new Transform2d(Physical.INTAKE_X_OFFSET_BACK_ALGAE, Physical.INTAKE_Y_OFFSET_BACK_ALGAE,
+                            new Rotation2d(Math.PI)))
+                    .getY()),
+            new Rotation2d(
+                poseDirection.getRotation().getRadians()));
+        algaeFrontMore = new Pose2d(
+            new Translation2d(
+                poseDirection
+                    .transformBy(new Transform2d(adjustAlgaeMoreX, adjustAlgaeMoreY, new Rotation2d()))
+                    .transformBy(
+                        new Transform2d(Physical.INTAKE_X_OFFSET_FRONT_ALGAE, Physical.INTAKE_Y_OFFSET_FRONT_ALGAE,
+                            new Rotation2d(Math.PI)))
+                    .getX(),
+                poseDirection
+                    .transformBy(new Transform2d(adjustAlgaeMoreX, adjustAlgaeMoreY, new Rotation2d()))
+                    .transformBy(
+                        new Transform2d(Physical.INTAKE_X_OFFSET_FRONT_ALGAE, Physical.INTAKE_Y_OFFSET_FRONT_ALGAE,
+                            new Rotation2d(Math.PI)))
+                    .getY()),
+            new Rotation2d(
+                poseDirection.getRotation().getRadians() - Math.PI));
+
+        algaeBackMore = new Pose2d(
+            new Translation2d(
+                poseDirection
+                    .transformBy(new Transform2d(adjustAlgaeMoreX, adjustAlgaeMoreY, new Rotation2d()))
+                    .transformBy(
+                        new Transform2d(Physical.INTAKE_X_OFFSET_BACK_ALGAE, Physical.INTAKE_Y_OFFSET_BACK_ALGAE,
+                            new Rotation2d(Math.PI)))
+                    .getX(),
+                poseDirection
+                    .transformBy(new Transform2d(adjustAlgaeMoreX, adjustAlgaeMoreY, new Rotation2d()))
                     .transformBy(
                         new Transform2d(Physical.INTAKE_X_OFFSET_BACK_ALGAE, Physical.INTAKE_Y_OFFSET_BACK_ALGAE,
                             new Rotation2d(Math.PI)))
@@ -523,6 +565,8 @@ public final class Constants {
         l3BlueBackPlacingPositions.add(l3BackLeft);
         algaeBlueFrontPlacingPositions.add(algaeFront);
         algaeBlueBackPlacingPositions.add(algaeBack);
+        algaeBlueFrontPlacingPositionsMore.add(algaeFrontMore);
+        algaeBlueBackPlacingPositionsMore.add(algaeBackMore);
       }
 
       for (Pose2d bluePose : algaeBlueFrontPlacingPositions) {
@@ -545,6 +589,28 @@ public final class Constants {
             bluePose.getRotation().getRadians() + Math.PI);
         redPose = new Pose2d(mirroredTranslation, mirroredRotation);
         algaeRedBackPlacingPositions.add(redPose);
+      }
+
+      for (Pose2d bluePose : algaeBlueFrontPlacingPositionsMore) {
+        Pose2d redPose = new Pose2d();
+        Translation2d mirroredTranslation = new Translation2d(
+            Constants.Physical.FIELD_LENGTH - bluePose.getX(),
+            Constants.Physical.FIELD_WIDTH - bluePose.getY());
+        Rotation2d mirroredRotation = new Rotation2d(
+            bluePose.getRotation().getRadians() + Math.PI);
+        redPose = new Pose2d(mirroredTranslation, mirroredRotation);
+        algaeRedFrontPlacingPositionsMore.add(redPose);
+      }
+
+      for (Pose2d bluePose : algaeBlueBackPlacingPositionsMore) {
+        Pose2d redPose = new Pose2d();
+        Translation2d mirroredTranslation = new Translation2d(
+            Constants.Physical.FIELD_LENGTH - bluePose.getX(),
+            Constants.Physical.FIELD_WIDTH - bluePose.getY());
+        Rotation2d mirroredRotation = new Rotation2d(
+            bluePose.getRotation().getRadians() + Math.PI);
+        redPose = new Pose2d(mirroredTranslation, mirroredRotation);
+        algaeRedBackPlacingPositionsMore.add(redPose);
       }
 
       for (Pose2d bluePose : blueFrontPlacingPositions) {
@@ -644,9 +710,9 @@ public final class Constants {
     public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-3.5);
 
     public static final double INTAKE_X_OFFSET_FRONT_ALGAE = inchesToMeters(25.5 + 5.0);
-    public static final double INTAKE_Y_OFFSET_FRONT_ALGAE = inchesToMeters(3.5);
+    public static final double INTAKE_Y_OFFSET_FRONT_ALGAE = inchesToMeters(3.8);
     public static final double INTAKE_X_OFFSET_BACK_ALGAE = inchesToMeters(26.5 + 5.0);
-    public static final double INTAKE_Y_OFFSET_BACK_ALGAE = inchesToMeters(-3.5);
+    public static final double INTAKE_Y_OFFSET_BACK_ALGAE = inchesToMeters(-3.8);
 
     public static final double L3_INTAKE_X_OFFSET_FRONT = inchesToMeters(29.5);
     public static final double L3_INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.2);

@@ -15,6 +15,7 @@ import frc.robot.Constants.SetPoints.ElevatorPosition;
 import frc.robot.subsystems.Climber.ClimbState;
 import frc.robot.subsystems.Drive.DriveState;
 import frc.robot.subsystems.Elevator.ElevatorState;
+import frc.robot.subsystems.Intake.IntakeItem;
 import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.Lights.LightsState;
 import frc.robot.subsystems.Pivot.PivotFlip;
@@ -334,7 +335,7 @@ public class Superstructure extends SubsystemBase {
         if (OI.isBlueSide()) {
           if (drive.hitSetPoint(Constants.Reef.processorBlueFrontPlacingPosition.getX(),
               Constants.Reef.processorBlueFrontPlacingPosition
-                  .getX(),
+                  .getY(),
               drive.getMT2OdometryAngle())
               && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kPROCESSOR.meters
                   - 5.0 / 39.37
@@ -349,7 +350,22 @@ public class Superstructure extends SubsystemBase {
             currentSuperState = SuperState.AUTO_PROCESSOR;
           }
         } else {
-
+          if (drive.hitSetPoint(Constants.Reef.processorRedFrontPlacingPosition.getX(),
+              Constants.Reef.processorRedFrontPlacingPosition
+                  .getY(),
+              drive.getMT2OdometryAngle())
+              && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kPROCESSOR.meters
+                  - 5.0 / 39.37
+              && (drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+                  Constants.Reef.processorRedFrontPlacingPosition.getRotation().getDegrees()) < 10.0
+                  || drive
+                      .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+                          Constants.Reef.processorRedBackPlacingPosition.getRotation().getDegrees()) < 10.0)) {
+            wantedSuperState = SuperState.OUTAKE_DRIVE;
+            currentSuperState = SuperState.OUTAKE_DRIVE;
+          } else {
+            currentSuperState = SuperState.AUTO_PROCESSOR;
+          }
         }
         break;
       case AUTO_NET:
@@ -377,7 +393,7 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.L3_ALGAE_PICKUP;
         break;
       case AUTO_ALGAE_PICKUP:
-        if (drive.hitSetPoint(drive.getAlgaeClosestSetpoint(drive.getMT2Odometry())[0],
+        if (drive.hitSetPointGenerous(drive.getAlgaeClosestSetpoint(drive.getMT2Odometry())[0],
             drive.getAlgaeClosestSetpoint(drive.getMT2Odometry())[1],
             drive.getAlgaeClosestSetpoint(drive.getMT2Odometry())[2])
             && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kL2ALGAE.meters - 5.0 / 39.37) {
@@ -766,11 +782,11 @@ public class Superstructure extends SubsystemBase {
     elevator.setWantedState(ElevatorState.PROCESSOR);
     intake.setWantedState(IntakeState.DEFAULT);
     if (drive.getAutoPlacementSideIsFront()) {
-      pivot.setWantedFlip(PivotFlip.FRONT);
-      twist.setWantedState(TwistState.DOWN);
-    } else {
       pivot.setWantedFlip(PivotFlip.BACK);
       twist.setWantedState(TwistState.UP);
+    } else {
+      pivot.setWantedFlip(PivotFlip.FRONT);
+      twist.setWantedState(TwistState.DOWN);
     }
     pivot.setWantedState(PivotState.PROCESSOR);
   }
@@ -1015,7 +1031,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoAlgaePickupState() {
-    lights.setWantedState(LightsState.FEEDER);
+    lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.ALGAE);
     intake.setWantedState(IntakeState.ALGAE_INTAKE);
     if (drive.isGoingForL3Algae()) {
@@ -1038,7 +1054,7 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoAlgaePickupMoreState() {
     lights.setWantedState(LightsState.FEEDER);
-    if (drive.getDistanceFromAlgaeSetpoint() < 8.5 / 39.37 && Timer.getFPGATimestamp() - algaePickupTime < 3.0
+    if (intake.getIntakeItem() == IntakeItem.NONE
         && Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) < 0.1 && Math
             .hypot(OI.getDriverRightX(), OI.getDriverRightY()) < 0.1
         && !finishedAlgae) {

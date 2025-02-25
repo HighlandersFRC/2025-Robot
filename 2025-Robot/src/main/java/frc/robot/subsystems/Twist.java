@@ -72,13 +72,15 @@ public class Twist extends SubsystemBase {
   }
 
   public void twistToPosition(double rotations) {
-    if (algaeMode) {
-      twistMotor.setControl(this.twistTorqueCurrentFOC
-          .withPosition(rotations).withEnableFOC(true).withSlot(1));
-    } else {
-      twistMotor.setControl(this.twistTorqueCurrentFOC
-          .withPosition(rotations).withEnableFOC(true).withSlot(0));
-    }
+
+    if (algaeMode) { //TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
+      twistMotor.setControl(this.twistTorqueCurrentFOC //TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
+          .withPosition(rotations).withEnableFOC(true).withSlot(1)); //TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
+    } else { //TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
+      twistMotor.setControl(this.twistTorqueCurrentFOC //TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
+          .withPosition(rotations).withEnableFOC(true).withSlot(0)); //TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
+    } //TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
+
     // Logger.recordOutput("Twist Setpoint", rotations);
     // twistMotor.setControl(this.twistTorqueCurrentFOC
     // .withPosition(rotations).withEnableFOC(true));

@@ -273,7 +273,17 @@ public class Pivot extends SubsystemBase {
         pivotToPosition(Constants.SetPoints.PivotPosition.kNET.rotations);
         break;
       case PROCESSOR:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+            break;
+        }
         break;
       case PREP:
         if (getPivotPosition() > 0) {

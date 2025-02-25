@@ -18,7 +18,8 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   String m_fieldSide = "blue";
-  boolean rjPressed = false;
+  boolean bPressed = false;
+  boolean xPressed = false;
 
   @Override
   public void robotInit() {
@@ -75,19 +76,28 @@ public class Robot extends LoggedRobot {
       System.out.println("Problem with logging");
     }
 
-    if (OI.isManualMode()) {
-      m_robotContainer.manualMode = true;
-    } else {
-      m_robotContainer.manualMode = false;
-    }
+    // if (OI.isManualMode()) {
+    //   m_robotContainer.manualMode = true;
+    // } else {
+    //   m_robotContainer.manualMode = false;
+    // }
 
-    if (OI.driverRJ.getAsBoolean()) {
-      if (rjPressed) {
+    if (OI.driverB.getAsBoolean()) {
+      if (bPressed) {
         m_robotContainer.algaeMode = !m_robotContainer.algaeMode;
-        rjPressed = false;
+        bPressed = false;
       }
     } else {
-      rjPressed = true;
+      bPressed = true;
+    }
+
+    if (OI.driverX.getAsBoolean()) {
+      if (xPressed) {
+        m_robotContainer.manualMode = !m_robotContainer.manualMode;
+        xPressed = false;
+      }
+    } else {
+      xPressed = true;
     }
 
     m_robotContainer.twist.setAlgaeMode(m_robotContainer.algaeMode);

@@ -241,8 +241,8 @@ public class RobotContainer {
     OI.driverPOVLeft.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.L2_PLACE),
         new ConditionalCommand(new ConditionalCommand(
             new SetRobotState(superstructure, SuperState.L2_ALGAE_PICKUP),
-            new SetRobotStateOnce(superstructure,
-                SuperState.AUTO_ALGAE_PICKUP),
+            new SetRobotStateComplicated(superstructure,
+                SuperState.AUTO_ALGAE_PICKUP, SuperState.DEFAULT),
             () -> manualMode),
             new SetRobotStateOnce(superstructure, SuperState.AUTO_L2_PLACE), () -> algaeMode),
         () -> (manualMode && !algaeMode)));
@@ -253,8 +253,8 @@ public class RobotContainer {
     OI.driverPOVDown.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.L3_PLACE),
         new ConditionalCommand(new ConditionalCommand(
             new SetRobotState(superstructure, SuperState.L3_ALGAE_PICKUP),
-            new SetRobotStateOnce(superstructure,
-                SuperState.AUTO_ALGAE_PICKUP),
+            new SetRobotStateComplicated(superstructure,
+                SuperState.AUTO_ALGAE_PICKUP, SuperState.DEFAULT),
             () -> manualMode),
             new SetRobotStateOnce(superstructure, SuperState.AUTO_L3_PLACE), () -> algaeMode),
         () -> (manualMode && !algaeMode)));
@@ -265,8 +265,8 @@ public class RobotContainer {
     OI.driverPOVRight.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.L4_PLACE),
         new ConditionalCommand(new ConditionalCommand(
             new SetRobotState(superstructure, SuperState.NET),
-            new SetRobotStateOnce(superstructure,
-                SuperState.AUTO_NET),
+            new SetRobotStateComplicated(superstructure,
+                SuperState.AUTO_NET, SuperState.DEFAULT),
             () -> manualMode),
             new SetRobotStateOnce(superstructure, SuperState.AUTO_L4_PLACE), () -> algaeMode),
         () -> (manualMode && !algaeMode)));
