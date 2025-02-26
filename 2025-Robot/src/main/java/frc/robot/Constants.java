@@ -700,6 +700,20 @@ public final class Constants {
     public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
         ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
 
+    public static final double RED_LEFT_FEEDER_X = 16.324;
+    public static final double RED_LEFT_FEEDER_Y = 1.188;
+    public static final double RED_LEFT_FEEDER_THETA = Math.toRadians(126.0);
+
+    public static final Pose2d RED_LEFT_FEEDER = new Pose2d(RED_LEFT_FEEDER_X, RED_LEFT_FEEDER_Y,
+        new Rotation2d(RED_LEFT_FEEDER_THETA));
+    public static final Pose2d RED_RIGHT_FEEDER = new Pose2d(
+        RED_LEFT_FEEDER_X, FIELD_WIDTH - RED_LEFT_FEEDER_Y, new Rotation2d(Math.toRadians(234.0)));
+
+    public static final Pose2d BLUE_RIGHT_FEEDER = new Pose2d(
+        FIELD_LENGTH - RED_LEFT_FEEDER_X, RED_LEFT_FEEDER_Y, new Rotation2d(Math.toRadians(54.0)));
+    public static final Pose2d BLUE_LEFT_FEEDER = new Pose2d(
+        FIELD_LENGTH - RED_LEFT_FEEDER_X, FIELD_WIDTH - RED_LEFT_FEEDER_Y, new Rotation2d(Math.toRadians(-54.0)));
+
     // public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(22.5);
     // public static final double INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.3);
     // public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
