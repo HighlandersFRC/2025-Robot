@@ -42,6 +42,7 @@ public final class Constants {
                 "Test.polarauto",
                 "3piece.polarauto",
                 "3PieceFeeder.polarauto",
+                "3PieceFeederSmart.polarauto",
                 "4PieceFeeder.polarauto",
         };
 
@@ -196,7 +197,10 @@ public final class Constants {
     }
 
     public static class Reef {
-        public static final Translation2d center = new Translation2d(inchesToMeters(176.746),
+        public static final Translation2d centerBlue = new Translation2d(inchesToMeters(176.746),
+                inchesToMeters(158.501));
+        public static final Translation2d centerRed = new Translation2d(
+                Constants.Physical.FIELD_LENGTH - inchesToMeters(176.746),
                 inchesToMeters(158.501));
         public static final double faceToZoneLine = inchesToMeters(12); // Side of the reef to the inside of the reef
                                                                         // zone line
@@ -325,7 +329,7 @@ public final class Constants {
                 Pose2d algaeBack = new Pose2d();
                 Pose2d algaeFrontMore = new Pose2d();
                 Pose2d algaeBackMore = new Pose2d();
-                Pose2d poseDirection = new Pose2d(center, Rotation2d.fromDegrees(180 - (60 * face)));
+                Pose2d poseDirection = new Pose2d(centerBlue, Rotation2d.fromDegrees(180 - (60 * face)));
                 double adjustX = inchesToMeters(30.738);
                 double adjustY = inchesToMeters(6.469);
                 double adjustAlgaeX = inchesToMeters(35.738);
