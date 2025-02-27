@@ -2205,10 +2205,13 @@ public class Drive extends SubsystemBase {
             if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 324
                 &&
                 Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 144)) {
-              driveToTheta(234);
-
+              // driveToTheta(234);
+              driveToPoint(Constants.Reef.RED_RIGHT_FEEDER.getX(), Constants.Reef.RED_RIGHT_FEEDER.getY(),
+                  Constants.Reef.RED_RIGHT_FEEDER.getRotation().getRadians() + Math.PI);
             } else { // robot back side redside left feeder (fieldside top right)
-              driveToTheta(54);
+              // driveToTheta(54);
+              driveToPoint(Constants.Reef.RED_RIGHT_FEEDER.getX(), Constants.Reef.RED_RIGHT_FEEDER.getY(),
+                  Constants.Reef.RED_RIGHT_FEEDER.getRotation().getRadians());
             }
           } else { // redside left feeder (fieldside bottom right)
             if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 36
@@ -2218,9 +2221,13 @@ public class Drive extends SubsystemBase {
                 (Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 360
                     &&
                     Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 216)) {
-              driveToTheta(306);
+              // driveToTheta(306);
+              driveToPoint(Constants.Reef.RED_LEFT_FEEDER.getX(), Constants.Reef.RED_LEFT_FEEDER.getY(),
+                  Constants.Reef.RED_LEFT_FEEDER.getRotation().getRadians() + Math.PI);
             } else { // robot back side redside left (fieldside bottom right)
-              driveToTheta(126);
+              // driveToTheta(126);
+              driveToPoint(Constants.Reef.RED_LEFT_FEEDER.getX(), Constants.Reef.RED_LEFT_FEEDER.getY(),
+                  Constants.Reef.RED_LEFT_FEEDER.getRotation().getRadians());
             }
           }
         } else { // blue side
@@ -2228,9 +2235,13 @@ public class Drive extends SubsystemBase {
             if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 324
                 &&
                 Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 144)) {
-              driveToTheta(234);
+              // driveToTheta(234);
+              driveToPoint(Constants.Reef.BLUE_RIGHT_FEEDER.getX(), Constants.Reef.BLUE_RIGHT_FEEDER.getY(),
+                  Constants.Reef.BLUE_RIGHT_FEEDER.getRotation().getRadians() + Math.PI);
             } else { // robot back side blueside right (fieldside bottom left)
-              driveToTheta(54);
+              // driveToTheta(54);
+              driveToPoint(Constants.Reef.BLUE_RIGHT_FEEDER.getX(), Constants.Reef.BLUE_RIGHT_FEEDER.getY(),
+                  Constants.Reef.BLUE_RIGHT_FEEDER.getRotation().getRadians());
             }
           } else { // blue side left feeder (fieldside top left)
             if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 36
@@ -2240,9 +2251,13 @@ public class Drive extends SubsystemBase {
                 (Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 360
                     &&
                     Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 216)) {
-              driveToTheta(306);
+              // driveToTheta(306);
+              driveToPoint(Constants.Reef.BLUE_LEFT_FEEDER.getX(), Constants.Reef.BLUE_LEFT_FEEDER.getY(),
+                  Constants.Reef.BLUE_LEFT_FEEDER.getRotation().getRadians() + Math.PI);
             } else { // robot back side blueside left (fieldside top left)
-              driveToTheta(126);
+              // driveToTheta(126);
+              driveToPoint(Constants.Reef.BLUE_LEFT_FEEDER.getX(), Constants.Reef.BLUE_LEFT_FEEDER.getY(),
+                  Constants.Reef.BLUE_LEFT_FEEDER.getRotation().getRadians());
             }
           }
         }

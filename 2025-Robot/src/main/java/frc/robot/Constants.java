@@ -42,6 +42,7 @@ public final class Constants {
         "Test.polarauto",
         "3piece.polarauto",
         "3PieceFeeder.polarauto",
+        "3PieceFeederSmart.polarauto",
         "4PieceFeeder.polarauto",
     };
 
