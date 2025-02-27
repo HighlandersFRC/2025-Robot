@@ -41,14 +41,14 @@ public class Twist extends SubsystemBase {
 
   public void init() {
     TalonFXConfiguration twistConfig = new TalonFXConfiguration();
-    twistConfig.Slot0.kP = 1000.0 * Constants.Ratios.TWIST_GEAR_RATIO;
-    twistConfig.Slot0.kI = 5.0;
+    twistConfig.Slot0.kP = 2000.0 * Constants.Ratios.TWIST_GEAR_RATIO;
+    twistConfig.Slot0.kI = 100.0;
     twistConfig.Slot0.kD = 1.6 * Constants.Ratios.TWIST_GEAR_RATIO;
-    twistConfig.Slot0.kS = 300.0 * Constants.Ratios.TWIST_GEAR_RATIO;
-    twistConfig.Slot1.kP = 140.0 * Constants.Ratios.TWIST_GEAR_RATIO;
-    twistConfig.Slot1.kI = 0.0;
+    twistConfig.Slot0.kS = 600.0 * Constants.Ratios.TWIST_GEAR_RATIO;
+    twistConfig.Slot1.kP = 800.0 * Constants.Ratios.TWIST_GEAR_RATIO;
+    twistConfig.Slot1.kI = 50.0;
     twistConfig.Slot1.kD = 1.6 * Constants.Ratios.TWIST_GEAR_RATIO;
-    twistConfig.Slot1.kS = 4.0 * Constants.Ratios.TWIST_GEAR_RATIO;
+    twistConfig.Slot1.kS = 200.0 * Constants.Ratios.TWIST_GEAR_RATIO;
     twistConfig.MotionMagic.MotionMagicJerk = this.twistJerk;
     twistConfig.MotionMagic.MotionMagicAcceleration = this.twistAcceleration;
     twistConfig.MotionMagic.MotionMagicCruiseVelocity = this.twistCruiseVelocity;
@@ -72,8 +72,6 @@ public class Twist extends SubsystemBase {
   }
 
   public void twistToPosition(double rotations) {
-    // System.out.println(rotations * Constants.Ratios.TWIST_GEAR_RATIO);
-
     if (algaeMode) { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
       twistMotor.setControl(this.twistTorqueCurrentFOC // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
           .withPosition(rotations * Constants.Ratios.TWIST_GEAR_RATIO).withEnableFOC(true).withSlot(1)); // TODO:

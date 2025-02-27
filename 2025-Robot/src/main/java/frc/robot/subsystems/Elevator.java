@@ -308,10 +308,6 @@ public class Elevator extends SubsystemBase {
         moveElevatorToPosition(getElevatorL3ScoreSetpoint());
         break;
       default:
-        // Logger.recordOutput("Elevator Velocity", Math
-        // .abs(
-        //
-        // Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())));
         if (firstTimeIdle) {
           idleTime = Timer.getFPGATimestamp();
           firstTimeIdle = false;

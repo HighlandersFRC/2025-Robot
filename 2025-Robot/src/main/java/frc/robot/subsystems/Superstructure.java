@@ -1266,7 +1266,7 @@ public class Superstructure extends SubsystemBase {
       outakeIdleInitTime = Timer.getFPGATimestamp();
       outakeIdleInit = true;
     }
-    if (Timer.getFPGATimestamp() - outakeIdleInitTime > 0.25) {
+    if (Timer.getFPGATimestamp() - outakeIdleInitTime > 0.4) {
       lights.setWantedState(LightsState.DEFAULT);
       drive.setWantedState(DriveState.IDLE);
       // pivot.setWantedFlip(PivotFlip.FRONT);
