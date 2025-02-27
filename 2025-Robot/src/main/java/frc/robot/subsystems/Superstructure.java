@@ -602,7 +602,7 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoL1PlaceState() {
     lights.setWantedState(LightsState.PLACING);
-    drive.setWantedState(DriveState.DEFAULT);
+    drive.setWantedState(DriveState.AUTO_L1);
     elevator.setWantedState(ElevatorState.AUTO_L1);
     intake.setWantedState(IntakeState.DEFAULT);
     // System.out.println(drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),

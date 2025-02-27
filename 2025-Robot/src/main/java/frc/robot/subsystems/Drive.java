@@ -267,6 +267,7 @@ public class Drive extends SubsystemBase {
     FEEDER,
     SCORE_L23,
     AUTO_FEEDER,
+    AUTO_L1,
   }
 
   private DriveState wantedState = DriveState.IDLE;
@@ -2076,6 +2077,8 @@ public class Drive extends SubsystemBase {
         return DriveState.SCORE_L23;
       case AUTO_FEEDER:
         return DriveState.AUTO_FEEDER;
+      case AUTO_L1:
+        return DriveState.AUTO_L1;
       default:
         return DriveState.IDLE;
     }
@@ -2096,8 +2099,28 @@ public class Drive extends SubsystemBase {
     return Math.hypot(Math.abs(getMT2OdometryX() - algaeSetpoint[0]), Math.abs(getMT2OdometryY() - algaeSetpoint[1]));
   }
 
+  public double getThetaToCenterReef() {
+    double theta = 0.0;
+    if (OI.isRedSide()) {
+      theta = Math.atan2(Constants.Reef.centerRed.getY() - getMT2OdometryY(),
+          Constants.Reef.centerRed.getX() - getMT2OdometryX());
+    } else {
+      theta = Math.atan2((Constants.Reef.centerBlue.getY() - getMT2OdometryY()),
+          (Constants.Reef.centerBlue.getX() - getMT2OdometryX()));
+    }
+    if (Math.abs(theta - getMT2OdometryAngle()) > Math.PI / 2) {
+      theta -= Math.PI;
+    }
+    return theta;
+  }
+
   @Override
   public void periodic() {
+    System.out.println(Math.toDegrees(getThetaToCenterReef()));
+    Translation2d t1 = new Translation2d(getMT2OdometryX(), getMT2OdometryY());
+    Rotation2d r1 = new Rotation2d(getThetaToCenterReef());
+    Pose2d p1 = new Pose2d(t1, r1);
+    Logger.recordOutput("L1 Auto Angle", p1);
     l23Setpoint = getReefClosestSetpoint(getMT2Odometry());
     algaeSetpoint = getAlgaeClosestSetpoint(getMT2Odometry());
     // Logger.recordOutput("Robot Odometry", getMT2Odometry());
@@ -2117,6 +2140,10 @@ public class Drive extends SubsystemBase {
         teleopDrive();
         break;
       case IDLE:
+        break;
+      case AUTO_L1:
+        // driveToTheta(getThetaToCenterReef());
+        System.out.println(Math.toDegrees(getThetaToCenterReef()));
         break;
       case REEF:
         driveToPoint(getReefClosestSetpoint(getMT2Odometry())[0], getReefClosestSetpoint(getMT2Odometry())[1],
