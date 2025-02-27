@@ -606,7 +606,7 @@ public class Superstructure extends SubsystemBase {
     elevator.setWantedState(ElevatorState.AUTO_L1);
     intake.setWantedState(IntakeState.DEFAULT);
     // System.out.println(drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-    //     Math.toDegrees(drive.getReefClosestSetpointFrontOnly(drive.getMT2Odometry())[2])));
+    // Math.toDegrees(drive.getReefClosestSetpointFrontOnly(drive.getMT2Odometry())[2])));
     if (drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
         Math.toDegrees(drive.getReefClosestSetpointFrontOnly(drive.getMT2Odometry())[2])) < 90) {
       pivot.setWantedFlip(PivotFlip.FRONT);
@@ -1275,7 +1275,7 @@ public class Superstructure extends SubsystemBase {
       } else {
         elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
       }
-      if (Math.abs(twist.getTwistPosition()) < 15) {
+      if (Math.abs(twist.getTwistPosition()) < 15 && elevator.getElevatorPosition() < 45) {
         pivot.setWantedState(PivotState.DEFAULT);
       }
       twist.setWantedState(TwistState.SIDE);
