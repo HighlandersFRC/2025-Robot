@@ -159,12 +159,12 @@ public class Intake extends SubsystemBase {
       case CORAL_INTAKE:
         switch (intakeItem) {
           case CORAL:
-            if (timeSinceItemSwitch > 1.0) {
-              double percent = Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) + 0.05;
-              setIntakeTorque(35, 0.2);
-            } else {
-              setIntakePercent(1.0);
-            }
+            // if (timeSinceItemSwitch > 1.0) {
+            double percent = Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) + 0.05;
+            setIntakeTorque(35, 0.1);
+            // } else {
+            // setIntakePercent(1.0);
+            // }
             break;
           default:
             setIntakePercent(1.0);
