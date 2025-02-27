@@ -902,7 +902,7 @@ public final class Constants {
     public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
     public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
     public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
-    public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(9.0);
+    public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(10.0);
     public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(18);
     public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(17);
     public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(33);
@@ -959,7 +959,7 @@ public final class Constants {
       }
     }
 
-    public static final double PIVOT_L1_POSITION_D = 85.0;
+    public static final double PIVOT_L1_POSITION_D = 90.0;
     public static final double PIVOT_L23_POSITION_D = 55.0;
     // public static final double PIVOT_AUTO_L23_POSITION_D = 45.0;
     public static final double PIVOT_AUTO_L2_POSITION_D = 45.0;

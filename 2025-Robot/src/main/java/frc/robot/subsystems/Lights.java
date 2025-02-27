@@ -233,6 +233,8 @@ public class Lights extends SubsystemBase {
     candleFront.setLEDs(r, g, b);
   }
 
+  private AllianceState lastAllianceState = AllianceState.RED;
+
   @Override
   public void periodic() {
 
@@ -240,6 +242,11 @@ public class Lights extends SubsystemBase {
       allianceState = AllianceState.RED;
     } else {
       allianceState = AllianceState.BLUE;
+    }
+
+    if (allianceState != lastAllianceState) {
+      lastAllianceState = allianceState;
+      clearAnimations();
     }
 
     LightsState newState = handleStateTransition();
@@ -264,6 +271,17 @@ public class Lights extends SubsystemBase {
         default:
           candleFront.setLEDs(10, 50, 10);
           candleSwerve.setLEDs(10, 50, 10);
+          break;
+      }
+    } else {
+      switch (allianceState) {
+        case RED:
+          candleSwerve.setLEDs(50, 0, 0);
+          break;
+        case BLUE:
+          candleSwerve.setLEDs(0, 0, 50);
+          break;
+        default:
           break;
       }
     }
@@ -324,11 +342,13 @@ public class Lights extends SubsystemBase {
         switch (allianceState) {
           case RED:
             setRedBouncing();
+            // setAllBlue();
             // candleSwerve.clearAnimation(0);
             // candleSwerve.setLEDs(0, 0, 0);
             break;
           default:
             setBlueBouncing();
+            // setAllRed();
             // candleSwerve.clearAnimation(0);
             // candleSwerve.setLEDs(0, 0, 0);
             break;
@@ -408,6 +428,18 @@ public class Lights extends SubsystemBase {
     candleSwerve.clearAnimation(0);
     candleBack.clearAnimation(0);
     candleFront.clearAnimation(0);
+  }
+
+  public void setAllRed() {
+    candleSwerve.setLEDs(0, 0, 255);
+    candleBack.setLEDs(0, 0, 255);
+    candleFront.setLEDs(0, 0, 255);
+  }
+
+  public void setAllBlue() {
+    candleSwerve.setLEDs(255, 0, 0);
+    candleBack.setLEDs(255, 0, 0);
+    candleFront.setLEDs(255, 0, 0);
   }
 
   public void setStrobeGreen() {
@@ -563,22 +595,22 @@ public class Lights extends SubsystemBase {
     switch (allianceState) {
       case RED:
         candleFront.setLEDs(100, 0, 0);
-        candleSwerve.setLEDs(100, 0, 0, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
+        // candleSwerve.setLEDs(100, 0, 0, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
         break;
       case BLUE:
         candleFront.setLEDs(0, 0, 100);
-        candleSwerve.setLEDs(0, 0, 100, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
+        // candleSwerve.setLEDs(0, 0, 100, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
         break;
       default:
         candleFront.setLEDs(125, 80, 0);
-        candleSwerve.setLEDs(125, 80, 0, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
+        // candleSwerve.setLEDs(125, 80, 0, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
         break;
     }
   }
 
   public void setAuto() {
     candleFront.setLEDs(80, 0, 80);
-    candleSwerve.setLEDs(80, 0, 80, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
+    // candleSwerve.setLEDs(80, 0, 80, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
   }
 
   /*

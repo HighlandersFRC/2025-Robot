@@ -72,7 +72,7 @@ public class Twist extends SubsystemBase {
   }
 
   public void twistToPosition(double rotations) {
-    System.out.println(rotations * Constants.Ratios.TWIST_GEAR_RATIO);
+    // System.out.println(rotations * Constants.Ratios.TWIST_GEAR_RATIO);
 
     if (algaeMode) { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
       twistMotor.setControl(this.twistTorqueCurrentFOC // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE

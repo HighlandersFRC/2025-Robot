@@ -51,7 +51,7 @@ public class Robot extends LoggedRobot {
 
     m_robotContainer.lights.clearAnimations();
     m_robotContainer.lights.setCommandRunning(true);
-    m_robotContainer.lights.setFlashYellow();
+    // m_robotContainer.lights.setFlashYellow();
   }
 
   @Override
@@ -122,7 +122,7 @@ public class Robot extends LoggedRobot {
     OI.operatorController.setRumble(RumbleType.kBothRumble, 0);
     m_robotContainer.lights.clearAnimations();
     m_robotContainer.lights.setCommandRunning(true);
-    m_robotContainer.lights.setFlashYellow();
+    // m_robotContainer.lights.setFlashYellow();
   }
 
   @Override
