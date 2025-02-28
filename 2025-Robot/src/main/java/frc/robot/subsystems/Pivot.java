@@ -45,6 +45,9 @@ public class Pivot extends SubsystemBase {
     pivotConfig.Slot1.kP = 70.0;
     pivotConfig.Slot1.kI = 0.0;
     pivotConfig.Slot1.kD = 5.0;
+    pivotConfig.Slot2.kP = 70.0;
+    pivotConfig.Slot2.kI = 0.0;
+    pivotConfig.Slot2.kD = 5.0;
     pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerk;
     pivotConfig.MotionMagic.MotionMagicAcceleration = this.pivotAcceleration;
     pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocity;
@@ -87,6 +90,18 @@ public class Pivot extends SubsystemBase {
               this.pivotJerk * pivotProfileScalarFactor)
           .withSlot(0));
     }
+  }
+
+  public void pivotToPositionSlow(double pivotPosition) {
+    if (Math.abs(pivotPosition) * 360.0 > 135.0) {
+      pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
+    }
+    pivotMotor.setControl(this.pivotMotionProfileRequest
+        .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
+        .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
+        .withJerk(
+            this.pivotJerk * pivotProfileScalarFactor)
+        .withSlot(2));
   }
 
   public double getPivotPosition() {

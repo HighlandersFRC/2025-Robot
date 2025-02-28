@@ -594,9 +594,12 @@ public class Superstructure extends SubsystemBase {
     } else if (firstTimeDefault) {
       pivot.setWantedState(PivotState.PREP);
     }
-    if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
-      twist.setWantedState(TwistState.SIDE);
+    if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
+      twist.setAlgaeMode(true);
     }
+    // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+    twist.setWantedState(TwistState.SIDE);
+    // }
     climber.setWantedState(ClimbState.IDLE);
   }
 
@@ -732,10 +735,10 @@ public class Superstructure extends SubsystemBase {
       } else {
         pivot.setWantedFlip(PivotFlip.BACK);
       }
-      if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 10.0 / 39.37) {
+      if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 28.0 / 39.37) {
         pivot.setWantedState(PivotState.AUTO_L4);
       } else {
-        pivot.setWantedState(PivotState.UP);
+        pivot.setWantedState(PivotState.DEFAULT);
       }
       twist.setWantedState(TwistState.SIDE);
     }
@@ -1266,7 +1269,7 @@ public class Superstructure extends SubsystemBase {
       outakeIdleInitTime = Timer.getFPGATimestamp();
       outakeIdleInit = true;
     }
-    if (Timer.getFPGATimestamp() - outakeIdleInitTime > 0.4) {
+    if (Timer.getFPGATimestamp() - outakeIdleInitTime > 0.25) {
       lights.setWantedState(LightsState.DEFAULT);
       drive.setWantedState(DriveState.IDLE);
       // pivot.setWantedFlip(PivotFlip.FRONT);
@@ -1275,7 +1278,7 @@ public class Superstructure extends SubsystemBase {
       } else {
         elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
       }
-      if (Math.abs(twist.getTwistPosition()) < 15 && elevator.getElevatorPosition() < 45) {
+      if (Math.abs(twist.getTwistPosition()) < 15 && elevator.getElevatorPosition() < Constants.inchesToMeters(54.0)) {
         pivot.setWantedState(PivotState.DEFAULT);
       }
       twist.setWantedState(TwistState.SIDE);

@@ -77,8 +77,9 @@ public class Intake extends SubsystemBase {
         intakeMotor.getTorqueCurrent().getValueAsDouble());
     Logger.recordOutput("Intake Acceleration",
         intakeMotor.getAcceleration().getValueAsDouble());
-    if (Math.abs(intakeMotor.getVelocity().getValueAsDouble()) < 5.0
-        && Math.abs(intakeMotor.getTorqueCurrent().getValueAsDouble()) > 8.0) {
+    if (Math.abs(intakeMotor.getVelocity().getValueAsDouble()) < 1
+        && Math.abs(intakeMotor.getTorqueCurrent().getValueAsDouble()) > 8
+        && Math.abs(intakeMotor.getAcceleration().getValueAsDouble()) < 10) {
       return true;
     } else {
       return false;
@@ -198,9 +199,9 @@ public class Intake extends SubsystemBase {
           // break;
           default:
             if (algaeMode) {
-              setIntakePercent(0.5);
+              setIntakePercent(0.2);
             } else {
-              setIntakePercent(-0.5);
+              setIntakePercent(-0.2);
             }
             break;
         }

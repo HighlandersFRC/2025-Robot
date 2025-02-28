@@ -340,7 +340,7 @@ public class Drive extends SubsystemBase {
 
     try {
       aprilTagFieldLayout = new AprilTagFieldLayout(
-          Filesystem.getDeployDirectory().getPath() + "/" + "2025-reefscape.json");
+          Filesystem.getDeployDirectory().getPath() + "/" + "2025-reefscape-welded.json");
     } catch (Exception e) {
       System.out.println("error with april tag: " + e.getMessage());
     }
@@ -1597,7 +1597,7 @@ public class Drive extends SubsystemBase {
     } else {
       hitNumber = 0;
     }
-    if (hitNumber > 7) {
+    if (hitNumber > 5) {
       return true;
     } else {
       return false;
