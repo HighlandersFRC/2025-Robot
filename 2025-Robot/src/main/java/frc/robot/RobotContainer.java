@@ -172,6 +172,38 @@ public class RobotContainer {
     // Driver
 
     OI.driverViewButton.whileTrue(new ZeroAngleMidMatch(drive)); // zero pidgeon
+    // OI.driverRT.whileTrue(new SetRobotState(superstructure,
+    // SuperState.GROUND_CORAL_PICKUP_FRONT));
+    // OI.driverRT.whileTrue(new ConditionalCommand(new SetRobotState(superstructure,
+    //         SuperState.GROUND_ALGAE_PICKUP_FRONT),
+    //         new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_FRONT),
+    //         () -> (algaeMode)));
+    // OI.driverRB.whileTrue(new SetRobotState(superstructure,
+    // SuperState.GROUND_CORAL_PICKUP_BACK));
+    // OI.driverRB.whileTrue(new ConditionalCommand(new InstantCommand(),
+    //         new ConditionalCommand(new SetRobotState(superstructure,
+    //                 SuperState.GROUND_ALGAE_PICKUP_BACK),
+    //                 new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_BACK),
+    //                 () -> (algaeMode)),
+    //         () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE || superstructure
+    //                 .getCurrentSuperState() == SuperState.L3_PLACE
+    //                 || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
+
+    // OI.driverRB
+    // .onFalse(new ConditionalCommand(new SetPivotState(pivot, PivotState.IDLE),
+    // new InstantCommand(),
+    // () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE ||
+    // superstructure
+    // .getCurrentSuperState() == SuperState.L3_PLACE
+    // || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
+
+    // OI.driverLB
+    // .onFalse(new ConditionalCommand(new SetPivotState(pivot, PivotState.IDLE),
+    // new InstantCommand(),
+    // () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE ||
+    // superstructure
+    // .getCurrentSuperState() == SuperState.L3_PLACE
+    // || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
 
     // OI.driverRT.whileTrue(new SetRobotState(superstructure,
     // SuperState.GROUND_CORAL_PICKUP_FRONT));
@@ -195,6 +227,14 @@ public class RobotContainer {
             () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE || superstructure
                 .getCurrentSuperState() == SuperState.L3_PLACE
                 || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
+
+    // OI.driverLB.whileTrue(new ConditionalCommand(new InstantCommand(),
+    //             new SetRobotState(superstructure, SuperState.FEEDER),
+    //             () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE || superstructure
+    //                     .getCurrentSuperState() == SuperState.L3_PLACE
+    //                     || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
+
+    // OI.driverMenuButton.whileTrue(new SetRobotState(superstructure, SuperState.DEFAULT));
 
     OI.driverLB
         .onFalse(new ConditionalCommand(new SetPivotState(pivot, PivotState.IDLE), new InstantCommand(),
