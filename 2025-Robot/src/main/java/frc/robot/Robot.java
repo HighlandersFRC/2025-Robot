@@ -19,6 +19,7 @@ public class Robot extends LoggedRobot {
 
   String m_fieldSide = "blue";
   boolean bPressed = false;
+  boolean yPressed = false;
   boolean xPressed = false;
 
   @Override
@@ -77,9 +78,9 @@ public class Robot extends LoggedRobot {
     }
 
     // if (OI.isManualMode()) {
-    //   m_robotContainer.manualMode = true;
+    // m_robotContainer.manualMode = true;
     // } else {
-    //   m_robotContainer.manualMode = false;
+    // m_robotContainer.manualMode = false;
     // }
 
     if (OI.driverB.getAsBoolean()) {
@@ -98,6 +99,15 @@ public class Robot extends LoggedRobot {
       }
     } else {
       xPressed = true;
+    }
+
+    if (OI.driverY.getAsBoolean()) {
+      if (yPressed) {
+        m_robotContainer.yPressed = !m_robotContainer.yPressed;
+        yPressed = false;
+      }
+    } else {
+      yPressed = true;
     }
 
     m_robotContainer.twist.setAlgaeMode(m_robotContainer.algaeMode);
