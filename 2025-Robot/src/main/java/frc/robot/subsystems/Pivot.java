@@ -32,6 +32,7 @@ public class Pivot extends SubsystemBase {
       pivotJerk);
 
   private boolean algaeMode = false;
+  private boolean runManualDownOrUp = false;
 
   public Pivot() {
   }
@@ -259,7 +260,10 @@ public class Pivot extends SubsystemBase {
     // pivotMotor.getStatorCurrent().getValueAsDouble());
     // System.out.println("Pivot Position: " + getPivotPosition());
     Logger.recordOutput("Pivot Position", getPivotPosition());
-
+    if (systemState != PivotState.L23 && systemState != PivotState.L4 && systemState != PivotState.MANUAL_PLACE
+        && systemState != PivotState.MANUAL_RESET) {
+      runManualDownOrUp = false;
+    }
     // Logger.recordOutput("Pivot Output",
     // pivotMotor.getClosedLoopOutput().getValueAsDouble());
     // Logger.recordOutput("Pivot Current",
@@ -361,13 +365,21 @@ public class Pivot extends SubsystemBase {
       case SCORE_L1:
         break;
       case L23:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kL23.rotations);
+        if (runManualDownOrUp) {
+          pivotToPosition(getPivotPosition());
+        } else {
+          pivotToPosition(Constants.SetPoints.PivotPosition.kL23.rotations);
+        }
         break;
       case SCORE_L23:
         pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations);
         break;
       case L4:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kL4.rotations);
+        if (runManualDownOrUp) {
+          pivotToPosition(getPivotPosition());
+        } else {
+          pivotToPosition(Constants.SetPoints.PivotPosition.kL4.rotations);
+        }
         break;
       case SCORE_L4:
         pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
@@ -483,9 +495,11 @@ public class Pivot extends SubsystemBase {
         }
         break;
       case MANUAL_PLACE:
+        runManualDownOrUp = true;
         setPivotPercent(0.2);
         break;
       case MANUAL_RESET:
+        runManualDownOrUp = true;
         setPivotPercent(-0.2);
         break;
       case IDLE:
