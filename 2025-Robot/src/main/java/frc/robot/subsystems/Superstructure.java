@@ -78,6 +78,7 @@ public class Superstructure extends SubsystemBase {
     MANUAL_PLACE,
     MANUAL_RESET,
     AUTO_FEEDER,
+    RUN_CLIMB_BACK
   }
 
   private SuperState wantedSuperState = SuperState.DEFAULT;
@@ -239,6 +240,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_FEEDER:
         handleAutoFeederState();
+        break;
+      case RUN_CLIMB_BACK:
+        handleRunClimbBack();
         break;
       default:
         handleIdleState();
@@ -491,6 +495,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_FEEDER:
         currentSuperState = SuperState.AUTO_FEEDER;
+        break;
+      case RUN_CLIMB_BACK:
+        currentSuperState = SuperState.RUN_CLIMB_BACK;
         break;
       default:
         currentSuperState = SuperState.IDLE;
@@ -1467,6 +1474,15 @@ public class Superstructure extends SubsystemBase {
         }
       }
     }
+  }
+
+  public void handleRunClimbBack() {
+    if (OI.driverA.getAsBoolean()) {
+      climber.setWantedState(ClimbState.RETRACTING);
+    } else {
+      climber.setWantedState(ClimbState.IDLE);
+    }
+    pivot.setWantedState(PivotState.CLIMB);
   }
 
   @Override

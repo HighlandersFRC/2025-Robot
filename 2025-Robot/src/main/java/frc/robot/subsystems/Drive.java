@@ -1486,6 +1486,97 @@ public class Drive extends SubsystemBase {
     // }
   }
 
+  public void robotCentricDrive(double angle) {
+    double oiRX = OI.getDriverRightX();
+    double oiLX = OI.getDriverLeftX();
+    double oiRY = OI.getDriverRightY();
+    double oiLY = OI.getDriverLeftY();
+    double speedMultiplier = (((60 - Constants.metersToInches(elevator.getElevatorPosition())) * 0.4 / 50) + 0.6);
+
+    if (elevator.getElevatorPosition() > Constants.inchesToMeters(10)) {
+      oiRX = oiRX * speedMultiplier;
+      oiLX = oiLX * speedMultiplier;
+      oiRY = oiRY * speedMultiplier;
+      oiLY = oiLY * speedMultiplier;
+    }
+
+    // Logger.recordOutput("Adjusted Right X", oiRX);
+    // Logger.recordOutput("Adjusted Left X", oiLX);
+    // Logger.recordOutput("Adjusted Right Y", oiRY);
+    // Logger.recordOutput("Adjusted Left Y", oiLY);
+
+    updateOdometryFusedArray();
+    double turnLimit = 0.17;
+    // 0.35 before
+
+    // if (OI.driverController.getRightTriggerAxis() > 0.2) {
+    // // activate slowy spin
+    // turnLimit = 0.1;
+    // }
+
+    // this is correct, X is forward in field, so originalX should be the y on the
+    // // joystick
+    // double originalX = -(Math.copySign(OI.getDriverLeftY() * OI.getDriverLeftY(),
+    // OI.getDriverLeftY()));
+    // double originalY = -(Math.copySign(OI.getDriverLeftX() * OI.getDriverLeftX(),
+    // OI.getDriverLeftX()));
+    double originalX = -(Math.copySign(oiLY * oiLY, oiLY));
+    double originalY = -(Math.copySign(oiLX * oiLX, oiLX));
+    // if (Math.abs(originalX) < 0.005) {
+    // originalX = 0;
+    // }
+    // if (Math.abs(originalY) < 0.005) {
+    // originalY = 0;
+    // }
+
+    // double turn = turnLimit * ((Math.copySign(OI.getDriverRightX() *
+    // OI.getDriverRightX() * OI.getDriverRightX(), OI.getDriverRightX())) *
+    // (Constants.Physical.TOP_SPEED)/(Constants.Physical.ROBOT_RADIUS));
+    double turn = turnLimit
+        * (oiRX * (Constants.Physical.TOP_SPEED) / (Constants.Physical.ROBOT_RADIUS));
+
+    if (Math.abs(turn) < 0.05) {
+      turn = 0.0;
+    }
+
+    // if (turn == 0.0 && Timer.getFPGATimestamp() - teleopInitTime > 2.0) {
+    // turningPID.setSetPoint(angleSetpoint);
+    // double yaw = peripherals.getPigeonAngle();
+    // while (Math.abs(angleSetpoint - yaw) > 180) {
+    // if (angleSetpoint - yaw > 180) {
+    // yaw += 360;
+    // } else {
+    // yaw -= 360;
+    // }
+    // }
+    // double result = -1 * turningPID.updatePID(yaw);
+    // Logger.recordOutput("result", result);
+    // driveAutoAligned(result);
+    // } else {
+    angleSetpoint = peripherals.getPigeonAngle();
+    double compensation = peripherals.getPigeonAngularVelocityW() * 0.050;
+    angleSetpoint += compensation;
+    // Logger.recordOutput("setpoint", angleSetpoint);
+    turningPID.setSetPoint(angleSetpoint);
+    double pigeonAngle = Math.toRadians(peripherals.getPigeonAngle());
+    double xPower = getAdjustedX(originalX, originalY);
+    double yPower = getAdjustedY(originalX, originalY);
+
+    double xSpeed = xPower * Constants.Physical.TOP_SPEED;
+    double ySpeed = yPower * Constants.Physical.TOP_SPEED;
+
+    Vector controllerVector = new Vector(xSpeed, ySpeed);
+    if (getFieldSide().equals("red")) {
+      controllerVector.setI(-xSpeed);
+      controllerVector.setJ(-ySpeed);
+    }
+    frontLeft.drive(controllerVector, turn, Math.toRadians(angle));
+    frontRight.drive(controllerVector, turn, Math.toRadians(angle));
+    backLeft.drive(controllerVector, turn, Math.toRadians(angle));
+    backRight.drive(controllerVector, turn, Math.toRadians(angle));
+    // }
+  }
+
   public void teleopDriveToPiece(double yToPiece) {
     updateOdometryFusedArray();
     double turnLimit = 0.17;
@@ -2137,7 +2228,11 @@ public class Drive extends SubsystemBase {
     }
     switch (systemState) {
       case DEFAULT:
-        teleopDrive();
+        if (OI.driverA.getAsBoolean()) {
+          robotCentricDrive(180.0);
+        } else {
+          teleopDrive();
+        }
         break;
       case IDLE:
         break;
