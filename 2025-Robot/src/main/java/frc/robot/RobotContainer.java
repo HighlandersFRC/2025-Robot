@@ -181,7 +181,7 @@ public class RobotContainer {
         () -> (algaeMode)));
     // OI.driverRB.whileTrue(new SetRobotState(superstructure,
     // SuperState.GROUND_CORAL_PICKUP_BACK));
-    OI.driverRB.whileTrue(new ConditionalCommand(new InstantCommand(),
+    OI.driverRB.whileTrue(new ConditionalCommand(new SetRobotState(superstructure, SuperState.MANUAL_RESET),
         new ConditionalCommand(new SetRobotState(superstructure,
             SuperState.GROUND_ALGAE_PICKUP_BACK),
             new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_BACK),
@@ -190,26 +190,22 @@ public class RobotContainer {
             .getCurrentSuperState() == SuperState.L3_PLACE
             || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
 
-    // OI.driverRB
-    // .onFalse(new ConditionalCommand(new SetPivotState(pivot, PivotState.IDLE),
-    // new InstantCommand(),
-    // () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE ||
-    // superstructure
-    // .getCurrentSuperState() == SuperState.L3_PLACE
-    // || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
+    OI.driverRB
+        .onFalse(new ConditionalCommand(new SetPivotState(pivot, PivotState.IDLE), new InstantCommand(),
+            () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE || superstructure
+                .getCurrentSuperState() == SuperState.L3_PLACE
+                || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
 
-    // OI.driverLB
-    // .onFalse(new ConditionalCommand(new SetPivotState(pivot, PivotState.IDLE),
-    // new InstantCommand(),
-    // () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE ||
-    // superstructure
-    // .getCurrentSuperState() == SuperState.L3_PLACE
-    // || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
+    OI.driverLB
+        .onFalse(new ConditionalCommand(new SetPivotState(pivot, PivotState.IDLE), new InstantCommand(),
+            () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE || superstructure
+                .getCurrentSuperState() == SuperState.L3_PLACE
+                || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
 
     OI.driverLT.whileTrue(new SetRobotStateSimple(superstructure, SuperState.OUTAKE_DRIVE));
     OI.driverLT.onFalse(new SetIntakeState(intake, IntakeState.DEFAULT));
 
-    OI.driverLB.whileTrue(new ConditionalCommand(new InstantCommand(),
+    OI.driverLB.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.MANUAL_PLACE),
         new SetRobotState(superstructure, SuperState.FEEDER),
         () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE || superstructure
             .getCurrentSuperState() == SuperState.L3_PLACE
