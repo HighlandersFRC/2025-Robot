@@ -206,7 +206,11 @@ public class RobotContainer {
     OI.driverLT.onFalse(new SetIntakeState(intake, IntakeState.DEFAULT));
 
     OI.driverLB.whileTrue(new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.MANUAL_PLACE),
-        new SetRobotState(superstructure, SuperState.FEEDER),
+        new ConditionalCommand(new SetRobotState(superstructure,
+            SuperState.FEEDER),
+            new SetRobotState(superstructure,
+                SuperState.FEEDER_AUTO),
+            () -> manualMode),
         () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE || superstructure
             .getCurrentSuperState() == SuperState.L3_PLACE
             || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
