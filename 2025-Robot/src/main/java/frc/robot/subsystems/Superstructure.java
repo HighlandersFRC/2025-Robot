@@ -50,6 +50,7 @@ public class Superstructure extends SubsystemBase {
     OUTAKE_DRIVE,
     NET,
     AUTO_NET,
+    FEEDER_AUTO,
     FEEDER,
     GROUND_CORAL_PICKUP_FRONT,
     GROUND_CORAL_PICKUP_BACK,
@@ -154,6 +155,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_NET:
         handleAutoNetState();
+        break;
+      case FEEDER_AUTO:
+        handleFeederAutoState();
         break;
       case FEEDER:
         handleFeederState();
@@ -378,6 +382,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_NET:
         currentSuperState = SuperState.AUTO_NET;
+        break;
+      case FEEDER_AUTO:
+        currentSuperState = SuperState.FEEDER_AUTO;
         break;
       case FEEDER:
         currentSuperState = SuperState.FEEDER;
@@ -804,11 +811,11 @@ public class Superstructure extends SubsystemBase {
     elevator.setWantedState(ElevatorState.PROCESSOR);
     intake.setWantedState(IntakeState.DEFAULT);
     if (drive.getAutoPlacementSideIsFront()) {
-      pivot.setWantedFlip(PivotFlip.BACK);
-      twist.setWantedState(TwistState.UP);
-    } else {
       pivot.setWantedFlip(PivotFlip.FRONT);
       twist.setWantedState(TwistState.DOWN);
+    } else {
+      pivot.setWantedFlip(PivotFlip.BACK);
+      twist.setWantedState(TwistState.UP);
     }
     pivot.setWantedState(PivotState.PROCESSOR);
   }
@@ -846,7 +853,19 @@ public class Superstructure extends SubsystemBase {
     pivot.setWantedState(PivotState.NET);
   }
 
-  public void handleFeederState() { // function for an actual field, comment
+  public void handleFeederState() {
+    lights.setWantedState(LightsState.FEEDER);
+    drive.setWantedState(DriveState.DEFAULT);
+    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    if (Math.abs(pivot.getPivotPosition()) > 10.0 / 360.0) {
+      twist.setWantedState(TwistState.UP);
+    }
+    pivot.setWantedFlip(PivotFlip.FRONT);
+    pivot.setWantedState(PivotState.FEEDER);
+    elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
+  }
+
+  public void handleFeederAutoState() { // function for an actual field, comment
     // out the function above when running on
     // an actual field
     lights.setWantedState(LightsState.FEEDER);

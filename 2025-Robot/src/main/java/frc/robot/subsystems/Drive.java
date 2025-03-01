@@ -2108,7 +2108,7 @@ public class Drive extends SubsystemBase {
       theta = Math.atan2((Constants.Reef.centerBlue.getY() - getMT2OdometryY()),
           (Constants.Reef.centerBlue.getX() - getMT2OdometryX()));
     }
-    if (Math.abs(theta - getMT2OdometryAngle()) > Math.PI / 2) {
+    if (getAngleDifferenceDegrees(Math.toDegrees(theta), Math.toDegrees(getMT2OdometryAngle())) > 90.0) {
       theta -= Math.PI;
     }
     return theta;
@@ -2142,7 +2142,7 @@ public class Drive extends SubsystemBase {
       case IDLE:
         break;
       case AUTO_L1:
-        // driveToTheta(getThetaToCenterReef());
+        driveToTheta(Math.toDegrees(getThetaToCenterReef()));
         // System.out.println(Math.toDegrees(getThetaToCenterReef()));
         break;
       case REEF:

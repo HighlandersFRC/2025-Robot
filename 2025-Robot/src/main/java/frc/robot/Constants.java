@@ -207,12 +207,12 @@ public final class Constants {
 
     public static final Pose2d[] centerFaces = new Pose2d[6]; // Starting facing the driver station in clockwise
                                                               // order
-    // public static final List<Map<ReefHeight, Pose3d>> blueBranchPositions = new
-    // ArrayList<>(); // Starting at the right
-    // // branch facing the driver
-    // // station in clockwise
-    // public static final List<Map<ReefHeight, Pose3d>> redBranchPositions = new
-    // ArrayList<>(); // Starting at the right
+                                                              // public static final List<Map<ReefHeight, Pose3d>> blueBranchPositions = new
+                                                              // ArrayList<>(); // Starting at the right
+                                                              // // branch facing the driver
+                                                              // // station in clockwise
+                                                              // public static final List<Map<ReefHeight, Pose3d>> redBranchPositions = new
+                                                              // ArrayList<>(); // Starting at the right
 
     public static final double RED_LEFT_FEEDER_X = 16.404;
     public static final double RED_LEFT_FEEDER_Y = 0.990;
@@ -229,19 +229,26 @@ public final class Constants {
         Physical.FIELD_LENGTH - RED_LEFT_FEEDER_X, Physical.FIELD_WIDTH - RED_LEFT_FEEDER_Y,
         new Rotation2d(Math.toRadians(-54.0)));
 
-    public static final Translation2d processorBlueFrontPlacingTranslation = new Translation2d(4.475, 6.055); // TODO:
-                                                                                                              // actually
-                                                                                                              // measure
-                                                                                                              // these
+    public static final double PROCESSOR_Y_OFFSET_M = inchesToMeters(93); // 20?
+    public static final double NET_X_OFFSET_M = inchesToMeters(93); // 30?
+
+    public static final Translation2d processorBlueFrontPlacingTranslation = new Translation2d(inchesToMeters(238.79),
+        PROCESSOR_Y_OFFSET_M); // TODO:
+    // actually
+    // measure
+    // these
     public static final Rotation2d processorBlueFrontPlacingRotation = new Rotation2d(degreesToRadians(270));
 
-    public static final Translation2d processorRedFrontPlacingTranslation = new Translation2d(4.475, 6.055);
+    public static final Translation2d processorRedFrontPlacingTranslation = new Translation2d(inchesToMeters(452.40),
+        inchesToMeters(316.21) - PROCESSOR_Y_OFFSET_M);
     public static final Rotation2d processorRedFrontPlacingRotation = new Rotation2d(degreesToRadians(90));
 
-    public static final Translation2d processorBlueBackPlacingTranslation = new Translation2d(4.475, 6.055);
+    public static final Translation2d processorBlueBackPlacingTranslation = new Translation2d(inchesToMeters(238.79),
+        PROCESSOR_Y_OFFSET_M);
     public static final Rotation2d processorBlueBackPlacingRotation = new Rotation2d(degreesToRadians(90));
 
-    public static final Translation2d processorRedBackPlacingTranslation = new Translation2d(4.475, 6.055);
+    public static final Translation2d processorRedBackPlacingTranslation = new Translation2d(inchesToMeters(452.40),
+        inchesToMeters(316.21) - PROCESSOR_Y_OFFSET_M);
     public static final Rotation2d processorRedBackPlacingRotation = new Rotation2d(degreesToRadians(270));
 
     public static final Pose2d processorBlueFrontPlacingPosition = new Pose2d(processorBlueFrontPlacingTranslation,
@@ -253,8 +260,8 @@ public final class Constants {
     public static final Pose2d processorRedBackPlacingPosition = new Pose2d(processorRedBackPlacingTranslation,
         processorRedBackPlacingRotation);
 
-    public static final double netBlueXM = 4.475; // TODO: measure these ones too
-    public static final double netRedXM = 4.475;
+    public static final double netBlueXM = (Constants.Physical.FIELD_LENGTH / 2) - NET_X_OFFSET_M; // TODO: measure these ones too
+    public static final double netRedXM = (Constants.Physical.FIELD_LENGTH / 2) + NET_X_OFFSET_M;
 
     public static final double netBlueFrontThetaR = degreesToRadians(0.0);
     public static final double netRedFrontThetaR = degreesToRadians(180.0);
