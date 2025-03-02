@@ -201,6 +201,7 @@ public class Robot extends LoggedRobot {
       m_fieldSide = "red";
     }
     this.m_robotContainer.drive.setFieldSide(m_fieldSide);
+    this.m_robotContainer.elevator.autoInit();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     System.out.println("Auto init time" + (Timer.getFPGATimestamp() - autoInitTime));
     m_autonomousCommand.schedule();

@@ -394,6 +394,11 @@ public class Drive extends SubsystemBase {
     if (Math.abs(turningPID.getSetPoint() - angleSetpoint) > 100) {
       turningPID.setSetPoint(angleSetpoint);
     }
+
+    frontLeft.setDriveCurrentLimits(120, 120);
+    frontRight.setDriveCurrentLimits(120, 120);
+    backLeft.setDriveCurrentLimits(120, 120);
+    backRight.setDriveCurrentLimits(120, 120);
   }
 
   public void teleopPeriodic() {
@@ -501,6 +506,11 @@ public class Drive extends SubsystemBase {
       firstPointY = Constants.Physical.FIELD_WIDTH - firstPointY;
       firstPointAngle = -firstPointAngle;
     }
+
+    frontLeft.setDriveCurrentLimits(60, 120);
+    frontRight.setDriveCurrentLimits(60, 120);
+    backLeft.setDriveCurrentLimits(60, 120);
+    backRight.setDriveCurrentLimits(60, 120);
 
     peripherals.setPigeonAngle(Math.toDegrees(firstPointAngle));
     SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];

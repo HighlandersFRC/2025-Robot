@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -569,7 +570,8 @@ public class Superstructure extends SubsystemBase {
 
     // Pivot has abs to account for placing backwards
     return Math
-        .abs(Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < 0.01388;
+        .abs(Math.abs(pivot.getPivotPosition())
+            - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (15.0 / 360.0);
   }
 
   // public void handleDefaultState() {
@@ -1237,7 +1239,7 @@ public class Superstructure extends SubsystemBase {
       intake.setWantedState(IntakeState.OUTAKE);
     } else {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations
-          - 10.0 / 360.0) {
+          - 10.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
         drive.setWantedState(DriveState.REEF_MORE);
         intake.setWantedState(IntakeState.OUTAKE);
         elevator.setWantedState(ElevatorState.DEFAULT);
@@ -1331,7 +1333,7 @@ public class Superstructure extends SubsystemBase {
       } else {
         elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
       }
-      if (Math.abs(twist.getTwistPosition()) < 15 && elevator.getElevatorPosition() < Constants.inchesToMeters(54.0)) {
+      if (Math.abs(twist.getTwistPosition()) < 15 && elevator.getElevatorPosition() < Constants.inchesToMeters(48.0)) {
         pivot.setWantedState(PivotState.DEFAULT);
       }
       twist.setWantedState(TwistState.SIDE);

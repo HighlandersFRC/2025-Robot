@@ -69,7 +69,7 @@ public class RobotContainer {
 
     HashMap<String, Supplier<Command>> commandMap = new HashMap<String, Supplier<Command>>() {
         {
-            put("AutoPlaceL4", () -> new AutoPlaceL4Follower(superstructure, drive));
+            put("AutoPlaceL4", () -> new AutoPlaceL4Follower(superstructure, drive, 2.3));
             put("AutoFeeder", () -> new FeederPickupFollower(superstructure, drive));
             put("FeederIntake", () -> new SetRobotState(superstructure, SuperState.FEEDER));
             put("Outake", () -> new SetRobotStateSimple(superstructure, SuperState.OUTAKE));

@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
@@ -59,6 +60,7 @@ public class Elevator extends SubsystemBase {
   private ElevatorState wantedState = ElevatorState.DEFAULT;
   private ElevatorState systemState = ElevatorState.DEFAULT;
   private double distanceFromL23DriveSetpoint = 0.0;
+  private boolean firstTimeDefault = false;
 
   public void updateDistanceFromL23DriveSetpoint(double distanceFromL23DriveSetpoint) {
     this.distanceFromL23DriveSetpoint = distanceFromL23DriveSetpoint;
@@ -79,6 +81,24 @@ public class Elevator extends SubsystemBase {
 
   public void teleopInit() {
     firstTimeIdle = true;
+    firstTimeDefault = false;
+    CurrentLimitsConfigs currentLimitsConfigs = new CurrentLimitsConfigs();
+    currentLimitsConfigs.StatorCurrentLimitEnable = true;
+    currentLimitsConfigs.SupplyCurrentLimitEnable = true;
+    currentLimitsConfigs.StatorCurrentLimit = 60;
+    currentLimitsConfigs.SupplyCurrentLimit = 60;
+    elevatorMotorMaster.getConfigurator().apply(currentLimitsConfigs);
+    elevatorMotorFollower.getConfigurator().apply(currentLimitsConfigs);
+  }
+
+  public void autoInit() {
+    CurrentLimitsConfigs currentLimitsConfigs = new CurrentLimitsConfigs();
+    currentLimitsConfigs.StatorCurrentLimitEnable = true;
+    currentLimitsConfigs.SupplyCurrentLimitEnable = true;
+    currentLimitsConfigs.StatorCurrentLimit = 40;
+    currentLimitsConfigs.SupplyCurrentLimit = 40;
+    elevatorMotorMaster.getConfigurator().apply(currentLimitsConfigs);
+    elevatorMotorFollower.getConfigurator().apply(currentLimitsConfigs);
   }
 
   public void init() {
@@ -313,15 +333,32 @@ public class Elevator extends SubsystemBase {
           idleTime = Timer.getFPGATimestamp();
           firstTimeIdle = false;
         }
-        if (Math
-            .abs(
-                Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
-            && Timer.getFPGATimestamp() - idleTime > 0.3
-            && !firstTimeIdle) {
-          moveWithPercent(0.0);
-          setElevatorEncoderPosition(0.0);
+        if (!firstTimeDefault) {
+          if (Math
+              .abs(
+                  Constants.Ratios
+                      .elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
+              && Timer.getFPGATimestamp() - idleTime > 0.3
+              && !firstTimeIdle) {
+            firstTimeDefault = true;
+            moveWithPercent(0.0);
+            // System.out.println("zeroing elevator");
+            setElevatorEncoderPosition(0.0);
+          } else {
+            // System.out.println("Running down to zero");
+            moveWithTorque(-50, 0.6);
+          }
         } else {
-          moveWithTorque(-50, 0.6);
+          if (getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
+            moveWithTorque(-50, 0.6);
+            // System.out.println("Running down default");
+          } else if (getElevatorPosition() > (Constants.inchesToMeters(1.0))) {
+            moveWithTorque(-30, 0.3);
+            // System.out.println("Running down default");
+          } else {
+            // System.out.println("stopping");
+            moveWithPercent(0.0);
+          }
         }
         break;
     }

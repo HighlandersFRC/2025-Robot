@@ -27,7 +27,7 @@ public final class Constants {
                 // their constants
                 public static final double AUTONOMOUS_LOOKAHEAD_DISTANCE = 0.10; // Lookahead at 1m/s scaled by wanted
                                                                                  // velocity
-                public static final double FULL_SEND_LOOKAHEAD = 0.48;
+                public static final double FULL_SEND_LOOKAHEAD = 0.60;
                 public static final double MIN_LOOKAHEAD_DISTANCE = 0.01; // Lookahead distance at 0m/s
                 // Path follower will end if within this radius of the final point
                 public static final double AUTONOMOUS_END_ACCURACY = 0.25;
@@ -1073,9 +1073,9 @@ public final class Constants {
                 public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(29.5);
                 public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.2);
 
-                public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.3);
+                public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.6);
                 // public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.3);
-                public static double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(3.0);
+                public static double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(2.9);
                 public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.1);
                 // public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.1);
                 public static double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-3.0);

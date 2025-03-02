@@ -4,7 +4,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TorqueCurrentConfigs;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -130,6 +132,10 @@ public class SwerveModule extends SubsystemBase {
 
     driveMotorConfig.TorqueCurrent.PeakForwardTorqueCurrent = 120;
     driveMotorConfig.TorqueCurrent.PeakReverseTorqueCurrent = -120;
+    driveMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    driveMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    driveMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
+    driveMotorConfig.CurrentLimits.SupplyCurrentLimit = 120;
 
     driveMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
@@ -145,6 +151,15 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.getConfigurator().apply(driveMotorConfig);
 
     velocityTorqueFOCRequestAngleMotor.Slot = 1;
+  }
+
+  public void setDriveCurrentLimits(double supply, double stator) {
+    CurrentLimitsConfigs currentLimitsConfigs = new CurrentLimitsConfigs();
+    currentLimitsConfigs.StatorCurrentLimitEnable = true;
+    currentLimitsConfigs.SupplyCurrentLimitEnable = true;
+    currentLimitsConfigs.StatorCurrentLimit = stator;
+    currentLimitsConfigs.SupplyCurrentLimit = supply;
+    driveMotor.getConfigurator().apply(currentLimitsConfigs);
   }
 
   /**

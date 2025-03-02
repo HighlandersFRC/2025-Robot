@@ -21,11 +21,14 @@ public class AutoPlaceL4Follower extends AutoFollower {
   private JSONArray path;
   private boolean reset = true;
   private int endIndex = 0;
+  private double initTime = 0.0;
+  double timeout = 0.0;
 
   /** Creates a new AutoPlaceL4Follower. */
-  public AutoPlaceL4Follower(Superstructure superstructure, Drive drive) {
+  public AutoPlaceL4Follower(Superstructure superstructure, Drive drive, double timeout) {
     this.superstructure = superstructure;
     this.drive = drive;
+    this.timeout = timeout;
     addRequirements(superstructure, drive);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -46,6 +49,7 @@ public class AutoPlaceL4Follower extends AutoFollower {
   @Override
   public void initialize() {
     superstructure.setWantedState(SuperState.AUTO_L4_PLACE);
+    initTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -62,7 +66,7 @@ public class AutoPlaceL4Follower extends AutoFollower {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (superstructure.placedCoralL4()) {
+    if (superstructure.placedCoralL4() || Timer.getFPGATimestamp() - initTime > timeout) {
       return true;
     } else {
       return false;
