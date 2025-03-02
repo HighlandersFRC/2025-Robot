@@ -1342,7 +1342,12 @@ public class Superstructure extends SubsystemBase {
     // drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
     // intake.setWantedState(IntakeState.OUTAKE);
     // } else {
-    intake.setWantedState(IntakeState.OFF);
+    if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
+        OI.getDriverLeftY()) > 0.25) {
+      intake.setWantedState(IntakeState.OUTAKE);
+    } else {
+      intake.setWantedState(IntakeState.OFF);
+    }
     // }
     pivot.setWantedState(PivotState.SCORE_L23);
   }
@@ -1356,8 +1361,12 @@ public class Superstructure extends SubsystemBase {
     // drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
     // intake.setWantedState(IntakeState.OUTAKE);
     // } else {
-    intake.setWantedState(IntakeState.OFF);
-    // }
+    if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
+        OI.getDriverLeftY()) > 0.25) {
+      intake.setWantedState(IntakeState.OUTAKE);
+    } else {
+      intake.setWantedState(IntakeState.OFF);
+    } // }
     pivot.setWantedState(PivotState.SCORE_L23);
   }
 
@@ -1372,8 +1381,12 @@ public class Superstructure extends SubsystemBase {
     // drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
     // intake.setWantedState(IntakeState.OUTAKE);
     // } else {
-    intake.setWantedState(IntakeState.OFF);
-    // }
+    if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
+        OI.getDriverLeftY()) > 0.25) {
+      intake.setWantedState(IntakeState.OUTAKE);
+    } else {
+      intake.setWantedState(IntakeState.OFF);
+    } // }
   }
 
   public void handleIdleState() {
