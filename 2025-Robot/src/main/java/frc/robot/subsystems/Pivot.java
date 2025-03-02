@@ -338,15 +338,19 @@ public class Pivot extends SubsystemBase {
         }
         break;
       case GROUND_CORAL_FRONT:
+        setAlgaeMode(false);
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALFRONT.rotations);
         break;
       case GROUND_CORAL_BACK:
+        setAlgaeMode(false);
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALBACK.rotations);
         break;
       case GROUND_CORAL_PREP_BACK:
+        setAlgaeMode(false);
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALPREPBACK.rotations);
         break;
       case L1:
+        setAlgaeMode(true);
         switch (systemFlip) {
           case FRONT:
             pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
@@ -430,6 +434,7 @@ public class Pivot extends SubsystemBase {
       // pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
       // break;
       case FEEDER:
+        setAlgaeMode(false);
         switch (systemFlip) {
           case FRONT:
             pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
@@ -443,6 +448,7 @@ public class Pivot extends SubsystemBase {
         }
         break;
       case AUTO_L1:
+        setAlgaeMode(true);
         switch (systemFlip) {
           case FRONT:
             pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);

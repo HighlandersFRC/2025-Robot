@@ -44,7 +44,7 @@ public final class Constants {
                                 "3piece.polarauto",
                                 "3PieceFeeder.polarauto",
                                 "3PieceFeederSmart.polarauto",
-                                "4PieceFeeder.polarauto",
+                                "2+1PieceFeeder.polarauto",
                 };
 
                 public static int getSelectedPathIndex() {
@@ -1055,10 +1055,10 @@ public final class Constants {
                 // public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
                 // public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
 
-                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(25);
+                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(26);
                 // public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(24.5);
                 public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(3.25);
-                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(26);
+                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(27);
                 // public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(25.5);
                 public static double INTAKE_Y_OFFSET_BACK = inchesToMeters(-3.25);
 
@@ -1075,10 +1075,10 @@ public final class Constants {
 
                 public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.6);
                 // public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.3);
-                public static double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(2.9);
+                public static double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(3.2);
                 public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.1);
                 // public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.1);
-                public static double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-3.0);
+                public static double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-2.7);
 
                 public static final double GRAVITY_ACCEL_MS2 = 9.806;
 

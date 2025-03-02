@@ -161,13 +161,13 @@ public class Intake extends SubsystemBase {
           case CORAL:
             // if (timeSinceItemSwitch > 1.0) {
             double percent = Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) + 0.05;
-            setIntakeTorque(40, 0.4);
+            setIntakeTorque(50, 0.6);
             // } else {
             // setIntakePercent(1.0);
             // }
             break;
           default:
-            setIntakePercent(0.4);
+            setIntakePercent(0.6);
             break;
         }
         break;
@@ -210,9 +210,9 @@ public class Intake extends SubsystemBase {
       default:
         // System.out.println("Motor Current: " + intakeMotor.getTorqueCurrent());
         if (algaeMode) {
-          setIntakeTorque(-40, 0.4);
+          setIntakeTorque(-40, 0.6);
         } else {
-          setIntakeTorque(30, 0.4);
+          setIntakeTorque(30, 0.6);
         }
     }
   }

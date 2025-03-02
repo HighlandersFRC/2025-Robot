@@ -616,6 +616,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoL1PlaceState() {
+    twist.setAlgaeMode(true);
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.AUTO_L1);
     elevator.setWantedState(ElevatorState.AUTO_L1);
@@ -625,10 +626,14 @@ public class Superstructure extends SubsystemBase {
     if (drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
         Math.toDegrees(drive.getReefClosestSetpointFrontOnly(drive.getMT2Odometry())[2])) < 90) {
       pivot.setWantedFlip(PivotFlip.FRONT);
-      twist.setWantedState(TwistState.UP);
+      if (Math.abs(pivot.getPivotPosition()) > 30.0 / 360.0) {
+        twist.setWantedState(TwistState.UP);
+      }
     } else {
       pivot.setWantedFlip(PivotFlip.BACK);
-      twist.setWantedState(TwistState.DOWN);
+      if (Math.abs(pivot.getPivotPosition()) > 30.0 / 360.0) {
+        twist.setWantedState(TwistState.DOWN);
+      }
     }
     if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kL1.meters - 10 / 39.37) {
       pivot.setWantedState(PivotState.AUTO_L1);
@@ -762,7 +767,9 @@ public class Superstructure extends SubsystemBase {
     elevator.setWantedState(ElevatorState.L1);
     intake.setWantedState(IntakeState.DEFAULT);
     pivot.setWantedState(PivotState.L1);
-    twist.setWantedState(TwistState.UP);
+    if (Math.abs(pivot.getPivotPosition()) > 30.0 / 360.0) {
+      twist.setWantedState(TwistState.UP);
+    }
   }
 
   public void handleL2PlaceState() {
@@ -877,6 +884,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleFeederState() {
+    twist.setAlgaeMode(false);
     lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.DEFAULT);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
@@ -891,6 +899,7 @@ public class Superstructure extends SubsystemBase {
   public void handleFeederAutoState() { // function for an actual field, comment
     // out the function above when running on
     // an actual field
+    twist.setAlgaeMode(false);
     lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.FEEDER);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
@@ -1031,6 +1040,7 @@ public class Superstructure extends SubsystemBase {
   /*
    */
   public void handleGroundCoralPickupFrontState() {
+    twist.setAlgaeMode(false);
     lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
@@ -1042,6 +1052,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleGroundCoralPickupBackState() {
+    twist.setAlgaeMode(false);
     lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
@@ -1350,6 +1361,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoFeederState() {
+    twist.setAlgaeMode(false);
     lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.AUTO_FEEDER);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
