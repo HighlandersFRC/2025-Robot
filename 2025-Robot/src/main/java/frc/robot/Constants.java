@@ -48,38 +48,20 @@ public final class Constants {
                 };
 
                 public static int getSelectedPathIndex() {
-                        if (!OI.autoChooser.getRawButton(7)) {
-                                if (OI.autoChooser.getRawButton(1)) {
-                                        return 0;
-                                }
-                                if (OI.autoChooser.getRawButton(2)) {
-                                        return 1;
-                                }
-                                if (OI.autoChooser.getRawButton(3)) {
-                                        return 2;
-                                }
-                                if (OI.autoChooser.getRawButton(4)) {
-                                        return 3;
-                                }
-                                if (OI.autoChooser.getRawButton(5)) {
-                                        return 4;
-                                }
-                        } else {
-                                if (OI.autoChooser.getRawButton(1)) {
-                                        return 5;
-                                }
-                                if (OI.autoChooser.getRawButton(2)) {
-                                        return 6;
-                                }
-                                if (OI.autoChooser.getRawButton(3)) {
-                                        return 7;
-                                }
-                                if (OI.autoChooser.getRawButton(4)) {
-                                        return 8;
-                                }
-                                if (OI.autoChooser.getRawButton(5)) {
-                                        return 9;
-                                }
+                        if (OI.autoChooser.getRawButton(1)) {
+                                return 0;
+                        }
+                        if (OI.autoChooser.getRawButton(2)) {
+                                return 1;
+                        }
+                        if (OI.autoChooser.getRawButton(3)) {
+                                return 2;
+                        }
+                        if (OI.autoChooser.getRawButton(4)) {
+                                return 3;
+                        }
+                        if (OI.autoChooser.getRawButton(5)) {
+                                return 4;
                         }
                         return -1;
                 }
