@@ -21,6 +21,7 @@ public class Robot extends LoggedRobot {
   boolean bPressed = false;
   boolean yPressed = false;
   boolean xPressed = false;
+  boolean autoChooserCenterSwitch = false;
 
   @Override
   public void robotInit() {
@@ -52,6 +53,19 @@ public class Robot extends LoggedRobot {
 
     m_robotContainer.lights.clearAnimations();
     m_robotContainer.lights.setCommandRunning(true);
+    SmartDashboard.putNumber("L2/3 Front X", Constants.Physical.INTAKE_X_OFFSET_FRONT);
+    SmartDashboard.putNumber("L2/3 Front Y", Constants.Physical.INTAKE_Y_OFFSET_FRONT);
+    SmartDashboard.putNumber("L2/3 Back X", Constants.Physical.INTAKE_X_OFFSET_BACK);
+    SmartDashboard.putNumber("L2/3 Back Y", Constants.Physical.INTAKE_Y_OFFSET_BACK);
+    SmartDashboard.putNumber("L4 Front X", Constants.Physical.L4_INTAKE_X_OFFSET_FRONT);
+    SmartDashboard.putNumber("L4 Front Y", Constants.Physical.L4_INTAKE_Y_OFFSET_FRONT);
+    SmartDashboard.putNumber("L4 Back X", Constants.Physical.L4_INTAKE_X_OFFSET_BACK);
+    SmartDashboard.putNumber("L4 Back Y", Constants.Physical.L4_INTAKE_Y_OFFSET_BACK);
+    SmartDashboard.putNumber("Algae Front X", Constants.Physical.INTAKE_X_OFFSET_FRONT_ALGAE);
+    SmartDashboard.putNumber("Algae Front Y", Constants.Physical.INTAKE_Y_OFFSET_FRONT_ALGAE);
+    SmartDashboard.putNumber("Algae Back X", Constants.Physical.INTAKE_X_OFFSET_BACK_ALGAE);
+    SmartDashboard.putNumber("Algae Back Y", Constants.Physical.INTAKE_Y_OFFSET_BACK_ALGAE);
+
     // m_robotContainer.lights.setFlashYellow();
   }
 
@@ -110,6 +124,42 @@ public class Robot extends LoggedRobot {
       yPressed = true;
     }
 
+    if (OI.isRecalculateMode()) {
+      if (autoChooserCenterSwitch) {
+        Constants.Reef.calculateReefPoints();
+        autoChooserCenterSwitch = false;
+      }
+    } else {
+      autoChooserCenterSwitch = true;
+    }
+
+    Constants.Physical.INTAKE_X_OFFSET_FRONT = SmartDashboard.getNumber("L2/3 Front X",
+        Constants.Physical.INTAKE_X_OFFSET_FRONT);
+
+    Constants.Physical.INTAKE_X_OFFSET_FRONT = SmartDashboard.getNumber("L2/3 Front X",
+        Constants.Physical.INTAKE_X_OFFSET_FRONT);
+    Constants.Physical.INTAKE_Y_OFFSET_FRONT = SmartDashboard.getNumber("L2/3 Front Y",
+        Constants.Physical.INTAKE_Y_OFFSET_FRONT);
+    Constants.Physical.INTAKE_X_OFFSET_BACK = SmartDashboard.getNumber("L2/3 Back X",
+        Constants.Physical.INTAKE_X_OFFSET_BACK);
+    Constants.Physical.INTAKE_Y_OFFSET_BACK = SmartDashboard.getNumber("L2/3 Back Y",
+        Constants.Physical.INTAKE_Y_OFFSET_BACK);
+    Constants.Physical.L4_INTAKE_X_OFFSET_FRONT = SmartDashboard.getNumber("L4 Front X",
+        Constants.Physical.L4_INTAKE_X_OFFSET_FRONT);
+    Constants.Physical.L4_INTAKE_Y_OFFSET_FRONT = SmartDashboard.getNumber("L4 Front Y",
+        Constants.Physical.L4_INTAKE_Y_OFFSET_FRONT);
+    Constants.Physical.L4_INTAKE_X_OFFSET_BACK = SmartDashboard.getNumber("L4 Back X",
+        Constants.Physical.L4_INTAKE_X_OFFSET_BACK);
+    Constants.Physical.L4_INTAKE_Y_OFFSET_BACK = SmartDashboard.getNumber("L4 Back Y",
+        Constants.Physical.L4_INTAKE_Y_OFFSET_BACK);
+    Constants.Physical.INTAKE_X_OFFSET_FRONT_ALGAE = SmartDashboard.getNumber("Algae Front X",
+        Constants.Physical.INTAKE_X_OFFSET_FRONT_ALGAE);
+    Constants.Physical.INTAKE_Y_OFFSET_FRONT_ALGAE = SmartDashboard.getNumber("Algae Front Y",
+        Constants.Physical.INTAKE_Y_OFFSET_FRONT_ALGAE);
+    Constants.Physical.INTAKE_X_OFFSET_BACK_ALGAE = SmartDashboard.getNumber("Algae Back X",
+        Constants.Physical.INTAKE_X_OFFSET_BACK_ALGAE);
+    Constants.Physical.INTAKE_Y_OFFSET_BACK_ALGAE = SmartDashboard.getNumber("Algae Back Y",
+        Constants.Physical.INTAKE_Y_OFFSET_BACK_ALGAE);
     m_robotContainer.twist.setAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.pivot.setAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateIntakeItem(m_robotContainer.intake.getIntakeItem());

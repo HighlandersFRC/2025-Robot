@@ -162,7 +162,11 @@ public class OI {
         return !autoChooser.getRawButton(8);
     }
 
-    public static boolean isManualMode() {
+    public static boolean isProcessorSide() {
+        return autoChooser.getRawButton(6);
+    }
+
+    public static boolean isRecalculateMode() {
         return autoChooser.getRawButton(7);
     }
 

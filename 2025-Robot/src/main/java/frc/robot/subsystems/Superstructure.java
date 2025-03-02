@@ -1,17 +1,13 @@
 package frc.robot.subsystems;
 
-import org.apache.commons.math3.optim.linear.PivotSelectionRule;
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
-import frc.robot.RobotContainer;
-import frc.robot.Constants.SetPoints.ElevatorPosition;
 import frc.robot.subsystems.Climber.ClimbState;
 import frc.robot.subsystems.Drive.DriveState;
 import frc.robot.subsystems.Elevator.ElevatorState;
@@ -30,7 +26,7 @@ public class Superstructure extends SubsystemBase {
   private Twist twist;
   private Climber climber;
   private Lights lights;
-  private RobotContainer robotContainer;
+  private Peripherals peripherals;
   double outakeIdleInitTime = 0;
   boolean outakeIdleInit = false;
   boolean firstTimeDefault = true;
@@ -85,8 +81,7 @@ public class Superstructure extends SubsystemBase {
   private SuperState currentSuperState = SuperState.DEFAULT;
 
   public Superstructure(Drive drive, Elevator elevator, Intake intake, Pivot pivot, Twist twist, Climber climber,
-      Lights lights,
-      RobotContainer robotContainer) {
+      Lights lights, Peripherals peripherals) {
     this.drive = drive;
     this.elevator = elevator;
     this.intake = intake;
@@ -94,7 +89,7 @@ public class Superstructure extends SubsystemBase {
     this.twist = twist;
     this.climber = climber;
     this.lights = lights;
-    this.robotContainer = robotContainer;
+    this.peripherals = peripherals;
   }
 
   public void setWantedState(SuperState wantedState) {
@@ -428,7 +423,7 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.AUTO_ALGAE_PICKUP_MORE;
         break;
       case DEPLOY_CLIMBER:
-        if (climber.getPosition() > -350) {
+        if (climber.getPosition() > -400) {
           currentSuperState = SuperState.DEPLOY_CLIMBER;
         } else {
           wantedSuperState = SuperState.CLIMBER_IDLE;
@@ -436,7 +431,7 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case CLIMB:
-        if (climber.getPosition() < -150) {
+        if (climber.getPosition() < -100) {
           currentSuperState = SuperState.CLIMB;
         } else {
           wantedSuperState = SuperState.CLIMBER_IDLE;
@@ -593,6 +588,7 @@ public class Superstructure extends SubsystemBase {
   // }
 
   public void handleDefaultState() {
+    peripherals.setBackCamPipline(0);
     lights.setWantedState(LightsState.DEFAULT);
     drive.setWantedState(DriveState.DEFAULT);
     // pivot.setWantedFlip(PivotFlip.FRONT);
@@ -1138,6 +1134,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.CLIMB_DEPLOY);
     climber.setWantedState(ClimbState.EXTENDING);
     pivot.setWantedState(PivotState.CLIMB);
+    peripherals.setBackCamPipline(1);
   }
 
   public void handleClimbState() {

@@ -128,7 +128,8 @@ public class Elevator extends SubsystemBase {
           elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
     } else {
       if (position > Constants.inchesToMeters(63.0) && getElevatorPosition() > Constants.inchesToMeters(62.0)) {
-        moveWithTorque(30, 0.3);
+        moveWithTorque(15, 0.15);
+        System.out.println("running with torque");
       } else {
         elevatorMotorMaster.setControl(
             elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))

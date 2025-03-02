@@ -497,6 +497,11 @@ public class Drive extends SubsystemBase {
       firstPointAngle = Math.PI + firstPointAngle;
     }
 
+    if (OI.isProcessorSide()) {
+      firstPointY = Constants.Physical.FIELD_WIDTH - firstPointY;
+      firstPointAngle = -firstPointAngle;
+    }
+
     peripherals.setPigeonAngle(Math.toDegrees(firstPointAngle));
     SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
     swerveModulePositions[0] = new SwerveModulePosition(frontLeft.getModuleDistance(),
@@ -2097,6 +2102,12 @@ public class Drive extends SubsystemBase {
       currentY = Constants.Physical.FIELD_WIDTH - currentY;
       currentTheta = Math.PI + currentTheta;
     }
+
+    if (OI.isProcessorSide()) {
+      currentY = Constants.Physical.FIELD_WIDTH - currentY;
+      currentTheta = -currentTheta;
+    }
+
     for (int i = currentIndex; i < pathPoints.length(); i++) {
       JSONObject point = pathPoints.getJSONObject(i);
       double targetX = point.getDouble("x"), targetY = point.getDouble("y"),
@@ -2161,6 +2172,12 @@ public class Drive extends SubsystemBase {
       finalY = -finalY;
       finalTheta = finalTheta;
     }
+
+    if (OI.isProcessorSide()) {
+      finalY = -finalY;
+      currentTheta = -currentTheta;
+    }
+
     Number[] velocityArray = new Number[] {
         finalX,
         -finalY,
@@ -2302,7 +2319,7 @@ public class Drive extends SubsystemBase {
     switch (systemState) {
       case DEFAULT:
         if (OI.driverA.getAsBoolean()) {
-          robotCentricDrive(180.0);
+          robotCentricDrive(195.0);
         } else {
           teleopDrive();
         }

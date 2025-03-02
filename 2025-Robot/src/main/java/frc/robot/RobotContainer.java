@@ -13,37 +13,20 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AccurateFollower;
 import frc.robot.commands.AutoPlaceL4Follower;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.FeederPickupFollower;
 import frc.robot.commands.FullSendFollower;
-import frc.robot.commands.MoveToPiece;
-import frc.robot.commands.MoveToPoint;
 import frc.robot.commands.PolarAutoFollower;
-import frc.robot.commands.RunIntake;
-import frc.robot.commands.RunOutake;
 import frc.robot.commands.SetClimberPivotTorque;
-import frc.robot.commands.SetElevatorPercent;
-import frc.robot.commands.SetElevatorState;
-import frc.robot.commands.SetIntake;
 import frc.robot.commands.SetIntakeState;
-import frc.robot.commands.SetPivotPercent;
-import frc.robot.commands.SetPivotState;
-import frc.robot.commands.SetRobotPose;
 import frc.robot.commands.SetRobotState;
 import frc.robot.commands.SetRobotStateComplicated;
 import frc.robot.commands.SetRobotStateOnce;
 import frc.robot.commands.SetRobotStateSimple;
 import frc.robot.commands.SetRobotStateSimpleOnce;
-import frc.robot.commands.SetTwistPercent;
-import frc.robot.commands.SetTwistState;
 import frc.robot.commands.ZeroAngleMidMatch;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
@@ -55,9 +38,7 @@ import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Twist;
 import frc.robot.subsystems.Intake.IntakeState;
-import frc.robot.subsystems.Pivot.PivotState;
 import frc.robot.subsystems.Superstructure.SuperState;
-import frc.robot.subsystems.Twist.TwistState;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -79,7 +60,8 @@ public class RobotContainer {
     Pivot pivot = new Pivot();
     Twist twist = new Twist();
     Climber climber = new Climber();
-    Superstructure superstructure = new Superstructure(drive, elevator, intake, pivot, twist, climber, lights, this);
+    Superstructure superstructure = new Superstructure(drive, elevator, intake, pivot, twist, climber, lights,
+            peripherals);
 
     boolean algaeMode = false;
     boolean manualMode = false;

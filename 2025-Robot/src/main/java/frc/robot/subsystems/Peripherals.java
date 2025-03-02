@@ -105,6 +105,10 @@ public class Peripherals {
     return pitch;
   }
 
+  public void setBackCamPipline(int index) {
+    backReefCam.setPipelineIndex(index);
+  }
+
   public double getGamePieceCamYaw() {
     double yaw = 0.0;
     var result = gamePieceCamera.getLatestResult();
@@ -395,7 +399,7 @@ public class Peripherals {
   }
 
   public void periodic() {
-    //TODO: uncomment if you want to see if the cameras have a track
+    // TODO: uncomment if you want to see if the cameras have a track
     // Logger.recordOutput("Front Cam Track", frontReefCamTrack);
     // Logger.recordOutput("Back Cam Track", backReefCamTrack);
     // Logger.recordOutput("Right Cam Track", frontBargeCamTrack);

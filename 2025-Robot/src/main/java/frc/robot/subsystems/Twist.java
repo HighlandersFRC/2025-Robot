@@ -24,8 +24,8 @@ public class Twist extends SubsystemBase {
       new CANBus(Constants.CANInfo.CANBUS_NAME));
 
   private final double twistJerk = 20.0;
-  private final double twistAcceleration = 30.0;
-  private final double twistCruiseVelocity = 100.0;
+  private final double twistAcceleration = 50.0;
+  private final double twistCruiseVelocity = 200.0;
 
   private final double twistProfileScalarFactor = 3;
   private boolean startedZero = false;
@@ -41,11 +41,11 @@ public class Twist extends SubsystemBase {
 
   public void init() {
     TalonFXConfiguration twistConfig = new TalonFXConfiguration();
-    twistConfig.Slot0.kP = 30.0;
+    twistConfig.Slot0.kP = 50.0;
     twistConfig.Slot0.kI = 0.0;
-    twistConfig.Slot0.kD = 3.6;
-    twistConfig.Slot0.kS = 8.0;
-    twistConfig.Slot1.kP = 20.0;
+    twistConfig.Slot0.kD = 4.6;
+    twistConfig.Slot0.kS = 5.0;
+    twistConfig.Slot1.kP = 15.0;
     twistConfig.Slot1.kI = 0.0;
     twistConfig.Slot1.kD = 5.0;
     twistConfig.Slot1.kS = 5.0;
@@ -54,9 +54,9 @@ public class Twist extends SubsystemBase {
     twistConfig.MotionMagic.MotionMagicCruiseVelocity = this.twistCruiseVelocity;
     twistConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     twistConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    twistConfig.CurrentLimits.StatorCurrentLimit = 40;
-    twistConfig.CurrentLimits.SupplyCurrentLimit = 40;
-    twistConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    twistConfig.CurrentLimits.StatorCurrentLimit = 60;
+    twistConfig.CurrentLimits.SupplyCurrentLimit = 60;
+    twistConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     twistConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     twistConfig.Feedback.FeedbackRemoteSensorID = twistCANcoder.getDeviceID();
     twistConfig.Feedback.SensorToMechanismRatio = 1.0;

@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.tools.math.Vector;
 import frc.robot.tools.wrappers.AutoFollower;
 import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.subsystems.Drive;
 
 public class FullSendFollower extends AutoFollower {
@@ -116,7 +117,7 @@ public class FullSendFollower extends AutoFollower {
     drive.autoDrive(velocityVector, desiredThetaChange);
     // Logger.recordOutput("pursuing?", true);
     // Logger.recordOutput("Path Time", path
-    //     .getJSONObject(getPathPointIndex()).getDouble("time"));
+    // .getJSONObject(getPathPointIndex()).getDouble("time"));
   }
 
   @Override
@@ -186,6 +187,11 @@ public class FullSendFollower extends AutoFollower {
       odometryFusedX = Constants.Physical.FIELD_LENGTH - odometryFusedX;
       odometryFusedY = Constants.Physical.FIELD_WIDTH - odometryFusedY;
       odometryFusedTheta = Math.PI + odometryFusedTheta;
+    }
+
+    if (OI.isProcessorSide()) {
+      odometryFusedY = Constants.Physical.FIELD_WIDTH - odometryFusedY;
+      odometryFusedTheta = -odometryFusedTheta;
     }
     while (Math.abs(odometryFusedTheta - point.getDouble("angle")) > Math.PI) {
       if (odometryFusedTheta - point.getDouble("angle") > Math.PI) {

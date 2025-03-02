@@ -161,13 +161,13 @@ public class Intake extends SubsystemBase {
           case CORAL:
             // if (timeSinceItemSwitch > 1.0) {
             double percent = Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) + 0.05;
-            setIntakeTorque(35, 0.1);
+            setIntakeTorque(40, 0.4);
             // } else {
             // setIntakePercent(1.0);
             // }
             break;
           default:
-            setIntakePercent(1.0);
+            setIntakePercent(0.4);
             break;
         }
         break;
@@ -175,17 +175,15 @@ public class Intake extends SubsystemBase {
         // System.out.println("algae running");
         switch (intakeItem) {
           case ALGAE:
-            if (timeSinceItemSwitch > 1.0) {
-              // System.out.println("intake running");
-              setIntakeTorque(-40, 1.0);
-            } else {
-              // System.out.println("2");
-              setIntakePercent(-1.0);
-            }
+            // if (timeSinceItemSwitch > 1.0) {
+            double percent = Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) + 0.05;
+            setIntakeTorque(-30, 0.4);
+            // } else {
+            // setIntakePercent(1.0);
+            // }
             break;
           default:
-            // System.out.println("3");
-            setIntakePercent(-1.0);
+            setIntakePercent(-0.4);
             break;
         }
         break;
@@ -199,9 +197,9 @@ public class Intake extends SubsystemBase {
           // break;
           default:
             if (algaeMode) {
-              setIntakePercent(0.2);
+              setIntakePercent(0.4);
             } else {
-              setIntakePercent(-0.2);
+              setIntakePercent(-0.4);
             }
             break;
         }
@@ -212,9 +210,9 @@ public class Intake extends SubsystemBase {
       default:
         // System.out.println("Motor Current: " + intakeMotor.getTorqueCurrent());
         if (algaeMode) {
-          setIntakeTorque(-35, 0.5);
+          setIntakeTorque(-40, 0.4);
         } else {
-          setIntakeTorque(25, 0.2);
+          setIntakeTorque(30, 0.4);
         }
     }
   }
