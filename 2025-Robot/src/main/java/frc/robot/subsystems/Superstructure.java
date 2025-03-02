@@ -1173,23 +1173,55 @@ public class Superstructure extends SubsystemBase {
     intake.setWantedState(IntakeState.OUTAKE);
   }
 
+  // public void handleAutoL2ScoreState() {
+  //   lights.setWantedState(LightsState.SCORING);
+  //   drive.setWantedState(DriveState.DEFAULT);
+  //   pivot.setWantedState(PivotState.AUTO_SCORE_L2);
+  //   // if (Math.hypot((drive.getMT2OdometryX() -
+  //   // drive.getReefClosestSetpoint(drive.getMT2Odometry())[0]),
+  //   // (drive.getMT2OdometryY() -
+  //   // drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
+  //   // intake.setWantedState(IntakeState.OUTAKE);
+  //   // } else {
+  //   // intake.setWantedState(IntakeState.OFF);
+  //   // }
+  //   if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.1 || Math.hypot(OI.getDriverLeftX(),
+  //       OI.getDriverLeftY()) > 0.1) {
+  //     intake.setWantedState(IntakeState.OUTAKE);
+  //   } else {
+  //     intake.setWantedState(IntakeState.OFF);
+  //   }
+  // }
+
   public void handleAutoL2ScoreState() {
     lights.setWantedState(LightsState.SCORING);
-    drive.setWantedState(DriveState.DEFAULT);
-    pivot.setWantedState(PivotState.AUTO_SCORE_L2);
+    if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 15.0 / 39.37) {
+      pivot.setWantedState(PivotState.AUTO_SCORE_L2);
+    } else {
+      pivot.setWantedState(PivotState.DEFAULT);
+    }
     // if (Math.hypot((drive.getMT2OdometryX() -
-    // drive.getReefClosestSetpoint(drive.getMT2Odometry())[0]),
+    // drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[0]),
     // (drive.getMT2OdometryY() -
-    // drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
+    // drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
     // intake.setWantedState(IntakeState.OUTAKE);
     // } else {
     // intake.setWantedState(IntakeState.OFF);
     // }
-    if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.1 || Math.hypot(OI.getDriverLeftX(),
-        OI.getDriverLeftY()) > 0.1) {
+    if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
+        OI.getDriverLeftY()) > 0.25) {
+      drive.setWantedState(DriveState.DEFAULT);
       intake.setWantedState(IntakeState.OUTAKE);
     } else {
-      intake.setWantedState(IntakeState.OFF);
+      if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
+          - 10.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+        drive.setWantedState(DriveState.REEF_MORE);
+        intake.setWantedState(IntakeState.OUTAKE);
+        elevator.setWantedState(ElevatorState.DEFAULT);
+      } else {
+        drive.setWantedState(DriveState.DEFAULT);
+        intake.setWantedState(IntakeState.OFF);
+      }
     }
   }
 
@@ -1198,27 +1230,59 @@ public class Superstructure extends SubsystemBase {
   // pivot.setWantedState(PivotState.AUTO_SCORE_L23);
   // }
 
+  // public void handleAutoL3ScoreState() {
+  //   // lights.setWantedState(LightsState.SCORING);
+  //   // elevator.updateDistanceFromL23DriveSetpoint(drive.getDistanceFromL23Setpoint());
+  //   // drive.setWantedState(DriveState.SCORE_L23);
+  //   // elevator.setWantedState(ElevatorState.AUTO_SCORE_L3);
+  //   lights.setWantedState(LightsState.SCORING);
+  //   drive.setWantedState(DriveState.DEFAULT);
+  //   pivot.setWantedState(PivotState.AUTO_SCORE_L3);
+  //   // if (Math.hypot((drive.getMT2OdometryX() -
+  //   // drive.getReefClosestSetpoint(drive.getMT2Odometry())[0]),
+  //   // (drive.getMT2OdometryY() -
+  //   // drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
+  //   // intake.setWantedState(IntakeState.OUTAKE);
+  //   // } else {
+  //   // intake.setWantedState(IntakeState.OFF);
+  //   // }
+  //   if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.1 || Math.hypot(OI.getDriverLeftX(),
+  //       OI.getDriverLeftY()) > 0.1) {
+  //     intake.setWantedState(IntakeState.OUTAKE);
+  //   } else {
+  //     intake.setWantedState(IntakeState.OFF);
+  //   }
+  // }
+
   public void handleAutoL3ScoreState() {
-    // lights.setWantedState(LightsState.SCORING);
-    // elevator.updateDistanceFromL23DriveSetpoint(drive.getDistanceFromL23Setpoint());
-    // drive.setWantedState(DriveState.SCORE_L23);
-    // elevator.setWantedState(ElevatorState.AUTO_SCORE_L3);
     lights.setWantedState(LightsState.SCORING);
-    drive.setWantedState(DriveState.DEFAULT);
-    pivot.setWantedState(PivotState.AUTO_SCORE_L3);
+    if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 15.0 / 39.37) {
+      pivot.setWantedState(PivotState.AUTO_SCORE_L3);
+    } else {
+      pivot.setWantedState(PivotState.DEFAULT);
+    }
     // if (Math.hypot((drive.getMT2OdometryX() -
-    // drive.getReefClosestSetpoint(drive.getMT2Odometry())[0]),
+    // drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[0]),
     // (drive.getMT2OdometryY() -
-    // drive.getReefClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
+    // drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[1])) > 2.0 / 39.37) {
     // intake.setWantedState(IntakeState.OUTAKE);
     // } else {
     // intake.setWantedState(IntakeState.OFF);
     // }
-    if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.1 || Math.hypot(OI.getDriverLeftX(),
-        OI.getDriverLeftY()) > 0.1) {
+    if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
+        OI.getDriverLeftY()) > 0.25) {
+      drive.setWantedState(DriveState.DEFAULT);
       intake.setWantedState(IntakeState.OUTAKE);
     } else {
-      intake.setWantedState(IntakeState.OFF);
+      if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations
+          - 10.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+        drive.setWantedState(DriveState.REEF_MORE);
+        intake.setWantedState(IntakeState.OUTAKE);
+        elevator.setWantedState(ElevatorState.DEFAULT);
+      } else {
+        drive.setWantedState(DriveState.DEFAULT);
+        intake.setWantedState(IntakeState.OFF);
+      }
     }
   }
 
