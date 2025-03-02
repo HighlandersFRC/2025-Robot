@@ -1244,7 +1244,7 @@ public final class Constants {
                 public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(33);
                 // public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(25);
                 public static final double ELEVATOR_AUTO_SCORE_L3_POSITION_M = inchesToMeters(20);
-                public static final double ELEVATOR_AUTO_L4_POSITION_M = inchesToMeters(66.0);
+                public static final double ELEVATOR_AUTO_L4_POSITION_M = inchesToMeters(64.0);
                 public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(31);
                 public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(64.0);
                 public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8.0);
