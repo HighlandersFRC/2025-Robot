@@ -27,6 +27,16 @@ public class OI {
     public static TriggerButton driverPOVDown = new TriggerButton(povDown);
     public static TriggerButton driverPOVLeft = new TriggerButton(povLeft);
 
+    public static BooleanSupplier operatorPovUp = () -> getOperatorPOV() == 0;
+    public static BooleanSupplier operatorPovRight = () -> getOperatorPOV() == 90;
+    public static BooleanSupplier operatorPovDown = () -> getOperatorPOV() == 180;
+    public static BooleanSupplier operatorPovLeft = () -> getOperatorPOV() == 270;
+
+    public static TriggerButton operatorPOVUp = new TriggerButton(operatorPovUp);
+    public static TriggerButton operatorPOVRight = new TriggerButton(operatorPovRight);
+    public static TriggerButton operatorPOVDown = new TriggerButton(operatorPovDown);
+    public static TriggerButton operatorPOVLeft = new TriggerButton(operatorPovLeft);
+
     public static TriggerButton driverRT = new TriggerButton(driveRTSupplier);
     public static TriggerButton driverLT = new TriggerButton(driverLTSupplier);
 
@@ -180,6 +190,10 @@ public class OI {
 
     public static int getPOV() {
         return driverController.getPOV();
+    }
+
+    public static int getOperatorPOV() {
+        return operatorController.getPOV();
     }
 
     public static boolean getPOVUp() {
