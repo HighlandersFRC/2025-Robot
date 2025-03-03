@@ -1037,10 +1037,10 @@ public final class Constants {
                 // public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
                 // public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
 
-                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(26);
+                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(25.5);
                 // public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(24.5);
                 public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(3.25);
-                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(27);
+                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(26.5);
                 // public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(25.5);
                 public static double INTAKE_Y_OFFSET_BACK = inchesToMeters(-3.25);
 
@@ -1055,10 +1055,10 @@ public final class Constants {
                 public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(29.5);
                 public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.2);
 
-                public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.6);
+                public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.1);
                 // public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.3);
                 public static double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(3.2);
-                public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.1);
+                public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(26.8);
                 // public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.1);
                 public static double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-2.7);
 
@@ -1220,7 +1220,7 @@ public final class Constants {
                 public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
                 public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
                 public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
-                public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(10.0);
+                public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(10.75);
                 public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(18);
                 public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(17);
                 public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(33);
