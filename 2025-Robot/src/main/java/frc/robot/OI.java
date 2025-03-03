@@ -114,6 +114,38 @@ public class OI {
         return rightY;
     }
 
+    public static double getOperatorLeftX() {
+        double leftX = -operatorController.getLeftX(), leftY = operatorController.getLeftY();
+        if (Math.hypot(leftX, leftY) < Constants.OperatorConstants.LEFT_STICK_DEADZONE) {
+            leftX = 0;
+        }
+        return leftX;
+    }
+
+    public static double getOperatorLeftY() {
+        double leftX = -operatorController.getLeftX(), leftY = operatorController.getLeftY();
+        if (Math.hypot(leftX, leftY) < Constants.OperatorConstants.LEFT_STICK_DEADZONE) {
+            leftY = 0;
+        }
+        return leftY;
+    }
+
+    public static double getOperatorRightX() {
+        double rightX = operatorController.getRightX(), rightY = operatorController.getRightY();
+        if (Math.hypot(rightX, rightY) < Constants.OperatorConstants.LEFT_STICK_DEADZONE) {
+            rightX = 0;
+        }
+        return rightX;
+    }
+
+    public static double getOperatorRightY() {
+        double rightX = operatorController.getRightX(), rightY = operatorController.getRightY();
+        if (Math.hypot(rightX, rightY) < Constants.OperatorConstants.LEFT_STICK_DEADZONE) {
+            rightY = 0;
+        }
+        return rightY;
+    }
+
     public static double getDriverRTPercent() {
         return driverController.getRightTriggerAxis();
     }

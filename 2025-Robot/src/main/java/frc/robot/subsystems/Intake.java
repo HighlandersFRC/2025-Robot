@@ -167,7 +167,7 @@ public class Intake extends SubsystemBase {
             // }
             break;
           default:
-            setIntakePercent(0.6);
+            setIntakePercent(0.8);
             break;
         }
         break;
@@ -177,13 +177,13 @@ public class Intake extends SubsystemBase {
           case ALGAE:
             // if (timeSinceItemSwitch > 1.0) {
             double percent = Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) + 0.05;
-            setIntakeTorque(-30, 0.4);
+            setIntakeTorque(-50, 0.7);
             // } else {
             // setIntakePercent(1.0);
             // }
             break;
           default:
-            setIntakePercent(-0.4);
+            setIntakePercent(-0.7);
             break;
         }
         break;
@@ -210,7 +210,7 @@ public class Intake extends SubsystemBase {
       default:
         // System.out.println("Motor Current: " + intakeMotor.getTorqueCurrent());
         if (algaeMode) {
-          setIntakeTorque(-40, 0.6);
+          setIntakeTorque(-30, 0.2);
         } else {
           setIntakeTorque(30, 0.6);
         }

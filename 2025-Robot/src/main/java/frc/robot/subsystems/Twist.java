@@ -45,7 +45,7 @@ public class Twist extends SubsystemBase {
     twistConfig.Slot0.kI = 0.0;
     twistConfig.Slot0.kD = 4.6;
     twistConfig.Slot0.kS = 5.0;
-    twistConfig.Slot1.kP = 15.0;
+    twistConfig.Slot1.kP = 30.0;
     twistConfig.Slot1.kI = 0.0;
     twistConfig.Slot1.kD = 5.0;
     twistConfig.Slot1.kS = 5.0;
