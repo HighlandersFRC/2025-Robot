@@ -40,11 +40,12 @@ public final class Constants {
                 public static final double FEED_FORWARD_MULTIPLIER = 0.5;
                 public static final double ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER = 1;
                 public static final String[] paths = new String[] {
-                                "Test.polarauto",
-                                "3piece.polarauto",
-                                "3PieceFeeder.polarauto",
-                                "3PieceFeederSmart.polarauto",
+                                // "3piece.polarauto",
+                                "center1.polarauto",
                                 "2+1PieceFeeder.polarauto",
+                                "3PieceFeederSmart.polarauto",
+                                "3PieceFeeder.polarauto",
+                                "Test.polarauto",
                 };
 
                 public static int getSelectedPathIndex() {
@@ -1220,7 +1221,7 @@ public final class Constants {
                 public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
                 public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
                 public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
-                public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(10.75);
+                public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(11.0);
                 public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(18);
                 public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(17);
                 public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(33);

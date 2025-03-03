@@ -75,31 +75,7 @@ public class RobotContainer {
                         put("Outake", () -> new SetRobotStateSimple(superstructure, SuperState.OUTAKE));
                         put("L1", () -> new SetRobotStateSimple(superstructure, SuperState.AUTO_L1_PLACE));
                         put("Idle", () -> new SetRobotStateSimple(superstructure, SuperState.IDLE));
-                        // put("Instant", () -> new InstantCommand());
-                        // put("Outake", () -> new RunOutake(intake, superstructure));
-                        // put("Elevator Down", () -> new SetRobotStateSimple(superstructure,
-                        // SuperState.IDLE));
-                        // put("Elevator L2", () -> new SetRobotStateSimple(superstructure,
-                        // SuperState.ELEVATOR_L2));
-                        // put("Elevator Mid", () -> new SetRobotStateSimple(superstructure,
-                        // SuperState.ELEVATOR_MID));
-                        // put("Wait", () -> new DoNothing());
-                        // put("Print", () -> new PrintCommand("10s"));
                         put("Full Send", () -> new FullSendFollower(drive, null, false));
-                        // put("Accurate", () -> new AccurateFollower(drive, false));
-                        // put("Place Coral High", () -> new SequentialCommandGroup(
-                        // new ParallelRaceGroup(
-                        // new SetRobotState(superstructure, SuperState.ELEVATOR_L2),
-                        // new WaitCommand(1)),
-                        // new ParallelRaceGroup(
-                        // new SetRobotState(superstructure, SuperState.ELEVATOR_MID),
-                        // new WaitCommand(0.2)),
-                        // new ParallelRaceGroup(
-                        // new SetIntake(intake, 0.3),
-                        // new WaitCommand(0.2))));
-                        // put("Intake Coral", () -> new RunIntake(intake, superstructure));
-                        // put("Raise 2in", () -> new SetRobotStateSimple(superstructure,
-                        // SuperState.ELEVATOR_ALGAE));
                 }
         };
 

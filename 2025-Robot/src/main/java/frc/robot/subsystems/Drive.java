@@ -2191,7 +2191,7 @@ public class Drive extends SubsystemBase {
 
     if (OI.isProcessorSide()) {
       finalY = -finalY;
-      currentTheta = -currentTheta;
+      finalTheta = -finalTheta;
     }
 
     Number[] velocityArray = new Number[] {
@@ -2506,11 +2506,11 @@ public class Drive extends SubsystemBase {
                     Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 216)) {
               // driveToTheta(306);
               driveToPoint(Constants.Reef.RED_LEFT_FEEDER.getX(), Constants.Reef.RED_LEFT_FEEDER.getY(),
-                  Constants.Reef.RED_LEFT_FEEDER.getRotation().getRadians());
+                  Constants.Reef.RED_LEFT_FEEDER.getRotation().getRadians() + Math.PI);
             } else { // robot back side redside left (fieldside bottom right)
               // driveToTheta(126);
               driveToPoint(Constants.Reef.RED_LEFT_FEEDER.getX(), Constants.Reef.RED_LEFT_FEEDER.getY(),
-                  Constants.Reef.RED_LEFT_FEEDER.getRotation().getRadians() + Math.PI);
+                  Constants.Reef.RED_LEFT_FEEDER.getRotation().getRadians());
             }
           }
         } else { // blue side
@@ -2520,11 +2520,11 @@ public class Drive extends SubsystemBase {
                 Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 144)) {
               // driveToTheta(234);
               driveToPoint(Constants.Reef.BLUE_RIGHT_FEEDER.getX(), Constants.Reef.BLUE_RIGHT_FEEDER.getY(),
-                  Constants.Reef.BLUE_RIGHT_FEEDER.getRotation().getRadians());
+                  Constants.Reef.BLUE_RIGHT_FEEDER.getRotation().getRadians() + Math.PI);
             } else { // robot back side blueside right (fieldside bottom left)
               // driveToTheta(54);
               driveToPoint(Constants.Reef.BLUE_RIGHT_FEEDER.getX(), Constants.Reef.BLUE_RIGHT_FEEDER.getY(),
-                  Constants.Reef.BLUE_RIGHT_FEEDER.getRotation().getRadians() + Math.PI);
+                  Constants.Reef.BLUE_RIGHT_FEEDER.getRotation().getRadians());
             }
           } else { // blue side left feeder (fieldside top left)
             if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 36
