@@ -124,6 +124,9 @@ public class Intake extends SubsystemBase {
   }
 
   private IntakeState handleStateTransition() {
+    if (OI.driverLT.getAsBoolean()) {
+      return IntakeState.OUTAKE;
+    }
     switch (wantedState) {
       case CORAL_INTAKE:
         return IntakeState.CORAL_INTAKE;

@@ -151,12 +151,13 @@ public class RobotContainer {
                                                 .getCurrentSuperState() == SuperState.L3_PLACE
                                                 || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
 
-                OI.driverLT.whileTrue(new SetRobotStateSimple(superstructure, SuperState.OUTAKE_DRIVE));
-                OI.driverLT.onFalse(new SetIntakeState(intake, IntakeState.DEFAULT));
+                // OI.driverLT.whileTrue(new SetIntakeState(intake, IntakeState.OUTAKE));
+                // OI.driverLT.onFalse(new SetIntakeState(intake, IntakeState.DEFAULT));
 
                 OI.driverLB.whileTrue(new ConditionalCommand(new InstantCommand(),
-                                new ConditionalCommand(new SetRobotState(superstructure,
-                                                SuperState.FEEDER),
+                                new ConditionalCommand(
+                                                new SetRobotState(superstructure,
+                                                                SuperState.FEEDER),
                                                 new SetRobotState(superstructure,
                                                                 SuperState.FEEDER_AUTO),
                                                 () -> manualMode),
@@ -243,11 +244,13 @@ public class RobotContainer {
 
                 OI.driverPOVRight.whileTrue(new ConditionalCommand(
                                 new SetRobotStateSimple(superstructure, SuperState.L4_PLACE),
-                                new ConditionalCommand(new ConditionalCommand(
-                                                new SetRobotState(superstructure, SuperState.NET),
-                                                new SetRobotStateComplicated(superstructure,
-                                                                SuperState.AUTO_NET, SuperState.DEFAULT),
-                                                () -> manualMode),
+                                new ConditionalCommand(
+                                                new ConditionalCommand(
+                                                                new SetRobotState(superstructure, SuperState.NET),
+                                                                new SetRobotStateComplicated(superstructure,
+                                                                                SuperState.AUTO_NET,
+                                                                                SuperState.DEFAULT),
+                                                                () -> manualMode),
                                                 new SetRobotStateOnce(superstructure, SuperState.AUTO_L4_PLACE),
                                                 () -> algaeMode),
                                 () -> (manualMode && !algaeMode)));

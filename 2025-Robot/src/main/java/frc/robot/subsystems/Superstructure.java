@@ -432,7 +432,7 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case CLIMB:
-        if (climber.getPosition() < -100) {
+        if (climber.getPosition() < -120) {
           currentSuperState = SuperState.CLIMB;
         } else {
           wantedSuperState = SuperState.CLIMBER_IDLE;

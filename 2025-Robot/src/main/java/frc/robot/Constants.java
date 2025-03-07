@@ -212,6 +212,40 @@ public final class Constants {
                 public static final double RED_LEFT_FEEDER_Y = 0.990;
                 public static final double RED_LEFT_FEEDER_THETA = Math.toRadians(126.0);
 
+                public static final double RED_LEFT_FEEDER_LEFT_X = 16.903;
+                public static final double RED_LEFT_FEEDER_LEFT_Y = 1.349;
+                public static final double RED_LEFT_FEEDER_LEFT_THETA = Math.toRadians(126.0);
+                public static final double RED_LEFT_FEEDER_RIGHT_X = 15.932;
+                public static final double RED_LEFT_FEEDER_RIGHT_Y = 0.664;
+                public static final double RED_LEFT_FEEDER_RIGHT_THETA = Math.toRadians(126.0);
+
+                public static final Pose2d RED_LEFT_FEEDER_LEFT = new Pose2d(RED_LEFT_FEEDER_LEFT_X,
+                                RED_LEFT_FEEDER_LEFT_Y,
+                                new Rotation2d(RED_LEFT_FEEDER_LEFT_THETA));
+                public static final Pose2d RED_RIGHT_FEEDER_LEFT = new Pose2d(
+                                RED_LEFT_FEEDER_LEFT_X, Physical.FIELD_WIDTH - RED_LEFT_FEEDER_LEFT_Y,
+                                new Rotation2d(Math.toRadians(234.0)));
+                public static final Pose2d BLUE_RIGHT_FEEDER_LEFT = new Pose2d(
+                                Physical.FIELD_LENGTH - RED_LEFT_FEEDER_LEFT_X, RED_LEFT_FEEDER_LEFT_Y,
+                                new Rotation2d(Math.toRadians(54.0)));
+                public static final Pose2d BLUE_LEFT_FEEDER_LEFT = new Pose2d(
+                                Physical.FIELD_LENGTH - RED_LEFT_FEEDER_LEFT_X,
+                                Physical.FIELD_WIDTH - RED_LEFT_FEEDER_LEFT_Y,
+                                new Rotation2d(Math.toRadians(-54.0)));
+                public static final Pose2d RED_LEFT_FEEDER_RIGHT = new Pose2d(RED_LEFT_FEEDER_RIGHT_X,
+                                RED_LEFT_FEEDER_RIGHT_Y,
+                                new Rotation2d(RED_LEFT_FEEDER_RIGHT_THETA));
+                public static final Pose2d RED_RIGHT_FEEDER_RIGHT = new Pose2d(
+                                RED_LEFT_FEEDER_RIGHT_X, Physical.FIELD_WIDTH - RED_LEFT_FEEDER_RIGHT_Y,
+                                new Rotation2d(Math.toRadians(234.0)));
+                public static final Pose2d BLUE_RIGHT_FEEDER_RIGHT = new Pose2d(
+                                Physical.FIELD_LENGTH - RED_LEFT_FEEDER_RIGHT_X, RED_LEFT_FEEDER_RIGHT_Y,
+                                new Rotation2d(Math.toRadians(54.0)));
+                public static final Pose2d BLUE_LEFT_FEEDER_RIGHT = new Pose2d(
+                                Physical.FIELD_LENGTH - RED_LEFT_FEEDER_RIGHT_X,
+                                Physical.FIELD_WIDTH - RED_LEFT_FEEDER_RIGHT_Y,
+                                new Rotation2d(Math.toRadians(-54.0)));
+
                 public static final Pose2d RED_LEFT_FEEDER = new Pose2d(RED_LEFT_FEEDER_X, RED_LEFT_FEEDER_Y,
                                 new Rotation2d(RED_LEFT_FEEDER_THETA));
                 public static final Pose2d RED_RIGHT_FEEDER = new Pose2d(
@@ -225,8 +259,8 @@ public final class Constants {
                                 Physical.FIELD_LENGTH - RED_LEFT_FEEDER_X, Physical.FIELD_WIDTH - RED_LEFT_FEEDER_Y,
                                 new Rotation2d(Math.toRadians(-54.0)));
 
-                public static final double PROCESSOR_Y_OFFSET_M = inchesToMeters(93); // 20?
-                public static final double NET_X_OFFSET_M = inchesToMeters(93); // 30?
+                public static final double PROCESSOR_Y_OFFSET_M = inchesToMeters(32.0); // 20?
+                public static final double NET_X_OFFSET_M = inchesToMeters(45.0); // 30?
 
                 public static final Translation2d processorBlueFrontPlacingTranslation = new Translation2d(
                                 inchesToMeters(238.79),
@@ -1056,10 +1090,10 @@ public final class Constants {
                 public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(29.5);
                 public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.2);
 
-                public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.1);
+                public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(27.1);
                 // public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.3);
                 public static double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(3.2);
-                public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(26.8);
+                public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.8);
                 // public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.1);
                 public static double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-2.7);
 
@@ -1235,7 +1269,7 @@ public final class Constants {
                 public static final double ELEVATOR_GROUND_ALGAE_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_FEEDER_POSITION_M = inchesToMeters(2);
                 public static final double ELEVATOR_OVER_POSITION_M = inchesToMeters(20);
-                public static final double ELEVATOR_NET_POSITION_M = inchesToMeters(64);
+                public static final double ELEVATOR_NET_POSITION_M = inchesToMeters(66);
                 public static final double ELEVATOR_L2_ALGAE_POSITION_M = inchesToMeters(19);
                 public static final double ELEVATOR_L3_ALGAE_POSITION_M = inchesToMeters(38);
                 public static final double ELEVATOR_PROCESSOR_POSITION_M = inchesToMeters(5);
