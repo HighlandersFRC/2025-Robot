@@ -1265,7 +1265,7 @@ public final class Constants {
                 public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(31);
                 public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(64.0);
                 public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8.0);
-                public static final double ELEVATOR_GROUND_CORAL_POSITION_M = inchesToMeters(7.0);
+                public static final double ELEVATOR_GROUND_CORAL_POSITION_M = inchesToMeters(6.0);
                 public static final double ELEVATOR_GROUND_ALGAE_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_FEEDER_POSITION_M = inchesToMeters(2);
                 public static final double ELEVATOR_OVER_POSITION_M = inchesToMeters(20);
@@ -1336,7 +1336,7 @@ public final class Constants {
                 public static final double PIVOT_DEFAULT_POSITION_D = 0.0;
                 public static final double PIVOT_PREP_POSITION_D = 30.0;
                 public static final double PIVOT_FEEDER_POSITION_D = 39.37;
-                public static final double PIVOT_NET_POSITION_D = 10.0;
+                public static final double PIVOT_NET_POSITION_D = -10.0;
                 public static final double PIVOT_PROCESSOR_POSITION_D = 56.0;
                 public static final double PIVOT_REEF_ALGAE_POSITION_D = 105.0;
                 public static final double PIVOT_CLIMB_POSITION_D = 45.0;

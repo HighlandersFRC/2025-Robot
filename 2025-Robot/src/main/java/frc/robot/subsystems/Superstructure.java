@@ -432,7 +432,7 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case CLIMB:
-        if (climber.getPosition() < -120) {
+        if (climber.getPosition() < -105) {
           currentSuperState = SuperState.CLIMB;
         } else {
           wantedSuperState = SuperState.CLIMBER_IDLE;
@@ -858,28 +858,34 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoNetState() {
     lights.setWantedState(LightsState.PLACING);
-    drive.setWantedState(DriveState.NET);
-    if (OI.isBlueSide()) {
-      if ((drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()), 0.0) < 15.0 || drive
-          .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()), 180.0) < 15.0)
-          && Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.0) {
-        elevator.setWantedState(ElevatorState.NET);
-      }
-    } else {
-      if ((drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()), 0.0) < 15.0 || drive
-          .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()), 180.0) < 15.0)
-          && Math.abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.0) {
-        elevator.setWantedState(ElevatorState.NET);
-      }
-    }
+    drive.setWantedState(DriveState.DEFAULT);
+    // if (OI.isBlueSide()) {
+    // if
+    // ((drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+    // 0.0) < 15.0 || drive
+    // .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+    // 180.0) < 15.0)
+    // && Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.0) {
+    elevator.setWantedState(ElevatorState.NET);
+    // }
+    // } else {
+    // if
+    // ((drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+    // 0.0) < 15.0 || drive
+    // .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+    // 180.0) < 15.0)
+    // && Math.abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.0) {
+    // elevator.setWantedState(ElevatorState.NET);
+    // }
+    // }
     intake.setWantedState(IntakeState.DEFAULT);
-    if (drive.getAutoPlacementSideIsFront()) {
-      pivot.setWantedFlip(PivotFlip.FRONT);
-      twist.setWantedState(TwistState.DOWN);
-    } else {
-      pivot.setWantedFlip(PivotFlip.BACK);
-      twist.setWantedState(TwistState.UP);
-    }
+    // if (drive.getAutoPlacementSideIsFront()) {
+    pivot.setWantedFlip(PivotFlip.FRONT);
+    twist.setWantedState(TwistState.DOWN);
+    // } else {
+    // pivot.setWantedFlip(PivotFlip.BACK);
+    // twist.setWantedState(TwistState.UP);
+    // }
     pivot.setWantedState(PivotState.NET);
   }
 

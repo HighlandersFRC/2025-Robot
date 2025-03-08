@@ -156,6 +156,7 @@ public class Intake extends SubsystemBase {
     // System.out.println("Intake Current: " +
     // intakeMotor.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput("Intake State", systemState);
+    Logger.recordOutput("Has coral", hasCoral());
     Logger.recordOutput("Intake Item", intakeItem);
     // Logger.recordOutput("Has Coral", hasCoral());
     switch (systemState) {
@@ -202,7 +203,7 @@ public class Intake extends SubsystemBase {
             if (algaeMode) {
               setIntakePercent(0.4);
             } else {
-              setIntakePercent(-0.4);
+              setIntakePercent(-0.1);
             }
             break;
         }
