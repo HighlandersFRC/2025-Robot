@@ -183,7 +183,7 @@ public class Drive extends SubsystemBase {
   Transform3d frontReefRobotToCam = new Transform3d( // top front reef cam
       new Translation3d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.5),
           Constants.inchesToMeters(23.75)),
-      new Rotation3d(Math.toRadians(1.9), Math.toRadians(24.8), Math.toRadians(15.0)));
+      new Rotation3d(Math.toRadians(0.8), Math.toRadians(24.9), Math.toRadians(15.0)));
   // 25.2, 25.8
   // Transform2d frontReefCamPos = new Transform2d(
   // new Translation2d(Constants.inchesToMeters(2.25),
@@ -193,17 +193,17 @@ public class Drive extends SubsystemBase {
   Transform3d backReefRobotToCam = new Transform3d( // top back reef cam
       new Translation3d(Constants.inchesToMeters(-2.25), Constants.inchesToMeters(-11.5),
           Constants.inchesToMeters(23.75)),
-      new Rotation3d(Math.toRadians(1.4), Math.toRadians(26.0), Math.toRadians(165.0)));
+      new Rotation3d(Math.toRadians(1.9), Math.toRadians(26.0), Math.toRadians(165.0)));
   // 1.2, 1.0
   Transform3d frontBargeRobotToCam = new Transform3d( // bottom
       new Translation3d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.5), // mead to get yaw
           Constants.inchesToMeters(17.5)),
-      new Rotation3d(Math.toRadians(-0.5), Math.toRadians(-34.6), Math.toRadians(15.0)));
+      new Rotation3d(Math.toRadians(-1.8), Math.toRadians(-35.6), Math.toRadians(15.0)));
 
   Transform3d backBargeRobotToCam = new Transform3d(
       new Translation3d(Constants.inchesToMeters(-2.25), Constants.inchesToMeters(-11.5),
           Constants.inchesToMeters(17.5)),
-      new Rotation3d(Math.toRadians(-0.1), Math.toRadians(-34.5), Math.toRadians(165.0)));
+      new Rotation3d(Math.toRadians(-0.6), Math.toRadians(-35.1), Math.toRadians(165.0)));
 
   double initAngle;
   double setAngle;
