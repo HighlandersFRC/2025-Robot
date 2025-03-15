@@ -407,7 +407,14 @@ public class Peripherals {
     return accelVector;
   }
 
+  public double getPigeonPitch() {
+    return pigeon.getPitch().getValueAsDouble();
+  }
+
   public void periodic() {
+    // Logger.recordOutput("Pidgeon Yaw?", pigeon.getYaw().getValueAsDouble());
+    // Logger.recordOutput("Pidgeon Pitch?", pigeon.getPitch().getValueAsDouble());
+    // Logger.recordOutput("Pidgeon Roll?", pigeon.getRoll().getValueAsDouble());
     // TODO: uncomment if you want to see if the cameras have a track
     // Logger.recordOutput("Front Cam Track", frontReefCamTrack);
     // Logger.recordOutput("Back Cam Track", backReefCamTrack);
