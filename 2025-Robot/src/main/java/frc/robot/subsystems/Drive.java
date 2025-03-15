@@ -269,7 +269,8 @@ public class Drive extends SubsystemBase {
     SCORE_L23,
     AUTO_FEEDER,
     AUTO_L1,
-    FEEDER_AUTO
+    FEEDER_AUTO,
+    PIECE_PICKUP
   }
 
   private DriveState wantedState = DriveState.IDLE;
@@ -1327,6 +1328,62 @@ public class Drive extends SubsystemBase {
     }
   }
 
+  public Pose2d getGamePiecePosition() {
+    double yaw = 0.0;
+    double pitch = 0.0;
+    var result = peripherals.getFrontGamePieceCamResult();
+    // Logger.recordOutput("has target", result.hasTargets());
+    if (result.hasTargets()) {
+      PhotonTrackedTarget target = result.getBestTarget();
+      yaw = target.getYaw();
+      pitch = target.getPitch();
+    }
+
+    if (yaw != 0.0 && pitch != 0.0) {
+      double limelightHeight = Constants.inchesToMeters(21.0);
+      double limelightAngle = 19.7;
+      double cameraYaw = 15.0;
+      double limelightXOffset = Constants.inchesToMeters(2.25);
+      double limelightYOffset = Constants.inchesToMeters(-11.5);
+      double gamePieceHeight = Constants.inchesToMeters(2.25);
+      double intakeXOffset = Constants.inchesToMeters(22.0);
+      double intakeYOffset = Constants.inchesToMeters(4.0);
+
+      double robotX = getMT2OdometryX();
+      double robotY = getMT2OdometryY();
+      double robotAngle = getMT2OdometryAngle();
+      Pose2d robotPose = new Pose2d(robotX, robotY, new Rotation2d(robotAngle));
+
+      double targetDistance = Math
+          .abs((limelightHeight - gamePieceHeight) / Math.tan(Math.toRadians(-limelightAngle + pitch)));
+      Logger.recordOutput("Distance to Coral", targetDistance);
+      double noteY = -(targetDistance * Math.sin(Math.toRadians(-cameraYaw + yaw)));
+      double noteX = ((targetDistance * Math.cos(Math.toRadians(cameraYaw - yaw))));
+      Logger.recordOutput("coral x", noteX);
+      Logger.recordOutput("coral y", noteY);
+      double xFromRobot = noteX + limelightXOffset;
+      double yFromRobot = noteY + limelightYOffset;
+      Pose2d coralPose = robotPose.transformBy(new Transform2d(xFromRobot, yFromRobot, new Rotation2d()));
+
+      Logger.recordOutput("coral rc x", xFromRobot);
+      Logger.recordOutput("coral rc y", yFromRobot);
+      Logger.recordOutput("coral pose", coralPose);
+
+      double xFromIntake = xFromRobot - intakeXOffset;
+      double yFromIntake = yFromRobot - intakeYOffset;
+      Pose2d targetPose = robotPose.transformBy(new Transform2d(xFromIntake, yFromIntake, new Rotation2d()));
+      Logger.recordOutput("target pickup", targetPose);
+      Logger.recordOutput("coral intake x", xFromIntake);
+      Logger.recordOutput("coral intake y", yFromIntake);
+
+      return targetPose;
+      // double pieceXFromIntake = noteX - intakeXOffset;
+      // double pieceYFromIntake = noteY - intakeYOffset;
+    } else {
+      return new Pose2d();
+    }
+  }
+
   /**
    * Retrieves the current X-coordinate of the robot from fused odometry.
    *
@@ -2279,6 +2336,8 @@ public class Drive extends SubsystemBase {
         return DriveState.AUTO_L1;
       case FEEDER_AUTO:
         return DriveState.FEEDER_AUTO;
+      case PIECE_PICKUP:
+        return DriveState.PIECE_PICKUP;
       default:
         return DriveState.IDLE;
     }
@@ -2326,6 +2385,7 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
+    Pose2d pose = getGamePiecePosition();
     // System.out.println(Math.toDegrees(getThetaToCenterReef()));
     // Translation2d t1 = new Translation2d(getMT2OdometryX(), getMT2OdometryY());
     // Rotation2d r1 = new Rotation2d(getThetaToCenterReef());
@@ -2377,6 +2437,11 @@ public class Drive extends SubsystemBase {
         driveToPoint(getReefL3ClosestSetpoint(getMT2Odometry())[0],
             getReefL3ClosestSetpoint(getMT2Odometry())[1],
             getReefL3ClosestSetpoint(getMT2Odometry())[2]);
+        break;
+      case PIECE_PICKUP:
+        driveToPoint(getReefL4ClosestSetpoint(getMT2Odometry())[0],
+            getReefL4ClosestSetpoint(getMT2Odometry())[1],
+            getReefL4ClosestSetpoint(getMT2Odometry())[2]);
         break;
       case ALGAE:
         driveToPoint(getAlgaeClosestSetpoint(getMT2Odometry())[0],
