@@ -41,9 +41,9 @@ public class MoveToPoint extends Command {
     setpointTime = 0;
     hitSetpoint = 0;
     if (auto) {
-      x = drive.getReefClosestSetpoint(drive.getMT2Odometry())[0];
-      y = drive.getReefClosestSetpoint(drive.getMT2Odometry())[1];
-      theta = drive.getReefClosestSetpoint(drive.getMT2Odometry())[2];
+      x = drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[0];
+      y = drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[1];
+      theta = drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[2];
 
       System.out.println("X: " + x);
       System.out.println("y: " + y);

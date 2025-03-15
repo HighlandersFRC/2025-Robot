@@ -169,9 +169,10 @@ public class RobotContainer {
 
                 // OI.driverA.onTrue(new SetRobotStateSimpleOnce(superstructure,
                 // SuperState.CLIMB));
-                OI.driverA.whileTrue(new ConditionalCommand(new InstantCommand(),
-                                new SetRobotStateSimple(superstructure, SuperState.RUN_CLIMB_BACK),
-                                () -> (!manualMode)));
+                OI.driverA.whileTrue(
+                                new ConditionalCommand(new InstantCommand(),
+                                                new SetRobotStateSimple(superstructure, SuperState.RUN_CLIMB_BACK),
+                                                () -> (!manualMode)));
                 // OI.driverY.onTrue(new SetRobotStateSimpleOnce(superstructure,
                 // SuperState.DEPLOY_CLIMBER));
                 // OI.driverY.whileTrue(
@@ -219,13 +220,18 @@ public class RobotContainer {
                                                 new SetRobotStateComplicated(superstructure,
                                                                 SuperState.AUTO_ALGAE_PICKUP, SuperState.DEFAULT),
                                                 () -> manualMode),
-                                                new SetRobotStateOnce(superstructure, SuperState.AUTO_L2_PLACE),
+                                                new SetRobotStateSimple(superstructure, SuperState.AUTO_L2_PLACE),
                                                 () -> algaeMode),
                                 () -> (manualMode && !algaeMode)));
 
                 OI.driverPOVLeft.onFalse(
-                                new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.SCORE_L2),
-                                                new InstantCommand(), () -> (manualMode && !algaeMode)));
+                                new ConditionalCommand(
+                                                new SetRobotStateSimpleOnce(superstructure, SuperState.DEFAULT),
+                                                new ConditionalCommand(
+                                                                new SetRobotStateSimple(superstructure,
+                                                                                SuperState.SCORE_L2),
+                                                                new InstantCommand(), () -> (manualMode && !algaeMode)),
+                                                () -> (!manualMode && !algaeMode)));
 
                 OI.driverPOVDown.whileTrue(new ConditionalCommand(
                                 new SetRobotStateSimple(superstructure, SuperState.L3_PLACE),
@@ -234,13 +240,18 @@ public class RobotContainer {
                                                 new SetRobotStateComplicated(superstructure,
                                                                 SuperState.AUTO_ALGAE_PICKUP, SuperState.DEFAULT),
                                                 () -> manualMode),
-                                                new SetRobotStateOnce(superstructure, SuperState.AUTO_L3_PLACE),
+                                                new SetRobotStateSimple(superstructure, SuperState.AUTO_L3_PLACE),
                                                 () -> algaeMode),
                                 () -> (manualMode && !algaeMode)));
 
                 OI.driverPOVDown.onFalse(
-                                new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.SCORE_L3),
-                                                new InstantCommand(), () -> (manualMode && !algaeMode)));
+                                new ConditionalCommand(
+                                                new SetRobotStateSimpleOnce(superstructure, SuperState.DEFAULT),
+                                                new ConditionalCommand(
+                                                                new SetRobotStateSimple(superstructure,
+                                                                                SuperState.SCORE_L3),
+                                                                new InstantCommand(), () -> (manualMode && !algaeMode)),
+                                                () -> (!manualMode && !algaeMode)));
 
                 OI.driverPOVRight.whileTrue(new ConditionalCommand(
                                 new SetRobotStateSimple(superstructure, SuperState.L4_PLACE),
@@ -251,13 +262,18 @@ public class RobotContainer {
                                                                                 SuperState.AUTO_NET,
                                                                                 SuperState.DEFAULT),
                                                                 () -> manualMode),
-                                                new SetRobotStateOnce(superstructure, SuperState.AUTO_L4_PLACE),
+                                                new SetRobotStateSimple(superstructure, SuperState.AUTO_L4_PLACE),
                                                 () -> algaeMode),
                                 () -> (manualMode && !algaeMode)));
 
                 OI.driverPOVRight.onFalse(
-                                new ConditionalCommand(new SetRobotStateSimple(superstructure, SuperState.SCORE_L4),
-                                                new InstantCommand(), () -> (manualMode && !algaeMode)));
+                                new ConditionalCommand(
+                                                new SetRobotStateSimpleOnce(superstructure, SuperState.DEFAULT),
+                                                new ConditionalCommand(
+                                                                new SetRobotStateSimple(superstructure,
+                                                                                SuperState.SCORE_L4),
+                                                                new InstantCommand(), () -> (manualMode && !algaeMode)),
+                                                () -> (!manualMode && !algaeMode)));
 
                 // OI.operatorLT.onFalse(new ConditionalCommand(new
                 // SetRobotStateSimple(superstructure, SuperState.SCORE_L4), , () ->

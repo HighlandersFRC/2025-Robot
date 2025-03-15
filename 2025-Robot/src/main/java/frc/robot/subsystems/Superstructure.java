@@ -272,9 +272,12 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.OUTAKE_DRIVE;
         break;
       case AUTO_L2_PLACE:
-        if (drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry())[0],
-            drive.getReefClosestSetpoint(drive.getMT2Odometry())[1],
-            drive.getReefClosestSetpoint(drive.getMT2Odometry())[2])
+        if (drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+            .getDriverA())[0],
+            drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+                .getDriverA())[1],
+            drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+                .getDriverA())[2])
             && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 5.0 / 39.37) {
           currentSuperState = SuperState.AUTO_SCORE_L2;
           wantedSuperState = SuperState.AUTO_SCORE_L2;
@@ -304,9 +307,12 @@ public class Superstructure extends SubsystemBase {
         // currentSuperState = SuperState.AUTO_L3_PLACE;
         // }
         // break;
-        if (drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry())[0],
-            drive.getReefClosestSetpoint(drive.getMT2Odometry())[1],
-            drive.getReefClosestSetpoint(drive.getMT2Odometry())[2])
+        if (drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+            .getDriverA())[0],
+            drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+                .getDriverA())[1],
+            drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+                .getDriverA())[2])
             && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 5.0 / 39.37) {
           currentSuperState = SuperState.AUTO_SCORE_L3;
           wantedSuperState = SuperState.AUTO_SCORE_L3;
@@ -315,10 +321,14 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case AUTO_L4_PLACE:
-        if (drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[0],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[1],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[2])
-            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 5.0 / 39.37) {
+        if (drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
+            .getDriverA())[0],
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
+                .getDriverA())[1],
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
+                .getDriverA())[2])
+            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 5.0 / 39.37
+            && Math.abs(peripherals.getPigeonPitch()) < 2.0) {
           currentSuperState = SuperState.AUTO_SCORE_L4;
           wantedSuperState = SuperState.AUTO_SCORE_L4;
         } else {
@@ -645,10 +655,10 @@ public class Superstructure extends SubsystemBase {
     drive.setWantedState(DriveState.REEF);
     intake.setWantedState(IntakeState.DEFAULT);
     if (Math.hypot(
-        drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0],
-        drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
+        drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[0],
+        drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[1]) < 1.5
         && drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-            Math.toDegrees(drive.getReefClosestSetpoint(drive.getMT2Odometry())[2])) < 50.0) {
+            Math.toDegrees(drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[2])) < 50.0) {
       elevator.setWantedState(ElevatorState.AUTO_L2);
       if (drive.getAutoPlacementSideIsFront()) {
         pivot.setWantedFlip(PivotFlip.FRONT);
@@ -667,10 +677,10 @@ public class Superstructure extends SubsystemBase {
     drive.setWantedState(DriveState.REEF);
     intake.setWantedState(IntakeState.DEFAULT);
     if (Math.hypot(
-        drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[0],
-        drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
+        drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[0],
+        drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[1]) < 1.5
         && drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-            Math.toDegrees(drive.getReefClosestSetpoint(drive.getMT2Odometry())[2])) < 50.0) {
+            Math.toDegrees(drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[2])) < 50.0) {
       elevator.setWantedState(ElevatorState.AUTO_L3);
       if (drive.getAutoPlacementSideIsFront()) {
         pivot.setWantedFlip(PivotFlip.FRONT);
@@ -742,10 +752,12 @@ public class Superstructure extends SubsystemBase {
     drive.setWantedState(DriveState.L4_REEF);
     intake.setWantedState(IntakeState.DEFAULT);
     if (Math.hypot(
-        drive.getMT2OdometryX() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[0],
-        drive.getMT2OdometryY() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
+        drive.getMT2OdometryX() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
+            .getDriverA())[0],
+        drive.getMT2OdometryY() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
+            .getDriverA())[1]) < 1.5
         && drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-            Math.toDegrees(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[2])) < 50.0) {
+            Math.toDegrees(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2])) < 50.0) {
       elevator.setWantedState(ElevatorState.AUTO_L4);
       if (drive.getAutoPlacementSideIsFront()) {
         pivot.setWantedFlip(PivotFlip.FRONT);
