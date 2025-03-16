@@ -259,8 +259,9 @@ public final class Constants {
                                 Physical.FIELD_LENGTH - RED_LEFT_FEEDER_X, Physical.FIELD_WIDTH - RED_LEFT_FEEDER_Y,
                                 new Rotation2d(Math.toRadians(-54.0)));
 
-                public static final double PROCESSOR_Y_OFFSET_M = inchesToMeters(32.0); // 20?
-                public static final double NET_X_OFFSET_M = inchesToMeters(45.0); // 30?
+                public static final double PROCESSOR_Y_OFFSET_M = inchesToMeters(30.0);
+                public static final double NET_X_OFFSET_M = inchesToMeters(50.0);
+                public static final double NET_X_OFFSET_MORE = inchesToMeters(35.0);
 
                 public static final Translation2d processorBlueFrontPlacingTranslation = new Translation2d(
                                 inchesToMeters(238.79),
@@ -299,12 +300,10 @@ public final class Constants {
                                 processorRedBackPlacingTranslation,
                                 processorRedBackPlacingRotation);
 
-                public static final double netBlueXM = (Constants.Physical.FIELD_LENGTH / 2) - NET_X_OFFSET_M; // TODO:
-                                                                                                               // measure
-                                                                                                               // these
-                                                                                                               // ones
-                                                                                                               // too
+                public static final double netBlueXM = (Constants.Physical.FIELD_LENGTH / 2) - NET_X_OFFSET_M;
                 public static final double netRedXM = (Constants.Physical.FIELD_LENGTH / 2) + NET_X_OFFSET_M;
+                public static final double netBlueXMore = (Constants.Physical.FIELD_LENGTH / 2) - NET_X_OFFSET_MORE;
+                public static final double netRedXMore = (Constants.Physical.FIELD_LENGTH / 2) + NET_X_OFFSET_MORE;
 
                 public static final double netBlueFrontThetaR = degreesToRadians(0.0);
                 public static final double netRedFrontThetaR = degreesToRadians(180.0);

@@ -47,6 +47,7 @@ public class Superstructure extends SubsystemBase {
     OUTAKE_DRIVE,
     NET,
     AUTO_NET,
+    AUTO_NET_MORE,
     FEEDER_AUTO, // TODO: do the side to side motion
     FEEDER,
     GROUND_CORAL_PICKUP_FRONT,
@@ -153,6 +154,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_NET:
         handleAutoNetState();
+        break;
+      case AUTO_NET_MORE:
+        handleAutoNetStateMore();
         break;
       case FEEDER_AUTO:
         handleFeederAutoState();
@@ -359,7 +363,7 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_PROCESSOR:
         if (OI.isBlueSide()) {
-          if (drive.hitSetPoint(Constants.Reef.processorBlueFrontPlacingPosition.getX(),
+          if (drive.hitSetPointGenerous(Constants.Reef.processorBlueFrontPlacingPosition.getX(),
               Constants.Reef.processorBlueFrontPlacingPosition
                   .getY(),
               drive.getMT2OdometryAngle())
@@ -395,7 +399,17 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case AUTO_NET:
-        currentSuperState = SuperState.AUTO_NET;
+        if (drive.hitSetPointUltraGenerous(drive.getNetXSetpoint(), drive.getMT2OdometryY(),
+            drive.getNetThetaSetpoint())
+            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kNET.meters - 10.0 / 39.37) {
+          wantedSuperState = SuperState.AUTO_NET_MORE;
+          currentSuperState = SuperState.AUTO_NET_MORE;
+        } else {
+          currentSuperState = SuperState.AUTO_NET;
+        }
+        break;
+      case AUTO_NET_MORE:
+        currentSuperState = SuperState.AUTO_NET_MORE;
         break;
       case FEEDER_AUTO:
         currentSuperState = SuperState.FEEDER_AUTO;
@@ -883,34 +897,70 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoNetState() {
     lights.setWantedState(LightsState.PLACING);
-    drive.setWantedState(DriveState.DEFAULT);
-    // if (OI.isBlueSide()) {
-    // if
-    // ((drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-    // 0.0) < 15.0 || drive
-    // .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-    // 180.0) < 15.0)
-    // && Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.0) {
-    elevator.setWantedState(ElevatorState.NET);
-    // }
-    // } else {
-    // if
-    // ((drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-    // 0.0) < 15.0 || drive
-    // .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-    // 180.0) < 15.0)
-    // && Math.abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.0) {
-    // elevator.setWantedState(ElevatorState.NET);
-    // }
-    // }
+    drive.setWantedState(DriveState.NET);
+    if (OI.isBlueSide()) {
+      if ((drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+          0.0) < 15.0
+          || drive
+              .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+                  180.0) < 15.0)
+          && Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.5) {
+        elevator.setWantedState(ElevatorState.NET);
+      }
+    } else {
+      if ((drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+          0.0) < 15.0
+          || drive
+              .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+                  180.0) < 15.0)
+          && Math.abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.5) {
+        elevator.setWantedState(ElevatorState.NET);
+      }
+    }
     intake.setWantedState(IntakeState.DEFAULT);
-    // if (drive.getAutoPlacementSideIsFront()) {
-    pivot.setWantedFlip(PivotFlip.FRONT);
-    twist.setWantedState(TwistState.DOWN);
-    // } else {
-    // pivot.setWantedFlip(PivotFlip.BACK);
-    // twist.setWantedState(TwistState.UP);
-    // }
+    if (drive.getAutoPlacementSideIsFront()) {
+      pivot.setWantedFlip(PivotFlip.FRONT);
+      twist.setWantedState(TwistState.DOWN);
+    } else {
+      pivot.setWantedFlip(PivotFlip.BACK);
+      twist.setWantedState(TwistState.UP);
+    }
+    pivot.setWantedState(PivotState.NET);
+  }
+
+  public void handleAutoNetStateMore() {
+    lights.setWantedState(LightsState.PLACING);
+    if (OI.getDriverLTPercent() > 0.2) {
+      setWantedState(SuperState.OUTAKE_DRIVE);
+    }
+    drive.setWantedState(DriveState.NET_MORE);
+    if (OI.isBlueSide()) {
+      if ((drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+          0.0) < 15.0
+          || drive
+              .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+                  180.0) < 15.0)
+          && Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.0) {
+        elevator.setWantedState(ElevatorState.NET);
+      }
+    } else {
+      if ((drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+          0.0) < 15.0
+          || drive
+              .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+                  180.0) < 15.0)
+          && Math.abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.0) {
+        elevator.setWantedState(ElevatorState.NET);
+      }
+    }
+    intake.setWantedState(IntakeState.DEFAULT);
+    if (drive.getAutoPlacementSideIsFront()) {
+      pivot.setWantedFlip(PivotFlip.FRONT);
+      twist.setWantedState(TwistState.DOWN);
+    } else {
+      pivot.setWantedFlip(PivotFlip.BACK);
+      twist.setWantedState(TwistState.UP);
+    }
     pivot.setWantedState(PivotState.NET);
   }
 
