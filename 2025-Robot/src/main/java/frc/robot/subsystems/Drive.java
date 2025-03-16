@@ -1749,6 +1749,15 @@ public class Drive extends SubsystemBase {
 
     updateOdometryFusedArray();
     double turnLimit = 0.17;
+
+    if (OI.driverController.getRightTriggerAxis() > 0.2) {
+      // activate slowy spin
+      turnLimit = 0.1;
+      oiRX = oiRX * 0.5;
+      oiLX = oiLX * 0.5;
+      oiRY = oiRY * 0.5;
+      oiLY = oiLY * 0.5;
+    }
     // 0.35 before
 
     // if (OI.driverController.getRightTriggerAxis() > 0.2) {
@@ -1842,10 +1851,14 @@ public class Drive extends SubsystemBase {
     double turnLimit = 0.17;
     // 0.35 before
 
-    // if (OI.driverController.getRightTriggerAxis() > 0.2) {
-    // // activate slowy spin
-    // turnLimit = 0.1;
-    // }
+    if (OI.driverController.getRightTriggerAxis() > 0.2) {
+      // activate slowy spin
+      turnLimit = 0.1;
+      oiRX = oiRX * 0.5;
+      oiLX = oiLX * 0.5;
+      oiRY = oiRY * 0.5;
+      oiLY = oiLY * 0.5;
+    }
 
     // this is correct, X is forward in field, so originalX should be the y on the
     // // joystick

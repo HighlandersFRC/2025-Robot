@@ -132,7 +132,7 @@ public class RobotContainer {
                 // COMPETITION CONTROLS
                 // Driver
 
-                OI.driverViewButton.whileTrue(new ZeroAngleMidMatch(drive, elevator)); // zero pidgeon and elevator
+                OI.driverViewButton.whileTrue(new ZeroAngleMidMatch(drive)); // zero pidgeon and elevator
 
                 // OI.driverRT.whileTrue(new SetRobotState(superstructure,
                 // SuperState.GROUND_CORAL_PICKUP_FRONT));
