@@ -286,7 +286,7 @@ public class Superstructure extends SubsystemBase {
                 .getDriverA())[1],
             drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
                 .getDriverA())[2])
-            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 5.0 / 39.37) {
+            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 3.0 / 39.37) {
           currentSuperState = SuperState.AUTO_SCORE_L2;
           wantedSuperState = SuperState.AUTO_SCORE_L2;
         } else {
@@ -321,7 +321,7 @@ public class Superstructure extends SubsystemBase {
                 .getDriverA())[1],
             drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
                 .getDriverA())[2])
-            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 5.0 / 39.37) {
+            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 3.0 / 39.37) {
           currentSuperState = SuperState.AUTO_SCORE_L3;
           wantedSuperState = SuperState.AUTO_SCORE_L3;
         } else {
@@ -335,7 +335,7 @@ public class Superstructure extends SubsystemBase {
                 .getDriverA())[1],
             drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
                 .getDriverA())[2])
-            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 5.0 / 39.37
+            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 3.0 / 39.37
             && Math.abs(peripherals.getPigeonPitch()) < 2.0) {
           currentSuperState = SuperState.AUTO_SCORE_L4;
           wantedSuperState = SuperState.AUTO_SCORE_L4;
@@ -769,6 +769,9 @@ public class Superstructure extends SubsystemBase {
   // }
 
   public void handleAutoL4PlaceState() {
+    if (OI.driverLB.getAsBoolean()) {
+      setWantedState(SuperState.AUTO_SCORE_L4);
+    }
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.L4_REEF);
     intake.setWantedState(IntakeState.DEFAULT);
@@ -785,7 +788,7 @@ public class Superstructure extends SubsystemBase {
       } else {
         pivot.setWantedFlip(PivotFlip.BACK);
       }
-      if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 28.0 / 39.37) {
+      if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 25.0 / 39.37) {
         if (drive.hitSetPointGenerous(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
             drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[1],
             drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2])) {
@@ -1394,6 +1397,8 @@ public class Superstructure extends SubsystemBase {
     elevator.setWantedState(ElevatorState.AUTO_SCORE_MORE_L3);
   }
 
+  private boolean hasPlaced = false;
+
   public void handleAutoL4ScoreState() {
     lights.setWantedState(LightsState.SCORING);
     if (OI.operatorLT.getAsBoolean() && OI.operatorRT.getAsBoolean()) {
@@ -1412,6 +1417,13 @@ public class Superstructure extends SubsystemBase {
       // } else {
       // intake.setWantedState(IntakeState.OFF);
       // }
+
+      if (drive.hitSetPointGenerous(drive.getReefMoreClosestSetpoint(drive.getMT2Odometry())[0],
+          drive.getReefMoreClosestSetpoint(drive.getMT2Odometry())[1],
+          drive.getReefMoreClosestSetpoint(drive.getMT2Odometry())[2])) {
+        setWantedState(SuperState.DEFAULT);
+      }
+
       if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
           OI.getDriverLeftY()) > 0.25) {
         drive.setWantedState(DriveState.DEFAULT);
@@ -1419,11 +1431,16 @@ public class Superstructure extends SubsystemBase {
       } else {
         if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations
             - 10.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+          hasPlaced = true;
           drive.setWantedState(DriveState.REEF_MORE);
           intake.setWantedState(IntakeState.OUTAKE);
           elevator.setWantedState(ElevatorState.DEFAULT);
         } else {
-          drive.setWantedState(DriveState.DEFAULT);
+          if (hasPlaced) {
+            drive.setWantedState(DriveState.DEFAULT);
+          } else {
+            drive.setWantedState(DriveState.L4_REEF);
+          }
           intake.setWantedState(IntakeState.OFF);
         }
       }
@@ -1699,6 +1716,9 @@ public class Superstructure extends SubsystemBase {
     Logger.recordOutput("Super State", currentSuperState);
     if (currentSuperState != SuperState.OUTAKE_IDLE) {
       outakeIdleInit = false;
+    }
+    if (currentSuperState != SuperState.AUTO_SCORE_L4) {
+      hasPlaced = false;
     }
     // Logger.recordOutput("Hit Time", hitAutoSetpointTime);
     applyStates();

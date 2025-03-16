@@ -1348,13 +1348,13 @@ public final class Constants {
                 public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
                 public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
                 public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(11.0);
-                public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(18);
+                public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(17);
                 public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(17);
                 public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(33);
                 // public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(25);
                 public static final double ELEVATOR_AUTO_SCORE_L3_POSITION_M = inchesToMeters(20);
                 public static final double ELEVATOR_AUTO_L4_POSITION_M = inchesToMeters(64.0);
-                public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(31);
+                public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(33);
                 public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(64.0);
                 public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8.0);
                 public static final double ELEVATOR_GROUND_CORAL_POSITION_M = inchesToMeters(6.25);
@@ -1409,16 +1409,16 @@ public final class Constants {
                 }
 
                 public static final double PIVOT_L1_POSITION_D = 90.0;
-                public static final double PIVOT_L23_POSITION_D = 55.0;
+                public static final double PIVOT_L23_POSITION_D = 52.5;
                 // public static final double PIVOT_AUTO_L23_POSITION_D = 45.0;
-                public static final double PIVOT_AUTO_L2_POSITION_D = 45.0;
-                public static final double PIVOT_AUTO_L3_POSITION_D = 45.0;
+                public static final double PIVOT_AUTO_L2_POSITION_D = 52.5;
+                public static final double PIVOT_AUTO_L3_POSITION_D = 52.5;
                 // public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
-                public static final double PIVOT_AUTO_L4_POSITION_D = 70.0;
+                public static final double PIVOT_AUTO_L4_POSITION_D = 60.0;
                 public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 105.0;
                 public static final double PIVOT_AUTO_L3_SCORE_POSITION_D = 90.0;
                 public static final double PIVOT_AUTO_L2_SCORE_POSITION_D = 90.0;
-                public static final double PIVOT_L4_POSITION_D = 70.0;
+                public static final double PIVOT_L4_POSITION_D = 60.0;
                 public static final double PIVOT_UPRIGHT_POSITION_D = 45.0;
                 public static final double PIVOT_GROUND_ALGAE_POSITION_D = 69.0;
                 public static final double PIVOT_GROUND_CORAL_POSITION_FRONT_D = 135.0;
