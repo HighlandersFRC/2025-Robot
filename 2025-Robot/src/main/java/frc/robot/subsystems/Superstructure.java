@@ -57,6 +57,7 @@ public class Superstructure extends SubsystemBase {
     L3_ALGAE_PICKUP,
     AUTO_ALGAE_PICKUP,
     AUTO_ALGAE_PICKUP_MORE,
+    AUTO_ALGAE_PICKUP_MORE_MORE,
     DEPLOY_CLIMBER,
     CLIMB,
     CLIMBER_IDLE,
@@ -182,6 +183,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_ALGAE_PICKUP_MORE:
         handleAutoAlgaePickupMoreState();
+        break;
+      case AUTO_ALGAE_PICKUP_MORE_MORE:
+        handleAutoAlgaePickupMoreMoreState();
         break;
       case DEPLOY_CLIMBER:
         handleDeployClimberState();
@@ -424,14 +428,17 @@ public class Superstructure extends SubsystemBase {
             && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kL2ALGAE.meters - 5.0 / 39.37) {
           currentSuperState = SuperState.AUTO_ALGAE_PICKUP_MORE;
           wantedSuperState = SuperState.AUTO_ALGAE_PICKUP_MORE;
-          algaePickupTime = Timer.getFPGATimestamp();
-          finishedAlgae = false;
+          // algaePickupTime = Timer.getFPGATimestamp();
+          // finishedAlgae1 = false;
         } else {
           currentSuperState = SuperState.AUTO_ALGAE_PICKUP;
         }
         break;
       case AUTO_ALGAE_PICKUP_MORE:
         currentSuperState = SuperState.AUTO_ALGAE_PICKUP_MORE;
+        break;
+      case AUTO_ALGAE_PICKUP_MORE_MORE:
+        currentSuperState = SuperState.AUTO_ALGAE_PICKUP_MORE_MORE;
         break;
       case DEPLOY_CLIMBER:
         if (climber.getPosition() > -400) {
@@ -1144,20 +1151,37 @@ public class Superstructure extends SubsystemBase {
     pivot.setWantedState(PivotState.REEF_ALGAE);
   }
 
-  private double algaePickupTime = Timer.getFPGATimestamp();
-  private boolean finishedAlgae = false;
+  // private double algaePickupTime = Timer.getFPGATimestamp();
+  // private boolean finishedAlgae1 = false;
+  // private boolean finishedAlgae2 = false;
 
   public void handleAutoAlgaePickupMoreState() {
     lights.setWantedState(LightsState.FEEDER);
     if (intake.getIntakeItem() == IntakeItem.NONE
         && Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) < 0.1 && Math
-            .hypot(OI.getDriverRightX(), OI.getDriverRightY()) < 0.1
-        && !finishedAlgae) {
+            .hypot(OI.getDriverRightX(), OI.getDriverRightY()) < 0.1) {
       drive.setWantedState(DriveState.ALGAE_MORE);
     } else {
-      finishedAlgae = true;
-      drive.setWantedState(DriveState.DEFAULT);
-      lights.setWantedState(LightsState.SCORING);
+      // drive.setWantedState(DriveState.DEFAULT);
+      // lights.setWantedState(LightsState.SCORING);
+      setWantedState(SuperState.AUTO_ALGAE_PICKUP_MORE_MORE);
+    }
+  }
+
+  public void handleAutoAlgaePickupMoreMoreState() {
+    lights.setWantedState(LightsState.INTAKING);
+    if (!drive.hitSetPointGenerous(drive.getAlgaeMoreMoreClosestSetpoint(drive.getMT2Odometry())[0],
+        drive.getAlgaeMoreMoreClosestSetpoint(drive
+            .getMT2Odometry())[1],
+        drive.getAlgaeMoreMoreClosestSetpoint(drive
+            .getMT2Odometry())[2])
+        && Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) < 0.1 && Math
+            .hypot(OI.getDriverRightX(), OI.getDriverRightY()) < 0.1) {
+      drive.setWantedState(DriveState.ALGAE_MORE_MORE);
+    } else {
+      // drive.setWantedState(DriveState.DEFAULT);
+      // lights.setWantedState(LightsState.SCORING);
+      setWantedState(SuperState.DEFAULT);
     }
   }
 

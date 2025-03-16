@@ -321,6 +321,11 @@ public final class Constants {
                 public static final List<Pose2d> blueBackPlacingPositionsMore = new ArrayList<>();
                 public static final List<Pose2d> redBackPlacingPositionsMore = new ArrayList<>();
 
+                public static final List<Pose2d> algaeBlueFrontPlacingPositionsMoreMore = new ArrayList<>();
+                public static final List<Pose2d> algaeRedFrontPlacingPositionsMoreMore = new ArrayList<>();
+                public static final List<Pose2d> algaeBlueBackPlacingPositionsMoreMore = new ArrayList<>();
+                public static final List<Pose2d> algaeRedBackPlacingPositionsMoreMore = new ArrayList<>();
+
                 public static final List<Pose2d> l4BlueFrontPlacingPositions = new ArrayList<>();
                 public static final List<Pose2d> l4RedFrontPlacingPositions = new ArrayList<>();
                 public static final List<Pose2d> l4BlueBackPlacingPositions = new ArrayList<>();
@@ -371,6 +376,10 @@ public final class Constants {
                         algaeRedFrontPlacingPositionsMore.clear();
                         algaeBlueBackPlacingPositionsMore.clear();
                         algaeRedBackPlacingPositionsMore.clear();
+                        algaeBlueFrontPlacingPositionsMoreMore.clear();
+                        algaeRedFrontPlacingPositionsMoreMore.clear();
+                        algaeBlueBackPlacingPositionsMoreMore.clear();
+                        algaeRedBackPlacingPositionsMoreMore.clear();
                         centerFaces[0] = new Pose2d(
                                         inchesToMeters(144.003),
                                         inchesToMeters(158.500),
@@ -417,6 +426,8 @@ public final class Constants {
                                 Pose2d algaeBack = new Pose2d();
                                 Pose2d algaeFrontMore = new Pose2d();
                                 Pose2d algaeBackMore = new Pose2d();
+                                Pose2d algaeFrontMoreMore = new Pose2d();
+                                Pose2d algaeBackMoreMore = new Pose2d();
                                 Pose2d poseDirection = new Pose2d(centerBlue,
                                                 Rotation2d.fromDegrees(180 - (60 * face)));
                                 double adjustX = inchesToMeters(30.738);
@@ -427,6 +438,8 @@ public final class Constants {
                                 double adjustAlgaeY = inchesToMeters(0.0);
                                 double adjustAlgaeMoreX = inchesToMeters(16.738);
                                 double adjustAlgaeMoreY = inchesToMeters(0.0);
+                                double adjustAlgaeMoreMoreX = inchesToMeters(36.738);
+                                double adjustAlgaeMoreMoreY = inchesToMeters(0.0);
 
                                 algaeFront = new Pose2d(
                                                 new Translation2d(
@@ -513,18 +526,74 @@ public final class Constants {
                                                                                                 new Transform2d(Physical.INTAKE_X_OFFSET_BACK_ALGAE,
                                                                                                                 Physical.INTAKE_Y_OFFSET_BACK_ALGAE,
                                                                                                                 new Rotation2d(Math.PI))) // TODO:
-                                                                                                                                          // why
-                                                                                                                                          // is
-                                                                                                                                          // this
-                                                                                                                                          // pi
-                                                                                                                                          // and
-                                                                                                                                          // not
-                                                                                                                                          // 0
+                                                                                // why
+                                                                                // is
+                                                                                // this
+                                                                                // pi
+                                                                                // and
+                                                                                // not
+                                                                                // 0
                                                                                 .getX(),
                                                                 poseDirection
                                                                                 .transformBy(
                                                                                                 new Transform2d(adjustAlgaeMoreX,
                                                                                                                 adjustAlgaeMoreY,
+                                                                                                                new Rotation2d()))
+                                                                                .transformBy(
+                                                                                                new Transform2d(Physical.INTAKE_X_OFFSET_BACK_ALGAE,
+                                                                                                                Physical.INTAKE_Y_OFFSET_BACK_ALGAE,
+                                                                                                                new Rotation2d(Math.PI))) // TODO
+                                                                                .getY()),
+                                                new Rotation2d(
+                                                                poseDirection.getRotation().getRadians()));
+                                algaeFrontMoreMore = new Pose2d(
+                                                new Translation2d(
+                                                                poseDirection
+                                                                                .transformBy(
+                                                                                                new Transform2d(adjustAlgaeMoreMoreX,
+                                                                                                                adjustAlgaeMoreMoreY,
+                                                                                                                new Rotation2d()))
+                                                                                .transformBy(
+                                                                                                new Transform2d(Physical.INTAKE_X_OFFSET_FRONT_ALGAE,
+                                                                                                                Physical.INTAKE_Y_OFFSET_FRONT_ALGAE,
+                                                                                                                new Rotation2d(Math.PI)))
+                                                                                .getX(),
+                                                                poseDirection
+                                                                                .transformBy(
+                                                                                                new Transform2d(adjustAlgaeMoreMoreX,
+                                                                                                                adjustAlgaeMoreMoreY,
+                                                                                                                new Rotation2d()))
+                                                                                .transformBy(
+                                                                                                new Transform2d(Physical.INTAKE_X_OFFSET_FRONT_ALGAE,
+                                                                                                                Physical.INTAKE_Y_OFFSET_FRONT_ALGAE,
+                                                                                                                new Rotation2d(Math.PI)))
+                                                                                .getY()),
+                                                new Rotation2d(
+                                                                poseDirection.getRotation().getRadians() - Math.PI));
+
+                                algaeBackMoreMore = new Pose2d(
+                                                new Translation2d(
+                                                                poseDirection
+                                                                                .transformBy(
+                                                                                                new Transform2d(adjustAlgaeMoreMoreX,
+                                                                                                                adjustAlgaeMoreMoreY,
+                                                                                                                new Rotation2d()))
+                                                                                .transformBy(
+                                                                                                new Transform2d(Physical.INTAKE_X_OFFSET_BACK_ALGAE,
+                                                                                                                Physical.INTAKE_Y_OFFSET_BACK_ALGAE,
+                                                                                                                new Rotation2d(Math.PI))) // TODO:
+                                                                                // why
+                                                                                // is
+                                                                                // this
+                                                                                // pi
+                                                                                // and
+                                                                                // not
+                                                                                // 0
+                                                                                .getX(),
+                                                                poseDirection
+                                                                                .transformBy(
+                                                                                                new Transform2d(adjustAlgaeMoreMoreX,
+                                                                                                                adjustAlgaeMoreMoreY,
                                                                                                                 new Rotation2d()))
                                                                                 .transformBy(
                                                                                                 new Transform2d(Physical.INTAKE_X_OFFSET_BACK_ALGAE,
@@ -915,6 +984,8 @@ public final class Constants {
                                 algaeBlueBackPlacingPositions.add(algaeBack);
                                 algaeBlueFrontPlacingPositionsMore.add(algaeFrontMore);
                                 algaeBlueBackPlacingPositionsMore.add(algaeBackMore);
+                                algaeBlueFrontPlacingPositionsMoreMore.add(algaeFrontMoreMore);
+                                algaeBlueBackPlacingPositionsMoreMore.add(algaeBackMoreMore);
                         }
 
                         for (Pose2d bluePose : algaeBlueFrontPlacingPositions) {
@@ -959,6 +1030,28 @@ public final class Constants {
                                                 bluePose.getRotation().getRadians() + Math.PI);
                                 redPose = new Pose2d(mirroredTranslation, mirroredRotation);
                                 algaeRedBackPlacingPositionsMore.add(redPose);
+                        }
+
+                        for (Pose2d bluePose : algaeBlueFrontPlacingPositionsMoreMore) {
+                                Pose2d redPose = new Pose2d();
+                                Translation2d mirroredTranslation = new Translation2d(
+                                                Constants.Physical.FIELD_LENGTH - bluePose.getX(),
+                                                Constants.Physical.FIELD_WIDTH - bluePose.getY());
+                                Rotation2d mirroredRotation = new Rotation2d(
+                                                bluePose.getRotation().getRadians() + Math.PI);
+                                redPose = new Pose2d(mirroredTranslation, mirroredRotation);
+                                algaeRedFrontPlacingPositionsMoreMore.add(redPose);
+                        }
+
+                        for (Pose2d bluePose : algaeBlueBackPlacingPositionsMoreMore) {
+                                Pose2d redPose = new Pose2d();
+                                Translation2d mirroredTranslation = new Translation2d(
+                                                Constants.Physical.FIELD_LENGTH - bluePose.getX(),
+                                                Constants.Physical.FIELD_WIDTH - bluePose.getY());
+                                Rotation2d mirroredRotation = new Rotation2d(
+                                                bluePose.getRotation().getRadians() + Math.PI);
+                                redPose = new Pose2d(mirroredTranslation, mirroredRotation);
+                                algaeRedBackPlacingPositionsMoreMore.add(redPose);
                         }
 
                         for (Pose2d bluePose : blueFrontPlacingPositions) {

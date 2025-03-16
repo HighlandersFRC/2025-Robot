@@ -263,6 +263,7 @@ public class Drive extends SubsystemBase {
     L4_REEF,
     ALGAE,
     ALGAE_MORE,
+    ALGAE_MORE_MORE,
     PROCESSOR,
     NET,
     FEEDER,
@@ -978,6 +979,67 @@ public class Drive extends SubsystemBase {
             chosenSetpoint[0] = Constants.Reef.algaeBlueBackPlacingPositionsMore.get(i).getX();
             chosenSetpoint[1] = Constants.Reef.algaeBlueBackPlacingPositionsMore.get(i).getY();
             chosenSetpoint[2] = Constants.Reef.algaeBlueBackPlacingPositionsMore.get(i).getRotation().getRadians();
+          }
+        }
+      }
+    }
+    if (Math.hypot(chosenSetpoint[0] - getMT2OdometryX(), chosenSetpoint[1] - getMT2OdometryY()) > 5) {
+      return getMT2Odometry();
+    } else {
+      return chosenSetpoint;
+    }
+  }
+
+  public double[] getAlgaeMoreMoreClosestSetpoint(double[] currentOdometry /* {x, y, thetaRadians} */) {
+    double x = currentOdometry[0];
+    double y = currentOdometry[1];
+    double theta = Constants.standardizeAngleDegrees(Math.toDegrees(currentOdometry[2]));
+    double dist = 100.0;
+    double currentDist = 100.0;
+    double[] chosenSetpoint = { x, y, Math.toRadians(theta) };
+    if (getFieldSide() == "red") {
+      for (int i = 0; i < Constants.Reef.algaeRedFrontPlacingPositionsMoreMore.size(); i++) {
+        // currentDist = Math.sqrt(Math.pow((x -
+        // Constants.Reef.redFrontPlacingPositionsMoreMore.get(i).getX()), 2)
+        // + Math.pow((y - Constants.Reef.redFrontPlacingPositionsMoreMore.get(i).getY()),
+        // 2));
+        currentDist = Math.hypot(
+            x - Constants.Reef.algaeRedFrontPlacingPositionsMoreMore.get(i).getX(),
+            y - Constants.Reef.algaeRedFrontPlacingPositionsMoreMore.get(i).getY());
+        if (currentDist < dist) {
+          dist = currentDist;
+          if (getAngleDifferenceDegrees(theta,
+              Constants.Reef.algaeRedFrontPlacingPositionsMoreMore.get(i).getRotation().getDegrees()) <= 90) {
+            autoPlacingFront = true;
+            chosenSetpoint[0] = Constants.Reef.algaeRedFrontPlacingPositionsMoreMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.algaeRedFrontPlacingPositionsMoreMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.algaeRedFrontPlacingPositionsMoreMore.get(i).getRotation().getRadians();
+          } else {
+            autoPlacingFront = false;
+            chosenSetpoint[0] = Constants.Reef.algaeRedBackPlacingPositionsMoreMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.algaeRedBackPlacingPositionsMoreMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.algaeRedBackPlacingPositionsMoreMore.get(i).getRotation().getRadians();
+          }
+        }
+      }
+    } else {
+      for (int i = 0; i < Constants.Reef.algaeBlueFrontPlacingPositionsMoreMore.size(); i++) {
+        currentDist = Math.hypot(
+            x - Constants.Reef.algaeBlueFrontPlacingPositionsMoreMore.get(i).getX(),
+            y - Constants.Reef.algaeBlueFrontPlacingPositionsMoreMore.get(i).getY());
+        if (currentDist < dist) {
+          dist = currentDist;
+          if (getAngleDifferenceDegrees(theta,
+              Constants.Reef.algaeBlueFrontPlacingPositionsMoreMore.get(i).getRotation().getDegrees()) <= 90) {
+            autoPlacingFront = true;
+            chosenSetpoint[0] = Constants.Reef.algaeBlueFrontPlacingPositionsMoreMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.algaeBlueFrontPlacingPositionsMoreMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.algaeBlueFrontPlacingPositionsMoreMore.get(i).getRotation().getRadians();
+          } else {
+            autoPlacingFront = false;
+            chosenSetpoint[0] = Constants.Reef.algaeBlueBackPlacingPositionsMoreMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.algaeBlueBackPlacingPositionsMoreMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.algaeBlueBackPlacingPositionsMoreMore.get(i).getRotation().getRadians();
           }
         }
       }
@@ -2385,6 +2447,8 @@ public class Drive extends SubsystemBase {
         return DriveState.ALGAE;
       case ALGAE_MORE:
         return DriveState.ALGAE_MORE;
+      case ALGAE_MORE_MORE:
+        return DriveState.ALGAE_MORE_MORE;
       case PROCESSOR:
         return DriveState.PROCESSOR;
       case NET:
@@ -2531,6 +2595,10 @@ public class Drive extends SubsystemBase {
         // }
         driveToPoint(getAlgaeMoreClosestSetpoint(getMT2Odometry())[0],
             getAlgaeMoreClosestSetpoint(getMT2Odometry())[1], getAlgaeMoreClosestSetpoint(getMT2Odometry())[2]);
+        break;
+      case ALGAE_MORE_MORE:
+        driveToPoint(getAlgaeMoreMoreClosestSetpoint(getMT2Odometry())[0],
+            getAlgaeMoreMoreClosestSetpoint(getMT2Odometry())[1], getAlgaeMoreMoreClosestSetpoint(getMT2Odometry())[2]);
         break;
       case PROCESSOR:
         if (OI.isBlueSide()) {
