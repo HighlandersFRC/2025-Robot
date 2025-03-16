@@ -46,9 +46,9 @@ public class Pivot extends SubsystemBase {
     pivotConfig.Slot1.kP = 70.0;
     pivotConfig.Slot1.kI = 0.0;
     pivotConfig.Slot1.kD = 5.0;
-    pivotConfig.Slot2.kP = 70.0;
+    pivotConfig.Slot2.kP = 50.0;
     pivotConfig.Slot2.kI = 0.0;
-    pivotConfig.Slot2.kD = 5.0;
+    pivotConfig.Slot2.kD = 15.0;
     pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerk;
     pivotConfig.MotionMagic.MotionMagicAcceleration = this.pivotAcceleration;
     pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocity;
@@ -94,6 +94,18 @@ public class Pivot extends SubsystemBase {
   }
 
   public void pivotToPositionSlow(double pivotPosition) {
+    if (Math.abs(pivotPosition) * 360.0 > 135.0) {
+      pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
+    }
+    pivotMotor.setControl(this.pivotMotionProfileRequest
+        .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
+        .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
+        .withJerk(
+            this.pivotJerk * pivotProfileScalarFactor)
+        .withSlot(1));
+  }
+
+  public void pivotToPositionSlower(double pivotPosition) {
     if (Math.abs(pivotPosition) * 360.0 > 135.0) {
       pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
     }
@@ -149,6 +161,7 @@ public class Pivot extends SubsystemBase {
     AUTO_SCORE_L2,
     AUTO_SCORE_L3,
     AUTO_SCORE_L4,
+    AUTO_SCORE_L4_SLOW,
     CLIMB,
     UP,
     MANUAL_PLACE,
@@ -231,6 +244,8 @@ public class Pivot extends SubsystemBase {
         return PivotState.SCORE_L23;
       case SCORE_L4:
         return PivotState.SCORE_L4;
+      case AUTO_SCORE_L4_SLOW:
+        return PivotState.AUTO_SCORE_L4_SLOW;
       case AUTO_SCORE_L1:
         return PivotState.AUTO_SCORE_L1;
       case AUTO_SCORE_L2:
@@ -424,6 +439,19 @@ public class Pivot extends SubsystemBase {
             break;
           default:
             pivotToPositionSlow(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+            break;
+        }
+        break;
+      case AUTO_SCORE_L4_SLOW:
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPositionSlower(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+            break;
+          case BACK:
+            pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+            break;
+          default:
+            pivotToPositionSlower(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
             break;
         }
         break;

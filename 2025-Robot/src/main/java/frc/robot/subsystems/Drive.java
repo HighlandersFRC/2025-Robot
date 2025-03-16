@@ -398,7 +398,7 @@ public class Drive extends SubsystemBase {
       turningPID.setSetPoint(angleSetpoint);
     }
 
-    frontLeft.setDriveCurrentLimits(120, 120);
+    frontLeft.setDriveCurrentLimits(120, 120); // if robot starts browning out in a placement sequence, just drop these to 40
     frontRight.setDriveCurrentLimits(120, 120);
     backLeft.setDriveCurrentLimits(120, 120);
     backRight.setDriveCurrentLimits(120, 120);
