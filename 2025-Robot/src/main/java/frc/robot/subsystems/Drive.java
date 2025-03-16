@@ -1750,7 +1750,7 @@ public class Drive extends SubsystemBase {
     updateOdometryFusedArray();
     double turnLimit = 0.17;
 
-    if (OI.driverController.getRightTriggerAxis() > 0.2) {
+    if (OI.driverController.getRightTriggerAxis() > 0.2 || OI.getDriverRB()) {
       // activate slowy spin
       turnLimit = 0.1;
       oiRX = oiRX * 0.5;
