@@ -34,7 +34,7 @@ public class Peripherals {
   private PhotonCamera backReefCam = new PhotonCamera("Back_Reef");
   private PhotonCamera frontBargeCam = new PhotonCamera("Front_Barge");
   private PhotonCamera backBargeCam = new PhotonCamera("Back_Barge");
-  private PhotonCamera gamePieceCamera = new PhotonCamera("Game_Piece_Cam");
+  private PhotonCamera gamePieceCamera = new PhotonCamera("Front_Game_Piece_Cam");
 
   AprilTagFieldLayout aprilTagFieldLayout;
 
@@ -303,6 +303,15 @@ public class Peripherals {
       return result.get(0);
     } else {
       backBargeCamTrack = false;
+      return new PhotonPipelineResult();
+    }
+  }
+
+  public PhotonPipelineResult getFrontGamePieceCamResult() {
+    var result = gamePieceCamera.getAllUnreadResults();
+    if (!result.isEmpty()) {
+      return result.get(0);
+    } else {
       return new PhotonPipelineResult();
     }
   }
