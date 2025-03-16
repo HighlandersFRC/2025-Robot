@@ -2641,9 +2641,9 @@ public class Drive extends SubsystemBase {
             getReefL3ClosestSetpoint(getMT2Odometry())[2]);
         break;
       case PIECE_PICKUP:
-        driveToPoint(getReefL4ClosestSetpoint(getMT2Odometry())[0],
-            getReefL4ClosestSetpoint(getMT2Odometry())[1],
-            getReefL4ClosestSetpoint(getMT2Odometry())[2]);
+        driveToPoint(getReefL4ClosestSetpoint(getMT2Odometry(), false)[0],
+            getReefL4ClosestSetpoint(getMT2Odometry(), false)[1],
+            getReefL4ClosestSetpoint(getMT2Odometry(), false)[2]);
         break;
       case ALGAE:
         driveToPoint(getAlgaeClosestSetpoint(getMT2Odometry())[0],
