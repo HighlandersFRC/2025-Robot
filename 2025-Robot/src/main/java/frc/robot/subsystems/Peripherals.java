@@ -81,6 +81,9 @@ public class Peripherals {
 
     // Zero the IMU angle
     zeroPigeon();
+
+    setPigeonPitchOffset(getPigeonPitch());
+
   }
 
   public double getFrontReefCamYaw() {
@@ -411,7 +414,18 @@ public class Peripherals {
     return pigeon.getPitch().getValueAsDouble();
   }
 
+  public double getPigeonPitchAdjusted() {
+    return getPigeonPitch() - pigeonPitchOffset;
+  }
+
+  double pigeonPitchOffset = 0.0;
+
+  public void setPigeonPitchOffset(double newOffset) {
+    pigeonPitchOffset = newOffset;
+  }
+
   public void periodic() {
+    Logger.recordOutput("Pigeon Pitch", getPigeonPitchAdjusted());
     // Logger.recordOutput("Pidgeon Yaw?", pigeon.getYaw().getValueAsDouble());
     // Logger.recordOutput("Pidgeon Pitch?", pigeon.getPitch().getValueAsDouble());
     // Logger.recordOutput("Pidgeon Roll?", pigeon.getRoll().getValueAsDouble());
