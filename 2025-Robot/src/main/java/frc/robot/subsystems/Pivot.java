@@ -154,6 +154,7 @@ public class Pivot extends SubsystemBase {
     GROUND_ALGAE,
     REEF_ALGAE,
     DEFAULT,
+    DEFAULT_CLIMB,
     SCORE_L1,
     SCORE_L23,
     SCORE_L4,
@@ -202,6 +203,8 @@ public class Pivot extends SubsystemBase {
     switch (wantedState) {
       case DEFAULT:
         return PivotState.DEFAULT;
+      case DEFAULT_CLIMB:
+        return PivotState.DEFAULT_CLIMB;
       case UP:
         return PivotState.UP;
       case L1:
@@ -289,6 +292,9 @@ public class Pivot extends SubsystemBase {
     switch (systemState) {
       case DEFAULT:
         pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT.rotations);
+        break;
+      case DEFAULT_CLIMB:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULTCLIMB.rotations);
         break;
       case REEF_ALGAE:
         switch (systemFlip) {
@@ -445,13 +451,13 @@ public class Pivot extends SubsystemBase {
       case AUTO_SCORE_L4_SLOW:
         switch (systemFlip) {
           case FRONT:
-            pivotToPositionSlower(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+            setPivotPercent(0.1);
             break;
           case BACK:
-            pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+            setPivotPercent(-0.1);
             break;
           default:
-            pivotToPositionSlower(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+            setPivotPercent(0.1);
             break;
         }
         break;

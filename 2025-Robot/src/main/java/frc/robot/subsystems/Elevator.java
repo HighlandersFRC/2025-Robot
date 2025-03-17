@@ -233,12 +233,12 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (OI.driverMenuButton.getAsBoolean()) {
+    systemState = handleStateTransition();
+    if (systemState != ElevatorState.DEFAULT) {
       firstTimeDefault = false;
       idleTime = Timer.getFPGATimestamp();
       zeroTime = 0.0;
     }
-    systemState = handleStateTransition();
     // System.out.println("Elevator Current: " +
     // elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
     // Logger.recordOutput("Elevator Current",
@@ -369,7 +369,23 @@ public class Elevator extends SubsystemBase {
             // System.out.println("Running down default");
           } else {
             // System.out.println("stopping");
-            moveWithPercent(0.0);
+            if (DriverStation.isTeleopEnabled() && Math
+                .abs(
+                    Constants.Ratios
+                        .elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
+                && Timer.getFPGATimestamp() - idleTime > 0.3
+                && !firstTimeIdle) {
+              if (zeroTime == 0.0) {
+                zeroTime = Timer.getFPGATimestamp();
+              } else if (Timer.getFPGATimestamp() - zeroTime > 0.75) {
+                firstTimeDefault = true;
+                moveWithPercent(0.0);
+                setElevatorEncoderPosition(0.0);
+              }
+            } else {
+              // System.out.println("Running down to zero");
+              moveWithTorque(-70, 0.2);
+            }
           }
         }
         break;

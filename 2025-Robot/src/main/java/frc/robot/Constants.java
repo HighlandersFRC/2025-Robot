@@ -1426,6 +1426,7 @@ public final class Constants {
                 public static final double PIVOT_GROUND_CORAL_PREP_BACK_D = -90;
                 // public static final double PIVOT_DEFAULT_POSITION_D = 30.0;
                 public static final double PIVOT_DEFAULT_POSITION_D = 0.0;
+                public static final double PIVOT_DEFAULT_CLIMB_POSITION_D = 45.0;
                 public static final double PIVOT_PREP_POSITION_D = 30.0;
                 public static final double PIVOT_FEEDER_POSITION_D = 39.37;
                 public static final double PIVOT_NET_POSITION_D = -10.0;
@@ -1460,6 +1461,8 @@ public final class Constants {
                         kAUTOL4SCORE(PIVOT_AUTO_L4_SCORE_POSITION_D,
                                         Constants.degreesToRotations(PIVOT_AUTO_L4_SCORE_POSITION_D)),
                         kDEFAULT(PIVOT_DEFAULT_POSITION_D, Constants.degreesToRotations(PIVOT_DEFAULT_POSITION_D)),
+                        kDEFAULTCLIMB(PIVOT_DEFAULT_CLIMB_POSITION_D,
+                                        Constants.degreesToRotations(PIVOT_DEFAULT_CLIMB_POSITION_D)),
                         kFEEDER(PIVOT_FEEDER_POSITION_D, Constants.degreesToRotations(PIVOT_FEEDER_POSITION_D)),
                         kREEFALGAE(PIVOT_REEF_ALGAE_POSITION_D,
                                         Constants.degreesToRotations(PIVOT_REEF_ALGAE_POSITION_D)),

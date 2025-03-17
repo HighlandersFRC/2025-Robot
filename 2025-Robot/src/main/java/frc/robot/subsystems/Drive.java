@@ -2027,7 +2027,7 @@ public class Drive extends SubsystemBase {
     // + hitNumber);
     if (Math
         .sqrt(Math.pow((x - getMT2OdometryX()), 2)
-            + Math.pow((y - getMT2OdometryY()), 2)) < 0.04
+            + Math.pow((y - getMT2OdometryY()), 2)) < 0.025
         && getAngleDifferenceDegrees(Math.toDegrees(theta),
             Math.toDegrees(getMT2OdometryAngle())) < 1.5) {
       hitNumber += 1;

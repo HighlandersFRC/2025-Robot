@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import org.apache.commons.math3.optim.linear.PivotSelectionRule;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -620,6 +621,8 @@ public class Superstructure extends SubsystemBase {
   // twist.setWantedState(TwistState.SIDE);
   // }
 
+  public boolean isClimbing = false;
+
   public void handleDefaultState() {
     peripherals.setBackCamPipline(0);
     lights.setWantedState(LightsState.DEFAULT);
@@ -631,12 +634,18 @@ public class Superstructure extends SubsystemBase {
       elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     }
     intake.setWantedState(IntakeState.DEFAULT);
-    if (Math.abs(twist.getTwistPosition()) < 10) {
-      pivot.setWantedState(PivotState.DEFAULT);
-      firstTimeDefault = false;
-    } else if (firstTimeDefault) {
-      pivot.setWantedState(PivotState.PREP);
+
+    if (isClimbing) {
+      pivot.setWantedState(PivotState.DEFAULT_CLIMB);
+    } else {
+      if (Math.abs(twist.getTwistPosition()) < 10) {
+        pivot.setWantedState(PivotState.DEFAULT);
+        firstTimeDefault = false;
+      } else if (firstTimeDefault) {
+        pivot.setWantedState(PivotState.PREP);
+      }
     }
+
     if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
       twist.setAlgaeMode(true);
     }
@@ -1709,6 +1718,12 @@ public class Superstructure extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (OI.getDriverA()) {
+      isClimbing = false;
+    }
+    if (OI.driverY.getAsBoolean()) {
+      isClimbing = true;
+    }
     currentSuperState = handleStateTransitions();
     if (currentSuperState != SuperState.DEFAULT) {
       firstTimeDefault = true;
