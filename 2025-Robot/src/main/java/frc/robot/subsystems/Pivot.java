@@ -17,7 +17,7 @@ import frc.robot.subsystems.Intake.IntakeItem;
 
 public class Pivot extends SubsystemBase {
 
-  private double nonAlgaeTime = Timer.getFPGATimestamp();
+  private double nonAlgaeTime = 0.0;
 
   private final TalonFX pivotMotor = new TalonFX(Constants.CANInfo.PIVOT_MOTOR_ID,
       new CANBus(Constants.CANInfo.CANBUS_NAME));
@@ -49,90 +49,6 @@ public class Pivot extends SubsystemBase {
 
   public Pivot() {
   }
-
-  // public void flashSlow() {
-  //   fastMode = Speed.SLOW;
-  //   pivotMotor.setNeutralMode(NeutralModeValue.Brake);
-  //   TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
-  //   pivotConfig.Slot0.kP = 100.0;
-  //   pivotConfig.Slot0.kI = 0.0;
-  //   pivotConfig.Slot0.kD = 5.0;
-  //   pivotConfig.Slot1.kP = 30.0;
-  //   pivotConfig.Slot1.kI = 0.0;
-  //   pivotConfig.Slot1.kD = 5.0;
-  //   pivotConfig.Slot2.kP = 50.0;
-  //   pivotConfig.Slot2.kI = 0.0;
-  //   pivotConfig.Slot2.kD = 15.0;
-  //   pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerkSlow;
-  //   pivotConfig.MotionMagic.MotionMagicAcceleration = this.pivotAccelerationSlow;
-  //   pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocitySlow;
-  //   pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-  //   pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-  //   pivotConfig.CurrentLimits.StatorCurrentLimit = 40;
-  //   pivotConfig.CurrentLimits.SupplyCurrentLimit = 40;
-  //   pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-  //   pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
-  //   pivotConfig.Feedback.SensorToMechanismRatio = 1.0;
-  //   pivotConfig.Feedback.RotorToSensorRatio = Constants.Ratios.PIVOT_GEAR_RATIO;
-  //   pivotMotor.getConfigurator().apply(pivotConfig);
-  //   pivotMotor.setNeutralMode(NeutralModeValue.Brake);
-  // }
-
-  // public void flashSlower() {
-  //   fastMode = Speed.ALGAE;
-  //   pivotMotor.setNeutralMode(NeutralModeValue.Brake);
-  //   TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
-  //   pivotConfig.Slot0.kP = 100.0;
-  //   pivotConfig.Slot0.kI = 0.0;
-  //   pivotConfig.Slot0.kD = 5.0;
-  //   pivotConfig.Slot1.kP = 30.0;
-  //   pivotConfig.Slot1.kI = 0.0;
-  //   pivotConfig.Slot1.kD = 5.0;
-  //   pivotConfig.Slot2.kP = 50.0;
-  //   pivotConfig.Slot2.kI = 0.0;
-  //   pivotConfig.Slot2.kD = 15.0;
-  //   pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerkSlower;
-  //   pivotConfig.MotionMagic.MotionMagicAcceleration = this.pivotAccelerationSlower;
-  //   pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocitySlower;
-  //   pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-  //   pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-  //   pivotConfig.CurrentLimits.StatorCurrentLimit = 40;
-  //   pivotConfig.CurrentLimits.SupplyCurrentLimit = 40;
-  //   pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-  //   pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
-  //   pivotConfig.Feedback.SensorToMechanismRatio = 1.0;
-  //   pivotConfig.Feedback.RotorToSensorRatio = Constants.Ratios.PIVOT_GEAR_RATIO;
-  //   pivotMotor.getConfigurator().apply(pivotConfig);
-  //   pivotMotor.setNeutralMode(NeutralModeValue.Brake);
-  // }
-
-  // public void flashFast() {
-  //   fastMode = Speed.FAST;
-  //   pivotMotor.setNeutralMode(NeutralModeValue.Brake);
-  //   TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
-  //   pivotConfig.Slot0.kP = 100.0;
-  //   pivotConfig.Slot0.kI = 0.0;
-  //   pivotConfig.Slot0.kD = 5.0;
-  //   pivotConfig.Slot1.kP = 30.0;
-  //   pivotConfig.Slot1.kI = 0.0;
-  //   pivotConfig.Slot1.kD = 5.0;
-  //   pivotConfig.Slot2.kP = 50.0;
-  //   pivotConfig.Slot2.kI = 0.0;
-  //   pivotConfig.Slot2.kD = 15.0;
-  //   pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerk;
-  //   pivotConfig.MotionMagic.MotionMagicAcceleration = this.pivotAcceleration;
-  //   pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocity;
-  //   pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-  //   pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-  //   pivotConfig.CurrentLimits.StatorCurrentLimit = 40;
-  //   pivotConfig.CurrentLimits.SupplyCurrentLimit = 40;
-  //   pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-  //   pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
-  //   pivotConfig.Feedback.SensorToMechanismRatio = 1.0;
-  //   pivotConfig.Feedback.RotorToSensorRatio = Constants.Ratios.PIVOT_GEAR_RATIO;
-  //   pivotMotor.getConfigurator().apply(pivotConfig);
-  //   pivotMotor.setNeutralMode(NeutralModeValue.Brake);
-  // }
 
   public void init() {
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
@@ -180,26 +96,20 @@ public class Pivot extends SubsystemBase {
     // } else if (fastMode != Speed.FAST) {
     //   flashFast();
     // }
-    if (Math.abs(pivotPosition) * 360.0 > 135.0) {
-      pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
+    if (Timer.getFPGATimestamp() - nonAlgaeTime < 1.0) {
+      pivotToPositionSlower(pivotPosition);
+    } else {
+      if (Math.abs(pivotPosition) * 360.0 > 135.0) {
+        pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
+      }
+      pivotMotor.setControl(this.pivotMotionProfileRequest
+          .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
+          .withVelocity(this.pivotCruiseVelocity * pivotProfileScalarFactor)
+          .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
+          .withJerk(
+              this.pivotJerk * pivotProfileScalarFactor)
+          .withSlot(0));
     }
-    // Logger.recordOutput("Pivot Setpoint", (pivotPosition));
-    // if (intakeItem == IntakeItem.ALGAE) {
-    //   pivotMotor.setControl(this.pivotMotionProfileRequest
-    //       .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
-    //       .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
-    //       .withJerk(
-    //           this.pivotJerk * pivotProfileScalarFactor)
-    //       .withSlot(1));
-    // } else {
-    pivotMotor.setControl(this.pivotMotionProfileRequest
-        .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
-        .withVelocity(this.pivotCruiseVelocity * pivotProfileScalarFactor)
-        .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
-        .withJerk(
-            this.pivotJerk * pivotProfileScalarFactor)
-        .withSlot(0));
-    // }
   }
 
   public void pivotToPositionSlow(double pivotPosition) {
@@ -405,6 +315,11 @@ public class Pivot extends SubsystemBase {
     if (systemState != PivotState.L23 && systemState != PivotState.L4 && systemState != PivotState.MANUAL_PLACE
         && systemState != PivotState.MANUAL_RESET) {
       runManualDownOrUp = false;
+    }
+    if (intakeItem != IntakeItem.ALGAE && nonAlgaeTime == 0.0) {
+      nonAlgaeTime = Timer.getFPGATimestamp();
+    } else if (intakeItem == IntakeItem.ALGAE) {
+      nonAlgaeTime = 0.0;
     }
     // Logger.recordOutput("Pivot Output",
     // pivotMotor.getClosedLoopOutput().getValueAsDouble());

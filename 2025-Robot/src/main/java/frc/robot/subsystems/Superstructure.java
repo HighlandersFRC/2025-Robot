@@ -45,6 +45,7 @@ public class Superstructure extends SubsystemBase {
     L4_PLACE,
     PROCESSOR,
     AUTO_PROCESSOR,
+    AUTO_PROCESSOR_MORE,
     OUTAKE_DRIVE,
     NET,
     AUTO_NET,
@@ -152,6 +153,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_PROCESSOR:
         handleAutoProcessorState();
+        break;
+      case AUTO_PROCESSOR_MORE:
+        handleAutoProcessorMoreState();
         break;
       case AUTO_NET:
         handleAutoNetState();
@@ -359,45 +363,48 @@ public class Superstructure extends SubsystemBase {
       case PROCESSOR:
         currentSuperState = SuperState.PROCESSOR;
         break;
+      case AUTO_PROCESSOR_MORE:
+        currentSuperState = SuperState.AUTO_PROCESSOR_MORE;
+        break;
       case NET:
         currentSuperState = SuperState.NET;
         break;
       case AUTO_PROCESSOR:
-        // if (OI.isBlueSide()) {
-        //   if (drive.hitSetPointGenerous(Constants.Reef.processorBlueFrontPlacingPosition.getX(),
-        //       Constants.Reef.processorBlueFrontPlacingPosition
-        //           .getY(),
-        //       drive.getMT2OdometryAngle())
-        //       && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kPROCESSOR.meters
-        //           - 5.0 / 39.37
-        //       && (drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-        //           Constants.Reef.processorBlueFrontPlacingPosition.getRotation().getDegrees()) < 10.0
-        //           || drive
-        //               .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-        //                   Constants.Reef.processorBlueBackPlacingPosition.getRotation().getDegrees()) < 10.0)) {
-        //     wantedSuperState = SuperState.OUTAKE_DRIVE;
-        //     currentSuperState = SuperState.OUTAKE_DRIVE;
-        //   } else {
-        currentSuperState = SuperState.AUTO_PROCESSOR;
-        // }
-        // } else {
-        //   if (drive.hitSetPoint(Constants.Reef.processorRedFrontPlacingPosition.getX(),
-        //       Constants.Reef.processorRedFrontPlacingPosition
-        //           .getY(),
-        //       drive.getMT2OdometryAngle())
-        //       && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kPROCESSOR.meters
-        //           - 5.0 / 39.37
-        //       && (drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-        //           Constants.Reef.processorRedFrontPlacingPosition.getRotation().getDegrees()) < 10.0
-        //           || drive
-        //               .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-        //                   Constants.Reef.processorRedBackPlacingPosition.getRotation().getDegrees()) < 10.0)) {
-        //     wantedSuperState = SuperState.OUTAKE_DRIVE;
-        //     currentSuperState = SuperState.OUTAKE_DRIVE;
-        //   } else {
-        currentSuperState = SuperState.AUTO_PROCESSOR;
-        // }
-        // }
+        if (OI.isBlueSide()) {
+          if (drive.hitSetPointGenerous(Constants.Reef.processorBlueFrontPlacingPosition.getX(),
+              Constants.Reef.processorBlueFrontPlacingPosition
+                  .getY(),
+              drive.getMT2OdometryAngle())
+              && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kPROCESSOR.meters
+                  - 5.0 / 39.37
+              && (drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+                  Constants.Reef.processorBlueFrontPlacingPosition.getRotation().getDegrees()) < 10.0
+                  || drive
+                      .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+                          Constants.Reef.processorBlueBackPlacingPosition.getRotation().getDegrees()) < 10.0)) {
+            wantedSuperState = SuperState.AUTO_PROCESSOR_MORE;
+            currentSuperState = SuperState.AUTO_PROCESSOR_MORE;
+          } else {
+            currentSuperState = SuperState.AUTO_PROCESSOR;
+          }
+        } else {
+          if (drive.hitSetPoint(Constants.Reef.processorRedFrontPlacingPosition.getX(),
+              Constants.Reef.processorRedFrontPlacingPosition
+                  .getY(),
+              drive.getMT2OdometryAngle())
+              && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kPROCESSOR.meters
+                  - 5.0 / 39.37
+              && (drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+                  Constants.Reef.processorRedFrontPlacingPosition.getRotation().getDegrees()) < 10.0
+                  || drive
+                      .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+                          Constants.Reef.processorRedBackPlacingPosition.getRotation().getDegrees()) < 10.0)) {
+            wantedSuperState = SuperState.AUTO_PROCESSOR_MORE;
+            currentSuperState = SuperState.AUTO_PROCESSOR_MORE;
+          } else {
+            currentSuperState = SuperState.AUTO_PROCESSOR;
+          }
+        }
         break;
       case AUTO_NET:
         if (drive.hitSetPointUltraGenerous(drive.getNetXSetpoint(), drive.getMT2OdometryY(),
@@ -883,6 +890,7 @@ public class Superstructure extends SubsystemBase {
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.NET);
     intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedFlip(PivotFlip.FRONT);
     pivot.setWantedState(PivotState.NET);
     twist.setWantedState(TwistState.UP);
   }
@@ -890,6 +898,21 @@ public class Superstructure extends SubsystemBase {
   public void handleAutoProcessorState() {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.PROCESSOR);
+    elevator.setWantedState(ElevatorState.PROCESSOR);
+    intake.setWantedState(IntakeState.DEFAULT);
+    if (drive.getAutoPlacementSideIsFront()) {
+      pivot.setWantedFlip(PivotFlip.FRONT);
+      twist.setWantedState(TwistState.UP);
+    } else {
+      pivot.setWantedFlip(PivotFlip.BACK);
+      twist.setWantedState(TwistState.DOWN);
+    }
+    pivot.setWantedState(PivotState.PROCESSOR);
+  }
+
+  public void handleAutoProcessorMoreState() {
+    lights.setWantedState(LightsState.PLACING);
+    drive.setWantedState(DriveState.PROCESSOR_MORE);
     elevator.setWantedState(ElevatorState.PROCESSOR);
     intake.setWantedState(IntakeState.DEFAULT);
     if (drive.getAutoPlacementSideIsFront()) {
@@ -932,10 +955,10 @@ public class Superstructure extends SubsystemBase {
     }
     intake.setWantedState(IntakeState.DEFAULT);
     if (!drive.getAutoPlacementSideIsFront()) {
-      pivot.setWantedFlip(PivotFlip.FRONT);
+      pivot.setWantedFlip(PivotFlip.BACK);
       twist.setWantedState(TwistState.DOWN);
     } else {
-      pivot.setWantedFlip(PivotFlip.BACK);
+      pivot.setWantedFlip(PivotFlip.FRONT);
       twist.setWantedState(TwistState.UP);
     }
     pivot.setWantedState(PivotState.NET);
@@ -968,10 +991,10 @@ public class Superstructure extends SubsystemBase {
     }
     intake.setWantedState(IntakeState.DEFAULT);
     if (!drive.getAutoPlacementSideIsFront()) {
-      pivot.setWantedFlip(PivotFlip.FRONT);
+      pivot.setWantedFlip(PivotFlip.BACK);
       twist.setWantedState(TwistState.DOWN);
     } else {
-      pivot.setWantedFlip(PivotFlip.BACK);
+      pivot.setWantedFlip(PivotFlip.FRONT);
       twist.setWantedState(TwistState.UP);
     }
     pivot.setWantedState(PivotState.NET);

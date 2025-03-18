@@ -274,15 +274,13 @@ public final class Constants {
                                 new Rotation2d(Math.toRadians(-54.0)));
 
                 public static final double PROCESSOR_Y_OFFSET_M = inchesToMeters(50.0);
+                public static final double PROCESSOR_MORE_Y_OFFSET_M = inchesToMeters(30.0);
                 public static final double NET_X_OFFSET_M = inchesToMeters(50.0);
                 public static final double NET_X_OFFSET_MORE = inchesToMeters(35.0);
 
                 public static final Translation2d processorBlueFrontPlacingTranslation = new Translation2d(
                                 inchesToMeters(238.79),
-                                PROCESSOR_Y_OFFSET_M); // TODO:
-                // actually
-                // measure
-                // these
+                                PROCESSOR_Y_OFFSET_M);
                 public static final Rotation2d processorBlueFrontPlacingRotation = new Rotation2d(
                                 degreesToRadians(270));
 
@@ -301,6 +299,30 @@ public final class Constants {
                                 inchesToMeters(316.21) - PROCESSOR_Y_OFFSET_M);
                 public static final Rotation2d processorRedBackPlacingRotation = new Rotation2d(degreesToRadians(270));
 
+                public static final Translation2d processorMoreBlueFrontPlacingTranslation = new Translation2d(
+                                inchesToMeters(238.79),
+                                PROCESSOR_MORE_Y_OFFSET_M);
+                public static final Rotation2d processorMoreBlueFrontPlacingRotation = new Rotation2d(
+                                degreesToRadians(270));
+
+                public static final Translation2d processorMoreRedFrontPlacingTranslation = new Translation2d(
+                                inchesToMeters(452.40),
+                                inchesToMeters(316.21) - PROCESSOR_MORE_Y_OFFSET_M);
+                public static final Rotation2d processorMoreRedFrontPlacingRotation = new Rotation2d(
+                                degreesToRadians(90));
+
+                public static final Translation2d processorMoreBlueBackPlacingTranslation = new Translation2d(
+                                inchesToMeters(238.79),
+                                PROCESSOR_MORE_Y_OFFSET_M);
+                public static final Rotation2d processorMoreBlueBackPlacingRotation = new Rotation2d(
+                                degreesToRadians(90));
+
+                public static final Translation2d processorMoreRedBackPlacingTranslation = new Translation2d(
+                                inchesToMeters(452.40),
+                                inchesToMeters(316.21) - PROCESSOR_MORE_Y_OFFSET_M);
+                public static final Rotation2d processorMoreRedBackPlacingRotation = new Rotation2d(
+                                degreesToRadians(270));
+
                 public static final Pose2d processorBlueFrontPlacingPosition = new Pose2d(
                                 processorBlueFrontPlacingTranslation,
                                 processorBlueFrontPlacingRotation);
@@ -313,6 +335,19 @@ public final class Constants {
                 public static final Pose2d processorRedBackPlacingPosition = new Pose2d(
                                 processorRedBackPlacingTranslation,
                                 processorRedBackPlacingRotation);
+
+                public static final Pose2d processorMoreBlueFrontPlacingPosition = new Pose2d(
+                                processorMoreBlueFrontPlacingTranslation,
+                                processorMoreBlueFrontPlacingRotation);
+                public static final Pose2d processorMoreRedFrontPlacingPosition = new Pose2d(
+                                processorMoreRedFrontPlacingTranslation,
+                                processorMoreRedFrontPlacingRotation);
+                public static final Pose2d processorMoreBlueBackPlacingPosition = new Pose2d(
+                                processorMoreBlueBackPlacingTranslation,
+                                processorMoreBlueBackPlacingRotation);
+                public static final Pose2d processorMoreRedBackPlacingPosition = new Pose2d(
+                                processorMoreRedBackPlacingTranslation,
+                                processorMoreRedBackPlacingRotation);
 
                 public static final double netBlueXM = (Constants.Physical.FIELD_LENGTH / 2) - NET_X_OFFSET_M;
                 public static final double netRedXM = (Constants.Physical.FIELD_LENGTH / 2) + NET_X_OFFSET_M;
