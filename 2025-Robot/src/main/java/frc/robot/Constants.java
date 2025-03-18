@@ -185,6 +185,20 @@ public final class Constants {
         }
 
         public static class Reef {
+                public static final double PERFECT_BRANCH_OFFSET_L4 = inchesToMeters(1 + 5 / 8); // l2/3
+                public static final double PERFECT_BRANCH_OFFSET_L23 = inchesToMeters(1 + 1 / 8);
+                public static final double A_BRANCH_OFFSET = inchesToMeters(1.5);
+                public static final double B_BRANCH_OFFSET = inchesToMeters(1.5);
+                public static final double C_BRANCH_OFFSET = inchesToMeters(1.5);
+                public static final double D_BRANCH_OFFSET = inchesToMeters(1.5);
+                public static final double E_BRANCH_OFFSET = inchesToMeters(0.0);
+                public static final double F_BRANCH_OFFSET = inchesToMeters(0.0);
+                public static final double G_BRANCH_OFFSET = inchesToMeters(0.0);
+                public static final double H_BRANCH_OFFSET = inchesToMeters(0.0);
+                public static final double I_BRANCH_OFFSET = inchesToMeters(1.5);
+                public static final double J_BRANCH_OFFSET = inchesToMeters(1.5);
+                public static final double K_BRANCH_OFFSET = inchesToMeters(1.5);
+                public static final double L_BRANCH_OFFSET = inchesToMeters(1.5);
                 public static final Translation2d centerBlue = new Translation2d(inchesToMeters(176.746),
                                 inchesToMeters(158.501));
                 public static final Translation2d centerRed = new Translation2d(
