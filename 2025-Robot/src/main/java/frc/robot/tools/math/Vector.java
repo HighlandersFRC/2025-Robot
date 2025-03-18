@@ -2,6 +2,8 @@
 
 package frc.robot.tools.math;
 
+import edu.wpi.first.math.geometry.Translation2d;
+
 public class Vector {
 
     private double i;
@@ -112,5 +114,25 @@ public class Vector {
 
     public Vector subtract(Vector other) {
         return new Vector(this.i - other.getI(), this.j - other.getJ());
+    }
+
+    public Vector scaled(double scalar) {
+        return new Vector(this.i * scalar, this.j * scalar);
+    }
+
+    public Vector projectOther(Vector other) {
+        double dotProduct = dot(other);
+        double magnitudeSquared = dot(this);
+        return scaled(dotProduct / magnitudeSquared);
+    }
+
+    public Translation2d getClosestPointOnLine(Translation2d pointOnLine, Translation2d pointOffLine) {
+        Vector toPoint = new Vector(pointOffLine.getX() - pointOnLine.getX(), pointOffLine.getY() - pointOnLine.getY());
+        Vector projVector = projectOther(toPoint); // Project onto the line direction
+        return new Translation2d(pointOnLine.getX() + projVector.i, pointOnLine.getY() + projVector.j);
+    }
+
+    public Vector perpendicular() {
+        return new Vector(-j, i);
     }
 }

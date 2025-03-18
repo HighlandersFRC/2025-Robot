@@ -104,8 +104,8 @@ public class Elevator extends SubsystemBase {
     CurrentLimitsConfigs currentLimitsConfigs = new CurrentLimitsConfigs();
     currentLimitsConfigs.StatorCurrentLimitEnable = true;
     currentLimitsConfigs.SupplyCurrentLimitEnable = true;
-    currentLimitsConfigs.StatorCurrentLimit = 40;
-    currentLimitsConfigs.SupplyCurrentLimit = 40;
+    currentLimitsConfigs.StatorCurrentLimit = 60;
+    currentLimitsConfigs.SupplyCurrentLimit = 60;
     elevatorMotorMaster.getConfigurator().apply(currentLimitsConfigs);
     elevatorMotorFollower.getConfigurator().apply(currentLimitsConfigs);
   }
@@ -345,42 +345,12 @@ public class Elevator extends SubsystemBase {
         moveElevatorToPosition(getElevatorL3ScoreSetpoint());
         break;
       default:
-        if (firstTimeIdle) {
-          idleTime = Timer.getFPGATimestamp();
-          firstTimeIdle = false;
-        }
-        if (!firstTimeDefault) {
-          if (DriverStation.isTeleopEnabled() && Math
-              .abs(
-                  Constants.Ratios
-                      .elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
-              && Timer.getFPGATimestamp() - idleTime > 0.3
-              && !firstTimeIdle) {
-            if (zeroTime == 0.0) {
-              zeroTime = Timer.getFPGATimestamp();
-            } else if (Timer.getFPGATimestamp() - zeroTime > 0.75) {
-              firstTimeDefault = true;
-              moveWithPercent(0.0);
-              setElevatorEncoderPosition(0.0);
-            }
-          } else {
-            // System.out.println("Running down to zero");
-            if (intakeItem == IntakeItem.ALGAE) {
-
-              moveWithTorque(-40, 0.1);
-            } else {
-              moveWithTorque(-40, 0.4);
-            }
+        if (DriverStation.isTeleopEnabled()) {
+          if (firstTimeIdle) {
+            idleTime = Timer.getFPGATimestamp();
+            firstTimeIdle = false;
           }
-        } else {
-          if (getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
-            moveWithTorque(-50, 0.6);
-            // System.out.println("Running down default");
-          } else if (getElevatorPosition() > (Constants.inchesToMeters(1.0))) {
-            moveWithTorque(-30, 0.4);
-            // System.out.println("Running down default");
-          } else {
-            // System.out.println("stopping");
+          if (!firstTimeDefault) {
             if (DriverStation.isTeleopEnabled() && Math
                 .abs(
                     Constants.Ratios
@@ -395,8 +365,7 @@ public class Elevator extends SubsystemBase {
                 setElevatorEncoderPosition(0.0);
               }
             } else {
-              // System.out.println("Running down to zero");            if (intakeItem == IntakeItem.ALGAE) {
-
+              // System.out.println("Running down to zero");
               if (intakeItem == IntakeItem.ALGAE) {
 
                 moveWithTorque(-40, 0.1);
@@ -404,6 +373,57 @@ public class Elevator extends SubsystemBase {
                 moveWithTorque(-40, 0.4);
               }
             }
+          } else {
+            if (getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
+              moveWithTorque(-50, 0.6);
+              // System.out.println("Running down default");
+            } else if (getElevatorPosition() > (Constants.inchesToMeters(1.0))) {
+              moveWithTorque(-30, 0.4);
+              // System.out.println("Running down default");
+            } else {
+              // System.out.println("stopping");
+              if (DriverStation.isTeleopEnabled() && Math
+                  .abs(
+                      Constants.Ratios
+                          .elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
+                  && Timer.getFPGATimestamp() - idleTime > 0.3
+                  && !firstTimeIdle) {
+                if (zeroTime == 0.0) {
+                  zeroTime = Timer.getFPGATimestamp();
+                } else if (Timer.getFPGATimestamp() - zeroTime > 0.75) {
+                  firstTimeDefault = true;
+                  moveWithPercent(0.0);
+                  setElevatorEncoderPosition(0.0);
+                }
+              } else {
+                // System.out.println("Running down to zero");            if (intakeItem == IntakeItem.ALGAE) {
+
+                if (intakeItem == IntakeItem.ALGAE) {
+
+                  moveWithTorque(-40, 0.1);
+                } else {
+                  moveWithTorque(-40, 0.4);
+                }
+              }
+            }
+          }
+        } else {
+          if (Math.abs(
+              Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
+              && Timer.getFPGATimestamp() - idleTime > 0.3
+              && !firstTimeIdle) {
+            if (zeroTime == 0.0) {
+              zeroTime = Timer.getFPGATimestamp();
+            } else if (Timer.getFPGATimestamp() - zeroTime > 0.75) {
+              firstTimeDefault = true;
+              moveWithPercent(0.0);
+              setElevatorEncoderPosition(0.0);
+            }
+          } else {
+            // System.out.println("Running down to zero");            if (intakeItem == IntakeItem.ALGAE) {
+
+            moveWithTorque(-40, 0.6);
+
           }
         }
         break;

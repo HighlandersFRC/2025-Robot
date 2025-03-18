@@ -21,7 +21,6 @@ import frc.robot.commands.FeederPickupFollower;
 import frc.robot.commands.FullSendFollower;
 import frc.robot.commands.PolarAutoFollower;
 import frc.robot.commands.SetClimberPivotTorque;
-import frc.robot.commands.SetIntakeState;
 import frc.robot.commands.SetRobotState;
 import frc.robot.commands.SetRobotStateComplicated;
 import frc.robot.commands.SetRobotStateOnce;
@@ -37,7 +36,6 @@ import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Twist;
-import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.Superstructure.SuperState;
 
 /**
@@ -159,7 +157,7 @@ public class RobotContainer {
                                                 new SetRobotState(superstructure,
                                                                 SuperState.FEEDER),
                                                 new SetRobotState(superstructure,
-                                                                SuperState.FEEDER_AUTO),
+                                                                SuperState.FEEDER_ALIGN),
                                                 () -> manualMode),
                                 () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE || superstructure
                                                 .getCurrentSuperState() == SuperState.L3_PLACE

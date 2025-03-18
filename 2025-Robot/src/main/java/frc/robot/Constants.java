@@ -182,6 +182,9 @@ public final class Constants {
                 System.out.println("l3 red positions: " + Constants.Reef.l3RedFrontPlacingPositions.toString());
                 System.out.println("l3 blue back positions: " + Constants.Reef.l3BlueBackPlacingPositions.toString());
                 System.out.println("l3 red back positions: " + Constants.Reef.l3RedBackPlacingPositions.toString());
+                Logger.recordOutput("feeder Positions", new Pose2d[] { Constants.Reef.RED_LEFT_FEEDER_LEFT,
+                                Constants.Reef.RED_RIGHT_FEEDER_RIGHT, Constants.Reef.RED_RIGHT_FEEDER_LEFT,
+                                Constants.Reef.RED_LEFT_FEEDER_RIGHT, });
         }
 
         public static class Reef {
@@ -1778,10 +1781,10 @@ public final class Constants {
                 // public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
                 // public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
 
-                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(23.0);
+                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(23.75);
                 // public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(24.5);
                 public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(1.25);
-                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(23.0);
+                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(23.75);
                 // public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(25.5);
                 public static double INTAKE_Y_OFFSET_BACK = inchesToMeters(-1.25);
 
@@ -1790,16 +1793,16 @@ public final class Constants {
                 public static double INTAKE_X_OFFSET_BACK_ALGAE = inchesToMeters(23.0 + 5.0);
                 public static double INTAKE_Y_OFFSET_BACK_ALGAE = inchesToMeters(-3.8);
 
-                public static final double L3_INTAKE_X_OFFSET_FRONT = inchesToMeters(28.0);
+                public static final double L3_INTAKE_X_OFFSET_FRONT = inchesToMeters(28.75);
                 public static final double L3_INTAKE_Y_OFFSET_FRONT = inchesToMeters(2.2);
 
-                public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(28.0);
+                public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(28.75);
                 public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-2.2);
 
-                public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(25.6);
+                public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(25.65);
                 // public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.3);
                 public static double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(24.6);
+                public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(25.00);
                 // public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.1);
                 public static double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.2);
 

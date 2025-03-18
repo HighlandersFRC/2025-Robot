@@ -291,6 +291,7 @@ public class Drive extends SubsystemBase {
     NET_MORE,
     FEEDER,
     SCORE_L23,
+    FEEDER_ALIGN,
     AUTO_FEEDER,
     AUTO_L1,
     FEEDER_AUTO,
@@ -1873,12 +1874,6 @@ public class Drive extends SubsystemBase {
       oiRY = oiRY * speedMultiplier;
       oiLY = oiLY * speedMultiplier;
     }
-
-    // Logger.recordOutput("Adjusted Right X", oiRX);
-    // Logger.recordOutput("Adjusted Left X", oiLX);
-    // Logger.recordOutput("Adjusted Right Y", oiRY);
-    // Logger.recordOutput("Adjusted Left Y", oiLY);
-
     updateOdometryFusedArray();
     double turnLimit = 0.17;
 
@@ -1890,52 +1885,14 @@ public class Drive extends SubsystemBase {
       oiRY = oiRY * 0.5;
       oiLY = oiLY * 0.5;
     }
-    // 0.35 before
-
-    // if (OI.driverController.getRightTriggerAxis() > 0.2) {
-    // // activate slowy spin
-    // turnLimit = 0.1;
-    // }
-
-    // this is correct, X is forward in field, so originalX should be the y on the
-    // // joystick
-    // double originalX = -(Math.copySign(OI.getDriverLeftY() * OI.getDriverLeftY(),
-    // OI.getDriverLeftY()));
-    // double originalY = -(Math.copySign(OI.getDriverLeftX() * OI.getDriverLeftX(),
-    // OI.getDriverLeftX()));
     double originalX = -(Math.copySign(oiLY * oiLY, oiLY));
     double originalY = -(Math.copySign(oiLX * oiLX, oiLX));
-    // if (Math.abs(originalX) < 0.005) {
-    // originalX = 0;
-    // }
-    // if (Math.abs(originalY) < 0.005) {
-    // originalY = 0;
-    // }
-
-    // double turn = turnLimit * ((Math.copySign(OI.getDriverRightX() *
-    // OI.getDriverRightX() * OI.getDriverRightX(), OI.getDriverRightX())) *
-    // (Constants.Physical.TOP_SPEED)/(Constants.Physical.ROBOT_RADIUS));
     double turn = turnLimit
         * (oiRX * (Constants.Physical.TOP_SPEED) / (Constants.Physical.ROBOT_RADIUS));
 
     if (Math.abs(turn) < 0.05) {
       turn = 0.0;
     }
-
-    // if (turn == 0.0 && Timer.getFPGATimestamp() - teleopInitTime > 2.0) {
-    // turningPID.setSetPoint(angleSetpoint);
-    // double yaw = peripherals.getPigeonAngle();
-    // while (Math.abs(angleSetpoint - yaw) > 180) {
-    // if (angleSetpoint - yaw > 180) {
-    // yaw += 360;
-    // } else {
-    // yaw -= 360;
-    // }
-    // }
-    // double result = -1 * turningPID.updatePID(yaw);
-    // Logger.recordOutput("result", result);
-    // driveAutoAligned(result);
-    // } else {
     angleSetpoint = peripherals.getPigeonAngle();
     double compensation = peripherals.getPigeonAngularVelocityW() * 0.050;
     angleSetpoint += compensation;
@@ -2358,7 +2315,6 @@ public class Drive extends SubsystemBase {
 
   public void driveToXTheta(double x, double theta) {
     System.out.println(theta);
-    double y = OI.getDriverLeftX();
     theta = Math.toRadians(theta);
     while (Math.abs(theta - getMT2OdometryAngle()) > Math.PI) {
       if (theta - getMT2OdometryAngle() > Math.PI) {
@@ -2367,12 +2323,6 @@ public class Drive extends SubsystemBase {
         theta += 2 * Math.PI;
       }
     }
-
-    double speedMultiplier = (((60 - Constants.metersToInches(elevator.getElevatorPosition())) * 0.4 / 50) + 0.6);
-    if (elevator.getElevatorPosition() > Constants.inchesToMeters(10)) {
-      y *= speedMultiplier;
-    }
-
     xxPID.setSetPoint(x);
     thetaaPID.setSetPoint(theta);
 
@@ -2382,21 +2332,9 @@ public class Drive extends SubsystemBase {
     double xVelNoFF = xxPID.getResult();
     double yVelNoFF = OI.getDriverLeftX() * 2.9;
     double thetaVelNoFF = -thetaaPID.getResult();
-
-    // double feedForwardX = targetPoint.getDouble("x_velocity") *
-    // Constants.Autonomous.FEED_FORWARD_MULTIPLIER;
-    // double feedForwardY = targetPoint.getDouble("y_velocity") *
-    // Constants.Autonomous.FEED_FORWARD_MULTIPLIER;
-    // double feedForwardTheta = -targetPoint.getDouble("angular_velocity") *
-    // Constants.Autonomous.FEED_FORWARD_MULTIPLIER;
-
     double finalX = xVelNoFF;
     double finalY = yVelNoFF;
     double finalTheta = thetaVelNoFF;
-    // if (m_fieldSide == "blue") {
-    // finalX = -finalX;
-    // finalTheta = -finalTheta;
-    // }
     Number[] velocityArray = new Number[] {
         finalX,
         -finalY,
@@ -2415,6 +2353,55 @@ public class Drive extends SubsystemBase {
     desiredThetaChange = velocityArray[2].doubleValue();
 
     autoDrive(velocityVector, desiredThetaChange);
+  }
+
+  public void driveOnLine(Vector lineVector, Translation2d pointOnLine, double angrad) {
+    Logger.recordOutput("Point On Line", new Pose2d(pointOnLine, new Rotation2d()));
+    Logger.recordOutput("LineVector",
+        new Pose2d(pointOnLine.plus(new Translation2d(lineVector.getI(), lineVector.getJ())), new Rotation2d()));
+    double oiLY = OI.getDriverLeftY();
+    double oiLX = OI.getDriverLeftX();
+    double originalX = -(Math.copySign(oiLY * oiLY, oiLY));
+    double originalY = -(Math.copySign(oiLX * oiLX, oiLX));
+    double xPower = getAdjustedX(originalX, originalY);
+    double yPower = getAdjustedY(originalX, originalY);
+
+    double xSpeed = xPower * Constants.Physical.TOP_SPEED;
+    double ySpeed = yPower * Constants.Physical.TOP_SPEED;
+
+    Vector controllerVector = new Vector(xSpeed, ySpeed);
+    if (getFieldSide().equals("red")) {
+      controllerVector.setI(-xSpeed);
+      controllerVector.setJ(-ySpeed);
+    }
+    Vector projectedJoystick = lineVector.perpendicular().projectOther(controllerVector);
+    Logger.recordOutput("projected x", projectedJoystick.getI());
+    Logger.recordOutput("projected y", projectedJoystick.getJ());
+    Translation2d currentPoint = new Translation2d(getMT2OdometryX(), getMT2OdometryY());
+    Translation2d closestPointOnLine = lineVector.getClosestPointOnLine(pointOnLine, currentPoint);
+    Logger.recordOutput("closestPointOnLine", new Pose2d(closestPointOnLine, new Rotation2d(angrad)));
+    xxPID.setSetPoint(closestPointOnLine.getX());
+    yyPID.setSetPoint(closestPointOnLine.getY());
+    while (Math.abs(angrad - getMT2OdometryAngle()) > Math.PI) {
+      if (angrad - getMT2OdometryAngle() > Math.PI) {
+        angrad -= 2 * Math.PI;
+      } else {
+        angrad += 2 * Math.PI;
+      }
+    }
+    thetaaPID.setSetPoint(angrad);
+    double toPointXVel = xxPID.updatePID(getMT2OdometryX());
+    double toPointYVel = -yyPID.updatePID(getMT2OdometryY());
+    double thetaVel = -thetaaPID.updatePID(getMT2OdometryAngle());
+    Logger.recordOutput("feederAngle", Math.toDegrees(angrad));
+    Logger.recordOutput("thetaVel", thetaVel);
+    Logger.recordOutput("toPointYVel", toPointYVel);
+    Logger.recordOutput("toPointXVel", toPointXVel);
+    Vector toPointVector = new Vector(toPointXVel, toPointYVel);
+    Vector driveVector = toPointVector.add(projectedJoystick);
+    Logger.recordOutput("driveVector", new Pose2d(new Translation2d(driveVector.getI() + getMT2OdometryX(),
+        driveVector.getJ() + getMT2OdometryY()), new Rotation2d(angrad)));
+    autoDrive(driveVector, thetaVel);
   }
 
   public void driveToTheta(double theta) {
@@ -2719,6 +2706,8 @@ public class Drive extends SubsystemBase {
         return DriveState.SCORE_L23;
       case AUTO_FEEDER:
         return DriveState.AUTO_FEEDER;
+      case FEEDER_ALIGN:
+        return DriveState.FEEDER_ALIGN;
       case AUTO_L1:
         return DriveState.AUTO_L1;
       case FEEDER_AUTO:
@@ -3145,7 +3134,77 @@ public class Drive extends SubsystemBase {
             }
           }
         }
-
+        break;
+      case FEEDER_ALIGN:
+        if (getFieldSide() == "red") { // red side
+          if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
+            if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 324
+                &&
+                Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 144)) {
+              Vector feederLine = new Vector(-Constants.Reef.RED_RIGHT_FEEDER.getRotation().getSin(),
+                  Constants.Reef.RED_RIGHT_FEEDER.getRotation().getCos());
+              driveOnLine(feederLine, Constants.Reef.RED_RIGHT_FEEDER.getTranslation(),
+                  Constants.Reef.RED_RIGHT_FEEDER.getRotation().getRadians());
+            } else { // robot back side redside left feeder (fieldside top right)
+              Vector feederLine = new Vector(-Constants.Reef.RED_RIGHT_FEEDER.getRotation().getSin(),
+                  Constants.Reef.RED_RIGHT_FEEDER.getRotation().getCos());
+              driveOnLine(feederLine, Constants.Reef.RED_RIGHT_FEEDER.getTranslation(),
+                  Constants.Reef.RED_RIGHT_FEEDER.getRotation().getRadians() + Math.PI);
+            }
+          } else { // redside left feeder (fieldside bottom right)
+            if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 36
+                &&
+                Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 0)
+                ||
+                (Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 360
+                    &&
+                    Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 216)) {
+              Vector feederLine = new Vector(-Constants.Reef.RED_LEFT_FEEDER.getRotation().getSin(),
+                  Constants.Reef.RED_LEFT_FEEDER.getRotation().getCos());
+              driveOnLine(feederLine, Constants.Reef.RED_LEFT_FEEDER.getTranslation(),
+                  Constants.Reef.RED_LEFT_FEEDER.getRotation().getRadians() + Math.PI);
+            } else { // robot back side redside left feeder (fieldside top right)
+              Vector feederLine = new Vector(-Constants.Reef.RED_LEFT_FEEDER.getRotation().getSin(),
+                  Constants.Reef.RED_LEFT_FEEDER.getRotation().getCos());
+              driveOnLine(feederLine, Constants.Reef.RED_LEFT_FEEDER.getTranslation(),
+                  Constants.Reef.RED_LEFT_FEEDER.getRotation().getRadians());
+            }
+          }
+        } else { // blue side
+          if (getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
+            if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 324
+                &&
+                Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 144)) {
+              Vector feederLine = new Vector(-Constants.Reef.BLUE_RIGHT_FEEDER.getRotation().getSin(),
+                  Constants.Reef.BLUE_RIGHT_FEEDER.getRotation().getCos());
+              driveOnLine(feederLine, Constants.Reef.BLUE_RIGHT_FEEDER.getTranslation(),
+                  Constants.Reef.BLUE_RIGHT_FEEDER.getRotation().getRadians());
+            } else { // robot back side redside left feeder (fieldside top right)
+              Vector feederLine = new Vector(-Constants.Reef.BLUE_RIGHT_FEEDER.getRotation().getSin(),
+                  Constants.Reef.BLUE_RIGHT_FEEDER.getRotation().getCos());
+              driveOnLine(feederLine, Constants.Reef.BLUE_RIGHT_FEEDER.getTranslation(),
+                  Constants.Reef.BLUE_RIGHT_FEEDER.getRotation().getRadians() + Math.PI);
+            }
+          } else { // blue side left feeder (fieldside top left)
+            if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 36
+                &&
+                Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 0)
+                ||
+                (Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 360
+                    &&
+                    Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 216)) {
+              Vector feederLine = new Vector(-Constants.Reef.BLUE_LEFT_FEEDER.getRotation().getSin(),
+                  Constants.Reef.BLUE_LEFT_FEEDER.getRotation().getCos());
+              driveOnLine(feederLine, Constants.Reef.BLUE_LEFT_FEEDER.getTranslation(),
+                  Constants.Reef.BLUE_LEFT_FEEDER.getRotation().getRadians());
+            } else { // robot back side redside left feeder (fieldside top right)
+              Vector feederLine = new Vector(-Constants.Reef.BLUE_LEFT_FEEDER.getRotation().getSin(),
+                  Constants.Reef.BLUE_LEFT_FEEDER.getRotation().getCos());
+              driveOnLine(feederLine, Constants.Reef.BLUE_LEFT_FEEDER.getTranslation(),
+                  Constants.Reef.BLUE_LEFT_FEEDER.getRotation().getRadians() + Math.PI);
+            }
+          }
+        }
         break;
       case FEEDER_AUTO:
         if (getFieldSide() == "red") { // red side
@@ -3251,58 +3310,3 @@ public class Drive extends SubsystemBase {
     return adjustedX;
   }
 }
-//
-//
-//
-//
-//
-//
-//
-
-//
-//
-//
-//
-//
-//
-//
-//
-
-//
-//
-//
-//
-//
-
-//
-//
-//
-//
-//
-//
-//
-
-//
-
-//
-//
-//
-//
-//
-//
-//
-
-//
-//
-//
-//
-//
-//
-
-//
-//
-//
-//
-//
-//
-//
