@@ -12,9 +12,11 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.Constants.SetPoints.ElevatorPosition;
 
 public class Elevator extends SubsystemBase {
@@ -227,9 +229,16 @@ public class Elevator extends SubsystemBase {
     }
   }
 
+  private double zeroTime = 0.0;
+
   @Override
   public void periodic() {
     systemState = handleStateTransition();
+    if (systemState != ElevatorState.DEFAULT) {
+      firstTimeDefault = false;
+      idleTime = Timer.getFPGATimestamp();
+      zeroTime = 0.0;
+    }
     // System.out.println("Elevator Current: " +
     // elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
     // Logger.recordOutput("Elevator Current",
@@ -334,19 +343,22 @@ public class Elevator extends SubsystemBase {
           firstTimeIdle = false;
         }
         if (!firstTimeDefault) {
-          if (Math
+          if (DriverStation.isTeleopEnabled() && Math
               .abs(
                   Constants.Ratios
                       .elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
               && Timer.getFPGATimestamp() - idleTime > 0.3
               && !firstTimeIdle) {
-            firstTimeDefault = true;
-            moveWithPercent(0.0);
-            // System.out.println("zeroing elevator");
-            setElevatorEncoderPosition(0.0);
+            if (zeroTime == 0.0) {
+              zeroTime = Timer.getFPGATimestamp();
+            } else if (Timer.getFPGATimestamp() - zeroTime > 0.75) {
+              firstTimeDefault = true;
+              moveWithPercent(0.0);
+              setElevatorEncoderPosition(0.0);
+            }
           } else {
             // System.out.println("Running down to zero");
-            moveWithTorque(-50, 0.6);
+            moveWithTorque(-70, 0.6);
           }
         } else {
           if (getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
@@ -357,7 +369,23 @@ public class Elevator extends SubsystemBase {
             // System.out.println("Running down default");
           } else {
             // System.out.println("stopping");
-            moveWithPercent(0.0);
+            if (DriverStation.isTeleopEnabled() && Math
+                .abs(
+                    Constants.Ratios
+                        .elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
+                && Timer.getFPGATimestamp() - idleTime > 0.3
+                && !firstTimeIdle) {
+              if (zeroTime == 0.0) {
+                zeroTime = Timer.getFPGATimestamp();
+              } else if (Timer.getFPGATimestamp() - zeroTime > 0.75) {
+                firstTimeDefault = true;
+                moveWithPercent(0.0);
+                setElevatorEncoderPosition(0.0);
+              }
+            } else {
+              // System.out.println("Running down to zero");
+              moveWithTorque(-70, 0.2);
+            }
           }
         }
         break;

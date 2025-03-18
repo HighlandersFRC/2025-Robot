@@ -132,7 +132,7 @@ public class RobotContainer {
                 // COMPETITION CONTROLS
                 // Driver
 
-                OI.driverViewButton.whileTrue(new ZeroAngleMidMatch(drive, elevator)); // zero pidgeon and elevator
+                OI.driverViewButton.whileTrue(new ZeroAngleMidMatch(drive)); // zero pidgeon and elevator
 
                 // OI.driverRT.whileTrue(new SetRobotState(superstructure,
                 // SuperState.GROUND_CORAL_PICKUP_FRONT));
@@ -163,7 +163,22 @@ public class RobotContainer {
                                                 () -> manualMode),
                                 () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE || superstructure
                                                 .getCurrentSuperState() == SuperState.L3_PLACE
-                                                || superstructure.getCurrentSuperState() == SuperState.L2_PLACE)));
+                                                || superstructure.getCurrentSuperState() == SuperState.L2_PLACE
+                                                || superstructure
+                                                                .getCurrentSuperState() == SuperState.AUTO_L4_PLACE
+                                                || superstructure
+                                                                .getCurrentSuperState() == SuperState.AUTO_L3_PLACE
+                                                || superstructure.getCurrentSuperState() == SuperState.AUTO_L2_PLACE
+                                                || superstructure
+                                                                .getCurrentSuperState() == SuperState.SCORE_L2
+                                                || superstructure
+                                                                .getCurrentSuperState() == SuperState.SCORE_L3
+                                                || superstructure.getCurrentSuperState() == SuperState.SCORE_L4
+                                                || superstructure
+                                                                .getCurrentSuperState() == SuperState.AUTO_SCORE_L2
+                                                || superstructure
+                                                                .getCurrentSuperState() == SuperState.AUTO_SCORE_L3
+                                                || superstructure.getCurrentSuperState() == SuperState.AUTO_SCORE_L4)));
 
                 OI.driverMenuButton.whileTrue(new SetRobotState(superstructure, SuperState.DEFAULT));
 

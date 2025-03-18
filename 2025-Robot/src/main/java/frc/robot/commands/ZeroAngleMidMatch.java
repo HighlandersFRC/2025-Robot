@@ -10,11 +10,9 @@ import frc.robot.subsystems.Elevator;
 
 public class ZeroAngleMidMatch extends Command {
   private Drive drive;
-  private Elevator elevator;
 
-  public ZeroAngleMidMatch(Drive drive, Elevator elevator) {
+  public ZeroAngleMidMatch(Drive drive) {
     this.drive = drive;
-    this.elevator = elevator;
   }
 
   @Override
@@ -24,7 +22,6 @@ public class ZeroAngleMidMatch extends Command {
   @Override
   public void execute() {
     drive.zeroIMU();
-    elevator.setElevatorEncoderPosition(0.0);
   }
 
   @Override

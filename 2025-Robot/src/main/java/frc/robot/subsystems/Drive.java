@@ -267,8 +267,10 @@ public class Drive extends SubsystemBase {
     L4_REEF,
     ALGAE,
     ALGAE_MORE,
+    ALGAE_MORE_MORE,
     PROCESSOR,
     NET,
+    NET_MORE,
     FEEDER,
     SCORE_L23,
     AUTO_FEEDER,
@@ -401,7 +403,8 @@ public class Drive extends SubsystemBase {
       turningPID.setSetPoint(angleSetpoint);
     }
 
-    frontLeft.setDriveCurrentLimits(120, 120);
+    frontLeft.setDriveCurrentLimits(120, 120); // if robot starts browning out in a placement sequence, just drop these
+                                               // to 40
     frontRight.setDriveCurrentLimits(120, 120);
     backLeft.setDriveCurrentLimits(120, 120);
     backRight.setDriveCurrentLimits(120, 120);
@@ -985,6 +988,68 @@ public class Drive extends SubsystemBase {
             chosenSetpoint[0] = Constants.Reef.algaeBlueBackPlacingPositionsMore.get(i).getX();
             chosenSetpoint[1] = Constants.Reef.algaeBlueBackPlacingPositionsMore.get(i).getY();
             chosenSetpoint[2] = Constants.Reef.algaeBlueBackPlacingPositionsMore.get(i).getRotation().getRadians();
+          }
+        }
+      }
+    }
+    if (Math.hypot(chosenSetpoint[0] - getMT2OdometryX(), chosenSetpoint[1] - getMT2OdometryY()) > 5) {
+      return getMT2Odometry();
+    } else {
+      return chosenSetpoint;
+    }
+  }
+
+  public double[] getAlgaeMoreMoreClosestSetpoint(double[] currentOdometry /* {x, y, thetaRadians} */) {
+    double x = currentOdometry[0];
+    double y = currentOdometry[1];
+    double theta = Constants.standardizeAngleDegrees(Math.toDegrees(currentOdometry[2]));
+    double dist = 100.0;
+    double currentDist = 100.0;
+    double[] chosenSetpoint = { x, y, Math.toRadians(theta) };
+    if (getFieldSide() == "red") {
+      for (int i = 0; i < Constants.Reef.algaeRedFrontPlacingPositionsMoreMore.size(); i++) {
+        // currentDist = Math.sqrt(Math.pow((x -
+        // Constants.Reef.redFrontPlacingPositionsMoreMore.get(i).getX()), 2)
+        // + Math.pow((y -
+        // Constants.Reef.redFrontPlacingPositionsMoreMore.get(i).getY()),
+        // 2));
+        currentDist = Math.hypot(
+            x - Constants.Reef.algaeRedFrontPlacingPositionsMoreMore.get(i).getX(),
+            y - Constants.Reef.algaeRedFrontPlacingPositionsMoreMore.get(i).getY());
+        if (currentDist < dist) {
+          dist = currentDist;
+          if (getAngleDifferenceDegrees(theta,
+              Constants.Reef.algaeRedFrontPlacingPositionsMoreMore.get(i).getRotation().getDegrees()) <= 90) {
+            autoPlacingFront = true;
+            chosenSetpoint[0] = Constants.Reef.algaeRedFrontPlacingPositionsMoreMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.algaeRedFrontPlacingPositionsMoreMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.algaeRedFrontPlacingPositionsMoreMore.get(i).getRotation().getRadians();
+          } else {
+            autoPlacingFront = false;
+            chosenSetpoint[0] = Constants.Reef.algaeRedBackPlacingPositionsMoreMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.algaeRedBackPlacingPositionsMoreMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.algaeRedBackPlacingPositionsMoreMore.get(i).getRotation().getRadians();
+          }
+        }
+      }
+    } else {
+      for (int i = 0; i < Constants.Reef.algaeBlueFrontPlacingPositionsMoreMore.size(); i++) {
+        currentDist = Math.hypot(
+            x - Constants.Reef.algaeBlueFrontPlacingPositionsMoreMore.get(i).getX(),
+            y - Constants.Reef.algaeBlueFrontPlacingPositionsMoreMore.get(i).getY());
+        if (currentDist < dist) {
+          dist = currentDist;
+          if (getAngleDifferenceDegrees(theta,
+              Constants.Reef.algaeBlueFrontPlacingPositionsMoreMore.get(i).getRotation().getDegrees()) <= 90) {
+            autoPlacingFront = true;
+            chosenSetpoint[0] = Constants.Reef.algaeBlueFrontPlacingPositionsMoreMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.algaeBlueFrontPlacingPositionsMoreMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.algaeBlueFrontPlacingPositionsMoreMore.get(i).getRotation().getRadians();
+          } else {
+            autoPlacingFront = false;
+            chosenSetpoint[0] = Constants.Reef.algaeBlueBackPlacingPositionsMoreMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.algaeBlueBackPlacingPositionsMoreMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.algaeBlueBackPlacingPositionsMoreMore.get(i).getRotation().getRadians();
           }
         }
       }
@@ -1788,6 +1853,15 @@ public class Drive extends SubsystemBase {
 
     updateOdometryFusedArray();
     double turnLimit = 0.17;
+
+    if (OI.driverController.getRightTriggerAxis() > 0.2 || OI.getDriverRB()) {
+      // activate slowy spin
+      turnLimit = 0.1;
+      oiRX = oiRX * 0.5;
+      oiLX = oiLX * 0.5;
+      oiRY = oiRY * 0.5;
+      oiLY = oiLY * 0.5;
+    }
     // 0.35 before
 
     // if (OI.driverController.getRightTriggerAxis() > 0.2) {
@@ -1881,10 +1955,14 @@ public class Drive extends SubsystemBase {
     double turnLimit = 0.17;
     // 0.35 before
 
-    // if (OI.driverController.getRightTriggerAxis() > 0.2) {
-    // // activate slowy spin
-    // turnLimit = 0.1;
-    // }
+    if (OI.driverController.getRightTriggerAxis() > 0.2) {
+      // activate slowy spin
+      turnLimit = 0.1;
+      oiRX = oiRX * 0.5;
+      oiLX = oiLX * 0.5;
+      oiRY = oiRY * 0.5;
+      oiLY = oiLY * 0.5;
+    }
 
     // this is correct, X is forward in field, so originalX should be the y on the
     // // joystick
@@ -2053,7 +2131,7 @@ public class Drive extends SubsystemBase {
     // + hitNumber);
     if (Math
         .sqrt(Math.pow((x - getMT2OdometryX()), 2)
-            + Math.pow((y - getMT2OdometryY()), 2)) < 0.03
+            + Math.pow((y - getMT2OdometryY()), 2)) < 0.025
         && getAngleDifferenceDegrees(Math.toDegrees(theta),
             Math.toDegrees(getMT2OdometryAngle())) < 1.5) {
       hitNumber += 1;
@@ -2144,6 +2222,33 @@ public class Drive extends SubsystemBase {
     }
   }
 
+  public boolean hitSetPointUltraGenerous(double x, double y, double theta) { // adjust for l4 TODO:
+    // Logger.recordOutput("Error for setpoint",
+    // Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
+    // + Math.pow((y - getMT2OdometryY()), 2)));
+    // System.out.println("X Y error: "
+    // + Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
+    // + Math.pow((y - getMT2OdometryY()), 2))
+    // + " Angle error: " + getAngleDifferenceDegrees(Math.toDegrees(theta),
+    // Math.toDegrees(getMT2OdometryAngle()))
+    // + " Hits: "
+    // + hitNumber);
+    if (Math
+        .sqrt(Math.pow((x - getMT2OdometryX()), 2)
+            + Math.pow((y - getMT2OdometryY()), 2)) < 0.10
+        && getAngleDifferenceDegrees(Math.toDegrees(theta),
+            Math.toDegrees(getMT2OdometryAngle())) < 10.0) {
+      hitNumber += 1;
+    } else {
+      hitNumber = 0;
+    }
+    if (hitNumber > 2) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   public void driveToPoint(double x, double y, double theta) {
 
     // Logger.recordOutput("Magnitude Error Inches",
@@ -2226,7 +2331,7 @@ public class Drive extends SubsystemBase {
     thetaaPID.updatePID(getMT2OdometryAngle());
 
     double xVelNoFF = xxPID.getResult();
-    double yVelNoFF = OI.getDriverLeftX() * 2.9;
+    double yVelNoFF = -OI.getDriverLeftX() * 2.9;
     double thetaVelNoFF = -thetaaPID.getResult();
 
     // double feedForwardX = targetPoint.getDouble("x_velocity") *
@@ -2544,10 +2649,14 @@ public class Drive extends SubsystemBase {
         return DriveState.ALGAE;
       case ALGAE_MORE:
         return DriveState.ALGAE_MORE;
+      case ALGAE_MORE_MORE:
+        return DriveState.ALGAE_MORE_MORE;
       case PROCESSOR:
         return DriveState.PROCESSOR;
       case NET:
         return DriveState.NET;
+      case NET_MORE:
+        return DriveState.NET_MORE;
       case FEEDER:
         return DriveState.FEEDER;
       case SCORE_L23:
@@ -2608,6 +2717,38 @@ public class Drive extends SubsystemBase {
   public double[] origionalL4SetpointPose = { 0.0, 0.0, 0.0 };
   public double[] origionalL23SetpointPose = { 0.0, 0.0, 0.0 };
   public boolean firstTimeReef = true;
+
+  public double getNetXSetpoint() {
+    if (OI.isBlueSide()) {
+      return Constants.Reef.netBlueXM;
+    } else {
+      return Constants.Reef.netRedXM;
+    }
+  }
+
+  public double getNetXMoreSetpoint() {
+    if (OI.isBlueSide()) {
+      return Constants.Reef.netBlueXMore;
+    } else {
+      return Constants.Reef.netRedXMore;
+    }
+  }
+
+  public double getNetThetaSetpoint() {
+    if (OI.isBlueSide()) {
+      if (autoPlacingFront) {
+        return Constants.Reef.netBlueFrontThetaR;
+      } else {
+        return Constants.Reef.netBlueBackThetaR;
+      }
+    } else {
+      if (autoPlacingFront) {
+        return Constants.Reef.netRedFrontThetaR;
+      } else {
+        return Constants.Reef.netRedBackThetaR;
+      }
+    }
+  }
 
   @Override
   public void periodic() {
@@ -2707,36 +2848,69 @@ public class Drive extends SubsystemBase {
         driveToPoint(getAlgaeMoreClosestSetpoint(getMT2Odometry())[0],
             getAlgaeMoreClosestSetpoint(getMT2Odometry())[1], getAlgaeMoreClosestSetpoint(getMT2Odometry())[2]);
         break;
+      case ALGAE_MORE_MORE:
+        driveToPoint(getAlgaeMoreMoreClosestSetpoint(getMT2Odometry())[0],
+            getAlgaeMoreMoreClosestSetpoint(getMT2Odometry())[1], getAlgaeMoreMoreClosestSetpoint(getMT2Odometry())[2]);
+        break;
       case PROCESSOR:
         if (OI.isBlueSide()) {
           if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
               Constants.Reef.processorBlueFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
             autoPlacingFront = true;
-            // driveToPoint(Constants.Reef.processorBlueFrontPlacingPosition.getX(),
-            // Constants.Reef.processorBlueFrontPlacingPosition.getY(),
-            // Constants.Reef.processorBlueFrontPlacingPosition.getRotation().getRadians());
-            driveToTheta((Constants.Reef.processorBlueFrontPlacingPosition.getRotation().getDegrees()));
+            driveToPoint(Constants.Reef.processorBlueFrontPlacingPosition.getX(),
+                Constants.Reef.processorBlueFrontPlacingPosition.getY(),
+                Constants.Reef.processorBlueFrontPlacingPosition.getRotation().getRadians());
+            // driveToTheta((Constants.Reef.processorBlueFrontPlacingPosition.getRotation().getDegrees()));
           } else {
             autoPlacingFront = false;
-            driveToTheta((Constants.Reef.processorBlueBackPlacingPosition.getRotation().getDegrees()));
-            // driveToPoint(Constants.Reef.processorBlueBackPlacingPosition.getX(),
-            // Constants.Reef.processorBlueBackPlacingPosition.getY(),
-            // Constants.Reef.processorBlueBackPlacingPosition.getRotation().getRadians());
+            // driveToTheta((Constants.Reef.processorBlueBackPlacingPosition.getRotation().getDegrees()));
+            driveToPoint(Constants.Reef.processorBlueBackPlacingPosition.getX(),
+                Constants.Reef.processorBlueBackPlacingPosition.getY(),
+                Constants.Reef.processorBlueBackPlacingPosition.getRotation().getRadians());
           }
         } else {
           if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
               Constants.Reef.processorRedFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
             autoPlacingFront = true;
-            // driveToPoint(Constants.Reef.processorRedFrontPlacingPosition.getX(),
-            // Constants.Reef.processorRedFrontPlacingPosition.getY(),
-            // Constants.Reef.processorRedFrontPlacingPosition.getRotation().getRadians());
-            driveToTheta((Constants.Reef.processorRedFrontPlacingPosition.getRotation().getDegrees()));
+            driveToPoint(Constants.Reef.processorRedFrontPlacingPosition.getX(),
+                Constants.Reef.processorRedFrontPlacingPosition.getY(),
+                Constants.Reef.processorRedFrontPlacingPosition.getRotation().getRadians());
+            // driveToTheta((Constants.Reef.processorRedFrontPlacingPosition.getRotation().getDegrees()));
           } else {
             autoPlacingFront = false;
-            // driveToPoint(Constants.Reef.processorRedBackPlacingPosition.getX(),
-            // Constants.Reef.processorRedBackPlacingPosition.getY(),
-            // Constants.Reef.processorRedBackPlacingPosition.getRotation().getRadians());
-            driveToTheta((Constants.Reef.processorRedBackPlacingPosition.getRotation().getDegrees()));
+            driveToPoint(Constants.Reef.processorRedBackPlacingPosition.getX(),
+                Constants.Reef.processorRedBackPlacingPosition.getY(),
+                Constants.Reef.processorRedBackPlacingPosition.getRotation().getRadians());
+            // driveToTheta((Constants.Reef.processorRedBackPlacingPosition.getRotation().getDegrees()));
+          }
+        }
+        break;
+      case NET_MORE:
+        if (OI.isBlueSide()) {
+          if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+              Math.toDegrees(Constants.Reef.netBlueFrontThetaR)) <= 90) {
+            autoPlacingFront = true;
+            driveToXTheta(Constants.Reef.netBlueXMore,
+                Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
+            // driveToTheta(Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
+          } else {
+            autoPlacingFront = false;
+            driveToXTheta(Constants.Reef.netBlueXMore,
+                Math.toDegrees(Constants.Reef.netBlueBackThetaR));
+            // driveToTheta(Math.toDegrees(Constants.Reef.netBlueBackThetaR));
+          }
+        } else {
+          if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+              Math.toDegrees(Constants.Reef.netRedFrontThetaR)) <= 90) {
+            autoPlacingFront = true;
+            driveToXTheta(Constants.Reef.netRedXMore,
+                Math.toDegrees(Constants.Reef.netRedFrontThetaR));
+            // driveToTheta(Math.toDegrees(Constants.Reef.netRedFrontThetaR));
+          } else {
+            autoPlacingFront = false;
+            driveToXTheta(Constants.Reef.netRedXMore,
+                Math.toDegrees(Constants.Reef.netRedBackThetaR));
+            // driveToTheta(Math.toDegrees(Constants.Reef.netRedBackThetaR));
           }
         }
         break;
@@ -2745,27 +2919,27 @@ public class Drive extends SubsystemBase {
           if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
               Math.toDegrees(Constants.Reef.netBlueFrontThetaR)) <= 90) {
             autoPlacingFront = true;
-            // driveToXTheta(Constants.Reef.netBlueXM,
-            // Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
-            driveToTheta(Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
+            driveToXTheta(Constants.Reef.netBlueXM,
+                Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
+            // driveToTheta(Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
           } else {
             autoPlacingFront = false;
-            // driveToXTheta(Constants.Reef.netBlueXM,
-            // Math.toDegrees(Constants.Reef.netBlueBackThetaR));
-            driveToTheta(Math.toDegrees(Constants.Reef.netBlueBackThetaR));
+            driveToXTheta(Constants.Reef.netBlueXM,
+                Math.toDegrees(Constants.Reef.netBlueBackThetaR));
+            // driveToTheta(Math.toDegrees(Constants.Reef.netBlueBackThetaR));
           }
         } else {
           if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
               Math.toDegrees(Constants.Reef.netRedFrontThetaR)) <= 90) {
             autoPlacingFront = true;
-            // driveToXTheta(Constants.Reef.netRedXM,
-            // Math.toDegrees(Constants.Reef.netRedFrontThetaR));
-            driveToTheta(Math.toDegrees(Constants.Reef.netRedFrontThetaR));
+            driveToXTheta(Constants.Reef.netRedXM,
+                Math.toDegrees(Constants.Reef.netRedFrontThetaR));
+            // driveToTheta(Math.toDegrees(Constants.Reef.netRedFrontThetaR));
           } else {
             autoPlacingFront = false;
-            // driveToXTheta(Constants.Reef.netRedXM,
-            // Math.toDegrees(Constants.Reef.netRedBackThetaR));
-            driveToTheta(Math.toDegrees(Constants.Reef.netRedBackThetaR));
+            driveToXTheta(Constants.Reef.netRedXM,
+                Math.toDegrees(Constants.Reef.netRedBackThetaR));
+            // driveToTheta(Math.toDegrees(Constants.Reef.netRedBackThetaR));
           }
         }
         break;
@@ -2988,3 +3162,58 @@ public class Drive extends SubsystemBase {
     return adjustedX;
   }
 }
+//
+//
+//
+//
+//
+//
+//
+
+//
+//
+//
+//
+//
+//
+//
+//
+
+//
+//
+//
+//
+//
+
+//
+//
+//
+//
+//
+//
+//
+
+//
+
+//
+//
+//
+//
+//
+//
+//
+
+//
+//
+//
+//
+//
+//
+
+//
+//
+//
+//
+//
+//
+//
