@@ -632,7 +632,7 @@ public class Superstructure extends SubsystemBase {
   public boolean isClimbing = false;
 
   public void handleDefaultState() {
-    peripherals.setBackCamPipline(0);
+    // peripherals.setBackCamPipline(0);
     lights.setWantedState(LightsState.DEFAULT);
     drive.setWantedState(DriveState.DEFAULT);
     // pivot.setWantedFlip(PivotFlip.FRONT);
@@ -1281,7 +1281,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.CLIMB_DEPLOY);
     climber.setWantedState(ClimbState.EXTENDING);
     pivot.setWantedState(PivotState.CLIMB);
-    peripherals.setBackCamPipline(1);
+    // peripherals.setBackCamPipline(1);
   }
 
   public void handleClimbState() {
