@@ -182,6 +182,9 @@ public final class Constants {
                 System.out.println("l3 red positions: " + Constants.Reef.l3RedFrontPlacingPositions.toString());
                 System.out.println("l3 blue back positions: " + Constants.Reef.l3BlueBackPlacingPositions.toString());
                 System.out.println("l3 red back positions: " + Constants.Reef.l3RedBackPlacingPositions.toString());
+                Logger.recordOutput("feeder Positions", new Pose2d[] { Constants.Reef.RED_LEFT_FEEDER_LEFT,
+                                Constants.Reef.RED_RIGHT_FEEDER_RIGHT, Constants.Reef.RED_RIGHT_FEEDER_LEFT,
+                                Constants.Reef.RED_LEFT_FEEDER_RIGHT, });
         }
 
         public static class Reef {

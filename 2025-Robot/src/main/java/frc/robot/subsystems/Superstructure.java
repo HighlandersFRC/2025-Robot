@@ -49,6 +49,7 @@ public class Superstructure extends SubsystemBase {
     NET,
     AUTO_NET,
     AUTO_NET_MORE,
+    FEEDER_ALIGN,
     FEEDER_AUTO, // TODO: do the side to side motion
     FEEDER,
     GROUND_CORAL_PICKUP_FRONT,
@@ -158,6 +159,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_NET_MORE:
         handleAutoNetStateMore();
+        break;
+      case FEEDER_ALIGN:
+        handleFeederAlignState();
         break;
       case FEEDER_AUTO:
         handleFeederAutoState();
@@ -411,6 +415,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_NET_MORE:
         currentSuperState = SuperState.AUTO_NET_MORE;
+        break;
+      case FEEDER_ALIGN:
+        currentSuperState = SuperState.FEEDER_ALIGN;
         break;
       case FEEDER_AUTO:
         currentSuperState = SuperState.FEEDER_AUTO;
@@ -974,6 +981,19 @@ public class Superstructure extends SubsystemBase {
       twist.setWantedState(TwistState.UP);
     }
     pivot.setWantedState(PivotState.NET);
+  }
+
+  public void handleFeederAlignState() {
+    twist.setAlgaeMode(false);
+    lights.setWantedState(LightsState.FEEDER);
+    drive.setWantedState(DriveState.FEEDER_ALIGN);
+    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    if (Math.abs(pivot.getPivotPosition()) > 10.0 / 360.0) {
+      twist.setWantedState(TwistState.UP);
+    }
+    pivot.setWantedFlip(PivotFlip.FRONT);
+    pivot.setWantedState(PivotState.FEEDER);
+    elevator.setWantedState(ElevatorState.FEEDER_INTAKE);
   }
 
   public void handleFeederState() {
