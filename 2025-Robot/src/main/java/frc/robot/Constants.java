@@ -185,8 +185,8 @@ public final class Constants {
         }
 
         public static class Reef {
-                public static final double PERFECT_BRANCH_OFFSET_L4 = inchesToMeters(1.625);
-                public static final double PERFECT_BRANCH_OFFSET_L23 = inchesToMeters(1.125);
+                public static final double PERFECT_BRANCH_OFFSET_L23 = inchesToMeters(1.625);
+                public static final double PERFECT_BRANCH_OFFSET_L4 = inchesToMeters(1.125);
                 public static final double A_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.75);
                 public static final double B_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.875);
                 public static final double C_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
