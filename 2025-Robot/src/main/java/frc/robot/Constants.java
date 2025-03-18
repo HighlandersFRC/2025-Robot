@@ -30,7 +30,7 @@ public final class Constants {
                 public static final double FULL_SEND_LOOKAHEAD = 0.60;
                 public static final double MIN_LOOKAHEAD_DISTANCE = 0.01; // Lookahead distance at 0m/s
                 // Path follower will end if within this radius of the final point
-                public static final double AUTONOMOUS_END_ACCURACY = 0.25;
+                public static final double AUTONOMOUS_END_ACCURACY = 0.40;
                 public static final double ACCURATE_FOLLOWER_AUTONOMOUS_END_ACCURACY = 0.05;
                 // When calculating the point distance, will divide x and y by this constant
                 public static final double AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS = 1.0;
@@ -185,20 +185,20 @@ public final class Constants {
         }
 
         public static class Reef {
-                public static final double PERFECT_BRANCH_OFFSET_L4 = inchesToMeters(1 + 5 / 8); // l2/3
-                public static final double PERFECT_BRANCH_OFFSET_L23 = inchesToMeters(1 + 1 / 8);
-                public static final double A_BRANCH_OFFSET = inchesToMeters(1.5);
-                public static final double B_BRANCH_OFFSET = inchesToMeters(1.5);
-                public static final double C_BRANCH_OFFSET = inchesToMeters(1.5);
-                public static final double D_BRANCH_OFFSET = inchesToMeters(1.5);
-                public static final double E_BRANCH_OFFSET = inchesToMeters(0.0);
-                public static final double F_BRANCH_OFFSET = inchesToMeters(0.0);
-                public static final double G_BRANCH_OFFSET = inchesToMeters(0.0);
-                public static final double H_BRANCH_OFFSET = inchesToMeters(0.0);
-                public static final double I_BRANCH_OFFSET = inchesToMeters(1.5);
-                public static final double J_BRANCH_OFFSET = inchesToMeters(1.5);
-                public static final double K_BRANCH_OFFSET = inchesToMeters(1.5);
-                public static final double L_BRANCH_OFFSET = inchesToMeters(1.5);
+                public static final double PERFECT_BRANCH_OFFSET_L4 = inchesToMeters(1.625);
+                public static final double PERFECT_BRANCH_OFFSET_L23 = inchesToMeters(1.125);
+                public static final double A_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.75);
+                public static final double B_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.875);
+                public static final double C_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
+                public static final double D_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.25);
+                public static final double E_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.625);
+                public static final double F_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.625);
+                public static final double G_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.625);
+                public static final double H_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.625);
+                public static final double I_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.0);
+                public static final double J_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.375);
+                public static final double K_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.5);
+                public static final double L_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.75);
                 public static final Translation2d centerBlue = new Translation2d(inchesToMeters(176.746),
                                 inchesToMeters(158.501));
                 public static final Translation2d centerRed = new Translation2d(
@@ -226,8 +226,8 @@ public final class Constants {
                 public static final double RED_LEFT_FEEDER_Y = 0.990;
                 public static final double RED_LEFT_FEEDER_THETA = Math.toRadians(126.0);
 
-                public static final double RED_LEFT_FEEDER_LEFT_X = 16.903;
-                public static final double RED_LEFT_FEEDER_LEFT_Y = 1.349;
+                public static final double RED_LEFT_FEEDER_LEFT_X = 16.853;
+                public static final double RED_LEFT_FEEDER_LEFT_Y = 1.309;
                 public static final double RED_LEFT_FEEDER_LEFT_THETA = Math.toRadians(126.0);
                 public static final double RED_LEFT_FEEDER_RIGHT_X = 15.932;
                 public static final double RED_LEFT_FEEDER_RIGHT_Y = 0.664;
@@ -720,18 +720,18 @@ public final class Constants {
 
                                 // Angle to face red side:
                                 // 180=AB
-                                // 120=CD
-                                // 60=EF
+                                // 120=KL
+                                // 60=IJ
                                 // 0=GH
-                                // -60=IJ
-                                // -120=KL
+                                // -60=EF
+                                // -120=CD
                                 if (poseDirection.getRotation().getDegrees() > 179.0
                                                 && poseDirection.getRotation().getDegrees() < 181.0) {
                                         l4FrontRight = new Pose2d(
                                                         new Translation2d(
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + B_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -741,7 +741,7 @@ public final class Constants {
                                                                                         .getX(),
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + B_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -756,7 +756,7 @@ public final class Constants {
                                                         new Translation2d(
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + B_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -766,7 +766,7 @@ public final class Constants {
                                                                                         .getX(),
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + B_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -776,13 +776,14 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
+                                        System.out.println("b branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > 119.0
                                                 && poseDirection.getRotation().getDegrees() < 121.0) {
                                         l4FrontRight = new Pose2d(
                                                         new Translation2d(
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + L_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -792,7 +793,7 @@ public final class Constants {
                                                                                         .getX(),
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + L_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -807,7 +808,7 @@ public final class Constants {
                                                         new Translation2d(
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + L_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -817,7 +818,7 @@ public final class Constants {
                                                                                         .getX(),
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + L_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -827,13 +828,14 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
+                                        System.out.println("d branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > 59.0
                                                 && poseDirection.getRotation().getDegrees() < 61.0) {
                                         l4FrontRight = new Pose2d(
                                                         new Translation2d(
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + J_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -843,7 +845,7 @@ public final class Constants {
                                                                                         .getX(),
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + J_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -858,7 +860,7 @@ public final class Constants {
                                                         new Translation2d(
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + J_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -868,7 +870,7 @@ public final class Constants {
                                                                                         .getX(),
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + J_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -878,13 +880,14 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
+                                        System.out.println("f branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > -1.0
                                                 && poseDirection.getRotation().getDegrees() < 1.0) {
                                         l4FrontRight = new Pose2d(
                                                         new Translation2d(
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + H_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -894,7 +897,7 @@ public final class Constants {
                                                                                         .getX(),
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + H_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -909,7 +912,7 @@ public final class Constants {
                                                         new Translation2d(
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + H_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -919,7 +922,7 @@ public final class Constants {
                                                                                         .getX(),
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + H_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -929,13 +932,14 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
+                                        System.out.println("h branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > -61.0
                                                 && poseDirection.getRotation().getDegrees() < -59.0) {
                                         l4FrontRight = new Pose2d(
                                                         new Translation2d(
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + F_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -945,7 +949,7 @@ public final class Constants {
                                                                                         .getX(),
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + F_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -960,7 +964,7 @@ public final class Constants {
                                                         new Translation2d(
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + F_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -970,7 +974,7 @@ public final class Constants {
                                                                                         .getX(),
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + F_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -980,12 +984,13 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
+                                        System.out.println("j branch: " + l4FrontRight);
                                 } else {
                                         l4FrontRight = new Pose2d(
                                                         new Translation2d(
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + D_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -995,7 +1000,7 @@ public final class Constants {
                                                                                         .getX(),
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + D_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -1010,7 +1015,7 @@ public final class Constants {
                                                         new Translation2d(
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + D_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -1020,7 +1025,7 @@ public final class Constants {
                                                                                         .getX(),
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
-                                                                                                        adjustX,
+                                                                                                        adjustX + D_BRANCH_OFFSET,
                                                                                                         adjustY,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
@@ -1030,6 +1035,7 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
+                                        System.out.println("l branch: " + l4FrontRight);
                                 }
                                 l3FrontRight = new Pose2d(
                                                 new Translation2d(
@@ -1167,50 +1173,318 @@ public final class Constants {
                                                                                 .getY()),
                                                 new Rotation2d(
                                                                 poseDirection.getRotation().getRadians()));
-                                l4FrontLeft = new Pose2d(
-                                                new Translation2d(
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                -adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.L4_INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.L4_INTAKE_Y_OFFSET_FRONT,
-                                                                                                new Rotation2d(Math.PI)))
-                                                                                .getX(),
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                -adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.L4_INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.L4_INTAKE_Y_OFFSET_FRONT,
-                                                                                                new Rotation2d(Math.PI)))
-                                                                                .getY()),
-                                                new Rotation2d(
-                                                                poseDirection.getRotation().getRadians() - Math.PI));
-                                l4BackLeft = new Pose2d(
-                                                new Translation2d(
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                -adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.L4_INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.L4_INTAKE_Y_OFFSET_BACK,
-                                                                                                new Rotation2d()))
-                                                                                .getX(),
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                -adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.L4_INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.L4_INTAKE_Y_OFFSET_BACK,
-                                                                                                new Rotation2d()))
-                                                                                .getY()),
-                                                new Rotation2d(
-                                                                poseDirection.getRotation().getRadians()));
+                                if (poseDirection.getRotation().getDegrees() > 179.0
+                                                && poseDirection.getRotation().getDegrees() < 181.0) {
+                                        l4FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + A_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + A_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l4BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + A_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + A_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        System.out.println("A branch: " + l4FrontLeft);
+                                } else if (poseDirection.getRotation().getDegrees() > 119.0
+                                                && poseDirection.getRotation().getDegrees() < 121.0) {
+                                        l4FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + K_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + K_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l4BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + K_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + K_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        System.out.println("c branch: " + l4FrontLeft);
+                                } else if (poseDirection.getRotation().getDegrees() > 59.0
+                                                && poseDirection.getRotation().getDegrees() < 61.0) {
+                                        l4FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + I_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + I_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l4BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + I_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + I_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        System.out.println("E branch: " + l4FrontLeft);
+                                } else if (poseDirection.getRotation().getDegrees() > -1.0
+                                                && poseDirection.getRotation().getDegrees() < 1.0) {
+                                        l4FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + G_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + G_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l4BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + G_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + G_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        System.out.println("G branch: " + l4FrontLeft);
+                                } else if (poseDirection.getRotation().getDegrees() > -61.0
+                                                && poseDirection.getRotation().getDegrees() < -59.0) {
+                                        l4FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + E_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + E_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l4BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + E_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + E_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        System.out.println("i branch: " + l4FrontLeft);
+                                } else {
+                                        l4FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + C_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + C_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l4BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + C_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + C_BRANCH_OFFSET,
+                                                                                                        -adjustY,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L4_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L4_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        System.out.println("k branch: " + l4FrontLeft);
+                                }
                                 l3FrontLeft = new Pose2d(
                                                 new Translation2d(
                                                                 poseDirection
@@ -1468,18 +1742,18 @@ public final class Constants {
                 public static double INTAKE_X_OFFSET_BACK_ALGAE = inchesToMeters(23.0 + 5.0);
                 public static double INTAKE_Y_OFFSET_BACK_ALGAE = inchesToMeters(-3.8);
 
-                public static final double L3_INTAKE_X_OFFSET_FRONT = inchesToMeters(27.0);
+                public static final double L3_INTAKE_X_OFFSET_FRONT = inchesToMeters(28.0);
                 public static final double L3_INTAKE_Y_OFFSET_FRONT = inchesToMeters(2.2);
 
-                public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(27.0);
+                public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(28.0);
                 public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-2.2);
 
                 public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(25.6);
                 // public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.3);
-                public static double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(1.2);
-                public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(26.3);
+                public static double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
+                public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(24.6);
                 // public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.1);
-                public static double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
+                public static double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.2);
 
                 public static final double GRAVITY_ACCEL_MS2 = 9.806;
 

@@ -2799,7 +2799,7 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
-    Pose2d target = getGamePiecePosition();
+    // Pose2d target = getGamePiecePosition();
     // System.out.println(Math.toDegrees(getThetaToCenterReef()));
     // Translation2d t1 = new Translation2d(getMT2OdometryX(), getMT2OdometryY());
     // Rotation2d r1 = new Rotation2d(getThetaToCenterReef());
