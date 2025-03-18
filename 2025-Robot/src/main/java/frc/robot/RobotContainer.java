@@ -178,7 +178,8 @@ public class RobotContainer {
                                                                 .getCurrentSuperState() == SuperState.AUTO_SCORE_L2
                                                 || superstructure
                                                                 .getCurrentSuperState() == SuperState.AUTO_SCORE_L3
-                                                || superstructure.getCurrentSuperState() == SuperState.AUTO_SCORE_L4)));
+                                                || superstructure.getCurrentSuperState() == SuperState.AUTO_SCORE_L4
+                                                || algaeMode)));
 
                 OI.driverMenuButton.whileTrue(new SetRobotState(superstructure, SuperState.DEFAULT));
 

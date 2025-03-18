@@ -25,6 +25,14 @@ public class Pivot extends SubsystemBase {
   private final double pivotAcceleration = 6.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
   private final double pivotCruiseVelocity = 6.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
 
+  private final double pivotJerkSlow = 0.0;
+  private final double pivotAccelerationSlow = 2.0;
+  private final double pivotCruiseVelocitySlow = 2.0;
+
+  private final double pivotJerkSlower = 0.0;
+  private final double pivotAccelerationSlower = 1.0;
+  private final double pivotCruiseVelocitySlower = 1.0;
+
   private final double pivotProfileScalarFactor = 1;
 
   private final DynamicMotionMagicVoltage pivotMotionProfileRequest = new DynamicMotionMagicVoltage(0,
@@ -34,9 +42,94 @@ public class Pivot extends SubsystemBase {
 
   private boolean algaeMode = false;
   private boolean runManualDownOrUp = false;
+  // private Speed fastMode = Speed.FAST;
 
   public Pivot() {
   }
+
+  // public void flashSlow() {
+  //   fastMode = Speed.SLOW;
+  //   pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+  //   TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
+  //   pivotConfig.Slot0.kP = 100.0;
+  //   pivotConfig.Slot0.kI = 0.0;
+  //   pivotConfig.Slot0.kD = 5.0;
+  //   pivotConfig.Slot1.kP = 30.0;
+  //   pivotConfig.Slot1.kI = 0.0;
+  //   pivotConfig.Slot1.kD = 5.0;
+  //   pivotConfig.Slot2.kP = 50.0;
+  //   pivotConfig.Slot2.kI = 0.0;
+  //   pivotConfig.Slot2.kD = 15.0;
+  //   pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerkSlow;
+  //   pivotConfig.MotionMagic.MotionMagicAcceleration = this.pivotAccelerationSlow;
+  //   pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocitySlow;
+  //   pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+  //   pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+  //   pivotConfig.CurrentLimits.StatorCurrentLimit = 40;
+  //   pivotConfig.CurrentLimits.SupplyCurrentLimit = 40;
+  //   pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+  //   pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
+  //   pivotConfig.Feedback.SensorToMechanismRatio = 1.0;
+  //   pivotConfig.Feedback.RotorToSensorRatio = Constants.Ratios.PIVOT_GEAR_RATIO;
+  //   pivotMotor.getConfigurator().apply(pivotConfig);
+  //   pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+  // }
+
+  // public void flashSlower() {
+  //   fastMode = Speed.ALGAE;
+  //   pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+  //   TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
+  //   pivotConfig.Slot0.kP = 100.0;
+  //   pivotConfig.Slot0.kI = 0.0;
+  //   pivotConfig.Slot0.kD = 5.0;
+  //   pivotConfig.Slot1.kP = 30.0;
+  //   pivotConfig.Slot1.kI = 0.0;
+  //   pivotConfig.Slot1.kD = 5.0;
+  //   pivotConfig.Slot2.kP = 50.0;
+  //   pivotConfig.Slot2.kI = 0.0;
+  //   pivotConfig.Slot2.kD = 15.0;
+  //   pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerkSlower;
+  //   pivotConfig.MotionMagic.MotionMagicAcceleration = this.pivotAccelerationSlower;
+  //   pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocitySlower;
+  //   pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+  //   pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+  //   pivotConfig.CurrentLimits.StatorCurrentLimit = 40;
+  //   pivotConfig.CurrentLimits.SupplyCurrentLimit = 40;
+  //   pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+  //   pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
+  //   pivotConfig.Feedback.SensorToMechanismRatio = 1.0;
+  //   pivotConfig.Feedback.RotorToSensorRatio = Constants.Ratios.PIVOT_GEAR_RATIO;
+  //   pivotMotor.getConfigurator().apply(pivotConfig);
+  //   pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+  // }
+
+  // public void flashFast() {
+  //   fastMode = Speed.FAST;
+  //   pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+  //   TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
+  //   pivotConfig.Slot0.kP = 100.0;
+  //   pivotConfig.Slot0.kI = 0.0;
+  //   pivotConfig.Slot0.kD = 5.0;
+  //   pivotConfig.Slot1.kP = 30.0;
+  //   pivotConfig.Slot1.kI = 0.0;
+  //   pivotConfig.Slot1.kD = 5.0;
+  //   pivotConfig.Slot2.kP = 50.0;
+  //   pivotConfig.Slot2.kI = 0.0;
+  //   pivotConfig.Slot2.kD = 15.0;
+  //   pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerk;
+  //   pivotConfig.MotionMagic.MotionMagicAcceleration = this.pivotAcceleration;
+  //   pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocity;
+  //   pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+  //   pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+  //   pivotConfig.CurrentLimits.StatorCurrentLimit = 40;
+  //   pivotConfig.CurrentLimits.SupplyCurrentLimit = 40;
+  //   pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+  //   pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
+  //   pivotConfig.Feedback.SensorToMechanismRatio = 1.0;
+  //   pivotConfig.Feedback.RotorToSensorRatio = Constants.Ratios.PIVOT_GEAR_RATIO;
+  //   pivotMotor.getConfigurator().apply(pivotConfig);
+  //   pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+  // }
 
   public void init() {
     pivotMotor.setNeutralMode(NeutralModeValue.Brake);
@@ -79,49 +172,63 @@ public class Pivot extends SubsystemBase {
   }
 
   public void pivotToPosition(double pivotPosition) {
+    // if (intakeItem == IntakeItem.ALGAE && fastMode != Speed.ALGAE) {
+    //   flashSlower();
+    // } else if (fastMode != Speed.FAST) {
+    //   flashFast();
+    // }
     if (Math.abs(pivotPosition) * 360.0 > 135.0) {
       pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
     }
     // Logger.recordOutput("Pivot Setpoint", (pivotPosition));
-    if (intakeItem == IntakeItem.ALGAE) {
-      pivotMotor.setControl(this.pivotMotionProfileRequest
-          .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
-          .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
-          .withJerk(
-              this.pivotJerk * pivotProfileScalarFactor)
-          .withSlot(1));
-    } else {
-      pivotMotor.setControl(this.pivotMotionProfileRequest
-          .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
-          .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
-          .withJerk(
-              this.pivotJerk * pivotProfileScalarFactor)
-          .withSlot(0));
-    }
+    // if (intakeItem == IntakeItem.ALGAE) {
+    //   pivotMotor.setControl(this.pivotMotionProfileRequest
+    //       .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
+    //       .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
+    //       .withJerk(
+    //           this.pivotJerk * pivotProfileScalarFactor)
+    //       .withSlot(1));
+    // } else {
+    pivotMotor.setControl(this.pivotMotionProfileRequest
+        .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
+        .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
+        .withJerk(
+            this.pivotJerk * pivotProfileScalarFactor)
+        .withSlot(0));
+    // }
   }
 
   public void pivotToPositionSlow(double pivotPosition) {
+    // if (Math.abs(pivotPosition) * 360.0 > 135.0) {
+    //   pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
+    // }
     if (Math.abs(pivotPosition) * 360.0 > 135.0) {
       pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
     }
     pivotMotor.setControl(this.pivotMotionProfileRequest
         .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
-        .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
+        .withVelocity(this.pivotCruiseVelocitySlow * pivotProfileScalarFactor)
+        .withAcceleration(this.pivotAccelerationSlow * pivotProfileScalarFactor)
         .withJerk(
-            this.pivotJerk * pivotProfileScalarFactor)
-        .withSlot(1));
+            this.pivotJerkSlow * pivotProfileScalarFactor)
+        .withSlot(0));
   }
 
   public void pivotToPositionSlower(double pivotPosition) {
+    // if (fastMode) {
+    //   flashSlow();
+    // }
     if (Math.abs(pivotPosition) * 360.0 > 135.0) {
       pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
     }
+
     pivotMotor.setControl(this.pivotMotionProfileRequest
         .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
-        .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
+        .withVelocity(this.pivotCruiseVelocitySlower * pivotProfileScalarFactor)
+        .withAcceleration(this.pivotAccelerationSlower * pivotProfileScalarFactor)
         .withJerk(
-            this.pivotJerk * pivotProfileScalarFactor)
-        .withSlot(2));
+            this.pivotJerkSlower * pivotProfileScalarFactor)
+        .withSlot(0));
   }
 
   public double getPivotPosition() {
@@ -140,6 +247,12 @@ public class Pivot extends SubsystemBase {
     FRONT,
     BACK,
   }
+
+  // public enum Speed {
+  //   FAST,
+  //   SLOW,
+  //   ALGAE,
+  // }
 
   public enum PivotState {
     PREP,
@@ -298,70 +411,177 @@ public class Pivot extends SubsystemBase {
     Logger.recordOutput("Pivot State", systemState);
     switch (systemState) {
       case DEFAULT:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT.rotations);
+        switch (intakeItem) {
+          case ALGAE:
+            pivotToPositionSlower(Constants.SetPoints.PivotPosition.kDEFAULT.rotations);
+
+            break;
+
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT.rotations);
+            break;
+        }
         break;
       case DEFAULT_CLIMB:
         pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULTCLIMB.rotations);
         break;
       case REEF_ALGAE:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+        switch (intakeItem) {
+          case ALGAE:
+            switch (systemFlip) {
+              case FRONT:
+                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+                break;
+              case BACK:
+                pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+                break;
+              default:
+                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+                break;
+            }
+
             break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
-            break;
+
           default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+            switch (systemFlip) {
+              case FRONT:
+                pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+                break;
+              case BACK:
+                pivotToPosition(-Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+                break;
+              default:
+                pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+                break;
+            }
             break;
         }
         break;
       case NET:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kNET.rotations);
+        switch (intakeItem) {
+          case ALGAE:
+            pivotToPositionSlower(Constants.SetPoints.PivotPosition.kNET.rotations);
+
+            break;
+
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kNET.rotations);
+            break;
+        }
         break;
       case PROCESSOR:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+        switch (intakeItem) {
+          case ALGAE:
+            switch (systemFlip) {
+              case FRONT:
+                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+                break;
+              case BACK:
+                pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+                break;
+              default:
+                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+                break;
+            }
+
             break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
-            break;
+
           default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+            switch (systemFlip) {
+              case FRONT:
+                pivotToPosition(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+                break;
+              case BACK:
+                pivotToPosition(-Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+                break;
+              default:
+                pivotToPosition(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+                break;
+            }
             break;
         }
         break;
       case PREP:
-        if (getPivotPosition() > 0) {
-          pivotToPosition(Constants.SetPoints.PivotPosition.kPREP.rotations);
-        } else {
-          pivotToPosition(-Constants.SetPoints.PivotPosition.kPREP.rotations);
+        switch (intakeItem) {
+          case ALGAE:
+            if (getPivotPosition() > 0) {
+              pivotToPositionSlower(Constants.SetPoints.PivotPosition.kPREP.rotations);
+            } else {
+              pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kPREP.rotations);
+            }
+
+            break;
+
+          default:
+            if (getPivotPosition() > 0) {
+              pivotToPosition(Constants.SetPoints.PivotPosition.kPREP.rotations);
+            } else {
+              pivotToPosition(-Constants.SetPoints.PivotPosition.kPREP.rotations);
+            }
+            break;
         }
         break;
       case GROUND_ALGAE:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+        switch (intakeItem) {
+          case ALGAE:
+            switch (systemFlip) {
+              case FRONT:
+                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+                break;
+              case BACK:
+                pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+                break;
+              default:
+                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+                break;
+            }
+
             break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
-            break;
+
           default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+            switch (systemFlip) {
+              case FRONT:
+                pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+                break;
+              case BACK:
+                pivotToPosition(-Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+                break;
+              default:
+                pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+                break;
+            }
             break;
         }
         break;
       case UP:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kUP.rotations);
+        switch (intakeItem) {
+          case ALGAE:
+            switch (systemFlip) {
+              case FRONT:
+                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kUP.rotations);
+                break;
+              case BACK:
+                pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kUP.rotations);
+                break;
+              default:
+                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kUP.rotations);
+                break;
+            }
+
             break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kUP.rotations);
-            break;
+
           default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kUP.rotations);
+            switch (systemFlip) {
+              case FRONT:
+                pivotToPosition(Constants.SetPoints.PivotPosition.kUP.rotations);
+                break;
+              case BACK:
+                pivotToPosition(-Constants.SetPoints.PivotPosition.kUP.rotations);
+                break;
+              default:
+                pivotToPosition(Constants.SetPoints.PivotPosition.kUP.rotations);
+                break;
+            }
             break;
         }
         break;
