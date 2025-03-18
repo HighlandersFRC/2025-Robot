@@ -1471,6 +1471,7 @@ public class Drive extends SubsystemBase {
       System.out.println("OOps");
       return getMT2Odometry();
     } else {
+      Logger.recordOutput("L4 target pose", chosenSetpoint);
       return chosenSetpoint;
     }
   }
@@ -2378,7 +2379,7 @@ public class Drive extends SubsystemBase {
     thetaaPID.updatePID(getMT2OdometryAngle());
 
     double xVelNoFF = xxPID.getResult();
-    double yVelNoFF = -OI.getDriverLeftX() * 2.9;
+    double yVelNoFF = OI.getDriverLeftX() * 2.9;
     double thetaVelNoFF = -thetaaPID.getResult();
 
     // double feedForwardX = targetPoint.getDouble("x_velocity") *
@@ -2403,8 +2404,13 @@ public class Drive extends SubsystemBase {
 
     Vector velocityVector = new Vector();
     double desiredThetaChange = 0;
-    velocityVector.setI(velocityArray[0].doubleValue());
-    velocityVector.setJ(velocityArray[1].doubleValue());
+    if (getFieldSide().equals("red")) {
+      velocityVector.setI(velocityArray[0].doubleValue());
+      velocityVector.setJ(-velocityArray[1].doubleValue());
+    } else {
+      velocityVector.setI(velocityArray[0].doubleValue());
+      velocityVector.setJ(velocityArray[1].doubleValue());
+    }
     desiredThetaChange = velocityArray[2].doubleValue();
 
     autoDrive(velocityVector, desiredThetaChange);
