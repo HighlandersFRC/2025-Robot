@@ -77,7 +77,7 @@ public class Intake extends SubsystemBase {
         intakeMotor.getTorqueCurrent().getValueAsDouble());
     Logger.recordOutput("Intake Acceleration",
         intakeMotor.getAcceleration().getValueAsDouble());
-    if (Math.abs(intakeMotor.getVelocity().getValueAsDouble()) < 1
+    if (Math.abs(intakeMotor.getVelocity().getValueAsDouble()) < 15
         && Math.abs(intakeMotor.getTorqueCurrent().getValueAsDouble()) > 8
         && Math.abs(intakeMotor.getAcceleration().getValueAsDouble()) < 10) {
       return true;
