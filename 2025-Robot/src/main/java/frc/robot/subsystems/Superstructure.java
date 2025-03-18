@@ -79,7 +79,8 @@ public class Superstructure extends SubsystemBase {
     MANUAL_PLACE,
     MANUAL_RESET,
     AUTO_FEEDER,
-    RUN_CLIMB_BACK
+    RUN_CLIMB_BACK,
+    DEFAULT_DRIVE,
   }
 
   private SuperState wantedSuperState = SuperState.DEFAULT;
@@ -117,6 +118,9 @@ public class Superstructure extends SubsystemBase {
     switch (currentSuperState) {
       case DEFAULT:
         handleDefaultState();
+        break;
+      case DEFAULT_DRIVE:
+        handleDefaultDriveState();
         break;
       case AUTO_L1_PLACE:
         handleAutoL1PlaceState();
@@ -277,6 +281,9 @@ public class Superstructure extends SubsystemBase {
     switch (wantedSuperState) {
       case DEFAULT:
         currentSuperState = SuperState.DEFAULT;
+        break;
+      case DEFAULT_DRIVE:
+        currentSuperState = SuperState.DEFAULT_DRIVE;
         break;
       case AUTO_L1_PLACE:
         currentSuperState = SuperState.AUTO_L1_PLACE;
@@ -631,6 +638,10 @@ public class Superstructure extends SubsystemBase {
 
   public boolean isClimbing = false;
 
+  public void handleDefaultDriveState() {
+    drive.setWantedState(DriveState.DEFAULT);
+  }
+
   public void handleDefaultState() {
     // peripherals.setBackCamPipline(0);
     lights.setWantedState(LightsState.DEFAULT);
@@ -691,7 +702,11 @@ public class Superstructure extends SubsystemBase {
   public void handleAutoL2PlaceState() {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.REEF);
-    intake.setWantedState(IntakeState.DEFAULT);
+    if (Math.abs(pivot.getPivotPosition()) > 80.0 / 360.0) {
+      intake.setWantedState(IntakeState.OUTAKE);
+    } else {
+      intake.setWantedState(IntakeState.DEFAULT);
+    }
     if (Math.hypot(
         drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[0],
         drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[1]) < 1.5
@@ -713,7 +728,11 @@ public class Superstructure extends SubsystemBase {
   public void handleAutoL3PlaceState() {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.REEF);
-    intake.setWantedState(IntakeState.DEFAULT);
+    if (Math.abs(pivot.getPivotPosition()) > 80.0 / 360.0) {
+      intake.setWantedState(IntakeState.OUTAKE);
+    } else {
+      intake.setWantedState(IntakeState.DEFAULT);
+    }
     if (Math.hypot(
         drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[0],
         drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[1]) < 1.5
@@ -1273,7 +1292,7 @@ public class Superstructure extends SubsystemBase {
     } else {
       // drive.setWantedState(DriveState.DEFAULT);
       // lights.setWantedState(LightsState.SCORING);
-      setWantedState(SuperState.DEFAULT);
+      setWantedState(SuperState.DEFAULT_DRIVE);
     }
   }
 
@@ -1349,7 +1368,7 @@ public class Superstructure extends SubsystemBase {
       intake.setWantedState(IntakeState.OUTAKE);
     } else {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
-          - 10.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+          - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
         drive.setWantedState(DriveState.REEF_MORE);
         intake.setWantedState(IntakeState.OUTAKE);
         elevator.setWantedState(ElevatorState.DEFAULT);
@@ -1412,7 +1431,7 @@ public class Superstructure extends SubsystemBase {
       intake.setWantedState(IntakeState.OUTAKE);
     } else {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations
-          - 10.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+          - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
         drive.setWantedState(DriveState.REEF_MORE);
         intake.setWantedState(IntakeState.OUTAKE);
         elevator.setWantedState(ElevatorState.DEFAULT);
