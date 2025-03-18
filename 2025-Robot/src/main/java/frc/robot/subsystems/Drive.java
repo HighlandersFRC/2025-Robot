@@ -286,6 +286,7 @@ public class Drive extends SubsystemBase {
     ALGAE_MORE,
     ALGAE_MORE_MORE,
     PROCESSOR,
+    PROCESSOR_MORE,
     NET,
     NET_MORE,
     FEEDER,
@@ -1472,6 +1473,7 @@ public class Drive extends SubsystemBase {
       System.out.println("OOps");
       return getMT2Odometry();
     } else {
+      Logger.recordOutput("L4 target pose", chosenSetpoint);
       return chosenSetpoint;
     }
   }
@@ -1693,7 +1695,7 @@ public class Drive extends SubsystemBase {
       // double pieceXFromIntake = noteX - intakeXOffset;
       // double pieceYFromIntake = noteY - intakeYOffset;
     } else {
-      System.out.println("default game piece");
+      // System.out.println("default game piece");
       return new Pose2d();
     }
   }
@@ -2114,7 +2116,7 @@ public class Drive extends SubsystemBase {
     // + hitNumber);
     if (Math
         .sqrt(Math.pow((x - getMT2OdometryX()), 2)
-            + Math.pow((y - getMT2OdometryY()), 2)) < 0.025
+            + Math.pow((y - getMT2OdometryY()), 2)) < 0.0325
         && getAngleDifferenceDegrees(Math.toDegrees(theta),
             Math.toDegrees(getMT2OdometryAngle())) < 1.5) {
       hitNumber += 1;
@@ -2328,7 +2330,7 @@ public class Drive extends SubsystemBase {
     thetaaPID.updatePID(getMT2OdometryAngle());
 
     double xVelNoFF = xxPID.getResult();
-    double yVelNoFF = -OI.getDriverLeftX() * 2.9;
+    double yVelNoFF = OI.getDriverLeftX() * 2.9;
     double thetaVelNoFF = -thetaaPID.getResult();
     double finalX = xVelNoFF;
     double finalY = yVelNoFF;
@@ -2341,8 +2343,13 @@ public class Drive extends SubsystemBase {
 
     Vector velocityVector = new Vector();
     double desiredThetaChange = 0;
-    velocityVector.setI(velocityArray[0].doubleValue());
-    velocityVector.setJ(velocityArray[1].doubleValue());
+    if (getFieldSide().equals("red")) {
+      velocityVector.setI(velocityArray[0].doubleValue());
+      velocityVector.setJ(-velocityArray[1].doubleValue());
+    } else {
+      velocityVector.setI(velocityArray[0].doubleValue());
+      velocityVector.setJ(velocityArray[1].doubleValue());
+    }
     desiredThetaChange = velocityArray[2].doubleValue();
 
     autoDrive(velocityVector, desiredThetaChange);
@@ -2687,6 +2694,8 @@ public class Drive extends SubsystemBase {
         return DriveState.ALGAE_MORE_MORE;
       case PROCESSOR:
         return DriveState.PROCESSOR;
+      case PROCESSOR_MORE:
+        return DriveState.PROCESSOR_MORE;
       case NET:
         return DriveState.NET;
       case NET_MORE:
@@ -2788,7 +2797,7 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
-    Pose2d target = getGamePiecePosition();
+    // Pose2d target = getGamePiecePosition();
     // System.out.println(Math.toDegrees(getThetaToCenterReef()));
     // Translation2d t1 = new Translation2d(getMT2OdometryX(), getMT2OdometryY());
     // Rotation2d r1 = new Rotation2d(getThetaToCenterReef());
@@ -2918,6 +2927,39 @@ public class Drive extends SubsystemBase {
                 Constants.Reef.processorRedBackPlacingPosition.getY(),
                 Constants.Reef.processorRedBackPlacingPosition.getRotation().getRadians());
             // driveToTheta((Constants.Reef.processorRedBackPlacingPosition.getRotation().getDegrees()));
+          }
+        }
+        break;
+      case PROCESSOR_MORE:
+        if (OI.isBlueSide()) {
+          if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+              Constants.Reef.processorMoreBlueFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
+            autoPlacingFront = true;
+            driveToPoint(Constants.Reef.processorMoreBlueFrontPlacingPosition.getX(),
+                Constants.Reef.processorMoreBlueFrontPlacingPosition.getY(),
+                Constants.Reef.processorMoreBlueFrontPlacingPosition.getRotation().getRadians());
+            // driveToTheta((Constants.Reef.processorMoreBlueFrontPlacingPosition.getRotation().getDegrees()));
+          } else {
+            autoPlacingFront = false;
+            // driveToTheta((Constants.Reef.processorMoreBlueBackPlacingPosition.getRotation().getDegrees()));
+            driveToPoint(Constants.Reef.processorMoreBlueBackPlacingPosition.getX(),
+                Constants.Reef.processorMoreBlueBackPlacingPosition.getY(),
+                Constants.Reef.processorMoreBlueBackPlacingPosition.getRotation().getRadians());
+          }
+        } else {
+          if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+              Constants.Reef.processorMoreRedFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
+            autoPlacingFront = true;
+            driveToPoint(Constants.Reef.processorMoreRedFrontPlacingPosition.getX(),
+                Constants.Reef.processorMoreRedFrontPlacingPosition.getY(),
+                Constants.Reef.processorMoreRedFrontPlacingPosition.getRotation().getRadians());
+            // driveToTheta((Constants.Reef.processorMoreRedFrontPlacingPosition.getRotation().getDegrees()));
+          } else {
+            autoPlacingFront = false;
+            driveToPoint(Constants.Reef.processorMoreRedBackPlacingPosition.getX(),
+                Constants.Reef.processorMoreRedBackPlacingPosition.getY(),
+                Constants.Reef.processorMoreRedBackPlacingPosition.getRotation().getRadians());
+            // driveToTheta((Constants.Reef.processorMoreRedBackPlacingPosition.getRotation().getDegrees()));
           }
         }
         break;
