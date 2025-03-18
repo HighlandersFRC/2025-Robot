@@ -20,7 +20,7 @@ import frc.robot.Constants;
 public class Climber extends SubsystemBase {
   private final TalonFX climberPivot = new TalonFX(Constants.CANInfo.CLIMBER_PIVOT_MOTOR_ID,
       Constants.CANInfo.CANBUS_NAME);
-  private final DigitalInput climbSensor = new DigitalInput(0);
+  private final DigitalInput climbSensor = new DigitalInput(2);
 
   private final TorqueCurrentFOC rollerTorqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
   private final TorqueCurrentFOC pivotTorqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
@@ -81,9 +81,9 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if ((" " + Timer.getFPGATimestamp()).indexOf("0") > 6) {
-      System.out.println(getClimbSensor());
-    }
+    // if ((" " + Timer.getFPGATimestamp()).indexOf("0") > 6) {
+    //   System.out.println(getClimbSensor());
+    // }
     Logger.recordOutput("Climb Sensor", getClimbSensor());
     ClimbState newState = handleStateTransition();
     if (newState != systemState) {

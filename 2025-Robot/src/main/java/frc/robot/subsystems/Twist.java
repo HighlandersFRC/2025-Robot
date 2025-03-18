@@ -15,6 +15,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.Intake.IntakeItem;
 
 public class Twist extends SubsystemBase {
 
@@ -29,7 +30,7 @@ public class Twist extends SubsystemBase {
 
   private final double twistProfileScalarFactor = 3;
   private boolean startedZero = false;
-  private double zeroInitTime = 0.0;
+  // private double zeroInitTime = 0.0;
   private boolean algaeMode = false;
 
   private final MotionMagicExpoVoltage twistTorqueCurrentFOC = new MotionMagicExpoVoltage(
@@ -45,10 +46,10 @@ public class Twist extends SubsystemBase {
     twistConfig.Slot0.kI = 0.0;
     twistConfig.Slot0.kD = 4.6;
     twistConfig.Slot0.kS = 5.0;
-    twistConfig.Slot1.kP = 30.0;
+    twistConfig.Slot1.kP = 13.0;
     twistConfig.Slot1.kI = 0.0;
     twistConfig.Slot1.kD = 5.0;
-    twistConfig.Slot1.kS = 5.0;
+    twistConfig.Slot1.kS = 1.0;
     twistConfig.MotionMagic.MotionMagicJerk = this.twistJerk;
     twistConfig.MotionMagic.MotionMagicAcceleration = this.twistAcceleration;
     twistConfig.MotionMagic.MotionMagicCruiseVelocity = this.twistCruiseVelocity;
@@ -68,12 +69,18 @@ public class Twist extends SubsystemBase {
   }
 
   public void teleopInit() {
-    zeroInitTime = Timer.getFPGATimestamp();
+    // zeroInitTime = Timer.getFPGATimestamp();
+  }
+
+  private IntakeItem intakeItem = IntakeItem.NONE;
+
+  public void updateIntakeItem(IntakeItem intakeItem) {
+    this.intakeItem = intakeItem;
   }
 
   public void twistToPosition(double rotations) {
 
-    if (algaeMode) { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
+    if (intakeItem == IntakeItem.ALGAE) { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
       twistMotor.setControl(this.twistTorqueCurrentFOC // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
           .withPosition(rotations).withEnableFOC(true).withSlot(1)); // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
     } else { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
@@ -149,34 +156,34 @@ public class Twist extends SubsystemBase {
     // Logger.recordOutput("Twist MPS",
     // (twistMotor.getVelocity().getValueAsDouble()));
     switch (systemState) {
-      case UP:
-        if (!startedZero) {
-          zeroInitTime = Timer.getFPGATimestamp();
-          startedZero = true;
-        }
+      case DOWN:
+        // if (!startedZero) {
+        //   zeroInitTime = Timer.getFPGATimestamp();
+        //   startedZero = true;
+        // }
         // if (Timer.getFPGATimestamp() - zeroInitTime > 1.3) {
         // setTwistPercent(0.0);
         // setTwistEncoderPosition(0.0);
         // } else {
         // setTwistTorque(10, 0.3);
         // }
-        startedZero = false;
-        zeroInitTime = 0.0;
+        // startedZero = false;
+        // zeroInitTime = 0.0;
         twistToPosition(0.25);
         break;
       case SIDE:
         startedZero = false;
-        zeroInitTime = 0.0;
+        // zeroInitTime = 0.0;
         twistToPosition(0.0);
         break;
-      case DOWN:
+      case UP:
         startedZero = false;
-        zeroInitTime = 0.0;
+        // zeroInitTime = 0.0;
         twistToPosition(-0.25);
         break;
       default:
         startedZero = false;
-        zeroInitTime = 0.0;
+        // zeroInitTime = 0.0;
         twistToPosition(0.0);
         break;
     }

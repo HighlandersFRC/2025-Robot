@@ -235,6 +235,19 @@ public class Drive extends SubsystemBase {
   private double kkThetaI = 0.00;
   private double kkThetaD = 3.00;
 
+  // l4 pid values
+  private double kkXP4 = 3.30;
+  private double kkXI4 = 0.00;
+  private double kkXD4 = 1.70;
+
+  private double kkYP4 = kkXP4;
+  private double kkYI4 = kkXI4;
+  private double kkYD4 = kkXD4;
+
+  private double kkThetaP4 = 3.00;
+  private double kkThetaI4 = 0.00;
+  private double kkThetaD4 = 3.20;
+
   // teleop targeting PID values
   private double kTurningP = 0.04;
   private double kTurningI = 0;
@@ -243,6 +256,10 @@ public class Drive extends SubsystemBase {
   private PID xxPID = new PID(kkXP, kkXI, kkXD);
   private PID yyPID = new PID(kkYP, kkYI, kkYD);
   private PID thetaaPID = new PID(kkThetaP, kkThetaI, kkThetaD);
+
+  private PID xxPID4 = new PID(kkXP4, kkXI4, kkXD4);
+  private PID yyPID4 = new PID(kkYP4, kkYI4, kkYD4);
+  private PID thetaaPID4 = new PID(kkThetaP4, kkThetaI4, kkThetaD4);
 
   private PID xPID = new PID(kXP, kXI, kXD);
   private PID yPID = new PID(kYP, kYI, kYD);
@@ -374,6 +391,15 @@ public class Drive extends SubsystemBase {
 
     thetaaPID.setMinOutput(-3);
     thetaaPID.setMaxOutput(3);
+
+    xxPID4.setMinOutput(-4.9);
+    xxPID4.setMaxOutput(4.9);
+
+    yyPID4.setMinOutput(-4.9);
+    yyPID4.setMaxOutput(4.9);
+
+    thetaaPID4.setMinOutput(-3);
+    thetaaPID4.setMaxOutput(3);
 
     xPID.setMinOutput(-4.9);
     xPID.setMaxOutput(4.9);
@@ -2161,17 +2187,38 @@ public class Drive extends SubsystemBase {
       }
     }
 
-    xxPID.setSetPoint(x);
-    yyPID.setSetPoint(y);
-    thetaaPID.setSetPoint(theta);
+    double xVelNoFF = 0.0;
+    double yVelNoFF = 0.0;
+    double thetaVelNoFF = 0.0;
 
-    xxPID.updatePID(getMT2OdometryX());
-    yyPID.updatePID(getMT2OdometryY());
-    thetaaPID.updatePID(getMT2OdometryAngle());
+    if (DriverStation.isTeleopEnabled() && OI.driverPOVRight.getAsBoolean()) {
 
-    double xVelNoFF = xxPID.getResult();
-    double yVelNoFF = yyPID.getResult();
-    double thetaVelNoFF = -thetaaPID.getResult();
+      xxPID4.setSetPoint(x);
+      yyPID4.setSetPoint(y);
+      thetaaPID4.setSetPoint(theta);
+
+      xxPID4.updatePID(getMT2OdometryX());
+      yyPID4.updatePID(getMT2OdometryY());
+      thetaaPID4.updatePID(getMT2OdometryAngle());
+
+      xVelNoFF = xxPID4.getResult();
+      yVelNoFF = yyPID4.getResult();
+      thetaVelNoFF = -thetaaPID4.getResult();
+
+    } else {
+
+      xxPID.setSetPoint(x);
+      yyPID.setSetPoint(y);
+      thetaaPID.setSetPoint(theta);
+
+      xxPID.updatePID(getMT2OdometryX());
+      yyPID.updatePID(getMT2OdometryY());
+      thetaaPID.updatePID(getMT2OdometryAngle());
+
+      xVelNoFF = xxPID.getResult();
+      yVelNoFF = yyPID.getResult();
+      thetaVelNoFF = -thetaaPID.getResult();
+    }
 
     // double feedForwardX = targetPoint.getDouble("x_velocity") *
     // Constants.Autonomous.FEED_FORWARD_MULTIPLIER;

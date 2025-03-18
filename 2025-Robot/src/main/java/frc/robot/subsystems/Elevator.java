@@ -358,7 +358,7 @@ public class Elevator extends SubsystemBase {
             }
           } else {
             // System.out.println("Running down to zero");
-            moveWithTorque(-70, 0.6);
+            moveWithTorque(-40, 0.4);
           }
         } else {
           if (getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
@@ -384,7 +384,7 @@ public class Elevator extends SubsystemBase {
               }
             } else {
               // System.out.println("Running down to zero");
-              moveWithTorque(-70, 0.2);
+              moveWithTorque(-40, 0.2);
             }
           }
         }

@@ -12,6 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.Intake.IntakeItem;
 
 public class Pivot extends SubsystemBase {
 
@@ -43,7 +44,7 @@ public class Pivot extends SubsystemBase {
     pivotConfig.Slot0.kP = 100.0;
     pivotConfig.Slot0.kI = 0.0;
     pivotConfig.Slot0.kD = 5.0;
-    pivotConfig.Slot1.kP = 70.0;
+    pivotConfig.Slot1.kP = 30.0;
     pivotConfig.Slot1.kI = 0.0;
     pivotConfig.Slot1.kD = 5.0;
     pivotConfig.Slot2.kP = 50.0;
@@ -71,12 +72,18 @@ public class Pivot extends SubsystemBase {
     // pivotMotor.setPosition(0.0);
   }
 
+  private IntakeItem intakeItem = IntakeItem.NONE;
+
+  public void updateIntakeItem(IntakeItem intakeItem) {
+    this.intakeItem = intakeItem;
+  }
+
   public void pivotToPosition(double pivotPosition) {
     if (Math.abs(pivotPosition) * 360.0 > 135.0) {
       pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
     }
     // Logger.recordOutput("Pivot Setpoint", (pivotPosition));
-    if (algaeMode) {
+    if (intakeItem == IntakeItem.ALGAE) {
       pivotMotor.setControl(this.pivotMotionProfileRequest
           .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
           .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
@@ -371,7 +378,7 @@ public class Pivot extends SubsystemBase {
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALPREPBACK.rotations);
         break;
       case L1:
-        setAlgaeMode(true);
+        setAlgaeMode(false);
         switch (systemFlip) {
           case FRONT:
             pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
