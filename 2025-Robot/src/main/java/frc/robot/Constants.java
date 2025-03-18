@@ -242,6 +242,10 @@ public final class Constants {
                 public static final double RED_LEFT_FEEDER_Y = 0.990;
                 public static final double RED_LEFT_FEEDER_THETA = Math.toRadians(126.0);
 
+                public static final double RED_LEFT_FEEDER_X_TELEOP = 16.544;
+                public static final double RED_LEFT_FEEDER_Y_TELEOP = 0.890;
+                public static final double RED_LEFT_FEEDER_THETA_TELEOP = Math.toRadians(126.0);
+
                 public static final double RED_LEFT_FEEDER_LEFT_X = 16.853;
                 public static final double RED_LEFT_FEEDER_LEFT_Y = 1.309;
                 public static final double RED_LEFT_FEEDER_LEFT_THETA = Math.toRadians(126.0);
@@ -287,6 +291,21 @@ public final class Constants {
                                 new Rotation2d(Math.toRadians(54.0)));
                 public static final Pose2d BLUE_LEFT_FEEDER = new Pose2d(
                                 Physical.FIELD_LENGTH - RED_LEFT_FEEDER_X, Physical.FIELD_WIDTH - RED_LEFT_FEEDER_Y,
+                                new Rotation2d(Math.toRadians(-54.0)));
+
+                public static final Pose2d RED_LEFT_FEEDER_TELEOP = new Pose2d(RED_LEFT_FEEDER_X_TELEOP,
+                                RED_LEFT_FEEDER_Y_TELEOP,
+                                new Rotation2d(RED_LEFT_FEEDER_THETA_TELEOP));
+                public static final Pose2d RED_RIGHT_FEEDER_TELEOP = new Pose2d(
+                                RED_LEFT_FEEDER_X_TELEOP, Physical.FIELD_WIDTH - RED_LEFT_FEEDER_Y_TELEOP,
+                                new Rotation2d(Math.toRadians(234.0)));
+
+                public static final Pose2d BLUE_RIGHT_FEEDER_TELEOP = new Pose2d(
+                                Physical.FIELD_LENGTH - RED_LEFT_FEEDER_X_TELEOP, RED_LEFT_FEEDER_Y_TELEOP,
+                                new Rotation2d(Math.toRadians(54.0)));
+                public static final Pose2d BLUE_LEFT_FEEDER_TELEOP = new Pose2d(
+                                Physical.FIELD_LENGTH - RED_LEFT_FEEDER_X_TELEOP,
+                                Physical.FIELD_WIDTH - RED_LEFT_FEEDER_Y_TELEOP,
                                 new Rotation2d(Math.toRadians(-54.0)));
 
                 public static final double PROCESSOR_Y_OFFSET_M = inchesToMeters(50.0);
@@ -1964,7 +1983,7 @@ public final class Constants {
                 public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
                 public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
                 public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
-                public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(14.0);
+                public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(16.0);
                 public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(17);
                 public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(17);
                 public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(33);
