@@ -1692,7 +1692,7 @@ public class Drive extends SubsystemBase {
       // double pieceXFromIntake = noteX - intakeXOffset;
       // double pieceYFromIntake = noteY - intakeYOffset;
     } else {
-      System.out.println("default game piece");
+      // System.out.println("default game piece");
       return new Pose2d();
     }
   }

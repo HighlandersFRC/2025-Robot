@@ -273,7 +273,7 @@ public final class Constants {
                                 Physical.FIELD_LENGTH - RED_LEFT_FEEDER_X, Physical.FIELD_WIDTH - RED_LEFT_FEEDER_Y,
                                 new Rotation2d(Math.toRadians(-54.0)));
 
-                public static final double PROCESSOR_Y_OFFSET_M = inchesToMeters(30.0);
+                public static final double PROCESSOR_Y_OFFSET_M = inchesToMeters(50.0);
                 public static final double NET_X_OFFSET_M = inchesToMeters(50.0);
                 public static final double NET_X_OFFSET_MORE = inchesToMeters(35.0);
 
@@ -459,7 +459,7 @@ public final class Constants {
                                 double adjustAlgaeY = inchesToMeters(0.0);
                                 double adjustAlgaeMoreX = inchesToMeters(16.738);
                                 double adjustAlgaeMoreY = inchesToMeters(0.0);
-                                double adjustAlgaeMoreMoreX = inchesToMeters(36.738);
+                                double adjustAlgaeMoreMoreX = inchesToMeters(56.738);
                                 double adjustAlgaeMoreMoreY = inchesToMeters(0.0);
 
                                 algaeFront = new Pose2d(
@@ -1930,7 +1930,7 @@ public final class Constants {
                 public static final double ELEVATOR_NET_POSITION_M = inchesToMeters(67);
                 public static final double ELEVATOR_L2_ALGAE_POSITION_M = inchesToMeters(19);
                 public static final double ELEVATOR_L3_ALGAE_POSITION_M = inchesToMeters(38);
-                public static final double ELEVATOR_PROCESSOR_POSITION_M = inchesToMeters(5);
+                public static final double ELEVATOR_PROCESSOR_POSITION_M = inchesToMeters(6.5);
 
                 public enum ElevatorPosition {
                         kDOWN(ELEVATOR_BOTTOM_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_BOTTOM_POSITION_M)),
@@ -1996,7 +1996,7 @@ public final class Constants {
                 public static final double PIVOT_PREP_POSITION_D = 30.0;
                 public static final double PIVOT_FEEDER_POSITION_D = 21.0;
                 public static final double PIVOT_NET_POSITION_D = 15.0;
-                public static final double PIVOT_PROCESSOR_POSITION_D = 85.0;
+                public static final double PIVOT_PROCESSOR_POSITION_D = 80.0;
                 public static final double PIVOT_REEF_ALGAE_POSITION_D = 90.0;
                 public static final double PIVOT_CLIMB_POSITION_D = 45.0;
 

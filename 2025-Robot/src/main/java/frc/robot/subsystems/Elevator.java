@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.Constants.SetPoints.ElevatorPosition;
+import frc.robot.subsystems.Intake.IntakeItem;
 
 public class Elevator extends SubsystemBase {
   private final TalonFX elevatorMotorMaster = new TalonFX(Constants.CANInfo.MASTER_ELEVATOR_MOTOR_ID,
@@ -63,6 +64,12 @@ public class Elevator extends SubsystemBase {
   private ElevatorState systemState = ElevatorState.DEFAULT;
   private double distanceFromL23DriveSetpoint = 0.0;
   private boolean firstTimeDefault = false;
+
+  private IntakeItem intakeItem = IntakeItem.NONE;
+
+  public void updateIntakeItem(IntakeItem intakeItem) {
+    this.intakeItem = intakeItem;
+  }
 
   public void updateDistanceFromL23DriveSetpoint(double distanceFromL23DriveSetpoint) {
     this.distanceFromL23DriveSetpoint = distanceFromL23DriveSetpoint;
@@ -358,14 +365,19 @@ public class Elevator extends SubsystemBase {
             }
           } else {
             // System.out.println("Running down to zero");
-            moveWithTorque(-40, 0.4);
+            if (intakeItem == IntakeItem.ALGAE) {
+
+              moveWithTorque(-40, 0.1);
+            } else {
+              moveWithTorque(-40, 0.4);
+            }
           }
         } else {
           if (getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
             moveWithTorque(-50, 0.6);
             // System.out.println("Running down default");
           } else if (getElevatorPosition() > (Constants.inchesToMeters(1.0))) {
-            moveWithTorque(-30, 0.3);
+            moveWithTorque(-30, 0.4);
             // System.out.println("Running down default");
           } else {
             // System.out.println("stopping");
@@ -383,8 +395,14 @@ public class Elevator extends SubsystemBase {
                 setElevatorEncoderPosition(0.0);
               }
             } else {
-              // System.out.println("Running down to zero");
-              moveWithTorque(-40, 0.2);
+              // System.out.println("Running down to zero");            if (intakeItem == IntakeItem.ALGAE) {
+
+              if (intakeItem == IntakeItem.ALGAE) {
+
+                moveWithTorque(-40, 0.1);
+              } else {
+                moveWithTorque(-40, 0.4);
+              }
             }
           }
         }

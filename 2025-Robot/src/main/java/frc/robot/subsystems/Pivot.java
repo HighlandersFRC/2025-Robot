@@ -10,11 +10,14 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake.IntakeItem;
 
 public class Pivot extends SubsystemBase {
+
+  private double nonAlgaeTime = Timer.getFPGATimestamp();
 
   private final TalonFX pivotMotor = new TalonFX(Constants.CANInfo.PIVOT_MOTOR_ID,
       new CANBus(Constants.CANInfo.CANBUS_NAME));
@@ -191,6 +194,7 @@ public class Pivot extends SubsystemBase {
     // } else {
     pivotMotor.setControl(this.pivotMotionProfileRequest
         .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
+        .withVelocity(this.pivotCruiseVelocity * pivotProfileScalarFactor)
         .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
         .withJerk(
             this.pivotJerk * pivotProfileScalarFactor)
@@ -460,12 +464,32 @@ public class Pivot extends SubsystemBase {
       case NET:
         switch (intakeItem) {
           case ALGAE:
-            pivotToPositionSlower(Constants.SetPoints.PivotPosition.kNET.rotations);
+            switch (systemFlip) {
+              case FRONT:
+                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kNET.rotations);
+                break;
+              case BACK:
+                pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kNET.rotations);
+                break;
+              default:
+                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kNET.rotations);
+                break;
+            }
 
             break;
 
           default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kNET.rotations);
+            switch (systemFlip) {
+              case FRONT:
+                pivotToPosition(Constants.SetPoints.PivotPosition.kNET.rotations);
+                break;
+              case BACK:
+                pivotToPosition(-Constants.SetPoints.PivotPosition.kNET.rotations);
+                break;
+              default:
+                pivotToPosition(Constants.SetPoints.PivotPosition.kNET.rotations);
+                break;
+            }
             break;
         }
         break;
