@@ -3335,7 +3335,7 @@ public class Drive extends SubsystemBase {
                 teleopDrive();
               } else {
                 driveOnLine(feederLine, Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getTranslation(),
-                    Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getRadians());
+                    Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
               }
             } else { // robot back side redside left feeder (fieldside top right)
               Vector feederLine = new Vector(-Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getSin(),
@@ -3344,7 +3344,7 @@ public class Drive extends SubsystemBase {
                 teleopDrive();
               } else {
                 driveOnLine(feederLine, Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getTranslation(),
-                    Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
+                    Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getRadians());
               }
             }
           } else { // blue side left feeder (fieldside top left)
