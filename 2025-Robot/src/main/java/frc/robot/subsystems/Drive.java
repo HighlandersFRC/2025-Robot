@@ -3279,13 +3279,21 @@ public class Drive extends SubsystemBase {
                 Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 144)) {
               Vector feederLine = new Vector(-Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getSin(),
                   Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getCos());
-              driveOnLine(feederLine, Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getTranslation(),
-                  Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getRadians());
+              if (OI.driverA.getAsBoolean()) {
+                teleopDrive();
+              } else {
+                driveOnLine(feederLine, Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getTranslation(),
+                    Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getRadians());
+              }
             } else { // robot back side redside left feeder (fieldside top right)
               Vector feederLine = new Vector(-Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getSin(),
                   Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getCos());
-              driveOnLine(feederLine, Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getTranslation(),
-                  Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
+              if (OI.driverA.getAsBoolean()) {
+                teleopDrive();
+              } else {
+                driveOnLine(feederLine, Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getTranslation(),
+                    Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
+              }
             }
           } else { // redside left feeder (fieldside bottom right)
             if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 36
@@ -3297,13 +3305,21 @@ public class Drive extends SubsystemBase {
                     Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 216)) {
               Vector feederLine = new Vector(-Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getSin(),
                   Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getCos());
-              driveOnLine(feederLine, Constants.Reef.RED_LEFT_FEEDER_TELEOP.getTranslation(),
-                  Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
+              if (OI.driverA.getAsBoolean()) {
+                teleopDrive();
+              } else {
+                driveOnLine(feederLine, Constants.Reef.RED_LEFT_FEEDER_TELEOP.getTranslation(),
+                    Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
+              }
             } else { // robot back side redside left feeder (fieldside top right)
               Vector feederLine = new Vector(-Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getSin(),
                   Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getCos());
-              driveOnLine(feederLine, Constants.Reef.RED_LEFT_FEEDER_TELEOP.getTranslation(),
-                  Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getRadians());
+              if (OI.driverA.getAsBoolean()) {
+                teleopDrive();
+              } else {
+                driveOnLine(feederLine, Constants.Reef.RED_LEFT_FEEDER_TELEOP.getTranslation(),
+                    Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getRadians());
+              }
             }
           }
         } else { // blue side
@@ -3313,13 +3329,21 @@ public class Drive extends SubsystemBase {
                 Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 144)) {
               Vector feederLine = new Vector(-Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getSin(),
                   Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getCos());
-              driveOnLine(feederLine, Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getTranslation(),
-                  Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getRadians());
+              if (OI.driverA.getAsBoolean()) {
+                teleopDrive();
+              } else {
+                driveOnLine(feederLine, Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getTranslation(),
+                    Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getRadians());
+              }
             } else { // robot back side redside left feeder (fieldside top right)
               Vector feederLine = new Vector(-Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getSin(),
                   Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getCos());
-              driveOnLine(feederLine, Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getTranslation(),
-                  Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
+              if (OI.driverA.getAsBoolean()) {
+                teleopDrive();
+              } else {
+                driveOnLine(feederLine, Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getTranslation(),
+                    Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
+              }
             }
           } else { // blue side left feeder (fieldside top left)
             if ((Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) <= 36
@@ -3331,13 +3355,21 @@ public class Drive extends SubsystemBase {
                     Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle())) >= 216)) {
               Vector feederLine = new Vector(-Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getSin(),
                   Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getCos());
-              driveOnLine(feederLine, Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getTranslation(),
-                  Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getRadians());
+              if (OI.driverA.getAsBoolean()) {
+                teleopDrive();
+              } else {
+                driveOnLine(feederLine, Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getTranslation(),
+                    Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getRadians());
+              }
             } else { // robot back side redside left feeder (fieldside top right)
               Vector feederLine = new Vector(-Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getSin(),
                   Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getCos());
-              driveOnLine(feederLine, Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getTranslation(),
-                  Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
+              if (OI.driverA.getAsBoolean()) {
+                teleopDrive();
+              } else {
+                driveOnLine(feederLine, Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getTranslation(),
+                    Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
+              }
             }
           }
         }
