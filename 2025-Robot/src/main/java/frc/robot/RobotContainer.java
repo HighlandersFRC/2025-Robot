@@ -74,6 +74,7 @@ public class RobotContainer {
                         put("L1", () -> new SetRobotStateSimple(superstructure, SuperState.AUTO_L1_PLACE));
                         put("Idle", () -> new SetRobotStateSimple(superstructure, SuperState.IDLE));
                         put("Full Send", () -> new FullSendFollower(drive, null, false));
+                        put("IntakeLollipop", () -> new SetRobotState(superstructure, SuperState.LOLLIOP_PICKUP));
                 }
         };
 

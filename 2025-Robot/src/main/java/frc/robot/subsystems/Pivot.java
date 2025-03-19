@@ -92,9 +92,9 @@ public class Pivot extends SubsystemBase {
 
   public void pivotToPosition(double pivotPosition) {
     // if (intakeItem == IntakeItem.ALGAE && fastMode != Speed.ALGAE) {
-    //   flashSlower();
+    // flashSlower();
     // } else if (fastMode != Speed.FAST) {
-    //   flashFast();
+    // flashFast();
     // }
     if (Timer.getFPGATimestamp() - nonAlgaeTime < 1.0) {
       pivotToPositionSlower(pivotPosition);
@@ -114,7 +114,7 @@ public class Pivot extends SubsystemBase {
 
   public void pivotToPositionSlow(double pivotPosition) {
     // if (Math.abs(pivotPosition) * 360.0 > 135.0) {
-    //   pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
+    // pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
     // }
     if (Math.abs(pivotPosition) * 360.0 > 135.0) {
       pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
@@ -130,7 +130,7 @@ public class Pivot extends SubsystemBase {
 
   public void pivotToPositionSlower(double pivotPosition) {
     // if (fastMode) {
-    //   flashSlow();
+    // flashSlow();
     // }
     if (Math.abs(pivotPosition) * 360.0 > 135.0) {
       pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
@@ -163,9 +163,9 @@ public class Pivot extends SubsystemBase {
   }
 
   // public enum Speed {
-  //   FAST,
-  //   SLOW,
-  //   ALGAE,
+  // FAST,
+  // SLOW,
+  // ALGAE,
   // }
 
   public enum PivotState {
@@ -202,6 +202,7 @@ public class Pivot extends SubsystemBase {
     MANUAL_PLACE,
     MANUAL_RESET,
     IDLE,
+    LOLLIPOP
   }
 
   private PivotState wantedState = PivotState.DEFAULT;
@@ -301,6 +302,8 @@ public class Pivot extends SubsystemBase {
         return PivotState.MANUAL_RESET;
       case IDLE:
         return PivotState.IDLE;
+      case LOLLIPOP:
+        return PivotState.LOLLIPOP;
       default:
         return PivotState.DEFAULT;
     }
@@ -527,6 +530,10 @@ public class Pivot extends SubsystemBase {
       case GROUND_CORAL_FRONT:
         setAlgaeMode(false);
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALFRONT.rotations);
+        break;
+      case LOLLIPOP:
+        setAlgaeMode(false);
+        pivotToPosition(Constants.SetPoints.PivotPosition.kLOLLIPOP.rotations);
         break;
       case GROUND_CORAL_BACK:
         setAlgaeMode(false);

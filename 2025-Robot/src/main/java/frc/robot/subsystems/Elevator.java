@@ -56,6 +56,7 @@ public class Elevator extends SubsystemBase {
     SCORE_L4,
     NET,
     OVER,
+    LOLLIPOP
   }
 
   private double idleTime;
@@ -231,6 +232,8 @@ public class Elevator extends SubsystemBase {
         return ElevatorState.SCORE_L4;
       case NET:
         return ElevatorState.NET;
+      case LOLLIPOP:
+        return ElevatorState.LOLLIPOP;
       default:
         return ElevatorState.DEFAULT;
     }
@@ -344,6 +347,10 @@ public class Elevator extends SubsystemBase {
         firstTimeIdle = true;
         moveElevatorToPosition(getElevatorL3ScoreSetpoint());
         break;
+      case LOLLIPOP:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kLOLLIPOP.meters);
+        break;
       default:
         if (DriverStation.isTeleopEnabled()) {
           if (firstTimeIdle) {
@@ -396,7 +403,8 @@ public class Elevator extends SubsystemBase {
                   setElevatorEncoderPosition(0.0);
                 }
               } else {
-                // System.out.println("Running down to zero");            if (intakeItem == IntakeItem.ALGAE) {
+                // System.out.println("Running down to zero"); if (intakeItem ==
+                // IntakeItem.ALGAE) {
 
                 if (intakeItem == IntakeItem.ALGAE) {
 
@@ -420,7 +428,8 @@ public class Elevator extends SubsystemBase {
               setElevatorEncoderPosition(0.0);
             }
           } else {
-            // System.out.println("Running down to zero");            if (intakeItem == IntakeItem.ALGAE) {
+            // System.out.println("Running down to zero"); if (intakeItem ==
+            // IntakeItem.ALGAE) {
 
             moveWithTorque(-40, 0.6);
 

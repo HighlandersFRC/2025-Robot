@@ -2001,6 +2001,7 @@ public final class Constants {
                 public static final double ELEVATOR_L2_ALGAE_POSITION_M = inchesToMeters(19);
                 public static final double ELEVATOR_L3_ALGAE_POSITION_M = inchesToMeters(38);
                 public static final double ELEVATOR_PROCESSOR_POSITION_M = inchesToMeters(6.5);
+                public static final double ELEVATOR_LOLLIPOP_POSITION_M = inchesToMeters(0.0);
 
                 public enum ElevatorPosition {
                         kDOWN(ELEVATOR_BOTTOM_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_BOTTOM_POSITION_M)),
@@ -2033,7 +2034,9 @@ public final class Constants {
                                         Ratios.elevatorMetersToRotations(ELEVATOR_L2_ALGAE_POSITION_M)),
                         kL3ALGAE(ELEVATOR_L3_ALGAE_POSITION_M,
                                         Ratios.elevatorMetersToRotations(ELEVATOR_L3_ALGAE_POSITION_M)),
-                        kOVER(ELEVATOR_OVER_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_OVER_POSITION_M));
+                        kOVER(ELEVATOR_OVER_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_OVER_POSITION_M)),
+                        kLOLLIPOP(ELEVATOR_LOLLIPOP_POSITION_M, Ratios.elevatorMetersToRotations(
+                                        ELEVATOR_LOLLIPOP_POSITION_M));
 
                         public final double meters;
                         public final double rotations;
@@ -2069,6 +2072,7 @@ public final class Constants {
                 public static final double PIVOT_PROCESSOR_POSITION_D = 80.0;
                 public static final double PIVOT_REEF_ALGAE_POSITION_D = 90.0;
                 public static final double PIVOT_CLIMB_POSITION_D = 45.0;
+                public static final double PIVOT_LOLLIPOP_POSITION_D = 98.0;
 
                 public enum PivotPosition {
                         kL1(PIVOT_L1_POSITION_D, Constants.degreesToRotations(PIVOT_L1_POSITION_D)),
@@ -2103,7 +2107,8 @@ public final class Constants {
                         kREEFALGAE(PIVOT_REEF_ALGAE_POSITION_D,
                                         Constants.degreesToRotations(PIVOT_REEF_ALGAE_POSITION_D)),
                         kPREP(PIVOT_PREP_POSITION_D, Constants.degreesToRotations(PIVOT_PREP_POSITION_D)),
-                        kCLIMB(PIVOT_CLIMB_POSITION_D, Constants.degreesToRotations(PIVOT_CLIMB_POSITION_D));
+                        kCLIMB(PIVOT_CLIMB_POSITION_D, Constants.degreesToRotations(PIVOT_CLIMB_POSITION_D)),
+                        kLOLLIPOP(PIVOT_LOLLIPOP_POSITION_D, Constants.degreesToRotations(PIVOT_LOLLIPOP_POSITION_D));
 
                         public final double degrees;
                         public final double rotations;

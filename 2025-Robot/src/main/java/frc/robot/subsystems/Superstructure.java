@@ -82,6 +82,7 @@ public class Superstructure extends SubsystemBase {
     AUTO_FEEDER,
     RUN_CLIMB_BACK,
     DEFAULT_DRIVE,
+    LOLLIOP_PICKUP
   }
 
   private SuperState wantedSuperState = SuperState.DEFAULT;
@@ -260,6 +261,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case RUN_CLIMB_BACK:
         handleRunClimbBack();
+        break;
+      case LOLLIOP_PICKUP:
+        handleLollipopPickup();
         break;
       default:
         handleIdleState();
@@ -547,6 +551,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case RUN_CLIMB_BACK:
         currentSuperState = SuperState.RUN_CLIMB_BACK;
+        break;
+      case LOLLIOP_PICKUP:
+        currentSuperState = SuperState.LOLLIOP_PICKUP;
         break;
       default:
         currentSuperState = SuperState.IDLE;
@@ -1903,6 +1910,18 @@ public class Superstructure extends SubsystemBase {
       climber.setWantedState(ClimbState.IDLE);
     }
     pivot.setWantedState(PivotState.CLIMB);
+  }
+
+  public void handleLollipopPickup() {
+    twist.setAlgaeMode(false);
+    lights.setWantedState(LightsState.INTAKING);
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.LOLLIPOP);
+    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    pivot.setWantedState(PivotState.LOLLIPOP);
+    if (pivot.getPivotPosition() > 15.0 / 360.0) {
+      twist.setWantedState(TwistState.SIDE);
+    }
   }
 
   @Override
