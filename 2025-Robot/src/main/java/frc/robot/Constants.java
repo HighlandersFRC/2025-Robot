@@ -44,8 +44,8 @@ public final class Constants {
                                 "center1.polarauto",
                                 "2+1PieceFeeder.polarauto",
                                 "3PieceFeederSmart.polarauto",
-                                "3PieceFeeder.polarauto",
-                                "Test.polarauto",
+                                "3PieceLollipop.polarauto",
+                                "TushPush.polarauto",
                 };
 
                 public static int getSelectedPathIndex() {
@@ -190,7 +190,7 @@ public final class Constants {
         public static class Reef {
                 public static final double PERFECT_BRANCH_OFFSET_L23 = inchesToMeters(1.625);
                 public static final double PERFECT_BRANCH_OFFSET_L4 = inchesToMeters(1.125);
-                public static final double A_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.75);
+                public static final double A_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.0);
                 public static final double B_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.875);
                 public static final double C_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
                 public static final double D_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.25);
