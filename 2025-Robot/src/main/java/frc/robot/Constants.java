@@ -40,7 +40,6 @@ public final class Constants {
                 public static final double FEED_FORWARD_MULTIPLIER = 0.5;
                 public static final double ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER = 1;
                 public static final String[] paths = new String[] {
-                                // "3piece.polarauto",
                                 "center1.polarauto",
                                 "2+1PieceFeeder.polarauto",
                                 "3PieceFeederSmart.polarauto",
@@ -750,8 +749,8 @@ public final class Constants {
                                                                                                 adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                Physical.L2_INTAKE_Y_OFFSET_FRONT,
                                                                                                 new Rotation2d(Math.PI)))
                                                                                 .getX(),
                                                                 poseDirection
@@ -759,8 +758,8 @@ public final class Constants {
                                                                                                 adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                Physical.L2_INTAKE_Y_OFFSET_FRONT,
                                                                                                 new Rotation2d(Math.PI)))
                                                                                 .getY()),
                                                 new Rotation2d(
@@ -772,8 +771,8 @@ public final class Constants {
                                                                                                 adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                Physical.L2_INTAKE_Y_OFFSET_BACK,
                                                                                                 new Rotation2d()))
                                                                                 .getX(),
                                                                 poseDirection
@@ -1114,8 +1113,8 @@ public final class Constants {
                                                                                                 adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.L3_INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.L3_INTAKE_Y_OFFSET_FRONT,
+                                                                                                Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
                                                                                                 new Rotation2d(Math.PI)))
                                                                                 .getX(),
                                                                 poseDirection
@@ -1123,8 +1122,8 @@ public final class Constants {
                                                                                                 adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.L3_INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.L3_INTAKE_Y_OFFSET_FRONT,
+                                                                                                Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
                                                                                                 new Rotation2d(Math.PI)))
                                                                                 .getY()),
                                                 new Rotation2d(
@@ -1136,8 +1135,8 @@ public final class Constants {
                                                                                                 adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.L3_INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.L3_INTAKE_Y_OFFSET_BACK,
+                                                                                                Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                Physical.INTAKE_Y_OFFSET_BACK,
                                                                                                 new Rotation2d()))
                                                                                 .getX(),
                                                                 poseDirection
@@ -1145,8 +1144,8 @@ public final class Constants {
                                                                                                 adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.L3_INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.L3_INTAKE_Y_OFFSET_BACK,
+                                                                                                Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                Physical.INTAKE_Y_OFFSET_BACK,
                                                                                                 new Rotation2d()))
                                                                                 .getY()),
                                                 new Rotation2d(
@@ -1158,8 +1157,8 @@ public final class Constants {
                                                                                                 -adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                Physical.L2_INTAKE_Y_OFFSET_FRONT,
                                                                                                 new Rotation2d(Math.PI)))
                                                                                 .getX(),
                                                                 poseDirection
@@ -1167,8 +1166,8 @@ public final class Constants {
                                                                                                 -adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                Physical.L2_INTAKE_Y_OFFSET_FRONT,
                                                                                                 new Rotation2d(Math.PI)))
                                                                                 .getY()),
                                                 new Rotation2d(
@@ -1180,8 +1179,8 @@ public final class Constants {
                                                                                                 -adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                Physical.L2_INTAKE_Y_OFFSET_BACK,
                                                                                                 new Rotation2d()))
                                                                                 .getX(),
                                                                 poseDirection
@@ -1189,8 +1188,8 @@ public final class Constants {
                                                                                                 -adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                Physical.L2_INTAKE_Y_OFFSET_BACK,
                                                                                                 new Rotation2d()))
                                                                                 .getY()),
                                                 new Rotation2d(
@@ -1562,8 +1561,8 @@ public final class Constants {
                                                                                                 -adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.L3_INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.L3_INTAKE_Y_OFFSET_FRONT,
+                                                                                                Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
                                                                                                 new Rotation2d(Math.PI)))
                                                                                 .getX(),
                                                                 poseDirection
@@ -1571,8 +1570,8 @@ public final class Constants {
                                                                                                 -adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.L3_INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.L3_INTAKE_Y_OFFSET_FRONT,
+                                                                                                Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
                                                                                                 new Rotation2d(Math.PI)))
                                                                                 .getY()),
                                                 new Rotation2d(
@@ -1584,8 +1583,8 @@ public final class Constants {
                                                                                                 -adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.L3_INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.L3_INTAKE_Y_OFFSET_BACK,
+                                                                                                Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                Physical.INTAKE_Y_OFFSET_BACK,
                                                                                                 new Rotation2d()))
                                                                                 .getX(),
                                                                 poseDirection
@@ -1593,8 +1592,8 @@ public final class Constants {
                                                                                                 -adjustY,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
-                                                                                                Physical.L3_INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.L3_INTAKE_Y_OFFSET_BACK,
+                                                                                                Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                Physical.INTAKE_Y_OFFSET_BACK,
                                                                                                 new Rotation2d()))
                                                                                 .getY()),
                                                 new Rotation2d(
@@ -1812,11 +1811,16 @@ public final class Constants {
                 public static double INTAKE_X_OFFSET_BACK_ALGAE = inchesToMeters(23.0 + 5.0);
                 public static double INTAKE_Y_OFFSET_BACK_ALGAE = inchesToMeters(-3.8);
 
-                public static final double L3_INTAKE_X_OFFSET_FRONT = inchesToMeters(28.75);
-                public static final double L3_INTAKE_Y_OFFSET_FRONT = inchesToMeters(2.2);
+                // public static final double L3_INTAKE_X_OFFSET_FRONT = inchesToMeters(28.75);
+                // public static final double L3_INTAKE_Y_OFFSET_FRONT = inchesToMeters(2.2);
 
-                public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(28.75);
-                public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-2.2);
+                // public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(28.75);
+                // public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-2.2);
+
+                public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(23.0);
+                public static double L2_INTAKE_Y_OFFSET_FRONT = inchesToMeters(1.25);
+                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(23.0);
+                public static double L2_INTAKE_Y_OFFSET_BACK = inchesToMeters(-1.25);
 
                 public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(25.65);
                 // public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.3);
@@ -1984,8 +1988,8 @@ public final class Constants {
                 public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
                 public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
                 public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(16.0);
-                public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(17);
-                public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(17);
+                public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(15);
+                public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(15);
                 public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(33);
                 // public static final double ELEVATOR_AUTO_L3_POSITION_M = inchesToMeters(25);
                 public static final double ELEVATOR_AUTO_SCORE_L3_POSITION_M = inchesToMeters(20);
@@ -2056,7 +2060,7 @@ public final class Constants {
                 public static final double PIVOT_AUTO_L4_POSITION_D = 60.0;
                 public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 115.0;
                 public static final double PIVOT_AUTO_L3_SCORE_POSITION_D = 90.0;
-                public static final double PIVOT_AUTO_L2_SCORE_POSITION_D = 90.0;
+                public static final double PIVOT_AUTO_L2_SCORE_POSITION_D = 80.0;
                 public static final double PIVOT_L4_POSITION_D = 60.0;
                 public static final double PIVOT_UPRIGHT_POSITION_D = 45.0;
                 public static final double PIVOT_GROUND_ALGAE_POSITION_D = 82.5;
