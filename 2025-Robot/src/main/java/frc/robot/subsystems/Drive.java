@@ -1277,6 +1277,7 @@ public class Drive extends SubsystemBase {
     if (Math.hypot(chosenSetpoint[0] - getMT2OdometryX(), chosenSetpoint[1] - getMT2OdometryY()) > 5) {
       return getMT2Odometry();
     } else {
+      Logger.recordOutput("L2 target pose", chosenSetpoint);
       return chosenSetpoint;
     }
   }
@@ -1610,6 +1611,7 @@ public class Drive extends SubsystemBase {
     if (Math.hypot(chosenSetpoint[0] - getMT2OdometryX(), chosenSetpoint[1] - getMT2OdometryY()) > 5) {
       return getMT2Odometry();
     } else {
+      Logger.recordOutput("L3 target pose", chosenSetpoint);
       return chosenSetpoint;
     }
   }

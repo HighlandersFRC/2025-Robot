@@ -668,16 +668,16 @@ public class Superstructure extends SubsystemBase {
     }
     intake.setWantedState(IntakeState.DEFAULT);
 
-    if (isClimbing) {
-      pivot.setWantedState(PivotState.DEFAULT_CLIMB);
-    } else {
-      if (Math.abs(twist.getTwistPosition()) < 30.0) {
-        pivot.setWantedState(PivotState.DEFAULT);
-        firstTimeDefault = false;
-      } else if (firstTimeDefault) {
-        pivot.setWantedState(PivotState.PREP);
-      }
+    // if (isClimbing) {
+    // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
+    // } else {
+    if (Math.abs(twist.getTwistPosition()) < 30.0) {
+      pivot.setWantedState(PivotState.DEFAULT);
+      firstTimeDefault = false;
+    } else if (firstTimeDefault) {
+      pivot.setWantedState(PivotState.PREP);
     }
+    // }
 
     if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
       twist.setAlgaeMode(true);
@@ -1904,7 +1904,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleRunClimbBack() {
-    if (OI.driverA.getAsBoolean()) {
+    if (OI.driverViewButton.getAsBoolean()) {
       climber.setWantedState(ClimbState.RETRACTING);
     } else {
       climber.setWantedState(ClimbState.IDLE);

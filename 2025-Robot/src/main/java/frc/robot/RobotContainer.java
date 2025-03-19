@@ -131,7 +131,10 @@ public class RobotContainer {
                 // COMPETITION CONTROLS
                 // Driver
 
-                OI.driverViewButton.whileTrue(new ZeroAngleMidMatch(drive)); // zero pidgeon and elevator
+                OI.driverViewButton.whileTrue(new ConditionalCommand(new ZeroAngleMidMatch(
+                                drive),
+                                new SetRobotStateSimple(superstructure, SuperState.RUN_CLIMB_BACK),
+                                () -> (!manualMode))); // zero pidgeon and elevator
 
                 // OI.driverRT.whileTrue(new SetRobotState(superstructure,
                 // SuperState.GROUND_CORAL_PICKUP_FRONT));
@@ -184,10 +187,10 @@ public class RobotContainer {
 
                 // OI.driverA.onTrue(new SetRobotStateSimpleOnce(superstructure,
                 // SuperState.CLIMB));
-                OI.driverRJ.whileTrue(
-                                new ConditionalCommand(new InstantCommand(),
-                                                new SetRobotStateSimple(superstructure, SuperState.RUN_CLIMB_BACK),
-                                                () -> (!manualMode)));
+                // OI.driverA.whileTrue(
+                // new ConditionalCommand(new InstantCommand(),
+                // new SetRobotStateSimple(superstructure, SuperState.RUN_CLIMB_BACK),
+                // () -> (!manualMode)));
                 // OI.driverY.onTrue(new SetRobotStateSimpleOnce(superstructure,
                 // SuperState.DEPLOY_CLIMBER));
                 // OI.driverY.whileTrue(

@@ -196,14 +196,40 @@ public final class Constants {
                 public static final double B_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.875);
                 public static final double C_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
                 public static final double D_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.25);
-                public static final double E_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.625);
-                public static final double F_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.625);
-                public static final double G_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.625);
-                public static final double H_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.625);
+                public static final double E_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
+                public static final double F_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
+                public static final double G_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
+                public static final double H_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
                 public static final double I_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.0);
                 public static final double J_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.375);
                 public static final double K_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.5);
                 public static final double L_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.75);
+
+                public static final double A_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
+                public static final double B_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.5);
+                public static final double C_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.75);
+                public static final double D_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
+                public static final double E_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
+                public static final double F_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
+                public static final double G_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
+                public static final double H_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
+                public static final double I_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.125);
+                public static final double J_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.5);
+                public static final double K_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
+                public static final double L_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
+
+                public static final double A_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.5);
+                public static final double B_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.5);
+                public static final double C_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.875);
+                public static final double D_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.25);
+                public static final double E_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
+                public static final double F_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
+                public static final double G_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
+                public static final double H_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
+                public static final double I_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.25);
+                public static final double J_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.75);
+                public static final double K_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
+                public static final double L_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
 
                 // right when facing the reef side is positive
                 // negative makes robot go more to the left
@@ -219,6 +245,32 @@ public final class Constants {
                 public static final double J_BRANCH_OFFSET_SIDE = inchesToMeters(-1.5);
                 public static final double K_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double L_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+
+                public static final double A_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                public static final double B_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                public static final double C_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                public static final double D_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                public static final double E_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                public static final double F_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                public static final double G_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                public static final double H_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                public static final double I_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                public static final double J_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(-1.5);
+                public static final double K_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                public static final double L_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+
+                public static final double A_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                public static final double B_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                public static final double C_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                public static final double D_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                public static final double E_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                public static final double F_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                public static final double G_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                public static final double H_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                public static final double I_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                public static final double J_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(-1.5);
+                public static final double K_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                public static final double L_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
                 public static final Translation2d centerBlue = new Translation2d(inchesToMeters(176.746),
                                 inchesToMeters(158.501));
                 public static final Translation2d centerRed = new Translation2d(
@@ -747,50 +799,50 @@ public final class Constants {
                                                 new Rotation2d(
                                                                 poseDirection.getRotation().getRadians()));
 
-                                l2FrontRight = new Pose2d(
-                                                new Translation2d(
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.L2_INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.L2_INTAKE_Y_OFFSET_FRONT,
-                                                                                                new Rotation2d(Math.PI)))
-                                                                                .getX(),
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.L2_INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.L2_INTAKE_Y_OFFSET_FRONT,
-                                                                                                new Rotation2d(Math.PI)))
-                                                                                .getY()),
-                                                new Rotation2d(
-                                                                poseDirection.getRotation().getRadians() - Math.PI));
-                                l2BackRight = new Pose2d(
-                                                new Translation2d(
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.L2_INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.L2_INTAKE_Y_OFFSET_BACK,
-                                                                                                new Rotation2d()))
-                                                                                .getX(),
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.INTAKE_Y_OFFSET_BACK,
-                                                                                                new Rotation2d()))
-                                                                                .getY()),
-                                                new Rotation2d(
-                                                                poseDirection.getRotation().getRadians()));
+                                // l2FrontRight = new Pose2d(
+                                // new Translation2d(
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                // Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                // new Rotation2d(Math.PI)))
+                                // .getX(),
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                // Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                // new Rotation2d(Math.PI)))
+                                // .getY()),
+                                // new Rotation2d(
+                                // poseDirection.getRotation().getRadians() - Math.PI));
+                                // l2BackRight = new Pose2d(
+                                // new Translation2d(
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.L2_INTAKE_X_OFFSET_BACK,
+                                // Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                // new Rotation2d()))
+                                // .getX(),
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.L2_INTAKE_X_OFFSET_BACK,
+                                // Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                // new Rotation2d()))
+                                // .getY()),
+                                // new Rotation2d(
+                                // poseDirection.getRotation().getRadians()));
 
                                 // Angle to face red side:
                                 // 180=AB
@@ -850,6 +902,104 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
+                                        l3FrontRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + B_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + B_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + B_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + B_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l3BackRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + B_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + B_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + B_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + B_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        l2FrontRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + B_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + B_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + B_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + B_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l2BackRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + B_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + B_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + B_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + B_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
                                         System.out.println("b branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > 119.0
                                                 && poseDirection.getRotation().getDegrees() < 121.0) {
@@ -898,6 +1048,104 @@ public final class Constants {
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_BACK,
                                                                                                         Physical.L4_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        l3FrontRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + L_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + L_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + L_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + L_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l3BackRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + L_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + L_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + L_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + L_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        l2FrontRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + L_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + L_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + L_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + L_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l2BackRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + L_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + L_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + L_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + L_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
                                                                                                         new Rotation2d()))
                                                                                         .getY()),
                                                         new Rotation2d(
@@ -954,6 +1202,104 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
+                                        l3FrontRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + J_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + J_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + J_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + J_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l3BackRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + J_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + J_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + J_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + J_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        l2FrontRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + J_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + J_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + J_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + J_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l2BackRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + J_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + J_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + J_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + J_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
                                         System.out.println("f branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > -1.0
                                                 && poseDirection.getRotation().getDegrees() < 1.0) {
@@ -1002,6 +1348,104 @@ public final class Constants {
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_BACK,
                                                                                                         Physical.L4_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        l3FrontRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + H_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + H_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + H_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + H_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l3BackRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + H_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + H_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + H_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + H_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        l2FrontRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + H_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + H_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + H_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + H_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l2BackRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + H_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + H_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + H_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + H_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
                                                                                                         new Rotation2d()))
                                                                                         .getY()),
                                                         new Rotation2d(
@@ -1058,6 +1502,104 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
+                                        l3FrontRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + F_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + F_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + F_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + F_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l3BackRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + F_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + F_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + F_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + F_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        l2FrontRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + F_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + F_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + F_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + F_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l2BackRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + F_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + F_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + F_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + F_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
                                         System.out.println("j branch: " + l4FrontRight);
                                 } else {
                                         l4FrontRight = new Pose2d(
@@ -1109,96 +1651,194 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
+                                        l3FrontRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + D_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + D_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + D_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + D_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l3BackRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + D_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + D_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + D_BRANCH_OFFSET_L3,
+                                                                                                        adjustY + D_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        l2FrontRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + D_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + D_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + D_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + D_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l2BackRight = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + D_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + D_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + D_BRANCH_OFFSET_L2,
+                                                                                                        adjustY + D_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
                                         System.out.println("l branch: " + l4FrontRight);
                                 }
-                                l3FrontRight = new Pose2d(
-                                                new Translation2d(
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
-                                                                                                new Rotation2d(Math.PI)))
-                                                                                .getX(),
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
-                                                                                                new Rotation2d(Math.PI)))
-                                                                                .getY()),
-                                                new Rotation2d(
-                                                                poseDirection.getRotation().getRadians() - Math.PI));
-                                l3BackRight = new Pose2d(
-                                                new Translation2d(
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.INTAKE_Y_OFFSET_BACK,
-                                                                                                new Rotation2d()))
-                                                                                .getX(),
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.INTAKE_Y_OFFSET_BACK,
-                                                                                                new Rotation2d()))
-                                                                                .getY()),
-                                                new Rotation2d(
-                                                                poseDirection.getRotation().getRadians()));
-                                l2FrontLeft = new Pose2d(
-                                                new Translation2d(
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                -adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.L2_INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.L2_INTAKE_Y_OFFSET_FRONT,
-                                                                                                new Rotation2d(Math.PI)))
-                                                                                .getX(),
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                -adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.L2_INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.L2_INTAKE_Y_OFFSET_FRONT,
-                                                                                                new Rotation2d(Math.PI)))
-                                                                                .getY()),
-                                                new Rotation2d(
-                                                                poseDirection.getRotation().getRadians() - Math.PI));
-                                l2BackLeft = new Pose2d(
-                                                new Translation2d(
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                -adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.L2_INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.L2_INTAKE_Y_OFFSET_BACK,
-                                                                                                new Rotation2d()))
-                                                                                .getX(),
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                -adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.L2_INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.L2_INTAKE_Y_OFFSET_BACK,
-                                                                                                new Rotation2d()))
-                                                                                .getY()),
-                                                new Rotation2d(
-                                                                poseDirection.getRotation().getRadians()));
+                                // l3FrontRight = new Pose2d(
+                                // new Translation2d(
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.INTAKE_X_OFFSET_FRONT,
+                                // Physical.INTAKE_Y_OFFSET_FRONT,
+                                // new Rotation2d(Math.PI)))
+                                // .getX(),
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.INTAKE_X_OFFSET_FRONT,
+                                // Physical.INTAKE_Y_OFFSET_FRONT,
+                                // new Rotation2d(Math.PI)))
+                                // .getY()),
+                                // new Rotation2d(
+                                // poseDirection.getRotation().getRadians() - Math.PI));
+                                // l3BackRight = new Pose2d(
+                                // new Translation2d(
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.INTAKE_X_OFFSET_BACK,
+                                // Physical.INTAKE_Y_OFFSET_BACK,
+                                // new Rotation2d()))
+                                // .getX(),
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.INTAKE_X_OFFSET_BACK,
+                                // Physical.INTAKE_Y_OFFSET_BACK,
+                                // new Rotation2d()))
+                                // .getY()),
+                                // new Rotation2d(
+                                // poseDirection.getRotation().getRadians()));
+                                // l2FrontLeft = new Pose2d(
+                                // new Translation2d(
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // -adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                // Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                // new Rotation2d(Math.PI)))
+                                // .getX(),
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // -adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                // Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                // new Rotation2d(Math.PI)))
+                                // .getY()),
+                                // new Rotation2d(
+                                // poseDirection.getRotation().getRadians() - Math.PI));
+                                // l2BackLeft = new Pose2d(
+                                // new Translation2d(
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // -adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.L2_INTAKE_X_OFFSET_BACK,
+                                // Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                // new Rotation2d()))
+                                // .getX(),
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // -adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.L2_INTAKE_X_OFFSET_BACK,
+                                // Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                // new Rotation2d()))
+                                // .getY()),
+                                // new Rotation2d(
+                                // poseDirection.getRotation().getRadians()));
                                 frontLeftMore = new Pose2d(
                                                 new Translation2d(
                                                                 poseDirection
@@ -1298,7 +1938,105 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        System.out.println("A branch: " + l4FrontLeft);
+                                        l3FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + A_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + A_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + A_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + A_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l3BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + A_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + A_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + A_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + A_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        l2FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + A_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + A_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + A_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + A_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l2BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + A_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + A_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + A_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + A_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        System.out.println("b branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > 119.0
                                                 && poseDirection.getRotation().getDegrees() < 121.0) {
                                         l4FrontLeft = new Pose2d(
@@ -1350,7 +2088,105 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        System.out.println("c branch: " + l4FrontLeft);
+                                        l3FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + K_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + K_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + K_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + K_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l3BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + K_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + K_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + K_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + K_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        l2FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + K_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + K_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + K_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + K_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l2BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + K_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + K_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + K_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + K_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        System.out.println("d branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > 59.0
                                                 && poseDirection.getRotation().getDegrees() < 61.0) {
                                         l4FrontLeft = new Pose2d(
@@ -1402,7 +2238,105 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        System.out.println("E branch: " + l4FrontLeft);
+                                        l3FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + I_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + I_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + I_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + I_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l3BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + I_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + I_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + I_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + I_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        l2FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + I_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + I_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + I_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + I_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l2BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + I_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + I_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + I_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + I_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        System.out.println("f branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > -1.0
                                                 && poseDirection.getRotation().getDegrees() < 1.0) {
                                         l4FrontLeft = new Pose2d(
@@ -1454,7 +2388,105 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        System.out.println("G branch: " + l4FrontLeft);
+                                        l3FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + G_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + G_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + G_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + G_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l3BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + G_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + G_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + G_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + G_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        l2FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + G_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + G_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + G_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + G_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l2BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + G_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + G_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + G_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + G_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        System.out.println("h branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > -61.0
                                                 && poseDirection.getRotation().getDegrees() < -59.0) {
                                         l4FrontLeft = new Pose2d(
@@ -1506,7 +2538,105 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        System.out.println("i branch: " + l4FrontLeft);
+                                        l3FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + E_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + E_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + E_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + E_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l3BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + E_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + E_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + E_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + E_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        l2FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + E_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + E_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + E_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + E_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l2BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + E_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + E_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + E_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + E_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        System.out.println("j branch: " + l4FrontRight);
                                 } else {
                                         l4FrontLeft = new Pose2d(
                                                         new Translation2d(
@@ -1557,52 +2687,150 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        System.out.println("k branch: " + l4FrontLeft);
+                                        l3FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + C_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + C_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + C_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + C_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l3BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + C_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + C_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + C_BRANCH_OFFSET_L3,
+                                                                                                        -adjustY + C_BRANCH_OFFSET_SIDE_L3,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        l2FrontLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + C_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + C_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + C_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + C_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_FRONT,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_FRONT,
+                                                                                                        new Rotation2d(Math.PI)))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()
+                                                                                        - Math.PI));
+                                        l2BackLeft = new Pose2d(
+                                                        new Translation2d(
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + C_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + C_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getX(),
+                                                                        poseDirection
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        adjustX + C_BRANCH_OFFSET_L2,
+                                                                                                        -adjustY + C_BRANCH_OFFSET_SIDE_L2,
+                                                                                                        new Rotation2d()))
+                                                                                        .transformBy(new Transform2d(
+                                                                                                        Physical.L2_INTAKE_X_OFFSET_BACK,
+                                                                                                        Physical.L2_INTAKE_Y_OFFSET_BACK,
+                                                                                                        new Rotation2d()))
+                                                                                        .getY()),
+                                                        new Rotation2d(
+                                                                        poseDirection.getRotation().getRadians()));
+                                        System.out.println("l branch: " + l4FrontRight);
                                 }
-                                l3FrontLeft = new Pose2d(
-                                                new Translation2d(
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                -adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
-                                                                                                new Rotation2d(Math.PI)))
-                                                                                .getX(),
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                -adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_FRONT,
-                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
-                                                                                                new Rotation2d(Math.PI)))
-                                                                                .getY()),
-                                                new Rotation2d(
-                                                                poseDirection.getRotation().getRadians() - Math.PI));
-                                l3BackLeft = new Pose2d(
-                                                new Translation2d(
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                -adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.INTAKE_Y_OFFSET_BACK,
-                                                                                                new Rotation2d()))
-                                                                                .getX(),
-                                                                poseDirection
-                                                                                .transformBy(new Transform2d(adjustX,
-                                                                                                -adjustY,
-                                                                                                new Rotation2d()))
-                                                                                .transformBy(new Transform2d(
-                                                                                                Physical.INTAKE_X_OFFSET_BACK,
-                                                                                                Physical.INTAKE_Y_OFFSET_BACK,
-                                                                                                new Rotation2d()))
-                                                                                .getY()),
-                                                new Rotation2d(
-                                                                poseDirection.getRotation().getRadians()));
+                                // l3FrontLeft = new Pose2d(
+                                // new Translation2d(
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // -adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.INTAKE_X_OFFSET_FRONT,
+                                // Physical.INTAKE_Y_OFFSET_FRONT,
+                                // new Rotation2d(Math.PI)))
+                                // .getX(),
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // -adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.INTAKE_X_OFFSET_FRONT,
+                                // Physical.INTAKE_Y_OFFSET_FRONT,
+                                // new Rotation2d(Math.PI)))
+                                // .getY()),
+                                // new Rotation2d(
+                                // poseDirection.getRotation().getRadians() - Math.PI));
+                                // l3BackLeft = new Pose2d(
+                                // new Translation2d(
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // -adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.INTAKE_X_OFFSET_BACK,
+                                // Physical.INTAKE_Y_OFFSET_BACK,
+                                // new Rotation2d()))
+                                // .getX(),
+                                // poseDirection
+                                // .transformBy(new Transform2d(adjustX,
+                                // -adjustY,
+                                // new Rotation2d()))
+                                // .transformBy(new Transform2d(
+                                // Physical.INTAKE_X_OFFSET_BACK,
+                                // Physical.INTAKE_Y_OFFSET_BACK,
+                                // new Rotation2d()))
+                                // .getY()),
+                                // new Rotation2d(
+                                // poseDirection.getRotation().getRadians()));
                                 blueFrontPlacingPositions.add(l2FrontRight);
                                 blueFrontPlacingPositions.add(l2FrontLeft);
                                 blueBackPlacingPositions.add(l2BackRight);
