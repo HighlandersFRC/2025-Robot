@@ -189,6 +189,9 @@ public final class Constants {
         public static class Reef {
                 public static final double PERFECT_BRANCH_OFFSET_L23 = inchesToMeters(1.625);
                 public static final double PERFECT_BRANCH_OFFSET_L4 = inchesToMeters(1.125);
+
+                // positive is from face of reef towards center of reef
+                // negative means futher from reef
                 public static final double A_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.0);
                 public static final double B_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.875);
                 public static final double C_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
@@ -202,6 +205,8 @@ public final class Constants {
                 public static final double K_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.5);
                 public static final double L_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.75);
 
+                // right when facing the reef side is positive
+                // negative makes robot go more to the left
                 public static final double A_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double B_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double C_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
@@ -211,7 +216,7 @@ public final class Constants {
                 public static final double G_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double H_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double I_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
-                public static final double J_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                public static final double J_BRANCH_OFFSET_SIDE = inchesToMeters(-1.5);
                 public static final double K_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double L_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final Translation2d centerBlue = new Translation2d(inchesToMeters(176.746),
@@ -1274,7 +1279,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + A_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + A_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_BACK,
@@ -1284,7 +1289,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + A_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + A_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_BACK,
@@ -1301,7 +1306,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + K_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + K_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_FRONT,
@@ -1311,7 +1316,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + K_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + K_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_FRONT,
@@ -1326,7 +1331,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + K_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + K_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_BACK,
@@ -1336,7 +1341,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + K_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + K_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_BACK,
@@ -1353,7 +1358,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + I_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + I_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_FRONT,
@@ -1363,7 +1368,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + I_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + I_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_FRONT,
@@ -1378,7 +1383,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + I_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + I_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_BACK,
@@ -1388,7 +1393,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + I_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + I_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_BACK,
@@ -1405,7 +1410,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + G_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + G_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_FRONT,
@@ -1415,7 +1420,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + G_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + G_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_FRONT,
@@ -1430,7 +1435,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + G_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + G_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_BACK,
@@ -1440,7 +1445,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + G_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + G_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_BACK,
@@ -1457,7 +1462,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + E_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + E_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_FRONT,
@@ -1467,7 +1472,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + E_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + E_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_FRONT,
@@ -1482,7 +1487,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + E_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + E_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_BACK,
@@ -1492,7 +1497,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + E_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + E_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_BACK,
@@ -1508,7 +1513,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + C_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + C_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_FRONT,
@@ -1518,7 +1523,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + C_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + C_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_FRONT,
@@ -1533,7 +1538,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + C_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + C_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_BACK,
@@ -1543,7 +1548,7 @@ public final class Constants {
                                                                         poseDirection
                                                                                         .transformBy(new Transform2d(
                                                                                                         adjustX + C_BRANCH_OFFSET,
-                                                                                                        -adjustY,
+                                                                                                        -adjustY + C_BRANCH_OFFSET_SIDE,
                                                                                                         new Rotation2d()))
                                                                                         .transformBy(new Transform2d(
                                                                                                         Physical.L4_INTAKE_X_OFFSET_BACK,
@@ -1801,10 +1806,10 @@ public final class Constants {
 
                 public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(23.75);
                 // public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(24.5);
-                public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(1.25);
-                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(23.75);
+                public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
+                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(23.0);
                 // public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(25.5);
-                public static double INTAKE_Y_OFFSET_BACK = inchesToMeters(-1.25);
+                public static double INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.2);
 
                 public static double INTAKE_X_OFFSET_FRONT_ALGAE = inchesToMeters(23.0 + 5.0);
                 public static double INTAKE_Y_OFFSET_FRONT_ALGAE = inchesToMeters(3.8);
@@ -1818,9 +1823,9 @@ public final class Constants {
                 // public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-2.2);
 
                 public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(23.0);
-                public static double L2_INTAKE_Y_OFFSET_FRONT = inchesToMeters(1.25);
-                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(23.0);
-                public static double L2_INTAKE_Y_OFFSET_BACK = inchesToMeters(-1.25);
+                public static double L2_INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
+                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(22.2);
+                public static double L2_INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.2);
 
                 public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(25.65);
                 // public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.3);
