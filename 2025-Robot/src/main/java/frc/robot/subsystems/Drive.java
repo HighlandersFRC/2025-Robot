@@ -2976,7 +2976,7 @@ public class Drive extends SubsystemBase {
           if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
               Constants.Reef.processorBlueFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
             autoPlacingFront = true;
-            if (OI.driverA.getAsBoolean()) {
+            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
               teleopDrive();
             } else {
               driveToPoint(Constants.Reef.processorBlueFrontPlacingPosition.getX(),
@@ -2986,7 +2986,7 @@ public class Drive extends SubsystemBase {
             // driveToTheta((Constants.Reef.processorBlueFrontPlacingPosition.getRotation().getDegrees()));
           } else {
             autoPlacingFront = false;
-            if (OI.driverA.getAsBoolean()) {
+            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
               teleopDrive();
             } else {
               // driveToTheta((Constants.Reef.processorBlueBackPlacingPosition.getRotation().getDegrees()));
@@ -2999,7 +2999,7 @@ public class Drive extends SubsystemBase {
           if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
               Constants.Reef.processorRedFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
             autoPlacingFront = true;
-            if (OI.driverA.getAsBoolean()) {
+            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
               teleopDrive();
             } else {
               driveToPoint(Constants.Reef.processorRedFrontPlacingPosition.getX(),
@@ -3009,7 +3009,7 @@ public class Drive extends SubsystemBase {
             // driveToTheta((Constants.Reef.processorRedFrontPlacingPosition.getRotation().getDegrees()));
           } else {
             autoPlacingFront = false;
-            if (OI.driverA.getAsBoolean()) {
+            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
               teleopDrive();
             } else {
               driveToPoint(Constants.Reef.processorRedBackPlacingPosition.getX(),
@@ -3025,7 +3025,7 @@ public class Drive extends SubsystemBase {
           if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
               Constants.Reef.processorMoreBlueFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
             autoPlacingFront = true;
-            if (OI.driverA.getAsBoolean()) {
+            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
               teleopDrive();
             } else {
               driveToPoint(Constants.Reef.processorMoreBlueFrontPlacingPosition.getX(),
@@ -3035,7 +3035,7 @@ public class Drive extends SubsystemBase {
             // driveToTheta((Constants.Reef.processorMoreBlueFrontPlacingPosition.getRotation().getDegrees()));
           } else {
             autoPlacingFront = false;
-            if (OI.driverA.getAsBoolean()) {
+            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
               teleopDrive();
             } else {
               // driveToTheta((Constants.Reef.processorMoreBlueBackPlacingPosition.getRotation().getDegrees()));
@@ -3048,7 +3048,7 @@ public class Drive extends SubsystemBase {
           if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
               Constants.Reef.processorMoreRedFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
             autoPlacingFront = true;
-            if (OI.driverA.getAsBoolean()) {
+            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
               teleopDrive();
             } else {
               driveToPoint(Constants.Reef.processorMoreRedFrontPlacingPosition.getX(),
@@ -3058,7 +3058,7 @@ public class Drive extends SubsystemBase {
             }
           } else {
             autoPlacingFront = false;
-            if (OI.driverA.getAsBoolean()) {
+            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
               teleopDrive();
             } else {
               driveToPoint(Constants.Reef.processorMoreRedBackPlacingPosition.getX(),

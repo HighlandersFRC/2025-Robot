@@ -365,7 +365,7 @@ public final class Constants {
                                 new Rotation2d(Math.toRadians(-54.0)));
 
                 public static final double PROCESSOR_Y_OFFSET_M = inchesToMeters(50.0);
-                public static final double PROCESSOR_MORE_Y_OFFSET_M = inchesToMeters(24.0);
+                public static final double PROCESSOR_MORE_Y_OFFSET_M = inchesToMeters(20.0);
                 public static final double NET_X_OFFSET_M = inchesToMeters(50.0);
                 public static final double NET_X_OFFSET_MORE = inchesToMeters(35.0);
 
@@ -3306,7 +3306,7 @@ public final class Constants {
                 public static final double PIVOT_PREP_POSITION_D = 30.0;
                 public static final double PIVOT_FEEDER_POSITION_D = 21.0;
                 public static final double PIVOT_NET_POSITION_D = 15.0;
-                public static final double PIVOT_PROCESSOR_POSITION_D = 80.0;
+                public static final double PIVOT_PROCESSOR_POSITION_D = 76.0;
                 public static final double PIVOT_REEF_ALGAE_POSITION_D = 90.0;
                 public static final double PIVOT_CLIMB_POSITION_D = 45.0;
                 public static final double PIVOT_LOLLIPOP_POSITION_D = 98.0;
