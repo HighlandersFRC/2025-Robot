@@ -26,6 +26,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.tools.math.Vector;
 
@@ -424,8 +425,18 @@ public class Peripherals {
     pigeonPitchOffset = newOffset;
   }
 
+  double cameraScreenshotTime = 0.0;
+
   public void periodic() {
     Logger.recordOutput("Pigeon Pitch", getPigeonPitchAdjusted());
+
+    // Use to take snapshots of camera stream (Output means processed stream, input
+    // means raw stream)
+    // if (Timer.getFPGATimestamp() - cameraScreenshotTime > 1.0) {
+    // gamePieceCamera.takeOutputSnapshot();
+    // cameraScreenshotTime = Timer.getFPGATimestamp();
+    // }
+
     // Logger.recordOutput("Pidgeon Yaw?", pigeon.getYaw().getValueAsDouble());
     // Logger.recordOutput("Pidgeon Pitch?", pigeon.getPitch().getValueAsDouble());
     // Logger.recordOutput("Pidgeon Roll?", pigeon.getRoll().getValueAsDouble());

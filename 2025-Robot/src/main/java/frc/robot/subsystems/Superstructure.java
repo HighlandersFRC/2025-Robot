@@ -632,7 +632,7 @@ public class Superstructure extends SubsystemBase {
     // Pivot has abs to account for placing backwards
     return Math
         .abs(Math.abs(pivot.getPivotPosition())
-            - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (15.0 / 360.0);
+            - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (20.0 / 360.0);
   }
 
   // public void handleDefaultState() {
@@ -1521,13 +1521,17 @@ public class Superstructure extends SubsystemBase {
       intake.setWantedState(IntakeState.OUTAKE);
     } else {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
-          - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
-        drive.setWantedState(DriveState.REEF_MORE);
+          - 15.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
         intake.setWantedState(IntakeState.OUTAKE);
-        elevator.setWantedState(ElevatorState.DEFAULT);
+      } else {
+        intake.setWantedState(IntakeState.OFF);
+      }
+      if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
+          - 15.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+        drive.setWantedState(DriveState.REEF_MORE);
+        elevator.setWantedState(ElevatorState.AUTO_L2);
       } else {
         drive.setWantedState(DriveState.DEFAULT);
-        intake.setWantedState(IntakeState.OFF);
       }
     }
   }
@@ -1585,12 +1589,16 @@ public class Superstructure extends SubsystemBase {
     } else {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations
           - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
-        drive.setWantedState(DriveState.REEF_MORE);
         intake.setWantedState(IntakeState.OUTAKE);
-        elevator.setWantedState(ElevatorState.DEFAULT);
+      } else {
+        intake.setWantedState(IntakeState.OFF);
+      }
+      if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations
+          - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+        drive.setWantedState(DriveState.REEF_MORE);
+        elevator.setWantedState(ElevatorState.AUTO_L3);
       } else {
         drive.setWantedState(DriveState.DEFAULT);
-        intake.setWantedState(IntakeState.OFF);
       }
     }
   }
