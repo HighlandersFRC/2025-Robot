@@ -3234,7 +3234,7 @@ public final class Constants {
                 public static final double ELEVATOR_GROUND_ALGAE_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_FEEDER_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_OVER_POSITION_M = inchesToMeters(20);
-                public static final double ELEVATOR_NET_POSITION_M = inchesToMeters(67);
+                public static final double ELEVATOR_NET_POSITION_M = inchesToMeters(65);
                 public static final double ELEVATOR_L2_ALGAE_POSITION_M = inchesToMeters(19);
                 public static final double ELEVATOR_L3_ALGAE_POSITION_M = inchesToMeters(38);
                 public static final double ELEVATOR_PROCESSOR_POSITION_M = inchesToMeters(6.5);

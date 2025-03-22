@@ -158,7 +158,7 @@ public class Elevator extends SubsystemBase {
           elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
     } else {
       if (position > Constants.inchesToMeters(64.0) && getElevatorPosition() > Constants.inchesToMeters(62.0)) {
-        moveWithTorque(25, 0.20);
+        moveWithTorque(18, 0.20);
         // System.out.println("running torque");
       } else {
         elevatorMotorMaster.setControl(
@@ -244,7 +244,7 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     systemState = handleStateTransition();
-    if (systemState != ElevatorState.DEFAULT) {
+    if (systemState != ElevatorState.DEFAULT || OI.driverMenuButton.getAsBoolean()) {
       firstTimeDefault = false;
       idleTime = Timer.getFPGATimestamp();
       zeroTime = 0.0;
@@ -357,7 +357,7 @@ public class Elevator extends SubsystemBase {
             idleTime = Timer.getFPGATimestamp();
             firstTimeIdle = false;
           }
-          if (!firstTimeDefault) {
+          if (!firstTimeDefault || OI.driverMenuButton.getAsBoolean()) {
             if (DriverStation.isTeleopEnabled() && Math
                 .abs(
                     Constants.Ratios
@@ -377,7 +377,7 @@ public class Elevator extends SubsystemBase {
 
                 moveWithTorque(-40, 0.1);
               } else {
-                moveWithTorque(-40, 0.4);
+                moveWithTorque(-47, 0.5);
               }
             }
           } else {

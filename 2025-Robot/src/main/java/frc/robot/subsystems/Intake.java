@@ -124,9 +124,39 @@ public class Intake extends SubsystemBase {
     return intakeMotor.getVelocity().getValueAsDouble();
   }
 
+  boolean inL1State = false;
+  double initOutakeL1Position = 0.0;
+  boolean initOutakeL1 = false;
+
   private IntakeState handleStateTransition() {
+    // System.out.println("current: " + intakeMotor.getPosition().getValueAsDouble()
+    // / 12.5);
+    // System.out.println("init: " + initOutakeL1Position);
+    // System.out.println("bool: " + initOutakeL1);
+    Logger.recordOutput("povup presses", OI.driverPOVUp.getAsBoolean());
+    // System.out.println("in l1 state: " + inL1State);
+    if (!OI.driverPOVUp.getAsBoolean() || !OI.driverLT.getAsBoolean()) {
+      inL1State = false;
+      initOutakeL1Position = 0.0;
+      initOutakeL1 = false;
+    }
     if (OI.driverLT.getAsBoolean()) {
-      return IntakeState.OUTAKE;
+      if (OI.driverPOVUp.getAsBoolean()) {
+        if (!initOutakeL1) {
+          initOutakeL1Position = intakeMotor.getPosition().getValueAsDouble() / 12.5;
+          initOutakeL1 = true;
+        }
+
+        if (Math.abs(
+            Math.abs(intakeMotor.getPosition().getValueAsDouble()) / 12.5 - Math.abs(initOutakeL1Position)) < 0.5) {
+          return IntakeState.OUTAKE;
+        } else {
+          return IntakeState.OFF;
+        }
+      } else {
+        initOutakeL1 = false;
+        return IntakeState.OUTAKE;
+      }
     }
     switch (wantedState) {
       case CORAL_INTAKE:

@@ -689,6 +689,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoL1PlaceState() {
+    intake.inL1State = true;
     twist.setAlgaeMode(true);
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.AUTO_L1);
@@ -854,6 +855,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleL1PlaceState() {
+    intake.inL1State = true;
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L1);
@@ -925,7 +927,9 @@ public class Superstructure extends SubsystemBase {
     intake.setWantedState(IntakeState.DEFAULT);
     pivot.setWantedFlip(PivotFlip.FRONT);
     pivot.setWantedState(PivotState.NET);
-    twist.setWantedState(TwistState.UP);
+    if (elevator.getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
+      twist.setWantedState(TwistState.UP);
+    }
   }
 
   public void handleAutoProcessorState() {
@@ -989,10 +993,14 @@ public class Superstructure extends SubsystemBase {
     intake.setWantedState(IntakeState.DEFAULT);
     if (!drive.getAutoPlacementSideIsFront()) {
       pivot.setWantedFlip(PivotFlip.BACK);
-      twist.setWantedState(TwistState.DOWN);
+      if (elevator.getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
+        twist.setWantedState(TwistState.DOWN);
+      }
     } else {
       pivot.setWantedFlip(PivotFlip.FRONT);
-      twist.setWantedState(TwistState.UP);
+      if (elevator.getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
+        twist.setWantedState(TwistState.UP);
+      }
     }
     pivot.setWantedState(PivotState.NET);
   }
@@ -1474,6 +1482,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoL1ScoreState() {
+    intake.inL1State = true;
     lights.setWantedState(LightsState.SCORING);
     drive.setWantedState(DriveState.DEFAULT);
     intake.setWantedState(IntakeState.OUTAKE);
@@ -1945,6 +1954,12 @@ public class Superstructure extends SubsystemBase {
     currentSuperState = handleStateTransitions();
     if (currentSuperState != SuperState.DEFAULT) {
       firstTimeDefault = true;
+    }
+    if (currentSuperState == SuperState.AUTO_L1_PLACE || currentSuperState == SuperState.AUTO_SCORE_L1
+        || currentSuperState == SuperState.L1_PLACE) {
+      intake.inL1State = true;
+    } else {
+      intake.inL1State = false;
     }
     Logger.recordOutput("Super State", currentSuperState);
     if (currentSuperState != SuperState.OUTAKE_IDLE) {

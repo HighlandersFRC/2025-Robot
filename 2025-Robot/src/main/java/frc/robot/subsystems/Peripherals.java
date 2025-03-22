@@ -25,6 +25,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
@@ -432,7 +433,8 @@ public class Peripherals {
 
     // Use to take snapshots of camera stream (Output means processed stream, input
     // means raw stream)
-    // if (Timer.getFPGATimestamp() - cameraScreenshotTime > 1.0) {
+    // if (Timer.getFPGATimestamp() - cameraScreenshotTime > 1.0 &&
+    // (DriverStation.isEnabled())) {
     // gamePieceCamera.takeOutputSnapshot();
     // cameraScreenshotTime = Timer.getFPGATimestamp();
     // }
