@@ -161,7 +161,7 @@ public class RobotContainer {
                                                 new SetRobotState(superstructure,
                                                                 SuperState.FEEDER),
                                                 new SetRobotState(superstructure,
-                                                                SuperState.FEEDER_ALIGN),
+                                                                SuperState.FEEDER_AUTO),
                                                 () -> manualMode),
                                 () -> (superstructure.getCurrentSuperState() == SuperState.L4_PLACE || superstructure
                                                 .getCurrentSuperState() == SuperState.L3_PLACE
