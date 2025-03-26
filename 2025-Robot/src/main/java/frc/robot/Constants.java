@@ -192,44 +192,44 @@ public final class Constants {
 
                 // positive is from face of reef towards center of reef
                 // negative means futher from reef
-                public static final double A_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
-                public static final double B_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
+                public static final double A_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.0);
+                public static final double B_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.875);
                 public static final double C_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
-                public static final double D_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
+                public static final double D_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.25);
                 public static final double E_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
                 public static final double F_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
                 public static final double G_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
                 public static final double H_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
-                public static final double I_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
-                public static final double J_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
-                public static final double K_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
-                public static final double L_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
+                public static final double I_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.0);
+                public static final double J_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.375);
+                public static final double K_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.5);
+                public static final double L_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.75);
 
-                public static final double A_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double B_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double C_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double D_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
+                public static final double A_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
+                public static final double B_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.5);
+                public static final double C_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.75);
+                public static final double D_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
                 public static final double E_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
                 public static final double F_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
                 public static final double G_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
                 public static final double H_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double I_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double J_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double K_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double L_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
+                public static final double I_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.125);
+                public static final double J_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.5);
+                public static final double K_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
+                public static final double L_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
 
-                public static final double A_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double B_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double C_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double D_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
+                public static final double A_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.5);
+                public static final double B_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.5);
+                public static final double C_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.875);
+                public static final double D_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.25);
                 public static final double E_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
                 public static final double F_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
                 public static final double G_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
                 public static final double H_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double I_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double J_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double K_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double L_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
+                public static final double I_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.25);
+                public static final double J_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.75);
+                public static final double K_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
+                public static final double L_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
 
                 // right when facing the reef side is positive
                 // negative makes robot go more to the left
@@ -242,7 +242,7 @@ public final class Constants {
                 public static final double G_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double H_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double I_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
-                public static final double J_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                public static final double J_BRANCH_OFFSET_SIDE = inchesToMeters(-1.5);
                 public static final double K_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double L_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
 
@@ -255,7 +255,7 @@ public final class Constants {
                 public static final double G_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
                 public static final double H_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
                 public static final double I_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
-                public static final double J_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                public static final double J_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(-1.5);
                 public static final double K_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
                 public static final double L_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
 
@@ -268,9 +268,124 @@ public final class Constants {
                 public static final double G_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
                 public static final double H_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
                 public static final double I_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
-                public static final double J_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                public static final double J_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(-1.5);
                 public static final double K_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
                 public static final double L_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                // public static final double A_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                // inchesToMeters(1.125);
+                // public static final double B_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                // inchesToMeters(1.125);
+                // public static final double C_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                // inchesToMeters(1.125);
+                // public static final double D_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                // inchesToMeters(1.125);
+                // public static final double E_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                // inchesToMeters(1.125);
+                // public static final double F_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                // inchesToMeters(1.125);
+                // public static final double G_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                // inchesToMeters(1.125);
+                // public static final double H_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                // inchesToMeters(1.125);
+                // public static final double I_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                // inchesToMeters(1.125);
+                // public static final double J_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                // inchesToMeters(1.125);
+                // public static final double K_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                // inchesToMeters(1.125);
+                // public static final double L_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                // inchesToMeters(1.125);
+
+                // public static final double A_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double B_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double C_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double D_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double E_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double F_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double G_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double H_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double I_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double J_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double K_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double L_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+
+                // public static final double A_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double B_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double C_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double D_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double E_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double F_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double G_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double H_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double I_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double J_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double K_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+                // public static final double L_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                // inchesToMeters(1.625);
+
+                // // right when facing the reef side is positive
+                // // negative makes robot go more to the left
+                // public static final double A_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                // public static final double B_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                // public static final double C_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                // public static final double D_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                // public static final double E_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                // public static final double F_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                // public static final double G_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                // public static final double H_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                // public static final double I_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                // public static final double J_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                // public static final double K_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                // public static final double L_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+
+                // public static final double A_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                // public static final double B_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                // public static final double C_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                // public static final double D_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                // public static final double E_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                // public static final double F_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                // public static final double G_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                // public static final double H_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                // public static final double I_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                // public static final double J_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                // public static final double K_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+                // public static final double L_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
+
+                // public static final double A_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                // public static final double B_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                // public static final double C_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                // public static final double D_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                // public static final double E_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                // public static final double F_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                // public static final double G_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                // public static final double H_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                // public static final double I_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                // public static final double J_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                // public static final double K_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
+                // public static final double L_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
                 public static final Translation2d centerBlue = new Translation2d(inchesToMeters(176.746),
                                 inchesToMeters(158.501));
                 public static final Translation2d centerRed = new Translation2d(
