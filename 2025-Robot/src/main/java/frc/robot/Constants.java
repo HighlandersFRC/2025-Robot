@@ -18,6 +18,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.tools.math.Vector;
 
 public final class Constants {
@@ -48,20 +49,24 @@ public final class Constants {
                 };
 
                 public static int getSelectedPathIndex() {
-                        if (OI.autoChooser.getRawButton(1)) {
-                                return 0;
-                        }
-                        if (OI.autoChooser.getRawButton(2)) {
-                                return 1;
-                        }
-                        if (OI.autoChooser.getRawButton(3)) {
-                                return 2;
-                        }
-                        if (OI.autoChooser.getRawButton(4)) {
-                                return 3;
-                        }
-                        if (OI.autoChooser.getRawButton(5)) {
-                                return 4;
+                        if (OI.autoChooserConnected()) {
+                                if (OI.autoChooser.getRawButton(1)) {
+                                        return 0;
+                                }
+                                if (OI.autoChooser.getRawButton(2)) {
+                                        return 1;
+                                }
+                                if (OI.autoChooser.getRawButton(3)) {
+                                        return 2;
+                                }
+                                if (OI.autoChooser.getRawButton(4)) {
+                                        return 3;
+                                }
+                                if (OI.autoChooser.getRawButton(5)) {
+                                        return 4;
+                                }
+                        } else {
+                                return (int) Math.round(SmartDashboard.getNumber("ROBOT AUTO OVERIDE", -1));
                         }
                         return -1;
                 }
