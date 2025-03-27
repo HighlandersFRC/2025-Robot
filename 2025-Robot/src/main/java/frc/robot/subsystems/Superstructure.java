@@ -19,6 +19,7 @@ import frc.robot.subsystems.Lights.LightsState;
 import frc.robot.subsystems.Pivot.PivotFlip;
 import frc.robot.subsystems.Pivot.PivotState;
 import frc.robot.subsystems.Twist.TwistState;
+import frc.robot.tools.math.Vector;
 
 public class Superstructure extends SubsystemBase {
   private Drive drive;
@@ -81,6 +82,7 @@ public class Superstructure extends SubsystemBase {
     MANUAL_RESET,
     AUTO_FEEDER,
     RUN_CLIMB_BACK,
+    AUTO_CLIMB,
     DEFAULT_DRIVE,
     LOLLIOP_PICKUP
   }
@@ -483,7 +485,10 @@ public class Superstructure extends SubsystemBase {
       case DEPLOY_CLIMBER:
         if (climber.getPosition() > -400) {
           currentSuperState = SuperState.DEPLOY_CLIMBER;
-        } else {
+        } else 
+         if(!climber.getClimbSensor()){
+          currentSuperState = SuperState.AUTO_CLIMB;
+        }else {
           wantedSuperState = SuperState.CLIMBER_IDLE;
           currentSuperState = SuperState.CLIMBER_IDLE;
         }
@@ -1927,6 +1932,16 @@ public class Superstructure extends SubsystemBase {
       climber.setWantedState(ClimbState.IDLE);
     }
     pivot.setWantedState(PivotState.CLIMB);
+  }
+
+  public void handleAutoClimb(){
+      pivot.setWantedState(PivotState.CLIMB);
+      if (!climber.getClimbSensor()) {
+            climber.setWantedState(ClimbState.RETRACTING);
+            drive.setWantedState(DriveState.AUTO_CLIMB);
+          }else{
+        climber.setWantedState(ClimbState.IDLE);
+      }
   }
 
   public void handleLollipopPickup() {

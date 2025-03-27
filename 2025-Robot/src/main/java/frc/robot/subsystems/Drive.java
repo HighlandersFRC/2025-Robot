@@ -137,6 +137,7 @@ public class Drive extends SubsystemBase {
       backRightCanCoder);
 
   Peripherals peripherals;
+  Boolean firstClimb = false;
 
   // xy position of module based on robot width and distance from edge of robot
   private final double moduleX = ((Constants.Physical.ROBOT_LENGTH) / 2) - Constants.Physical.MODULE_OFFSET;
@@ -273,6 +274,9 @@ public class Drive extends SubsystemBase {
   private double angleSetpoint = 0;
   private double teleopInitTime = 0;
 
+  double startX;
+  double startY;
+
   private Pose2d targetPointPickup = new Pose2d();
 
   public enum DriveState {
@@ -295,7 +299,8 @@ public class Drive extends SubsystemBase {
     AUTO_FEEDER,
     AUTO_L1,
     FEEDER_AUTO,
-    PIECE_PICKUP
+    PIECE_PICKUP,
+    AUTO_CLIMB
   }
 
   private DriveState wantedState = DriveState.IDLE;
@@ -2782,6 +2787,8 @@ public class Drive extends SubsystemBase {
         return DriveState.FEEDER_AUTO;
       case PIECE_PICKUP:
         return DriveState.PIECE_PICKUP;
+      case AUTO_CLIMB:
+        return DriveState.AUTO_CLIMB;
       default:
         return DriveState.IDLE;
     }
@@ -3449,7 +3456,25 @@ public class Drive extends SubsystemBase {
         }
 
         break;
+      case AUTO_CLIMB:
+        Vector moveBack = new Vector(0, -0.3);
+        double targetDistance = 0.6;
+
+        if (!firstClimb) {
+          startX = getMT2OdometryX();
+          startY = getMT2OdometryY();
+          firstClimb = true;
+        }
+
+        if (Math.hypot((Math.abs(getMT2OdometryX() - startX)), Math.abs(getMT2OdometryY() - startY)) < 0.3) {
+          autoRobotCentricDrive(moveBack, 0);
+        } else {
+          autoRobotCentricDrive(new Vector(0, 0), 0);
+        }
+        break;
+
       default:
+        firstClimb = false;
         break;
     }
   }
