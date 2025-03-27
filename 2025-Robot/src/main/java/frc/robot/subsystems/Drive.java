@@ -137,7 +137,7 @@ public class Drive extends SubsystemBase {
       backRightCanCoder);
 
   Peripherals peripherals;
-  Boolean firstClimb = false;
+  boolean firstClimb = false;
 
   // xy position of module based on robot width and distance from edge of robot
   private final double moduleX = ((Constants.Physical.ROBOT_LENGTH) / 2) - Constants.Physical.MODULE_OFFSET;
