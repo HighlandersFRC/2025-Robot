@@ -485,10 +485,9 @@ public class Superstructure extends SubsystemBase {
       case DEPLOY_CLIMBER:
         if (climber.getPosition() > -400) {
           currentSuperState = SuperState.DEPLOY_CLIMBER;
-        } else 
-         if(!climber.getClimbSensor()){
+        } else if (!climber.getClimbSensor()) {
           currentSuperState = SuperState.AUTO_CLIMB;
-        }else {
+        } else {
           wantedSuperState = SuperState.CLIMBER_IDLE;
           currentSuperState = SuperState.CLIMBER_IDLE;
         }
@@ -1934,14 +1933,14 @@ public class Superstructure extends SubsystemBase {
     pivot.setWantedState(PivotState.CLIMB);
   }
 
-  public void handleAutoClimb(){
-      pivot.setWantedState(PivotState.CLIMB);
-      if (!climber.getClimbSensor()) {
-            climber.setWantedState(ClimbState.RETRACTING);
-            drive.setWantedState(DriveState.AUTO_CLIMB);
-          }else{
-        climber.setWantedState(ClimbState.IDLE);
-      }
+  public void handleAutoClimb() {
+    pivot.setWantedState(PivotState.CLIMB);
+    if (!climber.getClimbSensor()) {
+      climber.setWantedState(ClimbState.RETRACTING);
+      drive.setWantedState(DriveState.AUTO_CLIMB);
+    } else {
+      climber.setWantedState(ClimbState.IDLE);
+    }
   }
 
   public void handleLollipopPickup() {

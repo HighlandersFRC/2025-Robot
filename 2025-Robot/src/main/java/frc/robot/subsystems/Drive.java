@@ -2893,6 +2893,9 @@ public class Drive extends SubsystemBase {
       systemState = DriveState.DEFAULT;
     }
 
+    if (!systemState.equals(DriveState.AUTO_CLIMB)) {
+      firstClimb = false;
+    }
     if (!systemState.equals(DriveState.PIECE_PICKUP)) {
       firstTimeAutoPickup = false;
     }
@@ -3458,7 +3461,6 @@ public class Drive extends SubsystemBase {
         break;
       case AUTO_CLIMB:
         Vector moveBack = new Vector(0, -0.3);
-        double targetDistance = 0.6;
 
         if (!firstClimb) {
           startX = getMT2OdometryX();
@@ -3474,7 +3476,7 @@ public class Drive extends SubsystemBase {
         break;
 
       default:
-        firstClimb = false;
+
         break;
     }
   }
