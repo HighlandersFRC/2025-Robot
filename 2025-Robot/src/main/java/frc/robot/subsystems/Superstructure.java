@@ -1938,8 +1938,6 @@ public class Superstructure extends SubsystemBase {
     if (!climber.getClimbSensor()) {
       climber.setWantedState(ClimbState.RETRACTING);
       drive.setWantedState(DriveState.AUTO_CLIMB);
-    } else {
-      climber.setWantedState(ClimbState.IDLE);
     }
   }
 
