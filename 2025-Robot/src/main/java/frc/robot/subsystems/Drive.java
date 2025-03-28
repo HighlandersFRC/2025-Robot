@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -2818,6 +2819,128 @@ public class Drive extends SubsystemBase {
     return theta;
   }
 
+  public double[] getClosestPointOnLine(double[] lineStart, double[] lineEnd) { // chatGPT ahh code
+    double dx = lineEnd[0] - lineStart[0];
+    double dy = lineEnd[1] - lineStart[1];
+    if (dx == 0 && dy == 0) {
+      return lineStart;
+    }
+
+    double t = ((getMT2OdometryX() - lineStart[0]) * dx + (getMT2OdometryY() - lineStart[1]) * dy)
+        / (dx * dx + dy * dy);
+
+    t = Math.max(0, Math.min(1, t));
+
+    double closestX = lineStart[0] + t * dx;
+    double closestY = lineStart[0] + t * dy;
+
+    double[] xy = { closestX, closestY };
+
+    return xy;
+  }
+
+  public double getThetaToPoint(double xMeters, double yMeters) {
+    return Math.atan2(yMeters - getMT2OdometryY(),
+        xMeters - getMT2OdometryX());
+  }
+
+  public double[] getClosestL1PointXY() { // returns the closest point on the trough for l1
+    double[] xy = { 0.0, 0.0 };
+    if (isL1Face()) {
+      xy = getClosestPointOnLine(getClosestL1Points().get(0), getClosestL1Points().get(1));
+    } else {
+      xy = getClosestPointOnLine(getClosestL1Points().get(0), getClosestL1Points().get(0));
+    }
+    return xy;
+  }
+
+  public ArrayList<double[]> getClosestL1Points() {
+    ArrayList<double[]> list = new ArrayList<>();
+    double currentDist = 100.0;
+    double dist = 100.0;
+    double[] chosenSetpoint = { 0.0, 0.0 };
+    if (isOnBlueSide()) {
+      for (int i = 0; i < Constants.Reef.l1BlueCornerPoints.size(); i++) {
+        // currentDist = Math.sqrt(Math.pow((x -
+        // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
+        // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
+        currentDist = Math.hypot(
+            getMT2OdometryX() - (Constants.Reef.l1BlueCornerPoints.get(i).getX()),
+            getMT2OdometryY() - (Constants.Reef.l1BlueCornerPoints.get(i).getY()));
+        if (currentDist < dist) {
+          dist = currentDist;
+          chosenSetpoint[0] = Constants.Reef.l1BlueCornerPoints.get(i).getX();
+          chosenSetpoint[1] = Constants.Reef.l1BlueCornerPoints.get(i).getY();
+        }
+      }
+      list.add(chosenSetpoint);
+      currentDist = 100.0;
+      dist = 100.0;
+      chosenSetpoint[0] = 0.0;
+      chosenSetpoint[1] = 0.0;
+      for (int i = 0; i < Constants.Reef.l1BlueCornerPoints.size(); i++) {
+        // currentDist = Math.sqrt(Math.pow((x -
+        // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
+        // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
+        currentDist = Math.hypot(
+            getMT2OdometryX() - (Constants.Reef.l1BlueCornerPoints.get(i).getX()),
+            getMT2OdometryY() - (Constants.Reef.l1BlueCornerPoints.get(i).getY()));
+        if (currentDist < dist && Math.abs(Constants.Reef.l1BlueCornerPoints.get(i).getX() - list.get(0)[0]) > 0.1
+            && Math.abs(Constants.Reef.l1BlueCornerPoints.get(i).getY() - list.get(0)[1]) > 0.1) {
+          dist = currentDist;
+          chosenSetpoint[0] = Constants.Reef.l1BlueCornerPoints.get(i).getX();
+          chosenSetpoint[1] = Constants.Reef.l1BlueCornerPoints.get(i).getY();
+        }
+      }
+      list.add(chosenSetpoint);
+    } else {
+      for (int i = 0; i < Constants.Reef.l1RedCornerPoints.size(); i++) {
+        // currentDist = Math.sqrt(Math.pow((x -
+        // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
+        // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
+        currentDist = Math.hypot(
+            getMT2OdometryX() - (Constants.Reef.l1RedCornerPoints.get(i).getX()),
+            getMT2OdometryY() - (Constants.Reef.l1RedCornerPoints.get(i).getY()));
+        if (currentDist < dist) {
+          dist = currentDist;
+          chosenSetpoint[0] = Constants.Reef.l1RedCornerPoints.get(i).getX();
+          chosenSetpoint[1] = Constants.Reef.l1RedCornerPoints.get(i).getY();
+        }
+      }
+      list.add(chosenSetpoint);
+      currentDist = 100.0;
+      dist = 100.0;
+      chosenSetpoint[0] = 0.0;
+      chosenSetpoint[1] = 0.0;
+      for (int i = 0; i < Constants.Reef.l1RedCornerPoints.size(); i++) {
+        // currentDist = Math.sqrt(Math.pow((x -
+        // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
+        // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
+        currentDist = Math.hypot(
+            getMT2OdometryX() - (Constants.Reef.l1RedCornerPoints.get(i).getX()),
+            getMT2OdometryY() - (Constants.Reef.l1RedCornerPoints.get(i).getY()));
+        if (currentDist < dist && Math.abs(Constants.Reef.l1RedCornerPoints.get(i).getX() - list.get(0)[0]) > 0.1
+            && Math.abs(Constants.Reef.l1RedCornerPoints.get(i).getY() - list.get(0)[1]) > 0.1) {
+          dist = currentDist;
+          chosenSetpoint[0] = Constants.Reef.l1RedCornerPoints.get(i).getX();
+          chosenSetpoint[1] = Constants.Reef.l1RedCornerPoints.get(i).getY();
+        }
+      }
+      list.add(chosenSetpoint);
+
+    }
+    return list;
+  }
+
+  public boolean isL1Face() { // returns true if the robot is by a face of the L1, returns false if the robot is around the point on the edge of l1 faces
+    if (isOnBlueSide()) {
+
+    } else {
+
+    }
+    return true; // TODO: theoretically this should work because the closest
+  }
+
   public Pose2d getClosestPose(Pose2d pose1, Pose2d pose2) {
     double dist1 = Math.hypot(Math.abs(pose1.getX() - getMT2OdometryX()), Math.abs(pose1.getY() - getMT2OdometryY()));
     double dist2 = Math.hypot(Math.abs(pose2.getX() - getMT2OdometryX()), Math.abs(pose2.getY() - getMT2OdometryY()));
@@ -2961,6 +3084,8 @@ public class Drive extends SubsystemBase {
     if (!OI.getDriverA()) {
       firstTimeReef = true;
     }
+
+    Logger.recordOutput("L1 goofy ahh thing", getClosestL1PointXY());
     switch (systemState) {
       case DEFAULT:
         if (OI.driverA.getAsBoolean()) {
