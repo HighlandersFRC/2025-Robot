@@ -216,6 +216,9 @@ public class Superstructure extends SubsystemBase {
       case CLIMBER_IDLE:
         handleClimberIdleState();
         break;
+      case AUTO_CLIMB:
+        handleAutoClimbState();
+        break;
       case OUTAKE:
         handleOutakeState();
         break;
@@ -1934,20 +1937,23 @@ public class Superstructure extends SubsystemBase {
     pivot.setWantedState(PivotState.CLIMB);
   }
 
-  public void handleAutoClimb() {
+  public void handleAutoClimbState() {
     pivot.setWantedState(PivotState.CLIMB);
 
     if (!continueClimbing && climber.getPosition() > -405) {
       climber.setWantedState(ClimbState.EXTENDING);
+      drive.setWantedState(DriveState.DEFAULT);
     } else {
       continueClimbing = true;
+      drive.setWantedState(DriveState.DEFAULT);
     }
 
-    if (!climber.getClimbSensor() && continueClimbing && !(climber.getPosition() > -150)) {
+    if (climber.getTimesTriggered() && continueClimbing && !(climber.getPosition() > -150)) {
       climber.setWantedState(ClimbState.RETRACTING);
       drive.setWantedState(DriveState.AUTO_CLIMB);
-    } else {
+    } else if (continueClimbing) {
       climber.setWantedState(ClimbState.IDLE);
+      drive.setWantedState(DriveState.DEFAULT);
     }
 
   }
@@ -1993,6 +1999,7 @@ public class Superstructure extends SubsystemBase {
     }
     if (currentSuperState != SuperState.AUTO_CLIMB) {
       continueClimbing = false;
+      climber.timesTriggered = 0;
     }
     // Logger.recordOutput("Hit Time", hitAutoSetpointTime);
     applyStates();

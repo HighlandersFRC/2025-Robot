@@ -3460,7 +3460,7 @@ public class Drive extends SubsystemBase {
 
         break;
       case AUTO_CLIMB:
-        Vector moveBack = new Vector(0.3, 0);
+        Vector moveBack = new Vector(0.2, 0);
 
         if (!firstClimb) {
           startX = getMT2OdometryX();
@@ -3468,7 +3468,7 @@ public class Drive extends SubsystemBase {
           firstClimb = true;
         }
 
-        if (Math.hypot((Math.abs(getMT2OdometryX() - startX)), Math.abs(getMT2OdometryY() - startY)) < 0.3) {
+        if (Math.hypot((Math.abs(getMT2OdometryX() - startX)), Math.abs(getMT2OdometryY() - startY)) < 0.15) {
           autoRobotCentricDrive(moveBack, 0);
         } else {
           autoRobotCentricDrive(new Vector(0, 0), 0);
