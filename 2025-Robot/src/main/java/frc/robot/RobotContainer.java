@@ -199,7 +199,7 @@ public class RobotContainer {
                 // new SetClimberPivotTorque(climber, -80, 1.0), () -> (!manualMode)));
                 OI.driverY.whileTrue(new ConditionalCommand(
                                 new ConditionalCommand(
-                                                new SetRobotStateSimpleOnce(superstructure, SuperState.DEPLOY_CLIMBER),
+                                                new SetRobotStateSimpleOnce(superstructure, SuperState.AUTO_CLIMB),
                                                 new SetRobotStateSimpleOnce(superstructure, SuperState.CLIMB),
                                                 () -> (!yPressed)),
                                 new SetClimberPivotTorque(climber, -80, 1.0), () -> (!manualMode)));

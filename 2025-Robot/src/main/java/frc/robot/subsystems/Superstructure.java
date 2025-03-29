@@ -1,8 +1,5 @@
 package frc.robot.subsystems;
 
-import javax.lang.model.util.ElementScanner14;
-
-import org.apache.commons.math3.optim.linear.PivotSelectionRule;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -21,7 +18,6 @@ import frc.robot.subsystems.Lights.LightsState;
 import frc.robot.subsystems.Pivot.PivotFlip;
 import frc.robot.subsystems.Pivot.PivotState;
 import frc.robot.subsystems.Twist.TwistState;
-import frc.robot.tools.math.Vector;
 
 public class Superstructure extends SubsystemBase {
   private Drive drive;
@@ -489,8 +485,6 @@ public class Superstructure extends SubsystemBase {
       case DEPLOY_CLIMBER:
         if (climber.getPosition() > -400) {
           currentSuperState = SuperState.DEPLOY_CLIMBER;
-        } else if (!climber.getClimbSensor()) {
-          currentSuperState = SuperState.AUTO_CLIMB;
         } else {
           wantedSuperState = SuperState.CLIMBER_IDLE;
           currentSuperState = SuperState.CLIMBER_IDLE;
@@ -505,7 +499,7 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case AUTO_CLIMB:
-
+        currentSuperState = SuperState.AUTO_CLIMB;
         break;
       case CLIMBER_IDLE:
         currentSuperState = SuperState.CLIMBER_IDLE;
