@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import javax.lang.model.util.ElementScanner14;
+
 import org.apache.commons.math3.optim.linear.PivotSelectionRule;
 import org.littletonrobotics.junction.Logger;
 
@@ -89,6 +91,8 @@ public class Superstructure extends SubsystemBase {
 
   private SuperState wantedSuperState = SuperState.DEFAULT;
   private SuperState currentSuperState = SuperState.DEFAULT;
+
+  private boolean continueClimbing = false;
 
   public Superstructure(Drive drive, Elevator elevator, Intake intake, Pivot pivot, Twist twist, Climber climber,
       Lights lights, Peripherals peripherals) {
@@ -499,6 +503,9 @@ public class Superstructure extends SubsystemBase {
           wantedSuperState = SuperState.CLIMBER_IDLE;
           currentSuperState = SuperState.CLIMBER_IDLE;
         }
+        break;
+      case AUTO_CLIMB:
+
         break;
       case CLIMBER_IDLE:
         currentSuperState = SuperState.CLIMBER_IDLE;
@@ -1933,12 +1940,35 @@ public class Superstructure extends SubsystemBase {
     pivot.setWantedState(PivotState.CLIMB);
   }
 
+  // public void handleAutoClimb() {
+  // pivot.setWantedState(PivotState.CLIMB);
+
+  // if (climber.getPosition() > -400) {
+  // currentSuperState = SuperState.DEPLOY_CLIMBER;
+  // } else {
+  // if (!climber.getClimbSensor()) {
+  // climber.setWantedState(ClimbState.RETRACTING);
+  // drive.setWantedState(DriveState.AUTO_CLIMB);
+  // }
+  // }
+  // }
+
   public void handleAutoClimb() {
     pivot.setWantedState(PivotState.CLIMB);
-    if (!climber.getClimbSensor()) {
+
+    if (!continueClimbing && climber.getPosition() > -405) {
+      climber.setWantedState(ClimbState.EXTENDING);
+    } else {
+      continueClimbing = true;
+    }
+
+    if (!climber.getClimbSensor() && continueClimbing && !(climber.getPosition() > -150)) {
       climber.setWantedState(ClimbState.RETRACTING);
       drive.setWantedState(DriveState.AUTO_CLIMB);
+    } else {
+      climber.setWantedState(ClimbState.IDLE);
     }
+
   }
 
   public void handleLollipopPickup() {
@@ -1979,6 +2009,9 @@ public class Superstructure extends SubsystemBase {
     }
     if (currentSuperState != SuperState.AUTO_SCORE_L4) {
       hasPlaced = false;
+    }
+    if (currentSuperState != SuperState.AUTO_CLIMB) {
+      continueClimbing = false;
     }
     // Logger.recordOutput("Hit Time", hitAutoSetpointTime);
     applyStates();

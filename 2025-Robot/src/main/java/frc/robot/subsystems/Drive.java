@@ -3460,7 +3460,7 @@ public class Drive extends SubsystemBase {
 
         break;
       case AUTO_CLIMB:
-        Vector moveBack = new Vector(0, -0.3);
+        Vector moveBack = new Vector(0.3, 0);
 
         if (!firstClimb) {
           startX = getMT2OdometryX();
