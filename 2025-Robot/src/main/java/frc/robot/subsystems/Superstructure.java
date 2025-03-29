@@ -1934,19 +1934,6 @@ public class Superstructure extends SubsystemBase {
     pivot.setWantedState(PivotState.CLIMB);
   }
 
-  // public void handleAutoClimb() {
-  // pivot.setWantedState(PivotState.CLIMB);
-
-  // if (climber.getPosition() > -400) {
-  // currentSuperState = SuperState.DEPLOY_CLIMBER;
-  // } else {
-  // if (!climber.getClimbSensor()) {
-  // climber.setWantedState(ClimbState.RETRACTING);
-  // drive.setWantedState(DriveState.AUTO_CLIMB);
-  // }
-  // }
-  // }
-
   public void handleAutoClimb() {
     pivot.setWantedState(PivotState.CLIMB);
 
