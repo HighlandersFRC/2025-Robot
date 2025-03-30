@@ -20,10 +20,13 @@ import frc.robot.Constants;
 public class Climber extends SubsystemBase {
   private final TalonFX climberPivot = new TalonFX(Constants.CANInfo.CLIMBER_PIVOT_MOTOR_ID,
       Constants.CANInfo.CANBUS_NAME);
-  private final DigitalInput climbSensor = new DigitalInput(2);
+  private final DigitalInput climbSensor = new DigitalInput(1);
 
   private final TorqueCurrentFOC rollerTorqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
   private final TorqueCurrentFOC pivotTorqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
+  public int timesTriggered = 0;
+
+  private boolean wasTriggered = false;
 
   /** Creates a new Climiber. */
   public Climber() {
@@ -79,12 +82,21 @@ public class Climber extends SubsystemBase {
     return climbSensor.get();
   }
 
+  public boolean getTimesTriggered() {
+    if (!climbSensor.get()) {
+      timesTriggered += 1;
+    }
+
+    return timesTriggered >= 5;
+  }
+
   @Override
   public void periodic() {
     // if ((" " + Timer.getFPGATimestamp()).indexOf("0") > 6) {
-    //   System.out.println(getClimbSensor());
+    // System.out.println(getClimbSensor());
     // }
     Logger.recordOutput("Climb Sensor", getClimbSensor());
+    Logger.recordOutput("Climber Times Triggered", timesTriggered);
     ClimbState newState = handleStateTransition();
     if (newState != systemState) {
       systemState = newState;

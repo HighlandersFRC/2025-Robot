@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import org.apache.commons.math3.optim.linear.PivotSelectionRule;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -81,12 +80,15 @@ public class Superstructure extends SubsystemBase {
     MANUAL_RESET,
     AUTO_FEEDER,
     RUN_CLIMB_BACK,
+    AUTO_CLIMB,
     DEFAULT_DRIVE,
     LOLLIOP_PICKUP
   }
 
   private SuperState wantedSuperState = SuperState.DEFAULT;
   private SuperState currentSuperState = SuperState.DEFAULT;
+
+  private boolean continueClimbing = false;
 
   public Superstructure(Drive drive, Elevator elevator, Intake intake, Pivot pivot, Twist twist, Climber climber,
       Lights lights, Peripherals peripherals) {
@@ -213,6 +215,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case CLIMBER_IDLE:
         handleClimberIdleState();
+        break;
+      case AUTO_CLIMB:
+        handleAutoClimbState();
         break;
       case OUTAKE:
         handleOutakeState();
@@ -495,6 +500,9 @@ public class Superstructure extends SubsystemBase {
           wantedSuperState = SuperState.CLIMBER_IDLE;
           currentSuperState = SuperState.CLIMBER_IDLE;
         }
+        break;
+      case AUTO_CLIMB:
+        currentSuperState = SuperState.AUTO_CLIMB;
         break;
       case CLIMBER_IDLE:
         currentSuperState = SuperState.CLIMBER_IDLE;
@@ -1929,6 +1937,27 @@ public class Superstructure extends SubsystemBase {
     pivot.setWantedState(PivotState.CLIMB);
   }
 
+  public void handleAutoClimbState() {
+    pivot.setWantedState(PivotState.CLIMB);
+
+    if (!continueClimbing && climber.getPosition() > -405) {
+      climber.setWantedState(ClimbState.EXTENDING);
+      drive.setWantedState(DriveState.DEFAULT);
+    } else {
+      continueClimbing = true;
+      drive.setWantedState(DriveState.DEFAULT);
+    }
+
+    if (climber.getTimesTriggered() && continueClimbing && !(climber.getPosition() > -150)) {
+      climber.setWantedState(ClimbState.RETRACTING);
+      drive.setWantedState(DriveState.AUTO_CLIMB);
+    } else if (continueClimbing) {
+      climber.setWantedState(ClimbState.IDLE);
+      drive.setWantedState(DriveState.DEFAULT);
+    }
+
+  }
+
   public void handleLollipopPickup() {
     twist.setAlgaeMode(false);
     lights.setWantedState(LightsState.INTAKING);
@@ -1967,6 +1996,10 @@ public class Superstructure extends SubsystemBase {
     }
     if (currentSuperState != SuperState.AUTO_SCORE_L4) {
       hasPlaced = false;
+    }
+    if (currentSuperState != SuperState.AUTO_CLIMB) {
+      continueClimbing = false;
+      climber.timesTriggered = 0;
     }
     // Logger.recordOutput("Hit Time", hitAutoSetpointTime);
     applyStates();
