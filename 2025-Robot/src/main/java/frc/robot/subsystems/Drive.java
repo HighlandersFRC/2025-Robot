@@ -2411,7 +2411,7 @@ public class Drive extends SubsystemBase {
 
   public void driveToXTheta(double x, double theta) {
     System.out.println(theta);
-    theta = Math.toRadians(theta);
+    // theta = Math.toRadians(theta);
     while (Math.abs(theta - getMT2OdometryAngle()) > Math.PI) {
       if (theta - getMT2OdometryAngle() > Math.PI) {
         theta -= 2 * Math.PI;
