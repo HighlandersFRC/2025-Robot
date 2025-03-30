@@ -40,10 +40,10 @@ public final class Constants {
                 public static final double FEED_FORWARD_MULTIPLIER = 0.5;
                 public static final double ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER = 1;
                 public static final String[] paths = new String[] {
-                                "center1.polarauto",
-                                "2+1PieceFeeder.polarauto",
+                                "2AlgaeCenter.polarauto",
+                                "JackInTheBot.polarauto",
                                 "3PieceFeederSmart.polarauto",
-                                "3PieceLollipop.polarauto",
+                                "4PieceLollipop.polarauto",
                                 "TushPush.polarauto",
                 };
 
