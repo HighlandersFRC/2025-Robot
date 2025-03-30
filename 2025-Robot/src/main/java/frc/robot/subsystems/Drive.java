@@ -2819,24 +2819,30 @@ public class Drive extends SubsystemBase {
     return theta;
   }
 
-  public double[] getClosestPointOnLine(double[] lineStart, double[] lineEnd) { // chatGPT ahh code
-    double dx = lineEnd[0] - lineStart[0];
-    double dy = lineEnd[1] - lineStart[1];
-    if (dx == 0 && dy == 0) {
-      return lineStart;
+  public double[] getClosestPoint(double[] lineStart, double[] lineEnd) { // chatGPT ahh code
+    // System.out.println("X1 - X2; " + (lineStart[0] - lineEnd[0]) + "Y1 - Y2" + (lineStart[1] - lineEnd[1]));
+    double x1 = lineStart[0];
+    double y1 = lineStart[1];
+    double x2 = lineEnd[0];
+    double y2 = lineEnd[1];
+    double px = getMT2OdometryX();
+    double py = getMT2OdometryY();
+
+    double dx = x2 - x1;
+    double dy = y2 - y1;
+    double lenSq = dx * dx + dy * dy;
+
+    if (lenSq == 0) {
+      return new double[] { x1, y1 };
     }
 
-    double t = ((getMT2OdometryX() - lineStart[0]) * dx + (getMT2OdometryY() - lineStart[1]) * dy)
-        / (dx * dx + dy * dy);
-
+    double t = ((px - x1) * dx + (py - y1) * dy) / lenSq;
     t = Math.max(0, Math.min(1, t));
 
-    double closestX = lineStart[0] + t * dx;
-    double closestY = lineStart[0] + t * dy;
+    double closestX = x1 + t * dx;
+    double closestY = y1 + t * dy;
 
-    double[] xy = { closestX, closestY };
-
-    return xy;
+    return new double[] { closestX, closestY };
   }
 
   public double getThetaToPoint(double xMeters, double yMeters) {
@@ -2845,12 +2851,16 @@ public class Drive extends SubsystemBase {
   }
 
   public double[] getClosestL1PointXY() { // returns the closest point on the trough for l1
-    double[] xy = { 0.0, 0.0 };
-    if (isL1Face()) {
-      xy = getClosestPointOnLine(getClosestL1Points().get(0), getClosestL1Points().get(1));
-    } else {
-      xy = getClosestPointOnLine(getClosestL1Points().get(0), getClosestL1Points().get(0));
-    }
+    // double[] xy = { 0.0, 0.0 };
+    // if (isL1Face()) {
+    //   xy = getClosestPoint(getClosestL1Points().get(0), getClosestL1Points().get(1));
+    // } else {
+    //   xy = getClosestPoint(getClosestL1Points().get(0), getClosestL1Points().get(0));
+    // }
+    // return xy;
+    // System.out.println("X1: " + getClosestL1Points().get(0)[0] + " Y1: " + getClosestL1Points().get(0)[1] + "X2: "
+    //     + getClosestL1Points().get(1)[0] + " Y2: " + getClosestL1Points().get(1)[1]);
+    double[] xy = getClosestPoint(getClosestL1Points().get(0), getClosestL1Points().get(1));
     return xy;
   }
 
@@ -2859,6 +2869,7 @@ public class Drive extends SubsystemBase {
     double currentDist = 100.0;
     double dist = 100.0;
     double[] chosenSetpoint = { 0.0, 0.0 };
+    double[] secondPoint = { 0.0, 0.0 };
     if (isOnBlueSide()) {
       for (int i = 0; i < Constants.Reef.l1BlueCornerPoints.size(); i++) {
         // currentDist = Math.sqrt(Math.pow((x -
@@ -2874,10 +2885,9 @@ public class Drive extends SubsystemBase {
         }
       }
       list.add(chosenSetpoint);
+      // System.out.println("Closest Point: " + list.get(0)[0] + " " + list.get(0)[1]);
       currentDist = 100.0;
       dist = 100.0;
-      chosenSetpoint[0] = 0.0;
-      chosenSetpoint[1] = 0.0;
       for (int i = 0; i < Constants.Reef.l1BlueCornerPoints.size(); i++) {
         // currentDist = Math.sqrt(Math.pow((x -
         // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
@@ -2885,14 +2895,21 @@ public class Drive extends SubsystemBase {
         currentDist = Math.hypot(
             getMT2OdometryX() - (Constants.Reef.l1BlueCornerPoints.get(i).getX()),
             getMT2OdometryY() - (Constants.Reef.l1BlueCornerPoints.get(i).getY()));
-        if (currentDist < dist && Math.abs(Constants.Reef.l1BlueCornerPoints.get(i).getX() - list.get(0)[0]) > 0.1
-            && Math.abs(Constants.Reef.l1BlueCornerPoints.get(i).getY() - list.get(0)[1]) > 0.1) {
+        if (currentDist < dist && Math.hypot(Math.abs(Constants.Reef.l1BlueCornerPoints.get(i).getX() - list.get(0)[0]),
+            Math.abs(Constants.Reef.l1BlueCornerPoints.get(i).getY() - list.get(0)[1])) > 0.1) {
           dist = currentDist;
-          chosenSetpoint[0] = Constants.Reef.l1BlueCornerPoints.get(i).getX();
-          chosenSetpoint[1] = Constants.Reef.l1BlueCornerPoints.get(i).getY();
+          // System.out.println(" ");
+          // System.out.println("new X2: " + Constants.Reef.l1BlueCornerPoints.get(i).getX() + "new Y2: "
+          //     + Constants.Reef.l1BlueCornerPoints.get(i).getY());
+          // System.out.println("old X2: " + list.get(0)[0] + "old Y2: "
+          //     + list.get(0)[1]);
+          secondPoint[0] = Constants.Reef.l1BlueCornerPoints.get(i).getX();
+          secondPoint[1] = Constants.Reef.l1BlueCornerPoints.get(i).getY();
         }
       }
-      list.add(chosenSetpoint);
+      // System.out.println("->->->->->->->->->");
+      list.add(secondPoint);
+      return list;
     } else {
       for (int i = 0; i < Constants.Reef.l1RedCornerPoints.size(); i++) {
         // currentDist = Math.sqrt(Math.pow((x -
@@ -2927,9 +2944,9 @@ public class Drive extends SubsystemBase {
         }
       }
       list.add(chosenSetpoint);
+      return list;
 
     }
-    return list;
   }
 
   public boolean isL1Face() { // returns true if the robot is by a face of the L1, returns false if the robot is around the point on the edge of l1 faces
@@ -3085,7 +3102,11 @@ public class Drive extends SubsystemBase {
       firstTimeReef = true;
     }
 
-    Logger.recordOutput("L1 goofy ahh thing", getClosestL1PointXY());
+    // Pose2d l1Pose = new Pose2d(getClosestL1PointXY()[0], getClosestL1PointXY()[1],
+    //     new Rotation2d(getThetaToPoint(getClosestL1PointXY()[0], getClosestL1PointXY()[1])));
+
+    Logger.recordOutput("L1 goofy ahh thing", new Pose2d(getClosestL1PointXY()[0], getClosestL1PointXY()[1],
+        new Rotation2d(getThetaToPoint(getClosestL1PointXY()[0], getClosestL1PointXY()[1]))));
     switch (systemState) {
       case DEFAULT:
         if (OI.driverA.getAsBoolean()) {
@@ -3097,7 +3118,8 @@ public class Drive extends SubsystemBase {
       case IDLE:
         break;
       case AUTO_L1:
-        driveToTheta(Math.toDegrees(getThetaToCenterReef()));
+        // driveToTheta(Math.toDegrees(getThetaToCenterReef()));
+        driveToTheta(Math.toDegrees(getThetaToPoint(getClosestL1PointXY()[0], getClosestL1PointXY()[1])));
         // System.out.println(Math.toDegrees(getThetaToCenterReef()));
         break;
       case REEF:

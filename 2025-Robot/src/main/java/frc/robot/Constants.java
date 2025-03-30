@@ -186,6 +186,14 @@ public final class Constants {
                 System.out.println("l3 red positions: " + Constants.Reef.l3RedFrontPlacingPositions.toString());
                 System.out.println("l3 blue back positions: " + Constants.Reef.l3BlueBackPlacingPositions.toString());
                 System.out.println("l3 red back positions: " + Constants.Reef.l3RedBackPlacingPositions.toString());
+
+                System.out.println("L1 Blue Corners: " + Constants.Reef.l1BlueCornerPoints.toString());
+                System.out.println("L1 Red Corners: " + Constants.Reef.l1RedCornerPoints.toString());
+
+                for (int i = 0; i < Constants.Reef.l1BlueCornerPoints.size(); i++) {
+                        Logger.recordOutput("L1 Blue Corners " + i + " ", Constants.Reef.l1BlueCornerPoints.get(i));
+                }
+
                 Logger.recordOutput("feeder Positions", new Pose2d[] { Constants.Reef.RED_LEFT_FEEDER_LEFT,
                                 Constants.Reef.RED_RIGHT_FEEDER_RIGHT, Constants.Reef.RED_RIGHT_FEEDER_LEFT,
                                 Constants.Reef.RED_LEFT_FEEDER_RIGHT, });
@@ -713,8 +721,8 @@ public final class Constants {
                                 double adjustAlgaeMoreY = inchesToMeters(0.0);
                                 double adjustAlgaeMoreMoreX = inchesToMeters(56.738);
                                 double adjustAlgaeMoreMoreY = inchesToMeters(0.0);
-                                double adjustL1CornerX = inchesToMeters(0.0);
-                                double adjustL1CornerY = inchesToMeters(37.04 / 2.0);
+                                double adjustL1CornerX = inchesToMeters(9.0);
+                                double adjustL1CornerY = inchesToMeters(18.0);
 
                                 algaeFront = new Pose2d(
                                                 new Translation2d(
@@ -854,8 +862,8 @@ public final class Constants {
                                                                                                                 adjustL1CornerY,
                                                                                                                 new Rotation2d()))
                                                                                 .transformBy(
-                                                                                                new Transform2d(0.0,
-                                                                                                                0.0,
+                                                                                                new Transform2d(Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
                                                                                                                 new Rotation2d(Math.PI)))
                                                                                 .getX(),
                                                                 poseDirection
@@ -864,8 +872,8 @@ public final class Constants {
                                                                                                                 adjustL1CornerY,
                                                                                                                 new Rotation2d()))
                                                                                 .transformBy(
-                                                                                                new Transform2d(0.0,
-                                                                                                                0.0,
+                                                                                                new Transform2d(Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
                                                                                                                 new Rotation2d(Math.PI)))
                                                                                 .getY()),
                                                 new Rotation2d(
