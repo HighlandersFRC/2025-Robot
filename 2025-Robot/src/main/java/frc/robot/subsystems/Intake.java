@@ -9,15 +9,12 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
-import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
@@ -26,8 +23,6 @@ public class Intake extends SubsystemBase {
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
 
   private boolean algaeMode = false;
-  private double timeSinceItemSwitch = 0.0;
-  private double itemSwitchTime = Timer.getFPGATimestamp();
   private IntakeItem intakeItem = IntakeItem.NONE;
 
   public void updateAlgaeMode(boolean algaeMode) {
@@ -102,15 +97,12 @@ public class Intake extends SubsystemBase {
       if (Math.abs(intakeMotor.getVelocity().getValueAsDouble()) < 15.0) {
         if (true) {
           return IntakeItem.ALGAE;
-        } else {
-          return IntakeItem.NONE;
         }
       } else {
         return IntakeItem.NONE;
       }
-    } else {
-      return IntakeItem.NONE;
     }
+    return IntakeItem.NONE;
   }
 
   public Intake() {
@@ -180,10 +172,8 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     Logger.recordOutput("Intake Motor Current", intakeMotor.getStatorCurrent().getValueAsDouble());
     if (intakeItem != getIntakeItem()) {
-      itemSwitchTime = Timer.getFPGATimestamp();
       intakeItem = getIntakeItem();
     }
-    timeSinceItemSwitch = Timer.getFPGATimestamp() - itemSwitchTime;
     systemState = handleStateTransition();
     // System.out.println("Intake Current: " +
     // intakeMotor.getStatorCurrent().getValueAsDouble());
@@ -196,7 +186,6 @@ public class Intake extends SubsystemBase {
         switch (intakeItem) {
           case CORAL:
             // if (timeSinceItemSwitch > 1.0) {
-            double percent = Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) + 0.05;
             setIntakeTorque(30, 1.0);
             // } else {
             // setIntakePercent(1.0);
@@ -212,7 +201,6 @@ public class Intake extends SubsystemBase {
         switch (intakeItem) {
           case ALGAE:
             // if (timeSinceItemSwitch > 1.0) {
-            double percent = Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) + 0.05;
             setIntakeTorque(55, 0.8);
             // } else {
             // setIntakePercent(1.0);

@@ -10,8 +10,6 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonTrackedTarget;
-import org.photonvision.PhotonUtils;
-
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -38,10 +36,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
-import frc.robot.subsystems.Elevator.ElevatorState;
-import frc.robot.subsystems.Pivot.PivotState;
-import frc.robot.subsystems.Superstructure.SuperState;
-import frc.robot.subsystems.Twist.TwistState;
 import frc.robot.tools.controlloops.PID;
 import frc.robot.tools.math.Vector;
 
@@ -272,8 +266,6 @@ public class Drive extends SubsystemBase {
   private String m_fieldSide = "blue";
 
   private double angleSetpoint = 0;
-  private double teleopInitTime = 0;
-
   double startX;
   double startY;
 
@@ -426,7 +418,6 @@ public class Drive extends SubsystemBase {
   }
 
   public void teleopInit() {
-    teleopInitTime = Timer.getFPGATimestamp();
     angleSetpoint = peripherals.getPigeonAngle();
     if (getFieldSide() == "red") {
       angleSetpoint -= 180;
@@ -1674,12 +1665,9 @@ public class Drive extends SubsystemBase {
 
     if (yaw != 0.0 && pitch != 0.0) {
       System.out.println("calculating%");
-      double limelightHeight = Constants.inchesToMeters(21.0);
-      double limelightAngle = 19.7;
       double cameraYaw = 15.0;
       double limelightXOffset = Constants.inchesToMeters(2.25);
       double limelightYOffset = Constants.inchesToMeters(-11.5);
-      double gamePieceHeight = Constants.inchesToMeters(2.25);
       double intakeXOffset = Constants.inchesToMeters(22.0);
       double intakeYOffset = Constants.inchesToMeters(4.0); // 4.0
 
@@ -2087,7 +2075,6 @@ public class Drive extends SubsystemBase {
     angleSetpoint += compensation;
     // Logger.recordOutput("setpoint", angleSetpoint);
     turningPID.setSetPoint(angleSetpoint);
-    double pigeonAngle = Math.toRadians(peripherals.getPigeonAngle());
     double xPower = getAdjustedX(originalX, originalY);
     double yPower = getAdjustedY(originalX, originalY);
 
@@ -2706,7 +2693,6 @@ public class Drive extends SubsystemBase {
     if (m_fieldSide == "blue") {
       finalX = -finalX;
       finalY = -finalY;
-      finalTheta = finalTheta;
     }
 
     if (OI.isProcessorSide()) {
@@ -2721,8 +2707,6 @@ public class Drive extends SubsystemBase {
         targetIndex,
     };
 
-    double velocityMag = Math
-        .sqrt(Math.pow(targetPoint.getDouble("x_velocity"), 2) + Math.pow(targetPoint.getDouble("y_velocity"), 2));
     // Logger.recordOutput("x-vel", velocityArray[0].doubleValue());
     // Logger.recordOutput("y-vel", velocityArray[1].doubleValue());
     // Logger.recordOutput("theta-vel", velocityArray[2].doubleValue());

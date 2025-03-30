@@ -5,16 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Peripherals;
-import frc.robot.subsystems.Drive.DriveState;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SetDriveThetaSetpoint extends Command {
   /** Creates a new SetDriveThetaSetpoint. */
   Drive drive;
   Peripherals peripherals;
+
   public SetDriveThetaSetpoint(Drive drive, Peripherals peripherals) {
     this.drive = drive;
     this.peripherals = peripherals;

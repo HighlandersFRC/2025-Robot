@@ -12,8 +12,6 @@ import java.util.function.Supplier;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;

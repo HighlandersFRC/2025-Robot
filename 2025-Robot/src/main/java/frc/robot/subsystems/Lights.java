@@ -7,28 +7,18 @@ package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix.led.CANdle;
-import com.ctre.phoenix.led.RainbowAnimation;
-import com.ctre.phoenix.led.RgbFadeAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
-import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
 import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 import com.ctre.phoenix.led.*;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.subsystems.Intake.IntakeItem;
-import frc.robot.subsystems.Intake.IntakeState;
 
 public class Lights extends SubsystemBase {
   /** Creates a new Lights. */
-  private String fieldSide = "none";
-  private boolean commandRunning = false;
-  private double time = Timer.getFPGATimestamp();
-  private double timeout = 0.0;
-  private boolean timedFlashes = false;
   private double strobeSpeed = 0.4;
   private double flashSpeed = 0.05;
   CANdle candleSwerve = new CANdle(Constants.CANInfo.CANDLE_ID_0, "Canivore");
@@ -187,10 +177,6 @@ public class Lights extends SubsystemBase {
    * @param tof Time of Flight sensor.
    */
   public Lights() {
-  }
-
-  public void setCommandRunning(boolean commandRunning) { // used to bypass the default light colors (red/blue)
-    this.commandRunning = commandRunning;
   }
 
   public void setWantedState(LightsState wantedState) {
@@ -384,16 +370,6 @@ public class Lights extends SubsystemBase {
     // setCommandRunning(false);
     // }
     // }
-  }
-
-  /**
-   * Sets the flag indicating whether timed flashes are enabled or disabled.
-   * 
-   * @param timedFlashes a boolean value indicating whether timed flashes should
-   *                     be enabled (true) or disabled (false).
-   */
-  public void setTimedFlashes(boolean timedFlashes) {
-    this.timedFlashes = timedFlashes;
   }
 
   // public void flashGreen(double seconds) { // blinks green for a certain amount
@@ -638,7 +614,6 @@ public class Lights extends SubsystemBase {
    * @param fieldSide The side of the field to initialize with.
    */
   public void init(String fieldSide) {
-    this.fieldSide = fieldSide;
     candleSwerve.clearAnimation(0);
     candleBack.clearAnimation(0);
     candleFront.clearAnimation(0);

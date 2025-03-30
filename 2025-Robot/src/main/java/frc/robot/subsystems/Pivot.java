@@ -43,7 +43,6 @@ public class Pivot extends SubsystemBase {
       pivotAcceleration,
       pivotJerk);
 
-  private boolean algaeMode = false;
   private boolean runManualDownOrUp = false;
   // private Speed fastMode = Speed.FAST;
 
@@ -213,10 +212,6 @@ public class Pivot extends SubsystemBase {
 
   public void setWantedState(PivotState wantedState) {
     this.wantedState = wantedState;
-  }
-
-  public void setAlgaeMode(boolean algaeMode) {
-    this.algaeMode = algaeMode;
   }
 
   public void setWantedFlip(PivotFlip wantedFlip) {
@@ -528,23 +523,18 @@ public class Pivot extends SubsystemBase {
         }
         break;
       case GROUND_CORAL_FRONT:
-        setAlgaeMode(false);
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALFRONT.rotations);
         break;
       case LOLLIPOP:
-        setAlgaeMode(false);
         pivotToPosition(Constants.SetPoints.PivotPosition.kLOLLIPOP.rotations);
         break;
       case GROUND_CORAL_BACK:
-        setAlgaeMode(false);
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALBACK.rotations);
         break;
       case GROUND_CORAL_PREP_BACK:
-        setAlgaeMode(false);
         pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALPREPBACK.rotations);
         break;
       case L1:
-        setAlgaeMode(false);
         switch (systemFlip) {
           case FRONT:
             pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
@@ -641,7 +631,6 @@ public class Pivot extends SubsystemBase {
       // pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
       // break;
       case FEEDER:
-        setAlgaeMode(false);
         switch (systemFlip) {
           case FRONT:
             pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
@@ -655,7 +644,6 @@ public class Pivot extends SubsystemBase {
         }
         break;
       case AUTO_L1:
-        setAlgaeMode(true);
         switch (systemFlip) {
           case FRONT:
             pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
