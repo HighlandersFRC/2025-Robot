@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class Constants {
         public static final class Autonomous {
@@ -42,20 +43,24 @@ public final class Constants {
                 };
 
                 public static int getSelectedPathIndex() {
-                        if (OI.autoChooser.getRawButton(1)) {
-                                return 0;
-                        }
-                        if (OI.autoChooser.getRawButton(2)) {
-                                return 1;
-                        }
-                        if (OI.autoChooser.getRawButton(3)) {
-                                return 2;
-                        }
-                        if (OI.autoChooser.getRawButton(4)) {
-                                return 3;
-                        }
-                        if (OI.autoChooser.getRawButton(5)) {
-                                return 4;
+                        if (OI.autoChooserConnected()) {
+                                if (OI.autoChooser.getRawButton(1)) {
+                                        return 0;
+                                }
+                                if (OI.autoChooser.getRawButton(2)) {
+                                        return 1;
+                                }
+                                if (OI.autoChooser.getRawButton(3)) {
+                                        return 2;
+                                }
+                                if (OI.autoChooser.getRawButton(4)) {
+                                        return 3;
+                                }
+                                if (OI.autoChooser.getRawButton(5)) {
+                                        return 4;
+                                }
+                        } else {
+                                return (int) Math.round(SmartDashboard.getNumber("ROBOT AUTO OVERIDE", -1));
                         }
                         return -1;
                 }
@@ -175,6 +180,14 @@ public final class Constants {
                 System.out.println("l3 red positions: " + Constants.Reef.l3RedFrontPlacingPositions.toString());
                 System.out.println("l3 blue back positions: " + Constants.Reef.l3BlueBackPlacingPositions.toString());
                 System.out.println("l3 red back positions: " + Constants.Reef.l3RedBackPlacingPositions.toString());
+
+                System.out.println("L1 Blue Corners: " + Constants.Reef.l1BlueCornerPoints.toString());
+                System.out.println("L1 Red Corners: " + Constants.Reef.l1RedCornerPoints.toString());
+
+                for (int i = 0; i < Constants.Reef.l1BlueCornerPoints.size(); i++) {
+                        Logger.recordOutput("L1 Blue Corners " + i + " ", Constants.Reef.l1BlueCornerPoints.get(i));
+                }
+
                 Logger.recordOutput("feeder Positions", new Pose2d[] { Constants.Reef.RED_LEFT_FEEDER_LEFT,
                                 Constants.Reef.RED_RIGHT_FEEDER_RIGHT, Constants.Reef.RED_RIGHT_FEEDER_LEFT,
                                 Constants.Reef.RED_LEFT_FEEDER_RIGHT, });
@@ -594,6 +607,9 @@ public final class Constants {
                 public static final List<Pose2d> algaeBlueBackPlacingPositionsMore = new ArrayList<>();
                 public static final List<Pose2d> algaeRedBackPlacingPositionsMore = new ArrayList<>();
 
+                public static final List<Pose2d> l1BlueCornerPoints = new ArrayList<>();
+                public static final List<Pose2d> l1RedCornerPoints = new ArrayList<>();
+
                 static {
                         calculateReefPoints();
                 }
@@ -636,6 +652,8 @@ public final class Constants {
                         algaeRedFrontPlacingPositionsMoreMore.clear();
                         algaeBlueBackPlacingPositionsMoreMore.clear();
                         algaeRedBackPlacingPositionsMoreMore.clear();
+                        l1BlueCornerPoints.clear();
+                        l1RedCornerPoints.clear();
                         centerFaces[0] = new Pose2d(
                                         inchesToMeters(144.003),
                                         inchesToMeters(158.500),
@@ -684,6 +702,7 @@ public final class Constants {
                                 Pose2d algaeBackMore = new Pose2d();
                                 Pose2d algaeFrontMoreMore = new Pose2d();
                                 Pose2d algaeBackMoreMore = new Pose2d();
+                                Pose2d l1CLockwiseCorner = new Pose2d();
                                 Pose2d poseDirection = new Pose2d(centerBlue,
                                                 Rotation2d.fromDegrees(180 - (60 * face)));
                                 double adjustX = inchesToMeters(30.738);
@@ -696,6 +715,8 @@ public final class Constants {
                                 double adjustAlgaeMoreY = inchesToMeters(0.0);
                                 double adjustAlgaeMoreMoreX = inchesToMeters(56.738);
                                 double adjustAlgaeMoreMoreY = inchesToMeters(0.0);
+                                double adjustL1CornerX = inchesToMeters(9.0);
+                                double adjustL1CornerY = inchesToMeters(18.0);
 
                                 algaeFront = new Pose2d(
                                                 new Translation2d(
@@ -822,6 +843,31 @@ public final class Constants {
                                                                                 .transformBy(
                                                                                                 new Transform2d(Physical.INTAKE_X_OFFSET_FRONT_ALGAE,
                                                                                                                 Physical.INTAKE_Y_OFFSET_FRONT_ALGAE,
+                                                                                                                new Rotation2d(Math.PI)))
+                                                                                .getY()),
+                                                new Rotation2d(
+                                                                poseDirection.getRotation().getRadians() - Math.PI));
+
+                                l1CLockwiseCorner = new Pose2d(
+                                                new Translation2d(
+                                                                poseDirection
+                                                                                .transformBy(
+                                                                                                new Transform2d(adjustL1CornerX,
+                                                                                                                adjustL1CornerY,
+                                                                                                                new Rotation2d()))
+                                                                                .transformBy(
+                                                                                                new Transform2d(Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
+                                                                                                                new Rotation2d(Math.PI)))
+                                                                                .getX(),
+                                                                poseDirection
+                                                                                .transformBy(
+                                                                                                new Transform2d(adjustL1CornerX,
+                                                                                                                adjustL1CornerY,
+                                                                                                                new Rotation2d()))
+                                                                                .transformBy(
+                                                                                                new Transform2d(Physical.INTAKE_X_OFFSET_FRONT,
+                                                                                                                Physical.INTAKE_Y_OFFSET_FRONT,
                                                                                                                 new Rotation2d(Math.PI)))
                                                                                 .getY()),
                                                 new Rotation2d(
@@ -2962,6 +3008,7 @@ public final class Constants {
                                 algaeBlueBackPlacingPositionsMore.add(algaeBackMore);
                                 algaeBlueFrontPlacingPositionsMoreMore.add(algaeFrontMoreMore);
                                 algaeBlueBackPlacingPositionsMoreMore.add(algaeBackMoreMore);
+                                l1BlueCornerPoints.add(l1CLockwiseCorner);
                         }
 
                         for (Pose2d bluePose : algaeBlueFrontPlacingPositions) {
@@ -2973,6 +3020,17 @@ public final class Constants {
                                                 bluePose.getRotation().getRadians() + Math.PI);
                                 redPose = new Pose2d(mirroredTranslation, mirroredRotation);
                                 algaeRedFrontPlacingPositions.add(redPose);
+                        }
+
+                        for (Pose2d bluePose : l1BlueCornerPoints) {
+                                Pose2d redPose = new Pose2d();
+                                Translation2d mirroredTranslation = new Translation2d(
+                                                Constants.Physical.FIELD_LENGTH - bluePose.getX(),
+                                                Constants.Physical.FIELD_WIDTH - bluePose.getY());
+                                Rotation2d mirroredRotation = new Rotation2d(
+                                                bluePose.getRotation().getRadians() + Math.PI);
+                                redPose = new Pose2d(mirroredTranslation, mirroredRotation);
+                                l1RedCornerPoints.add(redPose);
                         }
 
                         for (Pose2d bluePose : algaeBlueBackPlacingPositions) {
@@ -3152,6 +3210,11 @@ public final class Constants {
                 public static double INTAKE_Y_OFFSET_FRONT_ALGAE = inchesToMeters(3.8);
                 public static double INTAKE_X_OFFSET_BACK_ALGAE = inchesToMeters(23.0 + 5.0);
                 public static double INTAKE_Y_OFFSET_BACK_ALGAE = inchesToMeters(-3.8);
+
+                public static double INTAKE_X_OFFSET_FRONT_L1 = inchesToMeters(23.0);
+                public static double INTAKE_Y_OFFSET_FRONT_L1 = inchesToMeters(1.5);
+                public static double INTAKE_X_OFFSET_BACK_L1 = inchesToMeters(23.0);
+                public static double INTAKE_Y_OFFSET_BACK_L1 = inchesToMeters(-1.5);
 
                 // public static final double L3_INTAKE_X_OFFSET_FRONT = inchesToMeters(28.75);
                 // public static final double L3_INTAKE_Y_OFFSET_FRONT = inchesToMeters(2.2);

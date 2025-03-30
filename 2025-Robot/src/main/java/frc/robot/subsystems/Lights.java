@@ -325,21 +325,25 @@ public class Lights extends SubsystemBase {
         setFlashYellow();
         break;
       default:
-        switch (allianceState) {
-          case RED:
-            setRedBouncing();
-            // setAllBlue();
-            // candleSwerve.clearAnimation(0);
-            // candleSwerve.setLEDs(0, 0, 0);
-            break;
-          default:
-            setBlueBouncing();
-            // setAllRed();
-            // candleSwerve.clearAnimation(0);
-            // candleSwerve.setLEDs(0, 0, 0);
-            break;
+        if (OI.autoChooser.isConnected()) {
+          switch (allianceState) {
+            case RED:
+              setRedBouncing();
+              // setAllBlue();
+              // candleSwerve.clearAnimation(0);
+              // candleSwerve.setLEDs(0, 0, 0);
+              break;
+            default:
+              setBlueBouncing();
+              // setAllRed();
+              // candleSwerve.clearAnimation(0);
+              // candleSwerve.setLEDs(0, 0, 0);
+              break;
+          }
+          ;
+        } else {
+          setFlashYellow();
         }
-        ;
     }
     // // This method will be called once per scheduler run
     // if (!commandRunning) { // only makes lights red/blue if a command is not
