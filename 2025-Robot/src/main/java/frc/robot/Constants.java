@@ -41,10 +41,10 @@ public final class Constants {
                 public static final double FEED_FORWARD_MULTIPLIER = 0.5;
                 public static final double ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER = 1;
                 public static final String[] paths = new String[] {
-                                "center1.polarauto",
-                                "2+1PieceFeeder.polarauto",
+                                "2AlgaeCenter.polarauto",
+                                "JackInTheBot.polarauto",
                                 "3PieceFeederSmart.polarauto",
-                                "3PieceLollipop.polarauto",
+                                "4PieceLollipop.polarauto",
                                 "TushPush.polarauto",
                 };
 
@@ -3730,6 +3730,77 @@ public final class Constants {
                 public static double distBetweenPose(Pose3d pose1, Pose3d pose2) {
                         return (Math.sqrt(Math.pow(pose1.getX() - pose2.getX(), 2)
                                         + Math.pow(pose1.getY() - pose2.getY(), 2)));
+                }
+
+                public static final double DISTANCE_OFFSET = 6.0;
+                public static final double CAMERA_ANGLE_OFFSET = 0.0;
+                // pitch, distance
+                public static final double[][] CORAL_LOOKUP_TABLE = {
+                                { -17.72 + CAMERA_ANGLE_OFFSET, 24.5 + DISTANCE_OFFSET },
+                                { -8.36 + CAMERA_ANGLE_OFFSET, 34.0 + DISTANCE_OFFSET },
+                                { -0.8 + CAMERA_ANGLE_OFFSET, 45.75 + DISTANCE_OFFSET },
+                                { 4.81 + CAMERA_ANGLE_OFFSET, 64.0 + DISTANCE_OFFSET },
+                                { 5.12 + CAMERA_ANGLE_OFFSET, 70.0 + DISTANCE_OFFSET },
+                                { 8.24 + CAMERA_ANGLE_OFFSET, 85.0 + DISTANCE_OFFSET },
+                                { 10.82 + CAMERA_ANGLE_OFFSET, 109.0 + DISTANCE_OFFSET },
+                                { 12.02 + CAMERA_ANGLE_OFFSET, 132.0 + DISTANCE_OFFSET }
+                };
+
+                /**
+                 * Interpolates a value from a lookup table based on the given xValue.
+                 * 
+                 * @param xIndex The index of the x-values in the lookup table.
+                 * @param yIndex The index of the y-values in the lookup table.
+                 * @param xValue The x-value for which to interpolate a y-value.
+                 * @return The interpolated y-value corresponding to the given x-value.
+                 */
+                public static double getInterpolatedValue(int xIndex, int yIndex, double xValue) {
+                        int lastIndex = CORAL_LOOKUP_TABLE.length - 1;
+                        if (xValue < CORAL_LOOKUP_TABLE[0][xIndex]) {
+                                // If the xValue is closer than the first setpoint
+                                double returnValue = CORAL_LOOKUP_TABLE[0][yIndex];
+                                return returnValue;
+                        } else if (xValue > CORAL_LOOKUP_TABLE[lastIndex][xIndex]) {
+                                // If the xValue is farther than the last setpoint
+                                double returnValue = CORAL_LOOKUP_TABLE[lastIndex][yIndex];
+                                return returnValue;
+                        } else {
+                                for (int i = 0; i < CORAL_LOOKUP_TABLE.length; i++) {
+                                        if (xValue > CORAL_LOOKUP_TABLE[i][xIndex]
+                                                        && xValue < CORAL_LOOKUP_TABLE[i + 1][xIndex]) {
+                                                // If the xValue is in the table of setpoints
+                                                // Calculate where xValue is between setpoints
+                                                double leftDif = xValue - CORAL_LOOKUP_TABLE[i][xIndex];
+                                                double percent = leftDif / (CORAL_LOOKUP_TABLE[i + 1][xIndex]
+                                                                - CORAL_LOOKUP_TABLE[i][xIndex]);
+
+                                                double value1 = CORAL_LOOKUP_TABLE[i][yIndex];
+                                                double value2 = CORAL_LOOKUP_TABLE[i + 1][yIndex];
+
+                                                // Interpolate in-between values for value xValue and shooter rpm
+                                                double newValue = value1 + (percent * (value2 - value1));
+
+                                                double returnValue = newValue;
+                                                return returnValue;
+                                        }
+                                }
+                                // Should never run
+                                double returnValue = CORAL_LOOKUP_TABLE[0][yIndex];
+                                return returnValue;
+                        }
+                }
+
+                /**
+                 * Calculates shooter values (flywheel velocity and note velocity) based on the
+                 * given angle.
+                 *
+                 * @param angle The angle of the shooter.
+                 * @return An array containing the calculated flywheel velocity and note
+                 *         velocity.
+                 */
+                public static double getCoralDistanceFromPitch(double angle) {
+                        return getInterpolatedValue(0, 1, angle);
+                        // return new double[] {25, getInterpolatedValue(1, 3, angle)};
                 }
         }
 

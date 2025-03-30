@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AutoPlaceL2Follower;
 import frc.robot.commands.AutoPlaceL4Follower;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.FeederPickupFollower;
@@ -67,6 +68,7 @@ public class RobotContainer {
 
         HashMap<String, Supplier<Command>> commandMap = new HashMap<String, Supplier<Command>>() {
                 {
+                        put("AutoPlaceL2", () -> new AutoPlaceL2Follower(superstructure, drive, 2.3));
                         put("AutoPlaceL4", () -> new AutoPlaceL4Follower(superstructure, drive, 2.3));
                         put("AutoFeeder", () -> new FeederPickupFollower(superstructure, drive));
                         put("FeederIntake", () -> new SetRobotState(superstructure, SuperState.FEEDER));
@@ -75,6 +77,8 @@ public class RobotContainer {
                         put("Idle", () -> new SetRobotStateSimple(superstructure, SuperState.IDLE));
                         put("Full Send", () -> new FullSendFollower(drive, null, false));
                         put("IntakeLollipop", () -> new SetRobotState(superstructure, SuperState.LOLLIOP_PICKUP));
+                        put("Net", () -> new SetRobotStateSimple(superstructure, SuperState.NET));
+                        put("ReefAlgae", () -> new SetRobotState(superstructure, SuperState.AUTO_ALGAE_PICKUP));
                 }
         };
 
@@ -199,7 +203,7 @@ public class RobotContainer {
                 // new SetClimberPivotTorque(climber, -80, 1.0), () -> (!manualMode)));
                 OI.driverY.whileTrue(new ConditionalCommand(
                                 new ConditionalCommand(
-                                                new SetRobotStateSimpleOnce(superstructure, SuperState.DEPLOY_CLIMBER),
+                                                new SetRobotStateSimpleOnce(superstructure, SuperState.AUTO_CLIMB),
                                                 new SetRobotStateSimpleOnce(superstructure, SuperState.CLIMB),
                                                 () -> (!yPressed)),
                                 new SetClimberPivotTorque(climber, -80, 1.0), () -> (!manualMode)));
