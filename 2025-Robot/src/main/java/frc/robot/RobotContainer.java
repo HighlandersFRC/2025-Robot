@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AutoPlaceL2Follower;
 import frc.robot.commands.AutoPlaceL4Follower;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.FeederPickupFollower;
@@ -67,6 +68,7 @@ public class RobotContainer {
 
         HashMap<String, Supplier<Command>> commandMap = new HashMap<String, Supplier<Command>>() {
                 {
+                        put("AutoPlaceL2", () -> new AutoPlaceL2Follower(superstructure, drive, 2.3));
                         put("AutoPlaceL4", () -> new AutoPlaceL4Follower(superstructure, drive, 2.3));
                         put("AutoFeeder", () -> new FeederPickupFollower(superstructure, drive));
                         put("FeederIntake", () -> new SetRobotState(superstructure, SuperState.FEEDER));
