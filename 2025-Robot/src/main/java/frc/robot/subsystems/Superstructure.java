@@ -977,7 +977,8 @@ public class Superstructure extends SubsystemBase {
           || drive
               .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
                   180.0) < 15.0)
-          && Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.5) {
+          && (Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.5 || Math
+              .abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.5)) {
         elevator.setWantedState(ElevatorState.NET);
       }
     } else {
@@ -986,7 +987,8 @@ public class Superstructure extends SubsystemBase {
           || drive
               .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
                   180.0) < 15.0)
-          && Math.abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.5) {
+          && (Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.5 || Math
+              .abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.5)) {
         elevator.setWantedState(ElevatorState.NET);
       }
     }
@@ -1017,7 +1019,8 @@ public class Superstructure extends SubsystemBase {
           || drive
               .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
                   180.0) < 15.0)
-          && Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.0) {
+          && (Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.0 || Math
+              .abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.0)) {
         elevator.setWantedState(ElevatorState.NET);
       }
     } else {
@@ -1026,7 +1029,8 @@ public class Superstructure extends SubsystemBase {
           || drive
               .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
                   180.0) < 15.0)
-          && Math.abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.0) {
+          && (Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.0 || Math
+              .abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.0)) {
         elevator.setWantedState(ElevatorState.NET);
       }
     }
