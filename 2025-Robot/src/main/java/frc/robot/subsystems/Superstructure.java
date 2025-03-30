@@ -54,6 +54,8 @@ public class Superstructure extends SubsystemBase {
     FEEDER,
     GROUND_CORAL_PICKUP_FRONT,
     GROUND_CORAL_PICKUP_BACK,
+    AUTO_GROUND_CORAL_PICKUP_FRONT,
+    AUTO_GROUND_CORAL_PICKUP_BACK,
     GROUND_ALGAE_PICKUP_FRONT,
     GROUND_ALGAE_PICKUP_BACK,
     L2_ALGAE_PICKUP,
@@ -185,6 +187,12 @@ public class Superstructure extends SubsystemBase {
         break;
       case GROUND_CORAL_PICKUP_BACK:
         handleGroundCoralPickupBackState();
+        break;
+      case AUTO_GROUND_CORAL_PICKUP_FRONT:
+        handleAutoGroundCoralPickupFrontState();
+        break;
+      case AUTO_GROUND_CORAL_PICKUP_BACK:
+        handleAutoGroundCoralPickupBackState();
         break;
       case GROUND_ALGAE_PICKUP_FRONT:
         handleGroundAlgaePickupFrontState();
@@ -453,6 +461,12 @@ public class Superstructure extends SubsystemBase {
         break;
       case GROUND_CORAL_PICKUP_BACK:
         currentSuperState = SuperState.GROUND_CORAL_PICKUP_BACK;
+        break;
+      case AUTO_GROUND_CORAL_PICKUP_FRONT:
+        currentSuperState = SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT;
+        break;
+      case AUTO_GROUND_CORAL_PICKUP_BACK:
+        currentSuperState = SuperState.AUTO_GROUND_CORAL_PICKUP_BACK;
         break;
       case GROUND_ALGAE_PICKUP_FRONT:
         currentSuperState = SuperState.GROUND_ALGAE_PICKUP_FRONT;
@@ -1357,6 +1371,30 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleGroundCoralPickupBackState() {
+    twist.setAlgaeMode(false);
+    lights.setWantedState(LightsState.INTAKING);
+    drive.setWantedState(DriveState.DEFAULT);
+    elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
+    if (pivot.getPivotPosition() < -15.0 / 360.0) {
+      twist.setWantedState(TwistState.DOWN);
+    }
+  }
+
+  public void handleAutoGroundCoralPickupFrontState() {
+    twist.setAlgaeMode(false);
+    lights.setWantedState(LightsState.INTAKING);
+    drive.setWantedState(DriveState.PIECE_PICKUP);
+    elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    pivot.setWantedState(PivotState.GROUND_CORAL_FRONT);
+    if (pivot.getPivotPosition() > 15.0 / 360.0) {
+      twist.setWantedState(TwistState.UP);
+    }
+  }
+
+  public void handleAutoGroundCoralPickupBackState() {
     twist.setAlgaeMode(false);
     lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
