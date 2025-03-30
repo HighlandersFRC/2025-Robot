@@ -75,6 +75,8 @@ public class RobotContainer {
                         put("Idle", () -> new SetRobotStateSimple(superstructure, SuperState.IDLE));
                         put("Full Send", () -> new FullSendFollower(drive, null, false));
                         put("IntakeLollipop", () -> new SetRobotState(superstructure, SuperState.LOLLIOP_PICKUP));
+                        put("Net", () -> new SetRobotStateSimple(superstructure, SuperState.NET));
+                        put("ReefAlgae", () -> new SetRobotState(superstructure, SuperState.AUTO_ALGAE_PICKUP));
                 }
         };
 
