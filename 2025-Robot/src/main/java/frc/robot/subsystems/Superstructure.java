@@ -1940,7 +1940,7 @@ public class Superstructure extends SubsystemBase {
   public void handleAutoClimbState() {
     pivot.setWantedState(PivotState.CLIMB);
 
-    if (!continueClimbing && climber.getPosition() > -405) {
+    if (!continueClimbing && climber.getPosition() > -400) {
       climber.setWantedState(ClimbState.EXTENDING);
       drive.setWantedState(DriveState.DEFAULT);
     } else {
@@ -1948,7 +1948,7 @@ public class Superstructure extends SubsystemBase {
       drive.setWantedState(DriveState.DEFAULT);
     }
 
-    if (climber.getTimesTriggered() && continueClimbing && !(climber.getPosition() > -150)) {
+    if (climber.getTimesTriggered() && continueClimbing && !(climber.getPosition() > -105)) {
       climber.setWantedState(ClimbState.RETRACTING);
       drive.setWantedState(DriveState.AUTO_CLIMB);
     } else if (continueClimbing) {

@@ -87,7 +87,7 @@ public class Climber extends SubsystemBase {
       timesTriggered += 1;
     }
 
-    return timesTriggered >= 5;
+    return timesTriggered >= 3;
   }
 
   @Override
