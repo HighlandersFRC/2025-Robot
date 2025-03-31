@@ -22,7 +22,7 @@ public final class Constants {
                 // their constants
                 public static final double AUTONOMOUS_LOOKAHEAD_DISTANCE = 0.10; // Lookahead at 1m/s scaled by wanted
                                                                                  // velocity
-                public static final double FULL_SEND_LOOKAHEAD = 0.60;
+                public static final double FULL_SEND_LOOKAHEAD = 1;
                 public static final double MIN_LOOKAHEAD_DISTANCE = 0.01; // Lookahead distance at 0m/s
                 // Path follower will end if within this radius of the final point
                 public static final double AUTONOMOUS_END_ACCURACY = 0.40;
@@ -241,7 +241,7 @@ public final class Constants {
                 // right when facing the reef side is positive
                 // negative makes robot go more to the left
                 public static final double A_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
-                public static final double B_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                public static final double B_BRANCH_OFFSET_SIDE = inchesToMeters(2.0);
                 public static final double C_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double D_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double E_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
@@ -3481,7 +3481,7 @@ public final class Constants {
                 public static final double PIVOT_PROCESSOR_POSITION_D = 76.0;
                 public static final double PIVOT_REEF_ALGAE_POSITION_D = 90.0;
                 public static final double PIVOT_CLIMB_POSITION_D = 45.0;
-                public static final double PIVOT_LOLLIPOP_POSITION_D = 98.0;
+                public static final double PIVOT_LOLLIPOP_POSITION_D = -98.0;
 
                 public enum PivotPosition {
                         kL1(PIVOT_L1_POSITION_D, Constants.degreesToRotations(PIVOT_L1_POSITION_D)),

@@ -655,6 +655,19 @@ public class Superstructure extends SubsystemBase {
             - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (20.0 / 360.0);
   }
 
+  public boolean placedCoralL2() {
+    // return
+    // drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[0],
+    // drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[1],
+    // drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[2]) &&
+    // elevator.getElevatorPosition() > 53 / 39.37
+    // &&
+
+    // Pivot has abs to account for placing backwards
+    return Math
+        .abs(Math.abs(pivot.getPivotPosition())
+            - Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations) < (5.0 / 360.0);
+  }
   // public void handleDefaultState() {
   // drive.setWantedState(DriveState.DEFAULT);
   // if (Math.abs(pivot.getPivotPosition()) > 0.05) {
@@ -1577,9 +1590,12 @@ public class Superstructure extends SubsystemBase {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
           - 15.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
         drive.setWantedState(DriveState.REEF_MORE);
-        elevator.setWantedState(ElevatorState.AUTO_L2);
       } else {
         drive.setWantedState(DriveState.DEFAULT);
+      }
+      if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
+          - 15.0 / 360.0) {
+        elevator.setWantedState(ElevatorState.AUTO_L2);
       }
     }
   }

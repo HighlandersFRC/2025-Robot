@@ -59,7 +59,7 @@ public class AutoPlaceL2Follower extends AutoFollower {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (superstructure.placedCoralL4() || Timer.getFPGATimestamp() - initTime > timeout) {
+    if (superstructure.placedCoralL2() || Timer.getFPGATimestamp() - initTime > timeout) {
       return true;
     } else {
       return false;

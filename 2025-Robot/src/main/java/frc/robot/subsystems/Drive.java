@@ -208,17 +208,17 @@ public class Drive extends SubsystemBase {
   double diffAngle;
 
   // path following PID values
-  private double kXP = 4.00;
+  private double kXP = 8.044;
   private double kXI = 0.00;
-  private double kXD = 1.20;
+  private double kXD = 1.79;
 
-  private double kYP = 4.00;
-  private double kYI = 0.00;
-  private double kYD = 1.20;
+  private double kYP = kXP;
+  private double kYI = kXI;
+  private double kYD = kXD;
 
-  private double kThetaP = 2.90;
+  private double kThetaP = 3.937;
   private double kThetaI = 0.00;
-  private double kThetaD = 2.00;
+  private double kThetaD = 2.910;
 
   // auto placement PID values
   private double kkXP = 3.60;
@@ -229,9 +229,9 @@ public class Drive extends SubsystemBase {
   private double kkYI = kkXI;
   private double kkYD = kkXD;
 
-  private double kkThetaP = 3.20;
+  private double kkThetaP = 1.79;
   private double kkThetaI = 0.00;
-  private double kkThetaD = 3.00;
+  private double kkThetaD = 0.971;
 
   // l4 pid values
   private double kkXP4 = 3.30;
@@ -242,9 +242,9 @@ public class Drive extends SubsystemBase {
   private double kkYI4 = kkXI4;
   private double kkYD4 = kkXD4;
 
-  private double kkThetaP4 = 3.00;
+  private double kkThetaP4 = 2.056;
   private double kkThetaI4 = 0.00;
-  private double kkThetaD4 = 3.20;
+  private double kkThetaD4 = 0.971;
 
   // teleop targeting PID values
   private double kTurningP = 0.04;
@@ -396,20 +396,20 @@ public class Drive extends SubsystemBase {
     thetaaPID.setMinOutput(-3);
     thetaaPID.setMaxOutput(3);
 
-    xxPID4.setMinOutput(-4.9);
-    xxPID4.setMaxOutput(4.9);
+    xxPID4.setMinOutput(-3.0);
+    xxPID4.setMaxOutput(3.0);
 
-    yyPID4.setMinOutput(-4.9);
-    yyPID4.setMaxOutput(4.9);
+    yyPID4.setMinOutput(-3.0);
+    yyPID4.setMaxOutput(3.0);
 
     thetaaPID4.setMinOutput(-3);
     thetaaPID4.setMaxOutput(3);
 
-    xPID.setMinOutput(-4.9);
-    xPID.setMaxOutput(4.9);
+    xPID.setMinOutput(-5.5);
+    xPID.setMaxOutput(5.5);
 
-    yPID.setMinOutput(-4.9);
-    yPID.setMaxOutput(4.9);
+    yPID.setMinOutput(-5.5);
+    yPID.setMaxOutput(5.5);
 
     thetaPID.setMinOutput(-3);
     thetaPID.setMaxOutput(3);
@@ -688,7 +688,7 @@ public class Drive extends SubsystemBase {
                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-          standardDeviation.set(2, 0, 0.9);
+          standardDeviation.set(2, 0, 1.48);
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
           mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
@@ -721,7 +721,7 @@ public class Drive extends SubsystemBase {
                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-          standardDeviation.set(2, 0, 0.9);
+          standardDeviation.set(2, 0, 1.48);
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
           mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
@@ -757,7 +757,7 @@ public class Drive extends SubsystemBase {
                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-          standardDeviation.set(2, 0, 0.9);
+          standardDeviation.set(2, 0, 1.48);
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
           mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
@@ -793,7 +793,7 @@ public class Drive extends SubsystemBase {
                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-          standardDeviation.set(2, 0, 0.9);
+          standardDeviation.set(2, 0, 1.48);
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
           mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
@@ -2832,7 +2832,8 @@ public class Drive extends SubsystemBase {
   }
 
   public double[] getClosestPoint(double[] lineStart, double[] lineEnd) { // chatGPT ahh code
-    // System.out.println("X1 - X2; " + (lineStart[0] - lineEnd[0]) + "Y1 - Y2" + (lineStart[1] - lineEnd[1]));
+    // System.out.println("X1 - X2; " + (lineStart[0] - lineEnd[0]) + "Y1 - Y2" +
+    // (lineStart[1] - lineEnd[1]));
     double x1 = lineStart[0];
     double y1 = lineStart[1];
     double x2 = lineEnd[0];
@@ -2865,13 +2866,16 @@ public class Drive extends SubsystemBase {
   public double[] getClosestL1PointXY() { // returns the closest point on the trough for l1
     // double[] xy = { 0.0, 0.0 };
     // if (isL1Face()) {
-    //   xy = getClosestPoint(getClosestL1Points().get(0), getClosestL1Points().get(1));
+    // xy = getClosestPoint(getClosestL1Points().get(0),
+    // getClosestL1Points().get(1));
     // } else {
-    //   xy = getClosestPoint(getClosestL1Points().get(0), getClosestL1Points().get(0));
+    // xy = getClosestPoint(getClosestL1Points().get(0),
+    // getClosestL1Points().get(0));
     // }
     // return xy;
-    // System.out.println("X1: " + getClosestL1Points().get(0)[0] + " Y1: " + getClosestL1Points().get(0)[1] + "X2: "
-    //     + getClosestL1Points().get(1)[0] + " Y2: " + getClosestL1Points().get(1)[1]);
+    // System.out.println("X1: " + getClosestL1Points().get(0)[0] + " Y1: " +
+    // getClosestL1Points().get(0)[1] + "X2: "
+    // + getClosestL1Points().get(1)[0] + " Y2: " + getClosestL1Points().get(1)[1]);
     double[] xy = getClosestPoint(getClosestL1Points().get(0), getClosestL1Points().get(1));
     return xy;
   }
@@ -2897,7 +2901,8 @@ public class Drive extends SubsystemBase {
         }
       }
       list.add(chosenSetpoint);
-      // System.out.println("Closest Point: " + list.get(0)[0] + " " + list.get(0)[1]);
+      // System.out.println("Closest Point: " + list.get(0)[0] + " " +
+      // list.get(0)[1]);
       currentDist = 100.0;
       dist = 100.0;
       for (int i = 0; i < Constants.Reef.l1BlueCornerPoints.size(); i++) {
@@ -2911,10 +2916,11 @@ public class Drive extends SubsystemBase {
             Math.abs(Constants.Reef.l1BlueCornerPoints.get(i).getY() - list.get(0)[1])) > 0.1) {
           dist = currentDist;
           // System.out.println(" ");
-          // System.out.println("new X2: " + Constants.Reef.l1BlueCornerPoints.get(i).getX() + "new Y2: "
-          //     + Constants.Reef.l1BlueCornerPoints.get(i).getY());
+          // System.out.println("new X2: " +
+          // Constants.Reef.l1BlueCornerPoints.get(i).getX() + "new Y2: "
+          // + Constants.Reef.l1BlueCornerPoints.get(i).getY());
           // System.out.println("old X2: " + list.get(0)[0] + "old Y2: "
-          //     + list.get(0)[1]);
+          // + list.get(0)[1]);
           secondPoint[0] = Constants.Reef.l1BlueCornerPoints.get(i).getX();
           secondPoint[1] = Constants.Reef.l1BlueCornerPoints.get(i).getY();
         }
@@ -2961,7 +2967,8 @@ public class Drive extends SubsystemBase {
     }
   }
 
-  public boolean isL1Face() { // returns true if the robot is by a face of the L1, returns false if the robot is around the point on the edge of l1 faces
+  public boolean isL1Face() { // returns true if the robot is by a face of the L1, returns false if the robot
+                              // is around the point on the edge of l1 faces
     if (isOnBlueSide()) {
 
     } else {
@@ -3119,8 +3126,10 @@ public class Drive extends SubsystemBase {
       firstTimeReef = true;
     }
 
-    // Pose2d l1Pose = new Pose2d(getClosestL1PointXY()[0], getClosestL1PointXY()[1],
-    //     new Rotation2d(getThetaToPoint(getClosestL1PointXY()[0], getClosestL1PointXY()[1])));
+    // Pose2d l1Pose = new Pose2d(getClosestL1PointXY()[0],
+    // getClosestL1PointXY()[1],
+    // new Rotation2d(getThetaToPoint(getClosestL1PointXY()[0],
+    // getClosestL1PointXY()[1])));
 
     Logger.recordOutput("L1 goofy ahh thing", new Pose2d(getClosestL1PointXY()[0], getClosestL1PointXY()[1],
         new Rotation2d(getThetaToPoint(getClosestL1PointXY()[0], getClosestL1PointXY()[1]))));
@@ -3310,47 +3319,47 @@ public class Drive extends SubsystemBase {
         }
 
         // if (OI.isBlueSide()) { // TODO: uncomment to revert to colorado algae code
-        //   if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
-        //       Math.toDegrees(Constants.Reef.netBlueFrontThetaR)) <= 90) {
-        //     autoPlacingFront = true;
-        //     if (OI.driverA.getAsBoolean()) {
-        //       teleopDrive();
-        //     } else {
-        //       driveToXTheta(Constants.Reef.netBlueXMore,
-        //           Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
-        //     }
-        //     // driveToTheta(Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
-        //   } else {
-        //     autoPlacingFront = false;
-        //     if (OI.driverA.getAsBoolean()) {
-        //       teleopDrive();
-        //     } else {
-        //       driveToXTheta(Constants.Reef.netBlueXMore,
-        //           Math.toDegrees(Constants.Reef.netBlueBackThetaR));
-        //     }
-        //     // driveToTheta(Math.toDegrees(Constants.Reef.netBlueBackThetaR));
-        //   }
+        // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+        // Math.toDegrees(Constants.Reef.netBlueFrontThetaR)) <= 90) {
+        // autoPlacingFront = true;
+        // if (OI.driverA.getAsBoolean()) {
+        // teleopDrive();
         // } else {
-        //   if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
-        //       Math.toDegrees(Constants.Reef.netRedFrontThetaR)) <= 90) {
-        //     autoPlacingFront = true;
-        //     if (OI.driverA.getAsBoolean()) {
-        //       teleopDrive();
-        //     } else {
-        //       driveToXTheta(Constants.Reef.netRedXMore,
-        //           Math.toDegrees(Constants.Reef.netRedFrontThetaR));
-        //     }
-        //     // driveToTheta(Math.toDegrees(Constants.Reef.netRedFrontThetaR));
-        //   } else {
-        //     autoPlacingFront = false;
-        //     if (OI.driverA.getAsBoolean()) {
-        //       teleopDrive();
-        //     } else {
-        //       driveToXTheta(Constants.Reef.netRedXMore,
-        //           Math.toDegrees(Constants.Reef.netRedBackThetaR));
-        //     }
-        //     // driveToTheta(Math.toDegrees(Constants.Reef.netRedBackThetaR));
-        //   }
+        // driveToXTheta(Constants.Reef.netBlueXMore,
+        // Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
+        // }
+        // // driveToTheta(Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
+        // } else {
+        // autoPlacingFront = false;
+        // if (OI.driverA.getAsBoolean()) {
+        // teleopDrive();
+        // } else {
+        // driveToXTheta(Constants.Reef.netBlueXMore,
+        // Math.toDegrees(Constants.Reef.netBlueBackThetaR));
+        // }
+        // // driveToTheta(Math.toDegrees(Constants.Reef.netBlueBackThetaR));
+        // }
+        // } else {
+        // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+        // Math.toDegrees(Constants.Reef.netRedFrontThetaR)) <= 90) {
+        // autoPlacingFront = true;
+        // if (OI.driverA.getAsBoolean()) {
+        // teleopDrive();
+        // } else {
+        // driveToXTheta(Constants.Reef.netRedXMore,
+        // Math.toDegrees(Constants.Reef.netRedFrontThetaR));
+        // }
+        // // driveToTheta(Math.toDegrees(Constants.Reef.netRedFrontThetaR));
+        // } else {
+        // autoPlacingFront = false;
+        // if (OI.driverA.getAsBoolean()) {
+        // teleopDrive();
+        // } else {
+        // driveToXTheta(Constants.Reef.netRedXMore,
+        // Math.toDegrees(Constants.Reef.netRedBackThetaR));
+        // }
+        // // driveToTheta(Math.toDegrees(Constants.Reef.netRedBackThetaR));
+        // }
         // }
 
         break;
@@ -3362,47 +3371,47 @@ public class Drive extends SubsystemBase {
         }
 
         // if (OI.isBlueSide()) { // TODO: uncomment to revert to colorado algae code
-        //   if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
-        //       Math.toDegrees(Constants.Reef.netBlueFrontThetaR)) <= 90) {
-        //     autoPlacingFront = true;
-        //     if (OI.driverA.getAsBoolean()) {
-        //       teleopDrive();
-        //     } else {
-        //       driveToXTheta(Constants.Reef.netBlueXM,
-        //           Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
-        //     }
-        //     // driveToTheta(Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
-        //   } else {
-        //     autoPlacingFront = false;
-        //     if (OI.driverA.getAsBoolean()) {
-        //       teleopDrive();
-        //     } else {
-        //       driveToXTheta(Constants.Reef.netBlueXM,
-        //           Math.toDegrees(Constants.Reef.netBlueBackThetaR));
-        //     }
-        //     // driveToTheta(Math.toDegrees(Constants.Reef.netBlueBackThetaR));
-        //   }
+        // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+        // Math.toDegrees(Constants.Reef.netBlueFrontThetaR)) <= 90) {
+        // autoPlacingFront = true;
+        // if (OI.driverA.getAsBoolean()) {
+        // teleopDrive();
         // } else {
-        //   if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
-        //       Math.toDegrees(Constants.Reef.netRedFrontThetaR)) <= 90) {
-        //     autoPlacingFront = true;
-        //     if (OI.driverA.getAsBoolean()) {
-        //       teleopDrive();
-        //     } else {
-        //       driveToXTheta(Constants.Reef.netRedXM,
-        //           Math.toDegrees(Constants.Reef.netRedFrontThetaR));
-        //     }
-        //     // driveToTheta(Math.toDegrees(Constants.Reef.netRedFrontThetaR));
-        //   } else {
-        //     autoPlacingFront = false;
-        //     if (OI.driverA.getAsBoolean()) {
-        //       teleopDrive();
-        //     } else {
-        //       driveToXTheta(Constants.Reef.netRedXM,
-        //           Math.toDegrees(Constants.Reef.netRedBackThetaR));
-        //     }
-        //     // driveToTheta(Math.toDegrees(Constants.Reef.netRedBackThetaR));
-        //   }
+        // driveToXTheta(Constants.Reef.netBlueXM,
+        // Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
+        // }
+        // // driveToTheta(Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
+        // } else {
+        // autoPlacingFront = false;
+        // if (OI.driverA.getAsBoolean()) {
+        // teleopDrive();
+        // } else {
+        // driveToXTheta(Constants.Reef.netBlueXM,
+        // Math.toDegrees(Constants.Reef.netBlueBackThetaR));
+        // }
+        // // driveToTheta(Math.toDegrees(Constants.Reef.netBlueBackThetaR));
+        // }
+        // } else {
+        // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+        // Math.toDegrees(Constants.Reef.netRedFrontThetaR)) <= 90) {
+        // autoPlacingFront = true;
+        // if (OI.driverA.getAsBoolean()) {
+        // teleopDrive();
+        // } else {
+        // driveToXTheta(Constants.Reef.netRedXM,
+        // Math.toDegrees(Constants.Reef.netRedFrontThetaR));
+        // }
+        // // driveToTheta(Math.toDegrees(Constants.Reef.netRedFrontThetaR));
+        // } else {
+        // autoPlacingFront = false;
+        // if (OI.driverA.getAsBoolean()) {
+        // teleopDrive();
+        // } else {
+        // driveToXTheta(Constants.Reef.netRedXM,
+        // Math.toDegrees(Constants.Reef.netRedBackThetaR));
+        // }
+        // // driveToTheta(Math.toDegrees(Constants.Reef.netRedBackThetaR));
+        // }
         // }
 
         break;

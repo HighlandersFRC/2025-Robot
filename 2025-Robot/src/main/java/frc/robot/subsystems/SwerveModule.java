@@ -29,6 +29,7 @@ public class SwerveModule extends SubsystemBase {
   PositionTorqueCurrentFOC positionTorqueFOCRequest = new PositionTorqueCurrentFOC(0);
   VelocityTorqueCurrentFOC velocityTorqueFOCRequest = new VelocityTorqueCurrentFOC(0);
   VelocityTorqueCurrentFOC velocityTorqueFOCRequestAngleMotor = new VelocityTorqueCurrentFOC(0);
+  VelocityTorqueCurrentFOC velocityTorqueFOCRequestDriveMotorStop = new VelocityTorqueCurrentFOC(0);
 
   boolean swerveCan1;
   boolean swerveCan2;
@@ -118,16 +119,21 @@ public class SwerveModule extends SubsystemBase {
     angleMotorConfig.Feedback.RotorToSensorRatio = Constants.Ratios.STEER_GEAR_RATIO;
 
     if (moduleNumber == 2 || moduleNumber == 3) {
-      driveMotorConfig.Slot0.kP = 9.4;
+      driveMotorConfig.Slot0.kP = 9.496;
       driveMotorConfig.Slot0.kI = 0.0;
       driveMotorConfig.Slot0.kD = 0.0;
-      driveMotorConfig.Slot0.kV = 0.0;
+      driveMotorConfig.Slot0.kV = 5.940;
     } else {
-      driveMotorConfig.Slot0.kP = 8.0;
+      driveMotorConfig.Slot0.kP = 9.138;
       driveMotorConfig.Slot0.kI = 0.0;
       driveMotorConfig.Slot0.kD = 0.0;
-      driveMotorConfig.Slot0.kV = 0.0;
+      driveMotorConfig.Slot0.kV = 4.068;
     }
+
+    driveMotorConfig.Slot1.kP = 4.0;
+    driveMotorConfig.Slot1.kI = 0.0;
+    driveMotorConfig.Slot1.kD = 0.0;
+    driveMotorConfig.Slot1.kV = 0.0;
 
     driveMotorConfig.TorqueCurrent.PeakForwardTorqueCurrent = 120;
     driveMotorConfig.TorqueCurrent.PeakReverseTorqueCurrent = -120;
@@ -150,6 +156,7 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.getConfigurator().apply(driveMotorConfig);
 
     velocityTorqueFOCRequestAngleMotor.Slot = 1;
+    velocityTorqueFOCRequestDriveMotorStop.Slot = 1;
   }
 
   public void setDriveCurrentLimits(double supply, double stator) {
@@ -403,7 +410,7 @@ public class SwerveModule extends SubsystemBase {
     // turnValue = -turnValue;
     if (Math.abs(vector.getI()) < 0.001 && Math.abs(vector.getJ()) < 0.001 && Math.abs(turnValue) < 0.01) {
       // stops motors when joysticks are at 0
-      driveMotor.setControl(velocityTorqueFOCRequest.withVelocity(0.0));
+      driveMotor.setControl(velocityTorqueFOCRequestDriveMotorStop.withVelocity(0.0));
       angleMotor.setControl(velocityTorqueFOCRequestAngleMotor.withVelocity(0.0));
     } else {
       double angleWanted = Math.atan2(vector.getJ(), vector.getI());
