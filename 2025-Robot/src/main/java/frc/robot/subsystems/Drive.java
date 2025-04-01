@@ -1624,20 +1624,30 @@ public class Drive extends SubsystemBase {
   boolean firstTimeAutoPickup = false;
   double firstTimePickupAngle = 0.0;
 
+  private double filteredDistance = 0.0;
+  private boolean filterInitialized = false;
+  private double kalmanP = 99.0;
+  private final double kalmanQ = 0.1;
+  private final double kalmanR = 0.9;
+
+  private double filteredTargetPoseX = 0.0;
+  private double filteredTargetPoseY = 0.0;
+  private boolean targetPoseFilterInitialized = false;
+  private double kalmanP_x = 1.0;
+  private double kalmanP_y = 1.0;
+  private final double kalmanQ_xy = 0.5;
+  private final double kalmanR_xy = 25;
+
   public Pose2d getGamePiecePosition() {
     if (!firstTimeAutoPickup) {
       firstTimePickupAngle = getMT2OdometryAngle();
       firstTimeAutoPickup = true;
     }
+
     double yaw = 0.0;
     double pitch = 0.0;
     var result = peripherals.getFrontGamePieceCamResult();
-    // Logger.recordOutput("has target", result.hasTargets());
     if (result.hasTargets()) {
-      // PhotonTrackedTarget target = result.getBestTarget();
-      // System.out.println("best id: " + target.getDetectedObjectClassID());
-      // yaw = target.getYaw();
-      // pitch = target.getPitch();
       List<PhotonTrackedTarget> tracks = result.getTargets();
       for (int i = 0; i < tracks.size(); i++) {
         int id = tracks.get(i).getDetectedObjectClassID();
@@ -1652,8 +1662,6 @@ public class Drive extends SubsystemBase {
         double minPitch = tracks.get(0).getPitch();
         int index = 0;
         for (int i = 1; i < tracks.size(); i++) {
-          int id = tracks.get(0).getDetectedObjectClassID();
-          System.out.println("id: " + id);
           if (tracks.get(i).getPitch() < minPitch) {
             minPitch = tracks.get(i).getPitch();
             index = i;
@@ -1665,7 +1673,6 @@ public class Drive extends SubsystemBase {
     }
 
     if (yaw != 0.0 && pitch != 0.0) {
-      System.out.println("calculating%");
       double limelightHeight = Constants.inchesToMeters(21.0);
       double limelightAngle = 19.7;
       double cameraYaw = 15.0;
@@ -1673,102 +1680,99 @@ public class Drive extends SubsystemBase {
       double limelightYOffset = Constants.inchesToMeters(-11.5);
       double gamePieceHeight = Constants.inchesToMeters(2.25);
       double intakeXOffset = Constants.inchesToMeters(22.0);
-      double intakeYOffset = Constants.inchesToMeters(4.0); // 4.0
+      double intakeYOffset = Constants.inchesToMeters(4.0);
 
       double robotX = getMT2OdometryX();
       double robotY = getMT2OdometryY();
-      // double robotAngle = getMT2OdometryAngle();
       double robotAngle = firstTimePickupAngle;
       Pose2d robotPose = new Pose2d(robotX, robotY, new Rotation2d(robotAngle));
 
       double targetDistance = Math
           .abs((limelightHeight - gamePieceHeight) / Math.tan(Math.toRadians(-limelightAngle + pitch)));
-      Logger.recordOutput("Distance to Coral", targetDistance);
-      double noteY = -(targetDistance * Math.sin(Math.toRadians(-cameraYaw + yaw)));
-      double noteX = ((targetDistance * Math.cos(Math.toRadians(cameraYaw - yaw))));
-      Logger.recordOutput("coral x", noteX);
-      Logger.recordOutput("coral y", noteY);
+      Logger.recordOutput("Raw Distance", targetDistance);
+
+      if (!filterInitialized) {
+        filteredDistance = targetDistance;
+        filterInitialized = true;
+      } else {
+        kalmanP = kalmanP + kalmanQ;
+        double kalmanGain = kalmanP / (kalmanP + kalmanR);
+        filteredDistance = filteredDistance + kalmanGain * (targetDistance - filteredDistance);
+        kalmanP = (1 - kalmanGain) * kalmanP;
+      }
+      Logger.recordOutput("Filtered Distance", filteredDistance);
+
+      double noteY = -(filteredDistance * Math.sin(Math.toRadians(-cameraYaw + yaw)));
+      double noteX = filteredDistance * Math.cos(Math.toRadians(cameraYaw - yaw));
+      Logger.recordOutput("Unfiltered coral x", noteX);
+      Logger.recordOutput("Unfiltered coral y", noteY);
+
       double xFromRobot = noteX + limelightXOffset;
       double yFromRobot = noteY + limelightYOffset;
       Pose2d coralPose = robotPose.transformBy(new Transform2d(xFromRobot, yFromRobot, new Rotation2d()));
-
-      Logger.recordOutput("coral rc x", xFromRobot);
-      Logger.recordOutput("coral rc y", yFromRobot);
       Logger.recordOutput("coral pose", coralPose);
 
       double xFromIntake = xFromRobot - intakeXOffset;
       double yFromIntake = yFromRobot - intakeYOffset;
-      Pose2d targetPose = robotPose.transformBy(new Transform2d(xFromIntake,
-          yFromIntake, new Rotation2d()));
-      Logger.recordOutput("coral intake x", xFromIntake);
-      Logger.recordOutput("coral intake y", yFromIntake);
-      double projectedTx = Math.atan2(Math.tan(Math.toRadians(yaw)), Math.cos(Math.toRadians(pitch)));
-      System.out.println("Projected: " + Math.toDegrees(projectedTx));
-      System.out.println("actual: " + yaw);
-      Pose2d intakeFieldPose = robotPose.transformBy(new Transform2d(intakeXOffset, intakeYOffset, new Rotation2d()));
-      double angleToPiece = Constants.standardizeAngleDegrees(Math.toDegrees(Math.atan2(
-          intakeFieldPose.getY() - coralPose.getY(), intakeFieldPose.getX() - coralPose.getX()) - Math.PI));
-      Logger.recordOutput("Angle to Piece", (angleToPiece));
-      Logger.recordOutput("Intake field pose", intakeFieldPose);
+      Logger.recordOutput("Unfiltered Target Pose X", xFromIntake);
+      Logger.recordOutput("Unfiltered Target Pose Y", yFromIntake);
 
+      if (!targetPoseFilterInitialized) {
+        filteredTargetPoseX = xFromIntake;
+        filteredTargetPoseY = yFromIntake;
+        targetPoseFilterInitialized = true;
+      } else {
+        kalmanP_x = kalmanP_x + kalmanQ_xy;
+        double kalmanGain_x = kalmanP_x / (kalmanP_x + kalmanR_xy);
+        filteredTargetPoseX = filteredTargetPoseX + kalmanGain_x * (xFromIntake - filteredTargetPoseX);
+        kalmanP_x = (1 - kalmanGain_x) * kalmanP_x;
+
+        kalmanP_y = kalmanP_y + kalmanQ_xy;
+        double kalmanGain_y = kalmanP_y / (kalmanP_y + kalmanR_xy);
+        filteredTargetPoseY = filteredTargetPoseY + kalmanGain_y * (yFromIntake - filteredTargetPoseY);
+        kalmanP_y = (1 - kalmanGain_y) * kalmanP_y;
+      }
+      Logger.recordOutput("Filtered Target Pose X", filteredTargetPoseX);
+      Logger.recordOutput("Filtered Target Pose Y", filteredTargetPoseY);
+
+      Pose2d targetPose = robotPose
+          .transformBy(new Transform2d(filteredTargetPoseX, filteredTargetPoseY, new Rotation2d()));
+      Logger.recordOutput("target pickup", targetPose);
+
+      Pose2d intakeFieldPose = robotPose.transformBy(new Transform2d(intakeXOffset, intakeYOffset, new Rotation2d()));
       double deltaX = coralPose.getX() - intakeFieldPose.getX();
       double deltaY = coralPose.getY() - intakeFieldPose.getY();
       double targetAngle = Math.atan2(deltaY, deltaX);
-      Pose2d poseFromRobotFront = new Pose2d(Constants.metersToInches(xFromRobot - Constants.inchesToMeters(16.5)),
-          Constants.metersToInches(yFromRobot), new Rotation2d());
-      Logger.recordOutput("Pose from robot front", poseFromRobotFront);
 
-      // Adjust for the robot's current heading and camera yaw
-      double requiredTurn = targetAngle - Math.toRadians(cameraYaw);
-
-      // Normalize to range [-π, π] for minimal turning
-      requiredTurn = (requiredTurn + (2 * Math.PI)) % (2 * Math.PI);
-      // driveToPoint(targetPose.getX(), targetPose.getY(),
-      Logger.recordOutput("new angle", Math.toDegrees(requiredTurn));
-      // Pose2d targetPose = robotPose
-      // .transformBy(new Transform2d(xFromIntake, yFromIntake, new
-      // Rotation2d(requiredTurn)));
-      Logger.recordOutput("target pickup", targetPose);
-
-      double mx = (robotX + targetPose.getX()) / 2;
-      double my = (robotY + targetPose.getY()) / 2;
-
-      // Compute the length of AB (hypotenuse)
-      double abLength = Math.sqrt(Math.pow(robotX - targetPose.getX(), 2) + Math.pow(robotY - targetPose.getY(), 2));
-
-      // The expected right triangle height from midpoint to C
-      double d = Math.sqrt(xFromIntake * xFromIntake + yFromIntake * yFromIntake - (abLength * abLength) / 2);
-
-      // Compute the perpendicular direction (normalized)
-      double perpX = -(robotY - targetPose.getY()) / abLength;
-      double perpY = (robotX - targetPose.getX()) / abLength;
-
-      // Compute the two possible C points
-      double c1X = mx + d * perpX;
-      double c1Y = my + d * perpY;
-
-      double c2X = mx - d * perpX;
-      double c2Y = my - d * perpY;
-      Pose2d c1 = new Pose2d(c1X, c1Y, new Rotation2d(robotAngle));
-      Pose2d c2 = new Pose2d(c2X, c2Y, new Rotation2d(robotAngle));
-      Logger.recordOutput("c1x", c1);
-      Logger.recordOutput("c1y", c2);
-
-      // targetPose.getRotation().getRadians());
-      if (Math.abs(yFromIntake) < 0.2) {
+      if (Math.abs(filteredTargetPoseY) < 0.2) {
         System.out.println("going in");
         return targetPose;
-      } else if (yFromIntake < -0.1) {
-        System.out.println("to the left");
+      } else if (filteredTargetPoseY < -0.1) {
+        double mx = (robotX + targetPose.getX()) / 2;
+        double my = (robotY + targetPose.getY()) / 2;
+        double abLength = Math.sqrt(Math.pow(robotX - targetPose.getX(), 2) + Math.pow(robotY - targetPose.getY(), 2));
+        double d = Math.sqrt(xFromIntake * xFromIntake + yFromIntake * yFromIntake - (abLength * abLength) / 2);
+        double perpX = -(robotY - targetPose.getY()) / abLength;
+        double perpY = (robotX - targetPose.getX()) / abLength;
+        double c1X = mx + d * perpX;
+        double c1Y = my + d * perpY;
+        Pose2d c1 = new Pose2d(c1X, c1Y, new Rotation2d(robotAngle));
+        Logger.recordOutput("c1", c1);
         return c1;
       } else {
-        System.out.println("to the right");
+        double mx = (robotX + targetPose.getX()) / 2;
+        double my = (robotY + targetPose.getY()) / 2;
+        double abLength = Math.sqrt(Math.pow(robotX - targetPose.getX(), 2) + Math.pow(robotY - targetPose.getY(), 2));
+        double d = Math.sqrt(xFromIntake * xFromIntake + yFromIntake * yFromIntake - (abLength * abLength) / 2);
+        double perpX = -(robotY - targetPose.getY()) / abLength;
+        double perpY = (robotX - targetPose.getX()) / abLength;
+        double c2X = mx - d * perpX;
+        double c2Y = my - d * perpY;
+        Pose2d c2 = new Pose2d(c2X, c2Y, new Rotation2d(robotAngle));
+        Logger.recordOutput("c2", c2);
         return c2;
       }
-      // double pieceXFromIntake = noteX - intakeXOffset;
-      // double pieceYFromIntake = noteY - intakeYOffset;
     } else {
-      // System.out.println("default game piece");
       return new Pose2d();
     }
   }
@@ -2872,7 +2876,8 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // Pose2d target = getGamePiecePosition();
+
+    Pose2d target = getGamePiecePosition();
     // System.out.println(Math.toDegrees(getThetaToCenterReef()));
     // Translation2d t1 = new Translation2d(getMT2OdometryX(), getMT2OdometryY());
     // Rotation2d r1 = new Rotation2d(getThetaToCenterReef());

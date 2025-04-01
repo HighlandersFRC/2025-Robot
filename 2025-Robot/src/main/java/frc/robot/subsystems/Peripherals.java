@@ -125,16 +125,73 @@ public class Peripherals {
     return yaw;
   }
 
-  public List<TargetCorner> getGamePieceCamCorners() {
-    List<TargetCorner> corners = new ArrayList<TargetCorner>();
-    var result = gamePieceCamera.getLatestResult();
-    // Logger.recordOutput("has target", result.hasTargets());
+  // public List<TargetCorner> getGamePieceCamCorners() {
+  // List<PhotonPipelineResult> results = gamePieceCamera.getAllUnreadResults();
+
+  // if (!results.isEmpty() && results.get(0).hasTargets()) {
+  // PhotonTrackedTarget target = results.get(0).getBestTarget();
+  // List<TargetCorner> corners = target.getDetectedCorners();
+
+  // if (corners != null && !corners.isEmpty()) {
+  // return corners;
+  // }
+  // }
+
+  // List<TargetCorner> defaultCorners = new ArrayList<>();
+  // for (int i = 0; i < 4; i++) {
+  // defaultCorners.add(new TargetCorner(-1, -1));
+  // }
+  // return defaultCorners;
+  // }
+
+  private List<TargetCorner> CoralCorners = new ArrayList<>();
+
+  public void updateDetectionCorners() {
+    var result = getFrontGamePieceCamResult();
+
     if (result.hasTargets()) {
-      PhotonTrackedTarget target = result.getBestTarget();
-      corners = target.getDetectedCorners();
-      TargetCorner corner = corners.get(0);
+      List<PhotonTrackedTarget> tracks = new ArrayList<>(result.getTargets());
+
+      if (!tracks.isEmpty()) {
+        PhotonTrackedTarget bestTrack = tracks.get(0);
+
+        for (PhotonTrackedTarget track : tracks) {
+          if (track.getPitch() < bestTrack.getPitch()) {
+            bestTrack = track;
+          }
+        }
+
+        List<TargetCorner> corners = result.getBestTarget().minAreaRectCorners;
+        if (corners != null && !corners.isEmpty()) {
+          CoralCorners = corners;
+          return;
+        }
+      }
     }
-    return corners;
+
+    CoralCorners = getDefaultCorners();
+  }
+
+  public double getCoralArea() {
+    PhotonPipelineResult result = getFrontGamePieceCamResult();
+
+    if (result.hasTargets()) {
+      List<PhotonTrackedTarget> tracks = result.getTargets();
+
+      if (!tracks.isEmpty()) {
+        PhotonTrackedTarget bestTrack = tracks.get(0);
+        return bestTrack.getArea();
+      }
+    }
+    return -1;
+  }
+
+  private List<TargetCorner> getDefaultCorners() {
+    List<TargetCorner> defaultCorners = new ArrayList<>();
+    for (int i = 0; i < 4; i++) {
+      defaultCorners.add(new TargetCorner(-1, -1));
+    }
+    return defaultCorners;
   }
 
   public double getGamePiecePitch() {
@@ -426,9 +483,29 @@ public class Peripherals {
     pigeonPitchOffset = newOffset;
   }
 
-  double cameraScreenshotTime = 0.0;
+  public static double calculateAngle(double x) {
+    return 102 + (-25.6 * x) + (-7.16 * Math.pow(x, 2) - 10 * x / 90 / 2);
+  }
 
   public void periodic() {
+    updateDetectionCorners();
+
+    Logger.recordOutput("Coral Angle", calculateAngle(
+        (CoralCorners.get(1).x - CoralCorners.get(0).x) / (CoralCorners.get(3).y - CoralCorners.get(0).y)));
+    // Logger.recordOutput("Coral Area", getCoralArea());
+    // Logger.recordOutput("Bottom Left Corner", CoralCorners.get(0));
+    // Logger.recordOutput("Bottom Right Corner", CoralCorners.get(1));
+    // Logger.recordOutput("Top Right Corner", CoralCorners.get(2));
+    // Logger.recordOutput("Top Left Corner", CoralCorners.get(3));
+
+    // Logger.recordOutput("1length", CoralCorners.get(1).x -
+    // CoralCorners.get(0).x);
+    // Logger.recordOutput("1width", CoralCorners.get(3).y - CoralCorners.get(0).y);
+    Logger.recordOutput("LW Ratio",
+        (CoralCorners.get(1).x - CoralCorners.get(0).x) / (CoralCorners.get(3).y -
+            CoralCorners.get(0).y));
+    // Logger.recordOutput("Total Detections",
+    // gamePieceCamera.getAllUnreadResults().size());
     Logger.recordOutput("Pigeon Pitch", getPigeonPitchAdjusted());
 
     // Use to take snapshots of camera stream (Output means processed stream, input
