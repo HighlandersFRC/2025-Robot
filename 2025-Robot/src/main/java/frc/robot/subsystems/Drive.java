@@ -299,6 +299,7 @@ public class Drive extends SubsystemBase {
     FEEDER_ALIGN,
     AUTO_FEEDER,
     AUTO_L1,
+    AUTO_L1_MORE,
     FEEDER_AUTO,
     PIECE_PICKUP,
     AUTO_CLIMB
@@ -1275,6 +1276,289 @@ public class Drive extends SubsystemBase {
               chosenSetpoint[0] = Constants.Reef.blueBackPlacingPositions.get(i).getX();
               chosenSetpoint[1] = Constants.Reef.blueBackPlacingPositions.get(i).getY();
               chosenSetpoint[2] = Constants.Reef.blueBackPlacingPositions.get(i).getRotation().getRadians();
+            }
+          }
+        }
+      }
+    }
+    if (Math.hypot(chosenSetpoint[0] - getMT2OdometryX(), chosenSetpoint[1] - getMT2OdometryY()) > 5) {
+      return getMT2Odometry();
+    } else {
+      Logger.recordOutput("L2 target pose", chosenSetpoint);
+      return chosenSetpoint;
+    }
+  }
+
+  public double[] getL1ReefClosestSetpoint(double[] currentOdometry /* {x, y, thetaRadians} */, boolean notClosest) {
+    double x = currentOdometry[0];
+    double y = currentOdometry[1];
+    double theta = Constants.standardizeAngleDegrees(Math.toDegrees(currentOdometry[2]));
+    double dist = 100.0;
+    double currentDist = 100.0;
+    double[] chosenSetpoint = { x, y, Math.toRadians(theta) };
+    if (getFieldSide() == "red") {
+      for (int i = 0; i < Constants.Reef.redL1FrontPlacingPositions.size(); i++) {
+        // currentDist = Math.sqrt(Math.pow((x -
+        // Constants.Reef.redL1FrontPlacingPositions.get(i).getX()), 2)
+        // + Math.pow((y - Constants.Reef.redL1FrontPlacingPositions.get(i).getY()), 2));
+        currentDist = Math.hypot(
+            x - (Constants.Reef.redL1FrontPlacingPositions.get(i).getX() + Constants.Reef.redL1BackPlacingPositions
+                .get(i)
+                .getX()) / 2,
+            y - (Constants.Reef.redL1FrontPlacingPositions.get(i).getY()
+                + Constants.Reef.redL1BackPlacingPositions.get(i)
+                    .getY())
+                / 2);
+        if (currentDist < dist && !notClosest) {
+          dist = currentDist;
+          if (getAngleDifferenceDegrees(theta,
+              Constants.Reef.redL1FrontPlacingPositions.get(i).getRotation().getDegrees()) <= 90) {
+            autoPlacingFront = true;
+            chosenSetpoint[0] = Constants.Reef.redL1FrontPlacingPositions.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.redL1FrontPlacingPositions.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.redL1FrontPlacingPositions.get(i).getRotation().getRadians();
+          } else {
+            autoPlacingFront = false;
+            chosenSetpoint[0] = Constants.Reef.redL1BackPlacingPositions.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.redL1BackPlacingPositions.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.redL1BackPlacingPositions.get(i).getRotation().getRadians();
+          }
+        } else if (notClosest) {
+          if ((Math.hypot(
+              origionalL23SetpointPose[0] - Constants.Reef.redL1FrontPlacingPositions.get(i)
+                  .getX(),
+              origionalL23SetpointPose[1] - Constants.Reef.redL1FrontPlacingPositions.get(i)
+                  .getY()) < 0.9)
+              && ((Math
+                  .abs(origionalL23SetpointPose[0] - Constants.Reef.redL1FrontPlacingPositions.get(i).getX()) > 0.01
+                  || Math
+                      .abs(
+                          origionalL23SetpointPose[1] - Constants.Reef.redL1FrontPlacingPositions.get(i).getY()) > 0.01)
+                  && (Math
+                      .abs(origionalL23SetpointPose[0] - Constants.Reef.redL1BackPlacingPositions.get(i).getX()) > 0.01
+                      || Math.abs(origionalL23SetpointPose[1] - Constants.Reef.redL1BackPlacingPositions.get(i)
+                          .getY()) > 0.01))
+              && (Math.abs(origionalL23SetpointPose[2] - Constants.Reef.redL1FrontPlacingPositions
+                  .get(i).getRotation().getRadians()) < 0.01
+                  || Math.abs(origionalL23SetpointPose[2] - Constants.Reef.redL1BackPlacingPositions
+                      .get(i).getRotation().getRadians()) < 0.01)) {
+            dist = currentDist;
+            if (getAngleDifferenceDegrees(theta,
+                Constants.Reef.redL1FrontPlacingPositions.get(i).getRotation().getDegrees()) <= 90) {
+              autoPlacingFront = true;
+              chosenSetpoint[0] = Constants.Reef.redL1FrontPlacingPositions.get(i).getX();
+              chosenSetpoint[1] = Constants.Reef.redL1FrontPlacingPositions.get(i).getY();
+              chosenSetpoint[2] = Constants.Reef.redL1FrontPlacingPositions.get(i).getRotation().getRadians();
+            } else {
+              autoPlacingFront = false;
+              chosenSetpoint[0] = Constants.Reef.redL1BackPlacingPositions.get(i).getX();
+              chosenSetpoint[1] = Constants.Reef.redL1BackPlacingPositions.get(i).getY();
+              chosenSetpoint[2] = Constants.Reef.redL1BackPlacingPositions.get(i).getRotation().getRadians();
+            }
+          }
+        }
+      }
+    } else {
+      for (int i = 0; i < Constants.Reef.blueL1FrontPlacingPositions.size(); i++) {
+        currentDist = Math.hypot(
+            x - (Constants.Reef.blueL1FrontPlacingPositions.get(i).getX() + Constants.Reef.blueL1BackPlacingPositions
+                .get(i)
+                .getX()) / 2,
+            y - (Constants.Reef.blueL1FrontPlacingPositions.get(i).getY()
+                + Constants.Reef.blueL1BackPlacingPositions.get(i)
+                    .getY())
+                / 2);
+        if (currentDist < dist && !notClosest) {
+          dist = currentDist;
+          if (getAngleDifferenceDegrees(theta,
+              Constants.Reef.blueL1FrontPlacingPositions.get(i).getRotation().getDegrees()) <= 90) {
+            autoPlacingFront = true;
+            chosenSetpoint[0] = Constants.Reef.blueL1FrontPlacingPositions.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.blueL1FrontPlacingPositions.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.blueL1FrontPlacingPositions.get(i).getRotation().getRadians();
+          } else {
+            autoPlacingFront = false;
+            chosenSetpoint[0] = Constants.Reef.blueL1BackPlacingPositions.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.blueL1BackPlacingPositions.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.blueL1BackPlacingPositions.get(i).getRotation().getRadians();
+          }
+        } else if (notClosest) {
+          if ((Math.hypot(
+              origionalL23SetpointPose[0] - Constants.Reef.blueL1FrontPlacingPositions.get(i)
+                  .getX(),
+              origionalL23SetpointPose[1] - Constants.Reef.blueL1FrontPlacingPositions.get(i)
+                  .getY()) < 0.9)
+              && ((Math
+                  .abs(origionalL23SetpointPose[0] - Constants.Reef.blueL1FrontPlacingPositions.get(i).getX()) > 0.01
+                  || Math
+                      .abs(origionalL23SetpointPose[1]
+                          - Constants.Reef.blueL1FrontPlacingPositions.get(i).getY()) > 0.01)
+                  && (Math
+                      .abs(origionalL23SetpointPose[0] - Constants.Reef.blueL1BackPlacingPositions.get(i).getX()) > 0.01
+                      || Math.abs(origionalL23SetpointPose[1] - Constants.Reef.blueL1BackPlacingPositions.get(i)
+                          .getY()) > 0.01))
+              && (Math.abs(origionalL23SetpointPose[2] - Constants.Reef.blueL1FrontPlacingPositions
+                  .get(i).getRotation().getRadians()) < 0.01
+                  || Math.abs(origionalL23SetpointPose[2] - Constants.Reef.blueL1BackPlacingPositions
+                      .get(i).getRotation().getRadians()) < 0.01)) {
+            dist = currentDist;
+            if (getAngleDifferenceDegrees(theta,
+                Constants.Reef.blueL1FrontPlacingPositions.get(i).getRotation().getDegrees()) <= 90) {
+              autoPlacingFront = true;
+              chosenSetpoint[0] = Constants.Reef.blueL1FrontPlacingPositions.get(i).getX();
+              chosenSetpoint[1] = Constants.Reef.blueL1FrontPlacingPositions.get(i).getY();
+              chosenSetpoint[2] = Constants.Reef.blueL1FrontPlacingPositions.get(i).getRotation().getRadians();
+            } else {
+              autoPlacingFront = false;
+              chosenSetpoint[0] = Constants.Reef.blueL1BackPlacingPositions.get(i).getX();
+              chosenSetpoint[1] = Constants.Reef.blueL1BackPlacingPositions.get(i).getY();
+              chosenSetpoint[2] = Constants.Reef.blueL1BackPlacingPositions.get(i).getRotation().getRadians();
+            }
+          }
+        }
+      }
+    }
+    if (Math.hypot(chosenSetpoint[0] - getMT2OdometryX(), chosenSetpoint[1] - getMT2OdometryY()) > 5) {
+      return getMT2Odometry();
+    } else {
+      Logger.recordOutput("L2 target pose", chosenSetpoint);
+      return chosenSetpoint;
+    }
+  }
+
+  public double[] getL1ReefClosestSetpointMore(double[] currentOdometry /* {x, y, thetaRadians} */,
+      boolean notClosest) {
+    double x = currentOdometry[0];
+    double y = currentOdometry[1];
+    double theta = Constants.standardizeAngleDegrees(Math.toDegrees(currentOdometry[2]));
+    double dist = 100.0;
+    double currentDist = 100.0;
+    double[] chosenSetpoint = { x, y, Math.toRadians(theta) };
+    if (getFieldSide() == "red") {
+      for (int i = 0; i < Constants.Reef.redL1FrontPlacingPositionsMore.size(); i++) {
+        // currentDist = Math.sqrt(Math.pow((x -
+        // Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getX()), 2)
+        // + Math.pow((y - Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getY()), 2));
+        currentDist = Math.hypot(
+            x - (Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getX()
+                + Constants.Reef.redL1BackPlacingPositionsMore
+                    .get(i)
+                    .getX())
+                / 2,
+            y - (Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getY()
+                + Constants.Reef.redL1BackPlacingPositionsMore.get(i)
+                    .getY())
+                / 2);
+        if (currentDist < dist && !notClosest) {
+          dist = currentDist;
+          if (getAngleDifferenceDegrees(theta,
+              Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getRotation().getDegrees()) <= 90) {
+            autoPlacingFront = true;
+            chosenSetpoint[0] = Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getRotation().getRadians();
+          } else {
+            autoPlacingFront = false;
+            chosenSetpoint[0] = Constants.Reef.redL1BackPlacingPositionsMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.redL1BackPlacingPositionsMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.redL1BackPlacingPositionsMore.get(i).getRotation().getRadians();
+          }
+        } else if (notClosest) {
+          if ((Math.hypot(
+              origionalL23SetpointPose[0] - Constants.Reef.redL1FrontPlacingPositionsMore.get(i)
+                  .getX(),
+              origionalL23SetpointPose[1] - Constants.Reef.redL1FrontPlacingPositionsMore.get(i)
+                  .getY()) < 0.9)
+              && ((Math
+                  .abs(origionalL23SetpointPose[0] - Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getX()) > 0.01
+                  || Math
+                      .abs(
+                          origionalL23SetpointPose[1]
+                              - Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getY()) > 0.01)
+                  && (Math
+                      .abs(origionalL23SetpointPose[0]
+                          - Constants.Reef.redL1BackPlacingPositionsMore.get(i).getX()) > 0.01
+                      || Math.abs(origionalL23SetpointPose[1] - Constants.Reef.redL1BackPlacingPositionsMore.get(i)
+                          .getY()) > 0.01))
+              && (Math.abs(origionalL23SetpointPose[2] - Constants.Reef.redL1FrontPlacingPositionsMore
+                  .get(i).getRotation().getRadians()) < 0.01
+                  || Math.abs(origionalL23SetpointPose[2] - Constants.Reef.redL1BackPlacingPositionsMore
+                      .get(i).getRotation().getRadians()) < 0.01)) {
+            dist = currentDist;
+            if (getAngleDifferenceDegrees(theta,
+                Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getRotation().getDegrees()) <= 90) {
+              autoPlacingFront = true;
+              chosenSetpoint[0] = Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getX();
+              chosenSetpoint[1] = Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getY();
+              chosenSetpoint[2] = Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getRotation().getRadians();
+            } else {
+              autoPlacingFront = false;
+              chosenSetpoint[0] = Constants.Reef.redL1BackPlacingPositionsMore.get(i).getX();
+              chosenSetpoint[1] = Constants.Reef.redL1BackPlacingPositionsMore.get(i).getY();
+              chosenSetpoint[2] = Constants.Reef.redL1BackPlacingPositionsMore.get(i).getRotation().getRadians();
+            }
+          }
+        }
+      }
+    } else {
+      for (int i = 0; i < Constants.Reef.blueL1FrontPlacingPositionsMore.size(); i++) {
+        currentDist = Math.hypot(
+            x - (Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getX()
+                + Constants.Reef.blueL1BackPlacingPositionsMore
+                    .get(i)
+                    .getX())
+                / 2,
+            y - (Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getY()
+                + Constants.Reef.blueL1BackPlacingPositionsMore.get(i)
+                    .getY())
+                / 2);
+        if (currentDist < dist && !notClosest) {
+          dist = currentDist;
+          if (getAngleDifferenceDegrees(theta,
+              Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getRotation().getDegrees()) <= 90) {
+            autoPlacingFront = true;
+            chosenSetpoint[0] = Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getRotation().getRadians();
+          } else {
+            autoPlacingFront = false;
+            chosenSetpoint[0] = Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getX();
+            chosenSetpoint[1] = Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getY();
+            chosenSetpoint[2] = Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getRotation().getRadians();
+          }
+        } else if (notClosest) {
+          if ((Math.hypot(
+              origionalL23SetpointPose[0] - Constants.Reef.blueL1FrontPlacingPositionsMore.get(i)
+                  .getX(),
+              origionalL23SetpointPose[1] - Constants.Reef.blueL1FrontPlacingPositionsMore.get(i)
+                  .getY()) < 0.9)
+              && ((Math
+                  .abs(
+                      origionalL23SetpointPose[0] - Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getX()) > 0.01
+                  || Math
+                      .abs(origionalL23SetpointPose[1]
+                          - Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getY()) > 0.01)
+                  && (Math
+                      .abs(origionalL23SetpointPose[0]
+                          - Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getX()) > 0.01
+                      || Math.abs(origionalL23SetpointPose[1] - Constants.Reef.blueL1BackPlacingPositionsMore.get(i)
+                          .getY()) > 0.01))
+              && (Math.abs(origionalL23SetpointPose[2] - Constants.Reef.blueL1FrontPlacingPositionsMore
+                  .get(i).getRotation().getRadians()) < 0.01
+                  || Math.abs(origionalL23SetpointPose[2] - Constants.Reef.blueL1BackPlacingPositionsMore
+                      .get(i).getRotation().getRadians()) < 0.01)) {
+            dist = currentDist;
+            if (getAngleDifferenceDegrees(theta,
+                Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getRotation().getDegrees()) <= 90) {
+              autoPlacingFront = true;
+              chosenSetpoint[0] = Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getX();
+              chosenSetpoint[1] = Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getY();
+              chosenSetpoint[2] = Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getRotation().getRadians();
+            } else {
+              autoPlacingFront = false;
+              chosenSetpoint[0] = Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getX();
+              chosenSetpoint[1] = Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getY();
+              chosenSetpoint[2] = Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getRotation().getRadians();
             }
           }
         }
@@ -2467,12 +2751,13 @@ public class Drive extends SubsystemBase {
 
     Vector controllerVector = new Vector(xSpeed, ySpeed);
     if (getFieldSide().equals("red")) {
-      controllerVector.setI(-xSpeed);
-      controllerVector.setJ(-ySpeed);
+      controllerVector.setI(-ySpeed);
+      controllerVector.setJ(xSpeed);
     }
-    Vector projectedJoystick = lineVector.perpendicular().projectOther(controllerVector);
-    Logger.recordOutput("projected x", projectedJoystick.getI());
-    Logger.recordOutput("projected y", projectedJoystick.getJ());
+    Vector projectedJoystick = lineVector.projectOther(controllerVector);
+    Logger.recordOutput("controllerProjection",
+        new Pose2d(new Translation2d(projectedJoystick.getI() + getMT2OdometryX(),
+            projectedJoystick.getJ() + getMT2OdometryY()), new Rotation2d(angrad)));
     Translation2d currentPoint = new Translation2d(getMT2OdometryX(), getMT2OdometryY());
     Translation2d closestPointOnLine = lineVector.getClosestPointOnLine(pointOnLine, currentPoint);
     Logger.recordOutput("closestPointOnLine", new Pose2d(closestPointOnLine, new Rotation2d(angrad)));
@@ -2806,6 +3091,8 @@ public class Drive extends SubsystemBase {
         return DriveState.FEEDER_ALIGN;
       case AUTO_L1:
         return DriveState.AUTO_L1;
+      case AUTO_L1_MORE:
+        return DriveState.AUTO_L1_MORE;
       case FEEDER_AUTO:
         return DriveState.FEEDER_AUTO;
       case PIECE_PICKUP:
@@ -2892,7 +3179,106 @@ public class Drive extends SubsystemBase {
     return xy;
   }
 
+  public double[] getClosestL1CornerPointXY() { // returns the closest point on the trough for l1
+    // double[] xy = { 0.0, 0.0 };
+    // if (isL1Face()) {
+    //   xy = getClosestPoint(getClosestL1Points().get(0), getClosestL1Points().get(1));
+    // } else {
+    //   xy = getClosestPoint(getClosestL1Points().get(0), getClosestL1Points().get(0));
+    // }
+    // return xy;
+    // System.out.println("X1: " + getClosestL1Points().get(0)[0] + " Y1: " + getClosestL1Points().get(0)[1] + "X2: "
+    //     + getClosestL1Points().get(1)[0] + " Y2: " + getClosestL1Points().get(1)[1]);
+    double[] xy = getClosestPoint(getClosestL1CornerPoints().get(0), getClosestL1CornerPoints().get(1));
+    return xy;
+  }
+
   public ArrayList<double[]> getClosestL1Points() {
+    ArrayList<double[]> list = new ArrayList<>();
+    double currentDist = 100.0;
+    double dist = 100.0;
+    double[] chosenSetpoint = { 0.0, 0.0 };
+    double[] secondPoint = { 0.0, 0.0 };
+    if (isOnBlueSide()) {
+      for (int i = 0; i < Constants.Reef.l1BlueDrivePoints.size(); i++) {
+        // currentDist = Math.sqrt(Math.pow((x -
+        // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
+        // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
+        currentDist = Math.hypot(
+            getMT2OdometryX() - (Constants.Reef.l1BlueDrivePoints.get(i).getX()),
+            getMT2OdometryY() - (Constants.Reef.l1BlueDrivePoints.get(i).getY()));
+        if (currentDist < dist) {
+          dist = currentDist;
+          chosenSetpoint[0] = Constants.Reef.l1BlueDrivePoints.get(i).getX();
+          chosenSetpoint[1] = Constants.Reef.l1BlueDrivePoints.get(i).getY();
+        }
+      }
+      list.add(chosenSetpoint);
+      // System.out.println("Closest Point: " + list.get(0)[0] + " " + list.get(0)[1]);
+      currentDist = 100.0;
+      dist = 100.0;
+      for (int i = 0; i < Constants.Reef.l1BlueDrivePoints.size(); i++) {
+        // currentDist = Math.sqrt(Math.pow((x -
+        // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
+        // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
+        currentDist = Math.hypot(
+            getMT2OdometryX() - (Constants.Reef.l1BlueDrivePoints.get(i).getX()),
+            getMT2OdometryY() - (Constants.Reef.l1BlueDrivePoints.get(i).getY()));
+        if (currentDist < dist && Math.hypot(Math.abs(Constants.Reef.l1BlueDrivePoints.get(i).getX() - list.get(0)[0]),
+            Math.abs(Constants.Reef.l1BlueDrivePoints.get(i).getY() - list.get(0)[1])) > 0.1) {
+          dist = currentDist;
+          // System.out.println(" ");
+          // System.out.println("new X2: " + Constants.Reef.l1BluePoints.get(i).getX() + "new Y2: "
+          //     + Constants.Reef.l1BluePoints.get(i).getY());
+          // System.out.println("old X2: " + list.get(0)[0] + "old Y2: "
+          //     + list.get(0)[1]);
+          secondPoint[0] = Constants.Reef.l1BlueDrivePoints.get(i).getX();
+          secondPoint[1] = Constants.Reef.l1BlueDrivePoints.get(i).getY();
+        }
+      }
+      // System.out.println("->->->->->->->->->");
+      list.add(secondPoint);
+      return list;
+    } else {
+      for (int i = 0; i < Constants.Reef.l1RedDrivePoints.size(); i++) {
+        // currentDist = Math.sqrt(Math.pow((x -
+        // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
+        // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
+        currentDist = Math.hypot(
+            getMT2OdometryX() - (Constants.Reef.l1RedDrivePoints.get(i).getX()),
+            getMT2OdometryY() - (Constants.Reef.l1RedDrivePoints.get(i).getY()));
+        if (currentDist < dist) {
+          dist = currentDist;
+          chosenSetpoint[0] = Constants.Reef.l1RedDrivePoints.get(i).getX();
+          chosenSetpoint[1] = Constants.Reef.l1RedDrivePoints.get(i).getY();
+        }
+      }
+      list.add(chosenSetpoint);
+      currentDist = 100.0;
+      dist = 100.0;
+      chosenSetpoint[0] = 0.0;
+      chosenSetpoint[1] = 0.0;
+      for (int i = 0; i < Constants.Reef.l1RedDrivePoints.size(); i++) {
+        // currentDist = Math.sqrt(Math.pow((x -
+        // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
+        // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
+        currentDist = Math.hypot(
+            getMT2OdometryX() - (Constants.Reef.l1RedDrivePoints.get(i).getX()),
+            getMT2OdometryY() - (Constants.Reef.l1RedDrivePoints.get(i).getY()));
+        if (currentDist < dist && Math.abs(Constants.Reef.l1RedDrivePoints.get(i).getX() - list.get(0)[0]) > 0.1
+            && Math.abs(Constants.Reef.l1RedDrivePoints.get(i).getY() - list.get(0)[1]) > 0.1) {
+          dist = currentDist;
+          chosenSetpoint[0] = Constants.Reef.l1RedDrivePoints.get(i).getX();
+          chosenSetpoint[1] = Constants.Reef.l1RedDrivePoints.get(i).getY();
+        }
+      }
+      list.add(chosenSetpoint);
+      return list;
+
+    }
+  }
+
+  public ArrayList<double[]> getClosestL1CornerPoints() {
     ArrayList<double[]> list = new ArrayList<>();
     double currentDist = 100.0;
     double dist = 100.0;
@@ -2998,6 +3384,7 @@ public class Drive extends SubsystemBase {
 
   public double[] origionalL4SetpointPose = { 0.0, 0.0, 0.0 };
   public double[] origionalL23SetpointPose = { 0.0, 0.0, 0.0 };
+  public double[] origionalL1SetpointPose = { 0.0, 0.0, 0.0 };
   public boolean firstTimeReef = true;
 
   public double getNetXSetpoint() {
@@ -3134,12 +3521,20 @@ public class Drive extends SubsystemBase {
     if (!OI.getDriverA()) {
       firstTimeReef = true;
     }
+    // Logger.recordOutput("L1 Vector",
+    //     new Pose2d(new Translation2d(2.0, 2.0),
+    //         new Rotation2d(
+    //             Math.atan2(getClosestL1Points().get(0)[1] - getClosestL1Points().get(
+    //                 1)[1], getClosestL1Points().get(0)[0] - getClosestL1Points().get(1)[0]))));
+
+    // Logger.recordOutput("Point 1", new Pose2d(new Translation2d(getClosestL1Points().get(0)[0],
+    //     getClosestL1Points().get(0)[1]), new Rotation2d(0.0)));
+    // Logger.recordOutput("Point 2", new Pose2d(new Translation2d(getClosestL1Points().get(1)[0],
+    //     getClosestL1Points().get(1)[1]), new Rotation2d(0.0)));
 
     // Pose2d l1Pose = new Pose2d(getClosestL1PointXY()[0], getClosestL1PointXY()[1],
     //     new Rotation2d(getThetaToPoint(getClosestL1PointXY()[0], getClosestL1PointXY()[1])));
 
-    Logger.recordOutput("L1 goofy ahh thing", new Pose2d(getClosestL1PointXY()[0], getClosestL1PointXY()[1],
-        new Rotation2d(getThetaToPoint(getClosestL1PointXY()[0], getClosestL1PointXY()[1]))));
     switch (systemState) {
       case DEFAULT:
         if (OI.driverA.getAsBoolean()) {
@@ -3152,8 +3547,45 @@ public class Drive extends SubsystemBase {
         break;
       case AUTO_L1:
         // driveToTheta(Math.toDegrees(getThetaToCenterReef()));
-        driveToTheta(Math.toDegrees(getThetaToPoint(getClosestL1PointXY()[0], getClosestL1PointXY()[1])));
+        // driveToTheta(Math.toDegrees(getThetaToPoint(getClosestL1PointXY()[0], getClosestL1PointXY()[1])));
+        // driveOnLine(new Vector(getClosestL1Points().get(0)[0] - getClosestL1Points().get(
+        //     1)[0], getClosestL1Points().get(0)[1]
+        //         - getClosestL1Points().get(
+        //             1)[1]),
+        //     new Translation2d(getClosestL1Points().get(0)[0], getClosestL1Points().get(
+        //         0)[1]),
+        //     getThetaToPoint(getClosestL1CornerPointXY()[0], getClosestL1CornerPointXY()[1]));
         // System.out.println(Math.toDegrees(getThetaToCenterReef()));
+        if (firstTimeReef) {
+          firstTimeReef = false;
+          origionalL1SetpointPose = getL1ReefClosestSetpoint(getMT2Odometry(), false);
+        }
+        driveToPoint(getL1ReefClosestSetpoint(getMT2Odometry(), OI.getDriverA())[0],
+            getL1ReefClosestSetpoint(getMT2Odometry(),
+                OI.getDriverA())[1],
+            getL1ReefClosestSetpoint(getMT2Odometry(), OI.getDriverA())[2]);
+
+        break;
+      case AUTO_L1_MORE:
+        // driveToTheta(Math.toDegrees(getThetaToCenterReef()));
+        // driveToTheta(Math.toDegrees(getThetaToPoint(getClosestL1PointXY()[0], getClosestL1PointXY()[1])));
+        // driveOnLine(new Vector(getClosestL1Points().get(0)[0] - getClosestL1Points().get(
+        //     1)[0], getClosestL1Points().get(0)[1]
+        //         - getClosestL1Points().get(
+        //             1)[1]),
+        //     new Translation2d(getClosestL1Points().get(0)[0], getClosestL1Points().get(
+        //         0)[1]),
+        //     getThetaToPoint(getClosestL1CornerPointXY()[0], getClosestL1CornerPointXY()[1]));
+        // System.out.println(Math.toDegrees(getThetaToCenterReef()));
+        // if (firstTimeReef) {
+        //   firstTimeReef = false;
+        //   origionalL1SetpointPose = getL1ReefClosestSetpoint(getMT2Odometry(), false);
+        // }
+        driveToPoint(getL1ReefClosestSetpointMore(getMT2Odometry(), false)[0],
+            getL1ReefClosestSetpointMore(getMT2Odometry(),
+                false)[1],
+            getL1ReefClosestSetpointMore(getMT2Odometry(), false)[2]);
+
         break;
       case REEF:
         if (firstTimeReef) {

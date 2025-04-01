@@ -35,6 +35,7 @@ public class Superstructure extends SubsystemBase {
   public enum SuperState {
     DEFAULT,
     AUTO_L1_PLACE,
+    AUTO_L1_PLACE_MORE,
     AUTO_L2_PLACE,
     AUTO_L3_PLACE,
     AUTO_L4_PLACE,
@@ -130,6 +131,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_L1_PLACE:
         handleAutoL1PlaceState();
+        break;
+      case AUTO_L1_PLACE_MORE:
+        handleAutoL1PlaceMoreState();
         break;
       case AUTO_L2_PLACE:
         handleAutoL2PlaceState();
@@ -307,7 +311,25 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.DEFAULT_DRIVE;
         break;
       case AUTO_L1_PLACE:
-        currentSuperState = SuperState.AUTO_L1_PLACE;
+        if (Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kL1.rotations) < 10.0 / 360.0) {
+          currentSuperState = SuperState.AUTO_L1_PLACE_MORE;
+          wantedSuperState = SuperState.AUTO_L1_PLACE_MORE;
+        } else {
+          currentSuperState = SuperState.AUTO_L1_PLACE;
+        }
+        break;
+      case AUTO_L1_PLACE_MORE:
+        if (drive.hitSetPoint(drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), OI
+            .getDriverA())[0],
+            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), OI
+                .getDriverA())[1],
+            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), OI
+                .getDriverA())[2])) {
+          currentSuperState = SuperState.AUTO_SCORE_L1;
+          wantedSuperState = SuperState.AUTO_SCORE_L1;
+        } else {
+          currentSuperState = SuperState.AUTO_L1_PLACE_MORE;
+        }
         break;
       case OUTAKE_DRIVE:
         currentSuperState = SuperState.OUTAKE_DRIVE;
@@ -734,6 +756,32 @@ public class Superstructure extends SubsystemBase {
     if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kL1.meters - 10 / 39.37) {
       pivot.setWantedState(PivotState.AUTO_L1);
     }
+  }
+
+  public void handleAutoL1PlaceMoreState() {
+    intake.inL1State = true;
+    twist.setAlgaeMode(true);
+    lights.setWantedState(LightsState.PLACING);
+    drive.setWantedState(DriveState.AUTO_L1_MORE);
+    elevator.setWantedState(ElevatorState.AUTO_L1);
+    intake.setWantedState(IntakeState.DEFAULT);
+    // System.out.println(drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+    // Math.toDegrees(drive.getReefClosestSetpointFrontOnly(drive.getMT2Odometry())[2])));
+    if (drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
+        Math.toDegrees(drive.getReefClosestSetpointFrontOnly(drive.getMT2Odometry())[2])) < 90) {
+      pivot.setWantedFlip(PivotFlip.FRONT);
+      if (Math.abs(pivot.getPivotPosition()) > 30.0 / 360.0) {
+        twist.setWantedState(TwistState.UP);
+      }
+    } else {
+      pivot.setWantedFlip(PivotFlip.BACK);
+      if (Math.abs(pivot.getPivotPosition()) > 30.0 / 360.0) {
+        twist.setWantedState(TwistState.DOWN);
+      }
+    }
+    // if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kL1.meters - 10 / 39.37) {
+    pivot.setWantedState(PivotState.AUTO_L1);
+    // }
   }
 
   public void handleAutoL2PlaceState() {
@@ -1533,9 +1581,30 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoL1ScoreState() {
     intake.inL1State = true;
-    lights.setWantedState(LightsState.SCORING);
-    drive.setWantedState(DriveState.DEFAULT);
-    intake.setWantedState(IntakeState.OUTAKE);
+    // lights.setWantedState(LightsState.SCORING);
+    // drive.setWantedState(DriveState.DEFAULT);
+    // intake.setWantedState(IntakeState.OUTAKE);    lights.setWantedState(LightsState.SCORING);
+    pivot.setWantedState(PivotState.AUTO_SCORE_L1);
+
+    if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
+        OI.getDriverLeftY()) > 0.25) {
+      drive.setWantedState(DriveState.DEFAULT);
+      // intake.setWantedState(IntakeState.OUTAKE);
+    } else {
+      //   if (drive.hitSetPoint(drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
+      //       drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[1],
+      //       drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2])) {
+      intake.setWantedState(IntakeState.OUTAKE);
+      // } else {
+      //   intake.setWantedState(IntakeState.OFF);
+      // }
+      if (intake.getIntakeItem() == IntakeItem.NONE && !DriverStation.isAutonomousEnabled()) {
+        drive.setWantedState(DriveState.REEF_MORE);
+        // elevator.setWantedState(ElevatorState.DEFAULT);
+      } else {
+        // drive.setWantedState(DriveState.DEFAULT);
+      }
+    }
   }
 
   // public void handleAutoL2ScoreState() {
