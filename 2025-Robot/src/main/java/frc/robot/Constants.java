@@ -741,6 +741,8 @@ public final class Constants {
                                                 Rotation2d.fromDegrees(180 - (60 * face)));
                                 double adjustX = inchesToMeters(30.738);
                                 double adjustY = inchesToMeters(6.469);
+                                double adjustXL1 = inchesToMeters(30.738);
+                                double adjustYL1 = inchesToMeters(9.0);
                                 double adjustXMore = inchesToMeters(50.738);
                                 double adjustYMore = inchesToMeters(6.469);
                                 double adjustAlgaeX = inchesToMeters(35.738);
@@ -758,8 +760,8 @@ public final class Constants {
                                                 new Translation2d(
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                adjustY,
+                                                                                                adjustXL1,
+                                                                                                adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_FRONT_MORE,
@@ -768,8 +770,8 @@ public final class Constants {
                                                                                 .getX(),
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                adjustY,
+                                                                                                adjustXL1,
+                                                                                                adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_FRONT_MORE,
@@ -783,8 +785,8 @@ public final class Constants {
                                                 new Translation2d(
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                adjustY,
+                                                                                                adjustXL1,
+                                                                                                adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_BACK_MORE,
@@ -793,8 +795,8 @@ public final class Constants {
                                                                                 .getX(),
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                adjustY,
+                                                                                                adjustXL1,
+                                                                                                adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_BACK_MORE,
@@ -808,8 +810,8 @@ public final class Constants {
                                                 new Translation2d(
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                -adjustY,
+                                                                                                adjustXL1,
+                                                                                                -adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_FRONT_MORE,
@@ -833,8 +835,8 @@ public final class Constants {
                                                 new Translation2d(
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                -adjustY,
+                                                                                                adjustXL1,
+                                                                                                -adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_BACK_MORE,
@@ -858,8 +860,8 @@ public final class Constants {
                                                 new Translation2d(
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                adjustY,
+                                                                                                adjustXL1,
+                                                                                                adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_FRONT,
@@ -883,8 +885,8 @@ public final class Constants {
                                                 new Translation2d(
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                adjustY,
+                                                                                                adjustXL1,
+                                                                                                adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_BACK,
@@ -893,8 +895,8 @@ public final class Constants {
                                                                                 .getX(),
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                adjustY,
+                                                                                                adjustXL1,
+                                                                                                adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_BACK,
@@ -908,8 +910,8 @@ public final class Constants {
                                                 new Translation2d(
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                -adjustY,
+                                                                                                adjustXL1,
+                                                                                                -adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_FRONT,
@@ -918,8 +920,8 @@ public final class Constants {
                                                                                 .getX(),
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                -adjustY,
+                                                                                                adjustXL1,
+                                                                                                -adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_FRONT,
@@ -933,8 +935,8 @@ public final class Constants {
                                                 new Translation2d(
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                -adjustY,
+                                                                                                adjustXL1,
+                                                                                                -adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_BACK,
@@ -943,8 +945,8 @@ public final class Constants {
                                                                                 .getX(),
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                -adjustY,
+                                                                                                adjustXL1,
+                                                                                                -adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_BACK,
