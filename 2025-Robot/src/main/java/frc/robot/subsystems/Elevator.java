@@ -354,100 +354,100 @@ public class Elevator extends SubsystemBase {
         break;
       default:
         if (DriverStation.isTeleopEnabled()) {
-          System.out.println("Stupid ahh ts pmo 1");
+          // System.out.println("Stupid ahh ts pmo 1");
           if (firstTimeIdle) {
-            System.out.println("Stupid ahh ts pmo 2");
+            // System.out.println("Stupid ahh ts pmo 2");
             idleTime = Timer.getFPGATimestamp();
             firstTimeIdle = false;
           }
           if (!firstTimeDefault || OI.driverMenuButton.getAsBoolean()) {
-            System.out.println("Stupid ahh ts pmo 3");
+            // System.out.println("Stupid ahh ts pmo 3");
             if (DriverStation.isTeleopEnabled() && Math
                 .abs(
                     Constants.Ratios
                         .elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
                 && Timer.getFPGATimestamp() - idleTime > 0.3
                 && !firstTimeIdle) {
-              System.out.println("Stupid ahh ts pmo 4");
+              // System.out.println("Stupid ahh ts pmo 4");
               if (zeroTime == 0.0) {
-                System.out.println("Stupid ahh ts pmo 5");
+                // System.out.println("Stupid ahh ts pmo 5");
                 zeroTime = Timer.getFPGATimestamp();
-              } else if (Timer.getFPGATimestamp() - zeroTime > 0.75) {
-                System.out.println("Stupid ahh ts pmo 6");
+              } else if (Timer.getFPGATimestamp() - zeroTime > 0.5) {
+                // System.out.println("Stupid ahh ts pmo 6");
                 firstTimeDefault = true;
                 moveWithPercent(0.0);
                 setElevatorEncoderPosition(0.0);
               }
             } else {
-              System.out.println("Stupid ahh ts pmo 7");
+              // System.out.println("Stupid ahh ts pmo 7");
               // System.out.println("Running down to zero");
               if (intakeItem == IntakeItem.ALGAE) {
-                System.out.println("Stupid ahh ts pmo 8");
+                // System.out.println("Stupid ahh ts pmo 8");
 
                 moveWithTorque(-40, 0.1);
               } else {
-                System.out.println("Stupid ahh ts pmo 9");
+                // System.out.println("Stupid ahh ts pmo 9");
                 if (getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
-                  moveWithTorque(-50, 0.6);
-                  System.out.println("Stupid ahh ts pmo 25");
+                  moveWithTorque(-50, 0.8);
+                  // System.out.println("Stupid ahh ts pmo 25");
                 } else if (getElevatorPosition() > (Constants.inchesToMeters(1.0))) {
                   moveWithTorque(-30, 0.4);
-                  System.out.println("Stupid ahh ts pmo 26");
+                  // System.out.println("Stupid ahh ts pmo 26");
                 }
               }
             }
           } else {
-            System.out.println("Stupid ahh ts pmo 10");
+            // System.out.println("Stupid ahh ts pmo 10");
             if (getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
-              moveWithTorque(-50, 0.6);
-              System.out.println("Stupid ahh ts pmo 11");
+              moveWithTorque(-50, 0.8);
+              // System.out.println("Stupid ahh ts pmo 11");
             } else if (getElevatorPosition() > (Constants.inchesToMeters(1.0))) {
               moveWithTorque(-30, 0.4);
-              System.out.println("Stupid ahh ts pmo 12");
+              // System.out.println("Stupid ahh ts pmo 12");
             } else {
-              System.out.println("Stupid ahh ts pmo 13");
+              // System.out.println("Stupid ahh ts pmo 13");
               if (DriverStation.isTeleopEnabled() && Math
                   .abs(
                       Constants.Ratios
                           .elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
                   && Timer.getFPGATimestamp() - idleTime > 0.3
                   && !firstTimeIdle) {
-                System.out.println("Stupid ahh ts pmo 14");
+                // System.out.println("Stupid ahh ts pmo 14");
                 if (zeroTime == 0.0) {
-                  System.out.println("Stupid ahh ts pmo 15");
+                  // System.out.println("Stupid ahh ts pmo 15");
                   zeroTime = Timer.getFPGATimestamp();
-                } else if (Timer.getFPGATimestamp() - zeroTime > 0.75) {
-                  System.out.println("Stupid ahh ts pmo 16");
+                } else if (Timer.getFPGATimestamp() - zeroTime > 0.5) {
+                  // System.out.println("Stupid ahh ts pmo 16");
                   firstTimeDefault = true;
                   moveWithPercent(0.0);
                   setElevatorEncoderPosition(0.0);
                 }
               } else {
-                System.out.println("Stupid ahh ts pmo 17");
+                // System.out.println("Stupid ahh ts pmo 17");
                 // IntakeItem.ALGAE) {
 
                 if (intakeItem == IntakeItem.ALGAE) {
-                  System.out.println("Stupid ahh ts pmo 18");
+                  // System.out.println("Stupid ahh ts pmo 18");
                   moveWithTorque(-40, 0.1);
                 } else {
-                  System.out.println("Stupid ahh ts pmo 19");
+                  // System.out.println("Stupid ahh ts pmo 19");
                   moveWithTorque(-40, 0.4);
                 }
               }
             }
           }
         } else {
-          System.out.println("Stupid ahh ts pmo 20");
+          // System.out.println("Stupid ahh ts pmo 20");
           if (Math.abs(
               Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble())) < 0.1
               && Timer.getFPGATimestamp() - idleTime > 0.3
               && !firstTimeIdle) {
-            System.out.println("Stupid ahh ts pmo 21");
+            // System.out.println("Stupid ahh ts pmo 21");
             if (zeroTime == 0.0) {
-              System.out.println("Stupid ahh ts pmo 22");
+              // System.out.println("Stupid ahh ts pmo 22");
               zeroTime = Timer.getFPGATimestamp();
-            } else if (Timer.getFPGATimestamp() - zeroTime > 0.75) {
-              System.out.println("Stupid ahh ts pmo 23");
+            } else if (Timer.getFPGATimestamp() - zeroTime > 0.5) {
+              // System.out.println("Stupid ahh ts pmo 23");
               firstTimeDefault = true;
               moveWithPercent(0.0);
               setElevatorEncoderPosition(0.0);
@@ -455,7 +455,7 @@ public class Elevator extends SubsystemBase {
           } else {
             // System.out.println("Running down to zero"); if (intakeItem ==
             // IntakeItem.ALGAE) {
-            System.out.println("Stupid ahh ts pmo 24");
+            // System.out.println("Stupid ahh ts pmo 24");
 
             moveWithTorque(-40, 0.6);
 
