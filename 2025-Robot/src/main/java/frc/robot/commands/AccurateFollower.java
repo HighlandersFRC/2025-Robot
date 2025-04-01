@@ -9,8 +9,6 @@ import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.tools.math.Vector;
 import frc.robot.tools.wrappers.AutoFollower;
@@ -111,9 +109,6 @@ public class AccurateFollower extends AutoFollower {
         // create velocity vector and set desired theta change
 
         drive.autoDrive(velocityVector, desiredThetaChange);
-        // Logger.recordOutput("pursuing?", true);
-        // Logger.recordOutput("Path Time", path
-        //         .getJSONObject(getPathPointIndex()).getDouble("time"));
     }
 
     @Override

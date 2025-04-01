@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -18,9 +17,6 @@ public class AutoPlaceL2Follower extends AutoFollower {
   Superstructure superstructure;
   Drive drive;
   private int currentPathPointIndex = 0;
-  private JSONArray path;
-  private boolean reset = true;
-  private int endIndex = 0;
   private double initTime = 0.0;
   double timeout = 0.0;
 
@@ -40,9 +36,6 @@ public class AutoPlaceL2Follower extends AutoFollower {
   public void from(int pointIndex, JSONObject pathJSON, int to) {
     System.out.println("Running L2 in auto");
     this.currentPathPointIndex = pointIndex;
-    path = pathJSON.getJSONArray("sampled_points");
-    endIndex = to;
-    reset = false;
   }
 
   // Called when the command is initially scheduled.
@@ -66,7 +59,7 @@ public class AutoPlaceL2Follower extends AutoFollower {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (superstructure.placedCoralL4() || Timer.getFPGATimestamp() - initTime > timeout) {
+    if (superstructure.placedCoralL2() || Timer.getFPGATimestamp() - initTime > timeout) {
       return true;
     } else {
       return false;
