@@ -679,17 +679,32 @@ public class Drive extends SubsystemBase {
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
         // Logger.recordOutput("Distance to tag", distToTag);
         if (distToTag < 3.2) {
-          standardDeviation.set(0, 0,
-              Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                  * Constants.Vision.getTagDistStdDevScalar(distToTag));
-          // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-          // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-          standardDeviation.set(1, 0,
-              Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                  * Constants.Vision.getTagDistStdDevScalar(distToTag));
-          // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-          // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-          standardDeviation.set(2, 0, 1.48);
+          if (systemState.equals(DriveState.REEF) || systemState.equals(DriveState.L3_REEF)
+              || systemState.equals(DriveState.L4_REEF)) {
+            standardDeviation.set(0, 0,
+                0.5
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(1, 0,
+                0.5
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(2, 0, 1.48);
+          } else {
+            standardDeviation.set(0, 0,
+                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(1, 0,
+                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(2, 0, 1.48);
+          }
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
           mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
@@ -712,17 +727,32 @@ public class Drive extends SubsystemBase {
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
         // Logger.recordOutput("Distance to tag", distToTag);
         if (distToTag < 3.2) {
-          standardDeviation.set(0, 0,
-              Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                  * Constants.Vision.getTagDistStdDevScalar(distToTag));
-          // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-          // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-          standardDeviation.set(1, 0,
-              Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                  * Constants.Vision.getTagDistStdDevScalar(distToTag));
-          // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-          // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-          standardDeviation.set(2, 0, 1.48);
+          if (systemState.equals(DriveState.REEF) || systemState.equals(DriveState.L3_REEF)
+              || systemState.equals(DriveState.L4_REEF)) {
+            standardDeviation.set(0, 0,
+                0.5
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(1, 0,
+                0.5
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(2, 0, 1.48);
+          } else {
+            standardDeviation.set(0, 0,
+                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(1, 0,
+                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(2, 0, 1.48);
+          }
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
           mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
@@ -1291,7 +1321,8 @@ public class Drive extends SubsystemBase {
       for (int i = 0; i < Constants.Reef.redL1FrontPlacingPositions.size(); i++) {
         // currentDist = Math.sqrt(Math.pow((x -
         // Constants.Reef.redL1FrontPlacingPositions.get(i).getX()), 2)
-        // + Math.pow((y - Constants.Reef.redL1FrontPlacingPositions.get(i).getY()), 2));
+        // + Math.pow((y - Constants.Reef.redL1FrontPlacingPositions.get(i).getY()),
+        // 2));
         currentDist = Math.hypot(
             x - (Constants.Reef.redL1FrontPlacingPositions.get(i).getX() + Constants.Reef.redL1BackPlacingPositions
                 .get(i)
@@ -1429,7 +1460,8 @@ public class Drive extends SubsystemBase {
       for (int i = 0; i < Constants.Reef.redL1FrontPlacingPositionsMore.size(); i++) {
         // currentDist = Math.sqrt(Math.pow((x -
         // Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getX()), 2)
-        // + Math.pow((y - Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getY()), 2));
+        // + Math.pow((y - Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getY()),
+        // 2));
         currentDist = Math.hypot(
             x - (Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getX()
                 + Constants.Reef.redL1BackPlacingPositionsMore
@@ -3335,13 +3367,16 @@ public class Drive extends SubsystemBase {
   public double[] getClosestL1CornerPointXY() { // returns the closest point on the trough for l1
     // double[] xy = { 0.0, 0.0 };
     // if (isL1Face()) {
-    //   xy = getClosestPoint(getClosestL1Points().get(0), getClosestL1Points().get(1));
+    // xy = getClosestPoint(getClosestL1Points().get(0),
+    // getClosestL1Points().get(1));
     // } else {
-    //   xy = getClosestPoint(getClosestL1Points().get(0), getClosestL1Points().get(0));
+    // xy = getClosestPoint(getClosestL1Points().get(0),
+    // getClosestL1Points().get(0));
     // }
     // return xy;
-    // System.out.println("X1: " + getClosestL1Points().get(0)[0] + " Y1: " + getClosestL1Points().get(0)[1] + "X2: "
-    //     + getClosestL1Points().get(1)[0] + " Y2: " + getClosestL1Points().get(1)[1]);
+    // System.out.println("X1: " + getClosestL1Points().get(0)[0] + " Y1: " +
+    // getClosestL1Points().get(0)[1] + "X2: "
+    // + getClosestL1Points().get(1)[0] + " Y2: " + getClosestL1Points().get(1)[1]);
     double[] xy = getClosestPoint(getClosestL1CornerPoints().get(0), getClosestL1CornerPoints().get(1));
     return xy;
   }
@@ -3367,7 +3402,8 @@ public class Drive extends SubsystemBase {
         }
       }
       list.add(chosenSetpoint);
-      // System.out.println("Closest Point: " + list.get(0)[0] + " " + list.get(0)[1]);
+      // System.out.println("Closest Point: " + list.get(0)[0] + " " +
+      // list.get(0)[1]);
       currentDist = 100.0;
       dist = 100.0;
       for (int i = 0; i < Constants.Reef.l1BlueDrivePoints.size(); i++) {
@@ -3381,10 +3417,11 @@ public class Drive extends SubsystemBase {
             Math.abs(Constants.Reef.l1BlueDrivePoints.get(i).getY() - list.get(0)[1])) > 0.1) {
           dist = currentDist;
           // System.out.println(" ");
-          // System.out.println("new X2: " + Constants.Reef.l1BluePoints.get(i).getX() + "new Y2: "
-          //     + Constants.Reef.l1BluePoints.get(i).getY());
+          // System.out.println("new X2: " + Constants.Reef.l1BluePoints.get(i).getX() +
+          // "new Y2: "
+          // + Constants.Reef.l1BluePoints.get(i).getY());
           // System.out.println("old X2: " + list.get(0)[0] + "old Y2: "
-          //     + list.get(0)[1]);
+          // + list.get(0)[1]);
           secondPoint[0] = Constants.Reef.l1BlueDrivePoints.get(i).getX();
           secondPoint[1] = Constants.Reef.l1BlueDrivePoints.get(i).getY();
         }
@@ -3676,15 +3713,17 @@ public class Drive extends SubsystemBase {
       firstTimeReef = true;
     }
     // Logger.recordOutput("L1 Vector",
-    //     new Pose2d(new Translation2d(2.0, 2.0),
-    //         new Rotation2d(
-    //             Math.atan2(getClosestL1Points().get(0)[1] - getClosestL1Points().get(
-    //                 1)[1], getClosestL1Points().get(0)[0] - getClosestL1Points().get(1)[0]))));
+    // new Pose2d(new Translation2d(2.0, 2.0),
+    // new Rotation2d(
+    // Math.atan2(getClosestL1Points().get(0)[1] - getClosestL1Points().get(
+    // 1)[1], getClosestL1Points().get(0)[0] - getClosestL1Points().get(1)[0]))));
 
-    // Logger.recordOutput("Point 1", new Pose2d(new Translation2d(getClosestL1Points().get(0)[0],
-    //     getClosestL1Points().get(0)[1]), new Rotation2d(0.0)));
-    // Logger.recordOutput("Point 2", new Pose2d(new Translation2d(getClosestL1Points().get(1)[0],
-    //     getClosestL1Points().get(1)[1]), new Rotation2d(0.0)));
+    // Logger.recordOutput("Point 1", new Pose2d(new
+    // Translation2d(getClosestL1Points().get(0)[0],
+    // getClosestL1Points().get(0)[1]), new Rotation2d(0.0)));
+    // Logger.recordOutput("Point 2", new Pose2d(new
+    // Translation2d(getClosestL1Points().get(1)[0],
+    // getClosestL1Points().get(1)[1]), new Rotation2d(0.0)));
 
     // Pose2d l1Pose = new Pose2d(getClosestL1PointXY()[0],
     // getClosestL1PointXY()[1],
@@ -3704,14 +3743,17 @@ public class Drive extends SubsystemBase {
         break;
       case AUTO_L1:
         // driveToTheta(Math.toDegrees(getThetaToCenterReef()));
-        // driveToTheta(Math.toDegrees(getThetaToPoint(getClosestL1PointXY()[0], getClosestL1PointXY()[1])));
-        // driveOnLine(new Vector(getClosestL1Points().get(0)[0] - getClosestL1Points().get(
-        //     1)[0], getClosestL1Points().get(0)[1]
-        //         - getClosestL1Points().get(
-        //             1)[1]),
-        //     new Translation2d(getClosestL1Points().get(0)[0], getClosestL1Points().get(
-        //         0)[1]),
-        //     getThetaToPoint(getClosestL1CornerPointXY()[0], getClosestL1CornerPointXY()[1]));
+        // driveToTheta(Math.toDegrees(getThetaToPoint(getClosestL1PointXY()[0],
+        // getClosestL1PointXY()[1])));
+        // driveOnLine(new Vector(getClosestL1Points().get(0)[0] -
+        // getClosestL1Points().get(
+        // 1)[0], getClosestL1Points().get(0)[1]
+        // - getClosestL1Points().get(
+        // 1)[1]),
+        // new Translation2d(getClosestL1Points().get(0)[0], getClosestL1Points().get(
+        // 0)[1]),
+        // getThetaToPoint(getClosestL1CornerPointXY()[0],
+        // getClosestL1CornerPointXY()[1]));
         // System.out.println(Math.toDegrees(getThetaToCenterReef()));
         if (firstTimeReef) {
           firstTimeReef = false;
@@ -3725,18 +3767,21 @@ public class Drive extends SubsystemBase {
         break;
       case AUTO_L1_MORE:
         // driveToTheta(Math.toDegrees(getThetaToCenterReef()));
-        // driveToTheta(Math.toDegrees(getThetaToPoint(getClosestL1PointXY()[0], getClosestL1PointXY()[1])));
-        // driveOnLine(new Vector(getClosestL1Points().get(0)[0] - getClosestL1Points().get(
-        //     1)[0], getClosestL1Points().get(0)[1]
-        //         - getClosestL1Points().get(
-        //             1)[1]),
-        //     new Translation2d(getClosestL1Points().get(0)[0], getClosestL1Points().get(
-        //         0)[1]),
-        //     getThetaToPoint(getClosestL1CornerPointXY()[0], getClosestL1CornerPointXY()[1]));
+        // driveToTheta(Math.toDegrees(getThetaToPoint(getClosestL1PointXY()[0],
+        // getClosestL1PointXY()[1])));
+        // driveOnLine(new Vector(getClosestL1Points().get(0)[0] -
+        // getClosestL1Points().get(
+        // 1)[0], getClosestL1Points().get(0)[1]
+        // - getClosestL1Points().get(
+        // 1)[1]),
+        // new Translation2d(getClosestL1Points().get(0)[0], getClosestL1Points().get(
+        // 0)[1]),
+        // getThetaToPoint(getClosestL1CornerPointXY()[0],
+        // getClosestL1CornerPointXY()[1]));
         // System.out.println(Math.toDegrees(getThetaToCenterReef()));
         // if (firstTimeReef) {
-        //   firstTimeReef = false;
-        //   origionalSetpointPose = getL1ReefClosestSetpoint(getMT2Odometry(), false);
+        // firstTimeReef = false;
+        // origionalSetpointPose = getL1ReefClosestSetpoint(getMT2Odometry(), false);
         // }
         driveToPoint(getL1ReefClosestSetpointMore(getMT2Odometry(), false)[0],
             getL1ReefClosestSetpointMore(getMT2Odometry(),
