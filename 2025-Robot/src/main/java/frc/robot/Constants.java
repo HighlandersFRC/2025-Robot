@@ -251,7 +251,7 @@ public final class Constants {
                 public static final double F_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double G_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double H_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
-                public static final double I_BRANCH_OFFSET_SIDE = inchesToMeters(-1.5);
+                public static final double I_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double J_BRANCH_OFFSET_SIDE = inchesToMeters(-2.0);
                 public static final double K_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double L_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
@@ -264,7 +264,7 @@ public final class Constants {
                 public static final double F_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
                 public static final double G_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
                 public static final double H_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
-                public static final double I_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(-1.5);
+                public static final double I_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(1.5);
                 public static final double J_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(-2.0);
                 public static final double K_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
                 public static final double L_BRANCH_OFFSET_SIDE_L3 = inchesToMeters(0.0);
@@ -277,7 +277,7 @@ public final class Constants {
                 public static final double F_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
                 public static final double G_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
                 public static final double H_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
-                public static final double I_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(-1.5);
+                public static final double I_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(1.5);
                 public static final double J_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(-2.0);
                 public static final double K_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);
                 public static final double L_BRANCH_OFFSET_SIDE_L2 = inchesToMeters(0.0);

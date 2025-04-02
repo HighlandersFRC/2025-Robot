@@ -162,7 +162,8 @@ public class RobotContainer {
                 // OI.driverLT.whileTrue(new SetIntakeState(intake, IntakeState.OUTAKE));
                 // OI.driverLT.onFalse(new SetIntakeState(intake, IntakeState.DEFAULT));
 
-                OI.driverLB.whileTrue(new ConditionalCommand(new InstantCommand(),
+                OI.driverLB.whileTrue(new ConditionalCommand(
+                                new SetRobotState(superstructure, SuperState.LOLLIOP_PICKUP),
                                 new ConditionalCommand(
                                                 new SetRobotState(superstructure,
                                                                 SuperState.FEEDER),
