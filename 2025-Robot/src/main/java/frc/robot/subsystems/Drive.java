@@ -216,9 +216,9 @@ public class Drive extends SubsystemBase {
   private double kYI = kXI;
   private double kYD = kXD;
 
-  private double kThetaP = 2.90;
+  private double kThetaP = 3.937;
   private double kThetaI = 0.00;
-  private double kThetaD = 2.00;
+  private double kThetaD = 3.5;
 
   // auto placement PID values
   private double kkXP = 3.60;
@@ -246,6 +246,19 @@ public class Drive extends SubsystemBase {
   private double kkThetaI4 = 0.00;
   private double kkThetaD4 = 0.971;
 
+  // Piece pickup values
+  private double kkkXPPickup = 3.30;
+  private double kkkXIPickup = 0.00;
+  private double kkkXDPickup = 1.70;
+
+  private double kkkYPPickup = kkkXPPickup;
+  private double kkkYIPickup = kkkXIPickup;
+  private double kkkYDPickup = kkkXDPickup;
+
+  private double kkkThetaPPickup = 2.056;
+  private double kkkThetaIPickup = 0.00;
+  private double kkkThetaDPickup = 0.971;
+
   // teleop targeting PID values
   private double kTurningP = 0.04;
   private double kTurningI = 0;
@@ -258,6 +271,10 @@ public class Drive extends SubsystemBase {
   private PID xxPID4 = new PID(kkXP4, kkXI4, kkXD4);
   private PID yyPID4 = new PID(kkYP4, kkYI4, kkYD4);
   private PID thetaaPID4 = new PID(kkThetaP4, kkThetaI4, kkThetaD4);
+
+  private PID xxPIDPickup = new PID(kkkXPPickup, kkkXIPickup, kkkXDPickup);
+  private PID yyPIDPickup = new PID(kkkYPPickup, kkkYIPickup, kkkYDPickup);
+  private PID thetaaPIDPickup = new PID(kkkThetaPPickup, kkkThetaIPickup, kkkThetaDPickup);
 
   private PID xPID = new PID(kXP, kXI, kXD);
   private PID yPID = new PID(kYP, kYI, kYD);
@@ -388,14 +405,14 @@ public class Drive extends SubsystemBase {
     backRight.init();
     backLeft.init();
 
-    xxPID.setMinOutput(-4.9);
-    xxPID.setMaxOutput(4.9);
+    xxPID.setMinOutput(-3.0);
+    xxPID.setMaxOutput(3.0);
 
-    yyPID.setMinOutput(-4.9);
-    yyPID.setMaxOutput(4.9);
+    yyPID.setMinOutput(-3.0);
+    yyPID.setMaxOutput(3.0);
 
-    thetaaPID.setMinOutput(-3);
-    thetaaPID.setMaxOutput(3);
+    thetaaPID.setMinOutput(-3.0);
+    thetaaPID.setMaxOutput(3.0);
 
     xxPID4.setMinOutput(-3.0);
     xxPID4.setMaxOutput(3.0);
@@ -403,8 +420,17 @@ public class Drive extends SubsystemBase {
     yyPID4.setMinOutput(-3.0);
     yyPID4.setMaxOutput(3.0);
 
-    thetaaPID4.setMinOutput(-3);
-    thetaaPID4.setMaxOutput(3);
+    thetaaPID4.setMinOutput(-3.0);
+    thetaaPID4.setMaxOutput(3.0);
+
+    xxPIDPickup.setMinOutput(-1.0);
+    xxPIDPickup.setMaxOutput(1.0);
+
+    yyPIDPickup.setMinOutput(-1.0);
+    yyPIDPickup.setMaxOutput(1.0);
+
+    thetaaPIDPickup.setMinOutput(-2.0);
+    thetaaPIDPickup.setMaxOutput(2.0);
 
     xPID.setMinOutput(-5.5);
     xPID.setMaxOutput(5.5);
@@ -2216,9 +2242,9 @@ public class Drive extends SubsystemBase {
       // } else
       if (Math.abs(yFromIntake) < 0.2) {
         System.out.println("going in");
-        if (!firstTimeGoingInCalculated) {
-          firstTimeCalculated = false;
-        }
+        // if (!firstTimeGoingInCalculated) {
+        // firstTimeCalculated = false;
+        // }
         return targetPose;
       } else if (yFromIntake < -0.1) {
         System.out.println("to the left");
@@ -2831,6 +2857,20 @@ public class Drive extends SubsystemBase {
       xVelNoFF = xxPID4.getResult();
       yVelNoFF = yyPID4.getResult();
       thetaVelNoFF = -thetaaPID4.getResult();
+
+    } else if (systemState.equals(DriveState.PIECE_PICKUP)) {
+
+      xxPIDPickup.setSetPoint(x);
+      yyPIDPickup.setSetPoint(y);
+      thetaaPIDPickup.setSetPoint(theta);
+
+      xxPIDPickup.updatePID(getMT2OdometryX());
+      yyPIDPickup.updatePID(getMT2OdometryY());
+      thetaaPIDPickup.updatePID(getMT2OdometryAngle());
+
+      xVelNoFF = xxPIDPickup.getResult();
+      yVelNoFF = yyPIDPickup.getResult();
+      thetaVelNoFF = -thetaaPIDPickup.getResult();
 
     } else {
 
