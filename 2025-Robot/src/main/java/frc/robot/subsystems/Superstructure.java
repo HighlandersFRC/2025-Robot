@@ -2116,7 +2116,6 @@ public class Superstructure extends SubsystemBase {
 
   public void handleLollipopPickup() {
     lights.setWantedState(LightsState.INTAKING);
-    drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.LOLLIPOP);
     intake.setWantedState(IntakeState.CORAL_INTAKE);
     pivot.setWantedState(PivotState.LOLLIPOP);
