@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AutoCoralGroundPickupFollower;
 import frc.robot.commands.AutoIntakeFollower;
 import frc.robot.commands.AutoPlaceL2Follower;
 import frc.robot.commands.AutoPlaceL4Follower;
@@ -81,6 +82,7 @@ public class RobotContainer {
                         put("Net", () -> new SetRobotStateSimple(superstructure, SuperState.NET));
                         put("AutoIntake", () -> new AutoIntakeFollower(superstructure, drive, 2.3));
                         put("ReefAlgae", () -> new SetRobotState(superstructure, SuperState.AUTO_ALGAE_PICKUP));
+                        put("AutoIntake", () -> new AutoCoralGroundPickupFollower(superstructure, drive, 4.0));
                 }
         };
 
@@ -146,7 +148,7 @@ public class RobotContainer {
                 // SuperState.GROUND_CORAL_PICKUP_FRONT));
                 OI.driverRT.whileTrue(new ConditionalCommand(new SetRobotState(superstructure,
                                 SuperState.GROUND_ALGAE_PICKUP_FRONT),
-                                new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_FRONT),
+                                new SetRobotState(superstructure, SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT),
                                 () -> (algaeMode)));
                 // OI.driverRB.whileTrue(new SetRobotState(superstructure,
                 // SuperState.GROUND_CORAL_PICKUP_BACK));

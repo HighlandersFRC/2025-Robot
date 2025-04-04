@@ -98,7 +98,7 @@ public class Twist extends SubsystemBase {
   }
 
   public double getTwistPosition() {
-    return 360 * twistMotor.getPosition().getValueAsDouble();
+    return 360.0 * twistMotor.getPosition().getValueAsDouble();
   }
 
   public void setTwistEncoderPosition(double position) {

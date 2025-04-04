@@ -292,6 +292,7 @@ public class Drive extends SubsystemBase {
   public enum DriveState {
     DEFAULT,
     IDLE,
+    STOP,
     REEF,
     REEF_MORE,
     L3_REEF,
@@ -2097,6 +2098,7 @@ public class Drive extends SubsystemBase {
   double firstTimePickupAngle = 0.0;
   boolean firstTimeCalculated = false;
   boolean firstTimeGoingInCalculated = false;
+  boolean firstTimeGoingIn = false;
 
   Pose2d targetPose = new Pose2d();
   Pose2d c1 = new Pose2d();
@@ -2245,8 +2247,9 @@ public class Drive extends SubsystemBase {
         // if (!firstTimeGoingInCalculated) {
         // firstTimeCalculated = false;
         // }
+        firstTimeGoingIn = true;
         return targetPose;
-      } else if (yFromIntake < -0.1) {
+      } else if (yFromIntake < 0.0 && !firstTimeGoingIn) {
         System.out.println("to the left");
         return c1;
       } else {
@@ -3320,6 +3323,8 @@ public class Drive extends SubsystemBase {
         return DriveState.PIECE_PICKUP;
       case AUTO_CLIMB:
         return DriveState.AUTO_CLIMB;
+      case STOP:
+        return DriveState.STOP;
       default:
         return DriveState.IDLE;
     }
@@ -3748,6 +3753,7 @@ public class Drive extends SubsystemBase {
       firstTimeAutoPickup = false;
       firstTimeCalculated = false;
       firstTimeGoingInCalculated = false;
+      firstTimeGoingIn = false;
     }
     if (!OI.getDriverA()) {
       firstTimeReef = true;
@@ -3780,6 +3786,13 @@ public class Drive extends SubsystemBase {
         }
         break;
       case IDLE:
+        break;
+      case STOP:
+        Vector velocityVector = new Vector();
+        velocityVector.setI(0);
+        velocityVector.setJ(0);
+        double desiredThetaChange = 0.0;
+        autoDrive(velocityVector, desiredThetaChange);
         break;
       case AUTO_L1:
         // driveToTheta(Math.toDegrees(getThetaToCenterReef()));

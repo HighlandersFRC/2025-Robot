@@ -39,7 +39,7 @@ public final class Constants {
                                 "JackInTheBot.polarauto",
                                 "3PieceFeederSmart.polarauto",
                                 "4PieceLollipop.polarauto",
-                                "TushPush.polarauto",
+                                "4Ground.polarauto",
                 };
 
                 public static int getSelectedPathIndex() {
