@@ -13,7 +13,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Intake.IntakeItem;
+import frc.robot.subsystems.Manipulator.IntakeItem;
 
 public class Pivot extends SubsystemBase {
 

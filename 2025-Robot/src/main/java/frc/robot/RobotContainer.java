@@ -33,7 +33,7 @@ import frc.robot.commands.ZeroAngleMidMatch;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Manipulator;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Pivot;
@@ -56,7 +56,7 @@ public class RobotContainer {
         Peripherals peripherals = new Peripherals();
         Elevator elevator = new Elevator();
         Drive drive = new Drive(peripherals, elevator);
-        Intake intake = new Intake();
+        Manipulator intake = new Manipulator();
         Lights lights = new Lights();
         Pivot pivot = new Pivot();
         Twist twist = new Twist();

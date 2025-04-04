@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.Constants.SetPoints.ElevatorPosition;
-import frc.robot.subsystems.Intake.IntakeItem;
+import frc.robot.subsystems.Manipulator.IntakeItem;
 
 public class Elevator extends SubsystemBase {
   private final TalonFX elevatorMotorMaster = new TalonFX(Constants.CANInfo.MASTER_ELEVATOR_MOTOR_ID,

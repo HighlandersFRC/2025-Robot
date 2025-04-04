@@ -5,18 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Manipulator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SetIntake extends Command {
   /** Creates a new MoveTestMotor. */
-  Intake intake;
+  Manipulator manipulator;
   double percent;
-  public SetIntake(Intake intake, double percent) {
+
+  public SetIntake(Manipulator manipulator, double percent) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.intake = intake;
+    this.manipulator = manipulator;
     this.percent = percent;
-    addRequirements(this.intake);
+    addRequirements(this.manipulator);
   }
 
   // Called when the command is initially scheduled.
@@ -27,13 +28,13 @@ public class SetIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.setIntakePercent(percent);
+    manipulator.setIntakePercent(percent);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.setIntakePercent(0.0);
+    manipulator.setIntakePercent(0.0);
   }
 
   // Returns true when the command should end.

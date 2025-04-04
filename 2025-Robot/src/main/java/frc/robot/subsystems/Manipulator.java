@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
 
-public class Intake extends SubsystemBase {
+public class Manipulator extends SubsystemBase {
   /** Creates a new Intake. */
   private final TalonFX intakeMotor = new TalonFX(Constants.CANInfo.INTAKE_MOTOR_ID, Constants.CANInfo.CANBUS_NAME);
 
@@ -105,7 +105,7 @@ public class Intake extends SubsystemBase {
     return IntakeItem.NONE;
   }
 
-  public Intake() {
+  public Manipulator() {
   }
 
   public void setIntakePercent(double percent) {
