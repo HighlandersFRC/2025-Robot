@@ -659,7 +659,7 @@ public class Superstructure extends SubsystemBase {
         elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
       }
       manipulator.setWantedState(ManipulatorState.DEFAULT);
-
+      intake.setWantedState(IntakeState.DEFAULT);
       // if (isClimbing) {
       // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
       // } else {
@@ -693,6 +693,7 @@ public class Superstructure extends SubsystemBase {
       } else if (firstTimeDefault) {
         pivot.setWantedState(PivotState.PREP);
       }
+      intake.setWantedState(IntakeState.DEFAULT);
       // }
 
       if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {

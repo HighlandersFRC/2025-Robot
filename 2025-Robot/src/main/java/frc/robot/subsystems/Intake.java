@@ -46,9 +46,9 @@ public class Intake extends SubsystemBase {
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
     config.CurrentLimits.StatorCurrentLimit = 80;
     config.CurrentLimits.SupplyCurrentLimit = 80;
-    config.Slot0.kP = 33.39;
+    config.Slot0.kP = 1;
     config.Slot0.kI = 0.0;
-    config.Slot0.kD = 2.7;
+    config.Slot0.kD = 0;
     config.MotionMagic.MotionMagicAcceleration = Constants.SetPoints.IntakeSetpoints.INTAKE_ACCELERATION;
     config.MotionMagic.MotionMagicCruiseVelocity = Constants.SetPoints.IntakeSetpoints.INTAKE_CRUISE_VELOCITY;
     roller.getConfigurator().apply(config);
@@ -147,7 +147,7 @@ public class Intake extends SubsystemBase {
         roller.getAcceleration().getValueAsDouble());
     if (Math.abs(roller.getVelocity().getValueAsDouble()) < 15
         && Math.abs(roller.getTorqueCurrent().getValueAsDouble()) > 8
-        /* && Math.abs(roller.getAcceleration().getValueAsDouble()) < 10 */ && !beamBreak.isTripped()) {
+        /* && Math.abs(roller.getAcceleration().getValueAsDouble()) < 10 */ && beamBreak.isTripped()) {
       return true;
     } else {
       return false;

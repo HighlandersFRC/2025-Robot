@@ -12,6 +12,6 @@ public class BeamBreak {
     }
 
     public boolean isTripped() {
-        return sensor.get();
+        return !sensor.get();
     }
 }
