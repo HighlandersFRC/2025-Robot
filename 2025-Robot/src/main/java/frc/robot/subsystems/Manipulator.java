@@ -75,7 +75,7 @@ public class Manipulator extends SubsystemBase {
         manipulatorMotor.getAcceleration().getValueAsDouble());
     if (Math.abs(manipulatorMotor.getVelocity().getValueAsDouble()) < 15
         && Math.abs(manipulatorMotor.getTorqueCurrent().getValueAsDouble()) > 8
-        && Math.abs(manipulatorMotor.getAcceleration().getValueAsDouble()) < 10) {
+    /* && Math.abs(manipulatorMotor.getAcceleration().getValueAsDouble()) < 10 */) {
       return true;
     } else {
       return false;

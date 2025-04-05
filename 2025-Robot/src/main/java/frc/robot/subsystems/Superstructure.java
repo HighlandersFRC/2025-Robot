@@ -652,7 +652,7 @@ public class Superstructure extends SubsystemBase {
     drive.setWantedState(DriveState.DEFAULT);
     // pivot.setWantedFlip(PivotFlip.FRONT);
     // if ()
-    if (algaeMode || intake.hasCoral()) {
+    if (algaeMode) {
       if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
         elevator.setWantedState(ElevatorState.DEFAULT);
       } else {
@@ -675,8 +675,32 @@ public class Superstructure extends SubsystemBase {
       }
       // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
       twist.setWantedState(TwistState.SIDE);
+    } else if (manipulator.hasCoral()) {
+      // if (/* Math.abs(twist.getTwistPosition()) < 45 && */
+      // Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      elevator.setWantedState(ElevatorState.L3);
+      // } else {
+      // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+      // }
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
+
+      // if (isClimbing) {
+      // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
+      // } else {
+      if (Math.abs(twist.getTwistPosition()) < 30.0) {
+        pivot.setWantedState(PivotState.DEFAULT);
+        firstTimeDefault = false;
+      } else if (firstTimeDefault) {
+        pivot.setWantedState(PivotState.PREP);
+      }
+      // }
+
+      if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
+      }
+      // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      twist.setWantedState(TwistState.SIDE);
     } else {
-      twist.setWantedState(TwistState.DOWN);
+      twist.setWantedState(TwistState.UP);
       elevator.setWantedState(ElevatorState.HANDOFF);
       manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
       pivot.setWantedState(PivotState.HANDOFF);
