@@ -480,7 +480,11 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.FEEDER;
         break;
       case GROUND_CORAL_PICKUP_FRONT:
-        currentSuperState = SuperState.GROUND_CORAL_PICKUP_FRONT;
+        if (intake.hasCoral()) {
+          currentSuperState = SuperState.DEFAULT;
+        } else {
+          currentSuperState = SuperState.GROUND_CORAL_PICKUP_FRONT;
+        }
         break;
       case GROUND_CORAL_PICKUP_BACK:
         currentSuperState = SuperState.GROUND_CORAL_PICKUP_BACK;
@@ -1336,6 +1340,9 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
     intake.setWantedState(IntakeState.INTAKING);
+    pivot.setWantedState(PivotState.HANDOFF);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
+    elevator.setWantedState(ElevatorState.HANDOFF);
     if (pivot.getPivotPosition() > 15.0 / 360.0) {
       twist.setWantedState(TwistState.UP);
     }

@@ -139,6 +139,18 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean hasCoral() {
-    return beamBreak.isTripped();
+    Logger.recordOutput("Intake Velocity",
+        roller.getVelocity().getValueAsDouble());
+    Logger.recordOutput("Intake Torque",
+        roller.getTorqueCurrent().getValueAsDouble());
+    Logger.recordOutput("Intake Acceleration",
+        roller.getAcceleration().getValueAsDouble());
+    if (Math.abs(roller.getVelocity().getValueAsDouble()) < 15
+        && Math.abs(roller.getTorqueCurrent().getValueAsDouble()) > 8
+        /* && Math.abs(roller.getAcceleration().getValueAsDouble()) < 10 */ && !beamBreak.isTripped()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
