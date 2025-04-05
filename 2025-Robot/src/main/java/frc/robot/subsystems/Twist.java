@@ -14,7 +14,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Manipulator.IntakeItem;
+import frc.robot.subsystems.Manipulator.ArmItem;
 
 public class Twist extends SubsystemBase {
 
@@ -68,15 +68,15 @@ public class Twist extends SubsystemBase {
     // zeroInitTime = Timer.getFPGATimestamp();
   }
 
-  private IntakeItem intakeItem = IntakeItem.NONE;
+  private ArmItem intakeItem = ArmItem.NONE;
 
-  public void updateIntakeItem(IntakeItem intakeItem) {
+  public void updateIntakeItem(ArmItem intakeItem) {
     this.intakeItem = intakeItem;
   }
 
   public void twistToPosition(double rotations) {
 
-    if (intakeItem == IntakeItem.ALGAE) { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
+    if (intakeItem == ArmItem.ALGAE) { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
       twistMotor.setControl(this.twistTorqueCurrentFOC // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
           .withPosition(rotations).withEnableFOC(true).withSlot(1)); // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
     } else { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE

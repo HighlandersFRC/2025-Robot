@@ -12,22 +12,24 @@ import frc.robot.OI;
 import frc.robot.subsystems.Climber.ClimbState;
 import frc.robot.subsystems.Drive.DriveState;
 import frc.robot.subsystems.Elevator.ElevatorState;
-import frc.robot.subsystems.Manipulator.IntakeItem;
-import frc.robot.subsystems.Manipulator.IntakeState;
+import frc.robot.subsystems.Intake.IntakeState;
+import frc.robot.subsystems.Manipulator.ArmItem;
+import frc.robot.subsystems.Manipulator.ManipulatorState;
 import frc.robot.subsystems.Lights.LightsState;
 import frc.robot.subsystems.Pivot.PivotFlip;
 import frc.robot.subsystems.Pivot.PivotState;
 import frc.robot.subsystems.Twist.TwistState;
 
 public class Superstructure extends SubsystemBase {
-  private Drive drive;
-  private Elevator elevator;
-  private Manipulator manipulator;
-  private Pivot pivot;
-  private Twist twist;
-  private Climber climber;
-  private Lights lights;
-  private Peripherals peripherals;
+  private final Drive drive;
+  private final Elevator elevator;
+  private final Manipulator manipulator;
+  private final Pivot pivot;
+  private final Twist twist;
+  private final Intake intake;
+  private final Climber climber;
+  private final Lights lights;
+  private final Peripherals peripherals;
   double outakeIdleInitTime = 0;
   boolean outakeIdleInit = false;
   boolean firstTimeDefault = true;
@@ -92,17 +94,20 @@ public class Superstructure extends SubsystemBase {
   private SuperState currentSuperState = SuperState.DEFAULT;
 
   private boolean continueClimbing = false;
+  public boolean algaeMode = false;
 
-  public Superstructure(Drive drive, Elevator elevator, Manipulator intake, Pivot pivot, Twist twist, Climber climber,
-      Lights lights, Peripherals peripherals) {
+  public Superstructure(Drive drive, Elevator elevator, Manipulator manipulator, Pivot pivot, Twist twist,
+      Climber climber,
+      Lights lights, Peripherals peripherals, Intake intake) {
     this.drive = drive;
     this.elevator = elevator;
-    this.manipulator = intake;
+    this.manipulator = manipulator;
     this.pivot = pivot;
     this.twist = twist;
     this.climber = climber;
     this.lights = lights;
     this.peripherals = peripherals;
+    this.intake = intake;
   }
 
   public void setWantedState(SuperState wantedState) {
@@ -603,64 +608,6 @@ public class Superstructure extends SubsystemBase {
 
   }
 
-  // /**
-  // * This function handles the CYCLING state of the Superstructure subsystem.
-  // * In the CYCLING state, the drive subsystem is set to its default state.
-  // *
-  // * @return void - This function does not return any value.
-  // */
-  // public void handleCYCLINGState() {
-  // drive.setWantedState(DriveState.DEFAULT);
-  // elevator.setWantedState(ElevatorState.IDLE);
-  // }
-
-  // /**
-  // * This function handles the IDLE state of the Superstructure subsystem.
-  // * In the IDLE state, the drive subsystem is set to its IDLE state.
-  // *
-  // * @return void - This function does not return any value.
-  // */
-  // public void handleIDLEState() {
-  // drive.setWantedState(DriveState.IDLE);
-  // elevator.setWantedState(ElevatorState.IDLE);
-  // }
-
-  // public void handleElevatorOFFState() {
-  // elevator.setWantedState(ElevatorState.OFF);
-  // }
-
-  // public void handleElevatorMIDState() {
-  // elevator.setWantedState(ElevatorState.MID);
-  // }
-
-  // public void handleElevatorUPState() {
-  // elevator.setWantedState(ElevatorState.UP);
-  // }
-
-  // public void handleElevatorL2State() {
-  // elevator.setWantedState(ElevatorState.L2);
-  // }
-
-  // public void handeElevatorAlgaeState() {
-  // elevator.setWantedState(ElevatorState.ALGAE);
-  // }
-
-  // public void handleElevatorL3State() {
-  // elevator.setWantedState(ElevatorState.L3);
-  // }
-
-  // public void handleOutakingState() {
-  // intake.setWantedState(IntakeState.OUTAKE);
-  // }
-
-  // public void handleIntakingState() {
-  // intake.setWantedState(IntakeState.INTAKE);
-  // }
-
-  // public void handleIntakeDefaultState() {
-  // intake.setWantedState(IntakeState.DEFAULT);
-  // }
-
   public boolean placedCoralL4() {
     // return
     // drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[0],
@@ -688,20 +635,6 @@ public class Superstructure extends SubsystemBase {
         .abs(Math.abs(pivot.getPivotPosition())
             - Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations) < (5.0 / 360.0);
   }
-  // public void handleDefaultState() {
-  // drive.setWantedState(DriveState.DEFAULT);
-  // if (Math.abs(pivot.getPivotPosition()) > 0.05) {
-  // elevator.setWantedState(ElevatorState.DEFAULT);
-  // } else {
-  // elevator.setWantedState(ElevatorState.OVER);
-  // }
-  // intake.setWantedState(IntakeState.DEFAULT);
-  // if (elevator.getElevatorPosition() > 10 / 39.37
-  // || (Math.abs(pivot.getPivotPosition()) > 0.05)) {
-  // pivot.setWantedState(PivotState.DEFAULT);
-  // }
-  // twist.setWantedState(TwistState.SIDE);
-  // }
 
   public boolean isClimbing = false;
 
@@ -714,28 +647,42 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.DEFAULT);
     drive.setWantedState(DriveState.DEFAULT);
     // pivot.setWantedFlip(PivotFlip.FRONT);
-    if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
-      elevator.setWantedState(ElevatorState.DEFAULT);
+    // if ()
+    if (algaeMode || intake.hasCoral()) {
+      if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+        elevator.setWantedState(ElevatorState.DEFAULT);
+      } else {
+        elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+      }
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
+
+      // if (isClimbing) {
+      // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
+      // } else {
+      if (Math.abs(twist.getTwistPosition()) < 30.0) {
+        pivot.setWantedState(PivotState.DEFAULT);
+        firstTimeDefault = false;
+      } else if (firstTimeDefault) {
+        pivot.setWantedState(PivotState.PREP);
+      }
+      // }
+
+      if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
+      }
+      // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      twist.setWantedState(TwistState.SIDE);
     } else {
-      elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+      twist.setWantedState(TwistState.DOWN);
+      elevator.setWantedState(ElevatorState.HANDOFF);
+      manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
+      pivot.setWantedState(PivotState.HANDOFF);
+      intake.setWantedState(IntakeState.DEFAULT);
+      if (Math.abs(twist.getTwistPosition() - 90) < 10
+          && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02
+          && Math.abs(elevator.getElevatorPosition() - Constants.SetPoints.ElevatorPosition.kHANDOFF.meters) < 0.05) {
+        intake.setWantedState(IntakeState.OUTAKING);
+      }
     }
-    manipulator.setWantedState(IntakeState.DEFAULT);
-
-    // if (isClimbing) {
-    // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
-    // } else {
-    if (Math.abs(twist.getTwistPosition()) < 30.0) {
-      pivot.setWantedState(PivotState.DEFAULT);
-      firstTimeDefault = false;
-    } else if (firstTimeDefault) {
-      pivot.setWantedState(PivotState.PREP);
-    }
-    // }
-
-    if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
-    }
-    // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
-    twist.setWantedState(TwistState.SIDE);
     // }
     climber.setWantedState(ClimbState.IDLE);
   }
@@ -750,7 +697,7 @@ public class Superstructure extends SubsystemBase {
       drive.setWantedState(DriveState.AUTO_L1);
     }
     elevator.setWantedState(ElevatorState.AUTO_L1);
-    manipulator.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     // System.out.println(drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
     // Math.toDegrees(drive.getReefClosestSetpointFrontOnly(drive.getMT2Odometry())[2])));
     if (drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
@@ -780,7 +727,7 @@ public class Superstructure extends SubsystemBase {
       drive.setWantedState(DriveState.AUTO_L1_MORE);
     }
     elevator.setWantedState(ElevatorState.AUTO_L1);
-    manipulator.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     // System.out.println(drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
     // Math.toDegrees(drive.getReefClosestSetpointFrontOnly(drive.getMT2Odometry())[2])));
     if (drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
@@ -811,9 +758,9 @@ public class Superstructure extends SubsystemBase {
     }
     if (Math.abs(pivot.getPivotPosition()) > 80.0 / 360.0
         && Math.abs(elevator.getElevatorPosition() - Constants.SetPoints.ELEVATOR_AUTO_L2_POSITION_M) < 0.1) {
-      manipulator.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
-      manipulator.setWantedState(IntakeState.DEFAULT);
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
     }
     if (Math.hypot(
         drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[0],
@@ -842,9 +789,9 @@ public class Superstructure extends SubsystemBase {
       drive.setWantedState(DriveState.L3_REEF);
     }
     if (Math.abs(pivot.getPivotPosition()) > 80.0 / 360.0) {
-      manipulator.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
-      manipulator.setWantedState(IntakeState.DEFAULT);
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
     }
     if (Math.hypot(
         drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[0],
@@ -864,59 +811,6 @@ public class Superstructure extends SubsystemBase {
     }
   }
 
-  // public void handleAutoL3PlaceState() {
-  // drive.setWantedState(DriveState.REEF);
-  // intake.setWantedState(IntakeState.DEFAULT);
-  // if (Math.hypot(
-  // drive.getMT2OdometryX() -
-  // drive.getReefClosestSetpoint(drive.getMT2Odometry())[0],
-  // drive.getMT2OdometryY() -
-  // drive.getReefClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
-  // && drive.getMT2OdometryAngle() -
-  // drive.getReefClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
-  // elevator.setWantedState(ElevatorState.AUTO_L3);
-  // if (drive.getAutoPlacementSideIsFront()) {
-  // pivot.setWantedFlip(PivotFlip.FRONT);
-  // } else {
-  // pivot.setWantedFlip(PivotFlip.BACK);
-  // }
-  // pivot.setWantedState(PivotState.AUTO_L23);
-  // twist.setWantedState(TwistState.SIDE);
-  // }
-  // }
-
-  // public void handleAutoL3PlaceState() {
-  // lights.setWantedState(LightsState.PLACING);
-  // pivot.setWantedFlip(PivotFlip.FRONT);
-  // drive.setWantedState(DriveState.L3_REEF);
-  // elevator.setWantedState(ElevatorState.AUTO_L3);
-  // intake.setWantedState(IntakeState.DEFAULT);
-  // if (elevator.getElevatorPosition() >
-  // Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 10 / 39.37) {
-  // pivot.setWantedState(PivotState.AUTO_L3);
-  // }
-  // twist.setWantedState(TwistState.SIDE);
-  // if (Math.hypot(
-  // drive.getMT2OdometryX() -
-  // drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[0],
-  // drive.getMT2OdometryY() -
-  // drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
-  // && drive.getMT2OdometryAngle() -
-  // drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
-  // elevator.setWantedState(ElevatorState.AUTO_L3);
-  // if (drive.getAutoPlacementSideIsFront()) {
-  // pivot.setWantedFlip(PivotFlip.FRONT);
-  // } else {
-  // pivot.setWantedFlip(PivotFlip.BACK);
-  // }
-  // if (elevator.getElevatorPosition() >
-  // Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 10 / 39.37) {
-  // pivot.setWantedState(PivotState.AUTO_L3);
-  // }
-  // twist.setWantedState(TwistState.SIDE);
-  // }
-  // }
-
   public void handleAutoL4PlaceState() {
     if (OI.driverLB.getAsBoolean()) {
       setWantedState(SuperState.AUTO_SCORE_L4);
@@ -928,7 +822,7 @@ public class Superstructure extends SubsystemBase {
     } else {
       drive.setWantedState(DriveState.L4_REEF);
     }
-    manipulator.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (Math.hypot(
         drive.getMT2OdometryX() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[0],
         drive.getMT2OdometryY() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[1]) < 0.8
@@ -960,7 +854,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L1);
-    manipulator.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     pivot.setWantedState(PivotState.L1);
     if (Math.abs(pivot.getPivotPosition()) > 30.0 / 360.0) {
       twist.setWantedState(TwistState.UP);
@@ -971,7 +865,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L2);
-    manipulator.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (OI.driverLB.getAsBoolean()) {
       pivot.setWantedState(PivotState.MANUAL_PLACE);
     } else if (OI.driverRB.getAsBoolean()) {
@@ -986,7 +880,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L3);
-    manipulator.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (OI.driverLB.getAsBoolean()) {
       pivot.setWantedState(PivotState.MANUAL_PLACE);
     } else if (OI.driverRB.getAsBoolean()) {
@@ -1001,7 +895,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L4);
-    manipulator.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (OI.driverLB.getAsBoolean()) {
       pivot.setWantedState(PivotState.MANUAL_PLACE);
     } else if (OI.driverRB.getAsBoolean()) {
@@ -1016,7 +910,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.PROCESSOR);
-    manipulator.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     pivot.setWantedState(PivotState.PROCESSOR);
     twist.setWantedState(TwistState.UP);
   }
@@ -1025,7 +919,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.NET);
-    manipulator.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     pivot.setWantedFlip(PivotFlip.FRONT);
     pivot.setWantedState(PivotState.NET);
     if (elevator.getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
@@ -1037,7 +931,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.PROCESSOR);
     elevator.setWantedState(ElevatorState.PROCESSOR);
-    manipulator.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (drive.getAutoPlacementSideIsFront()) {
       pivot.setWantedFlip(PivotFlip.FRONT);
       twist.setWantedState(TwistState.UP);
@@ -1052,7 +946,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.PROCESSOR_MORE);
     elevator.setWantedState(ElevatorState.PROCESSOR);
-    manipulator.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (drive.getAutoPlacementSideIsFront()) {
       pivot.setWantedFlip(PivotFlip.FRONT);
       twist.setWantedState(TwistState.UP);
@@ -1066,7 +960,7 @@ public class Superstructure extends SubsystemBase {
   public void handleOutakeDriveState() {
     lights.setWantedState(LightsState.SCORING);
     drive.setWantedState(DriveState.DEFAULT);
-    manipulator.setWantedState(IntakeState.OUTAKE);
+    manipulator.setWantedState(ManipulatorState.OUTAKE);
   }
 
   public void handleAutoNetState() {
@@ -1093,7 +987,7 @@ public class Superstructure extends SubsystemBase {
         elevator.setWantedState(ElevatorState.NET);
       }
     }
-    manipulator.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (!drive.getAutoPlacementSideIsFront()) {
       pivot.setWantedFlip(PivotFlip.BACK);
       if (elevator.getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
@@ -1135,7 +1029,7 @@ public class Superstructure extends SubsystemBase {
         elevator.setWantedState(ElevatorState.NET);
       }
     }
-    manipulator.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (!drive.getAutoPlacementSideIsFront()) {
       pivot.setWantedFlip(PivotFlip.BACK);
       twist.setWantedState(TwistState.DOWN);
@@ -1149,7 +1043,7 @@ public class Superstructure extends SubsystemBase {
   public void handleFeederAlignState() {
     lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.FEEDER_ALIGN);
-    manipulator.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     if (drive.getFieldSide() == "red") { // red side
       if (drive.getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
         if (!(Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 324
@@ -1287,7 +1181,7 @@ public class Superstructure extends SubsystemBase {
   public void handleFeederState() {
     lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.DEFAULT);
-    manipulator.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     if (Math.abs(pivot.getPivotPosition()) > 10.0 / 360.0) {
       twist.setWantedState(TwistState.UP);
     }
@@ -1301,7 +1195,7 @@ public class Superstructure extends SubsystemBase {
     // an actual field
     lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.FEEDER);
-    manipulator.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     if (drive.getFieldSide() == "red") { // red side
       if (drive.getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
         if (!(Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 324
@@ -1441,9 +1335,7 @@ public class Superstructure extends SubsystemBase {
   public void handleGroundCoralPickupFrontState() {
     lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
-    manipulator.setWantedState(IntakeState.CORAL_INTAKE);
-    pivot.setWantedState(PivotState.GROUND_CORAL_FRONT);
+    intake.setWantedState(IntakeState.INTAKING);
     if (pivot.getPivotPosition() > 15.0 / 360.0) {
       twist.setWantedState(TwistState.UP);
     }
@@ -1453,7 +1345,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
-    manipulator.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
     if (pivot.getPivotPosition() < -15.0 / 360.0) {
       twist.setWantedState(TwistState.DOWN);
@@ -1472,7 +1364,7 @@ public class Superstructure extends SubsystemBase {
       }
     }
     elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
-    manipulator.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     pivot.setWantedState(PivotState.GROUND_CORAL_FRONT);
     if (pivot.getPivotPosition() > 15.0 / 360.0) {
       twist.setWantedState(TwistState.UP);
@@ -1491,7 +1383,7 @@ public class Superstructure extends SubsystemBase {
       }
     }
     elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
-    manipulator.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
     if (pivot.getPivotPosition() < -15.0 / 360.0) {
       twist.setWantedState(TwistState.DOWN);
@@ -1502,7 +1394,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_ALGAE_INTAKE);
-    manipulator.setWantedState(IntakeState.ALGAE_INTAKE);
+    manipulator.setWantedState(ManipulatorState.ALGAE_INTAKE);
     pivot.setWantedFlip(PivotFlip.FRONT);
     pivot.setWantedState(PivotState.GROUND_ALGAE);
     if (Math.abs(pivot.getPivotPosition()) > 10.0 / 360.0) {
@@ -1514,7 +1406,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_ALGAE_INTAKE);
-    manipulator.setWantedState(IntakeState.ALGAE_INTAKE);
+    manipulator.setWantedState(ManipulatorState.ALGAE_INTAKE);
     pivot.setWantedFlip(PivotFlip.BACK);
     pivot.setWantedState(PivotState.GROUND_ALGAE);
     if (Math.abs(pivot.getPivotPosition()) < 10.0 / 360.0) {
@@ -1526,7 +1418,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L2_ALGAE);
-    manipulator.setWantedState(IntakeState.ALGAE_INTAKE);
+    manipulator.setWantedState(ManipulatorState.ALGAE_INTAKE);
     pivot.setWantedFlip(PivotFlip.FRONT);
     pivot.setWantedState(PivotState.REEF_ALGAE);
     twist.setWantedState(TwistState.DOWN);
@@ -1536,7 +1428,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L3_ALGAE);
-    manipulator.setWantedState(IntakeState.ALGAE_INTAKE);
+    manipulator.setWantedState(ManipulatorState.ALGAE_INTAKE);
     pivot.setWantedFlip(PivotFlip.FRONT);
     pivot.setWantedState(PivotState.REEF_ALGAE);
     twist.setWantedState(TwistState.DOWN);
@@ -1545,7 +1437,7 @@ public class Superstructure extends SubsystemBase {
   public void handleAutoAlgaePickupState() {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.ALGAE);
-    manipulator.setWantedState(IntakeState.ALGAE_INTAKE);
+    manipulator.setWantedState(ManipulatorState.ALGAE_INTAKE);
     if (drive.isGoingForL3Algae()) {
       elevator.setWantedState(ElevatorState.L3_ALGAE);
     } else {
@@ -1567,7 +1459,7 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoAlgaePickupMoreState() {
     lights.setWantedState(LightsState.FEEDER);
-    if (manipulator.getIntakeItem() == IntakeItem.NONE
+    if (manipulator.getArmItem() == ArmItem.NONE
         && Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) < 0.1 && Math
             .hypot(OI.getDriverRightX(), OI.getDriverRightY()) < 0.1) {
       drive.setWantedState(DriveState.ALGAE_MORE);
@@ -1616,7 +1508,7 @@ public class Superstructure extends SubsystemBase {
 
   public void handleOutakeState() {
     lights.setWantedState(LightsState.SCORING);
-    manipulator.setWantedState(IntakeState.OUTAKE);
+    manipulator.setWantedState(ManipulatorState.OUTAKE);
   }
 
   public void handleAutoL1ScoreState() {
@@ -1637,11 +1529,11 @@ public class Superstructure extends SubsystemBase {
       // drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[1],
       // drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2]))
       // {
-      manipulator.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
       // } else {
       // intake.setWantedState(IntakeState.OFF);
       // }
-      if (manipulator.getIntakeItem() == IntakeItem.NONE && !DriverStation.isAutonomousEnabled()) {
+      if (manipulator.getArmItem() == ArmItem.NONE && !DriverStation.isAutonomousEnabled()) {
         drive.setWantedState(DriveState.REEF_MORE);
         // elevator.setWantedState(ElevatorState.DEFAULT);
       } else {
@@ -1689,13 +1581,13 @@ public class Superstructure extends SubsystemBase {
     if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
         OI.getDriverLeftY()) > 0.25) {
       drive.setWantedState(DriveState.DEFAULT);
-      manipulator.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
           - 15.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
-        manipulator.setWantedState(IntakeState.OUTAKE);
+        manipulator.setWantedState(ManipulatorState.OUTAKE);
       } else {
-        manipulator.setWantedState(IntakeState.OFF);
+        manipulator.setWantedState(ManipulatorState.OFF);
       }
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
           - 15.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
@@ -1759,13 +1651,13 @@ public class Superstructure extends SubsystemBase {
     if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
         OI.getDriverLeftY()) > 0.25) {
       drive.setWantedState(DriveState.DEFAULT);
-      manipulator.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations
           - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
-        manipulator.setWantedState(IntakeState.OUTAKE);
+        manipulator.setWantedState(ManipulatorState.OUTAKE);
       } else {
-        manipulator.setWantedState(IntakeState.OFF);
+        manipulator.setWantedState(ManipulatorState.OFF);
       }
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations
           - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
@@ -1814,13 +1706,13 @@ public class Superstructure extends SubsystemBase {
       if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
           OI.getDriverLeftY()) > 0.25) {
         drive.setWantedState(DriveState.DEFAULT);
-        manipulator.setWantedState(IntakeState.OUTAKE);
+        manipulator.setWantedState(ManipulatorState.OUTAKE);
       } else {
         if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations
             - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
           hasPlaced = true;
           drive.setWantedState(DriveState.REEF_MORE);
-          manipulator.setWantedState(IntakeState.OUTAKE);
+          manipulator.setWantedState(ManipulatorState.OUTAKE);
           elevator.setWantedState(ElevatorState.DEFAULT);
         } else {
           if (hasPlaced) {
@@ -1828,7 +1720,7 @@ public class Superstructure extends SubsystemBase {
           } else {
             drive.setWantedState(DriveState.L4_REEF);
           }
-          manipulator.setWantedState(IntakeState.OFF);
+          manipulator.setWantedState(ManipulatorState.OFF);
         }
       }
     }
@@ -1838,7 +1730,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.SCORING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.SCORE_L1);
-    manipulator.setWantedState(IntakeState.OUTAKE);
+    manipulator.setWantedState(ManipulatorState.OUTAKE);
     pivot.setWantedState(PivotState.SCORE_L1);
   }
 
@@ -1853,9 +1745,9 @@ public class Superstructure extends SubsystemBase {
     // } else {
     if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
         OI.getDriverLeftY()) > 0.25) {
-      manipulator.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
-      manipulator.setWantedState(IntakeState.OFF);
+      manipulator.setWantedState(ManipulatorState.OFF);
     }
     // }
     pivot.setWantedState(PivotState.SCORE_L23);
@@ -1872,9 +1764,9 @@ public class Superstructure extends SubsystemBase {
     // } else {
     if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
         OI.getDriverLeftY()) > 0.25) {
-      manipulator.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
-      manipulator.setWantedState(IntakeState.OFF);
+      manipulator.setWantedState(ManipulatorState.OFF);
     } // }
     pivot.setWantedState(PivotState.SCORE_L23);
   }
@@ -1892,9 +1784,9 @@ public class Superstructure extends SubsystemBase {
     // } else {
     if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
         OI.getDriverLeftY()) > 0.25) {
-      manipulator.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
-      manipulator.setWantedState(IntakeState.OFF);
+      manipulator.setWantedState(ManipulatorState.OFF);
     } // }
   }
 
@@ -1907,7 +1799,7 @@ public class Superstructure extends SubsystemBase {
     // } else {
     // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     // }
-    manipulator.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (Math.abs(twist.getTwistPosition()) < 15.0) {
       pivot.setWantedState(PivotState.DEFAULT);
     }
@@ -1916,7 +1808,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleOutakeIdleState() {
-    manipulator.setWantedState(IntakeState.OUTAKE);
+    manipulator.setWantedState(ManipulatorState.OUTAKE);
     if (!outakeIdleInit) {
       outakeIdleInitTime = Timer.getFPGATimestamp();
       outakeIdleInit = true;
@@ -1949,7 +1841,7 @@ public class Superstructure extends SubsystemBase {
   public void handleAutoFeederState() {
     lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.AUTO_FEEDER);
-    manipulator.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     if (drive.getFieldSide() == "red") { // red side
       if (drive.getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
         if (!(Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 324
@@ -2117,7 +2009,7 @@ public class Superstructure extends SubsystemBase {
   public void handleLollipopPickup() {
     lights.setWantedState(LightsState.INTAKING);
     elevator.setWantedState(ElevatorState.LOLLIPOP);
-    manipulator.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     pivot.setWantedState(PivotState.LOLLIPOP);
     if (pivot.getPivotPosition() > 15.0 / 360.0) {
       twist.setWantedState(TwistState.SIDE);
@@ -2126,8 +2018,8 @@ public class Superstructure extends SubsystemBase {
 
   @Override
   public void periodic() {
-    pivot.updateIntakeItem(manipulator.getIntakeItem());
-    twist.updateIntakeItem(manipulator.getIntakeItem());
+    pivot.updateIntakeItem(manipulator.getArmItem());
+    twist.updateIntakeItem(manipulator.getArmItem());
     if (OI.getDriverA()) {
       isClimbing = false;
     }

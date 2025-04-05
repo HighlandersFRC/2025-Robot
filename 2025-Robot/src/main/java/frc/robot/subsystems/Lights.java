@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
-import frc.robot.subsystems.Manipulator.IntakeItem;
+import frc.robot.subsystems.Manipulator.ArmItem;
 
 public class Lights extends SubsystemBase {
   /** Creates a new Lights. */
@@ -136,7 +136,7 @@ public class Lights extends SubsystemBase {
     }
   }
 
-  public void updateIntakeItem(IntakeItem intakeItem) {
+  public void updateIntakeItem(ArmItem intakeItem) {
     switch (intakeItem) {
       case CORAL:
         itemState = ItemState.CORAL;

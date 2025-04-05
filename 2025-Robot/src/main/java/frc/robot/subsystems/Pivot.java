@@ -13,7 +13,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Manipulator.IntakeItem;
+import frc.robot.subsystems.Manipulator.ArmItem;
 
 public class Pivot extends SubsystemBase {
 
@@ -83,9 +83,9 @@ public class Pivot extends SubsystemBase {
     // pivotMotor.setPosition(0.0);
   }
 
-  private IntakeItem intakeItem = IntakeItem.NONE;
+  private ArmItem intakeItem = ArmItem.NONE;
 
-  public void updateIntakeItem(IntakeItem intakeItem) {
+  public void updateIntakeItem(ArmItem intakeItem) {
     this.intakeItem = intakeItem;
   }
 
@@ -201,7 +201,8 @@ public class Pivot extends SubsystemBase {
     MANUAL_PLACE,
     MANUAL_RESET,
     IDLE,
-    LOLLIPOP
+    LOLLIPOP,
+    HANDOFF
   }
 
   private PivotState wantedState = PivotState.DEFAULT;
@@ -299,6 +300,8 @@ public class Pivot extends SubsystemBase {
         return PivotState.IDLE;
       case LOLLIPOP:
         return PivotState.LOLLIPOP;
+      case HANDOFF:
+        return PivotState.HANDOFF;
       default:
         return PivotState.DEFAULT;
     }
@@ -314,9 +317,9 @@ public class Pivot extends SubsystemBase {
         && systemState != PivotState.MANUAL_RESET) {
       runManualDownOrUp = false;
     }
-    if (intakeItem != IntakeItem.ALGAE && nonAlgaeTime == 0.0) {
+    if (intakeItem != ArmItem.ALGAE && nonAlgaeTime == 0.0) {
       nonAlgaeTime = Timer.getFPGATimestamp();
-    } else if (intakeItem == IntakeItem.ALGAE) {
+    } else if (intakeItem == ArmItem.ALGAE) {
       nonAlgaeTime = 0.0;
     }
     // Logger.recordOutput("Pivot Output",
@@ -702,6 +705,9 @@ public class Pivot extends SubsystemBase {
       case MANUAL_RESET:
         runManualDownOrUp = true;
         setPivotPercent(-0.2);
+        break;
+      case HANDOFF:
+        pivotToPosition(Constants.SetPoints.PivotPosition.kHANDOFF.rotations);
         break;
       case IDLE:
         setPivotPercent(0.0);

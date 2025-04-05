@@ -3520,17 +3520,9 @@ public final class Constants {
                 public static final double MODULE_OFFSET = inchesToMeters(2.5);
                 public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
                                 ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
-
-                // public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(22.5);
-                // public static final double INTAKE_Y_OFFSET_FRONT = inchesToMeters(4.3);
-                // public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(22.5);
-                // public static final double INTAKE_Y_OFFSET_BACK = inchesToMeters(-4.3);
-
                 public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(22.7);
-                // public static final double INTAKE_X_OFFSET_FRONT = inchesToMeters(24.5);
                 public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(1.2);
                 public static double INTAKE_X_OFFSET_BACK = inchesToMeters(21.9);
-                // public static final double INTAKE_X_OFFSET_BACK = inchesToMeters(25.5);
                 public static double INTAKE_Y_OFFSET_BACK = inchesToMeters(-1.2);
 
                 public static double INTAKE_X_OFFSET_FRONT_ALGAE = inchesToMeters(23.0 + 5.0);
@@ -3548,179 +3540,32 @@ public final class Constants {
                 public static double L1_INTAKE_X_OFFSET_BACK_MORE = inchesToMeters(23.5);
                 public static double L1_INTAKE_Y_OFFSET_BACK_MORE = inchesToMeters(-1.5);
 
-                // public static final double L3_INTAKE_X_OFFSET_FRONT = inchesToMeters(28.75);
-                // public static final double L3_INTAKE_Y_OFFSET_FRONT = inchesToMeters(2.2);
-
-                // public static final double L3_INTAKE_X_OFFSET_BACK = inchesToMeters(28.75);
-                // public static final double L3_INTAKE_Y_OFFSET_BACK = inchesToMeters(-2.2);
-
                 public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(22.7);
                 public static double L2_INTAKE_Y_OFFSET_FRONT = inchesToMeters(1.2);
                 public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(21.9);
                 public static double L2_INTAKE_Y_OFFSET_BACK = inchesToMeters(-1.2);
 
                 public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(25.65);
-                // public static final double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.3);
                 public static double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
                 public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(25.00);
-                // public static final double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.1);
                 public static double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
                 public static final double GRAVITY_ACCEL_MS2 = 9.806;
-
-                // public static final Translation2d redTranslationSetpoint1 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d redRotationSetpoint1 = new Rotation2d(0.0);
-                // public static final Pose2d redSetpoint1 = new Pose2d(redTranslationSetpoint1,
-                // redRotationSetpoint1);
-
-                // public static final Translation2d redTranslationSetpoint2 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d redRotationSetpoint2 = new Rotation2d(0.0);
-                // public static final Pose2d redSetpoint2 = new Pose2d(redTranslationSetpoint2,
-                // redRotationSetpoint2);
-
-                // public static final Translation2d redTranslationSetpoint3 = new
-                // Translation2d(13.70, 2.80);
-                // public static final Rotation2d redRotationSetpoint3 = new Rotation2d(2.094);
-                // public static final Pose2d redSetpoint3 = new Pose2d(redTranslationSetpoint3,
-                // redRotationSetpoint3);
-
-                // public static final Translation2d redTranslationSetpoint4 = new
-                // Translation2d(14.00, 3.00);
-                // public static final Rotation2d redRotationSetpoint4 = new Rotation2d(2.094);
-                // public static final Pose2d redSetpoint4 = new Pose2d(redTranslationSetpoint4,
-                // redRotationSetpoint4);
-
-                // public static final Translation2d redTranslationSetpoint5 = new
-                // Translation2d(0, 0);
-                // public static final Rotation2d redRotationSetpoint5 = new Rotation2d(0);
-                // public static final Pose2d redSetpoint5 = new Pose2d(redTranslationSetpoint5,
-                // redRotationSetpoint5);
-
-                // public static final Translation2d redTranslationSetpoint6 = new
-                // Translation2d(0, 0);
-                // public static final Rotation2d redRotationSetpoint6 = new Rotation2d(0);
-                // public static final Pose2d redSetpoint6 = new Pose2d(redTranslationSetpoint6,
-                // redRotationSetpoint6);
-
-                // public static final Translation2d redTranslationSetpoint7 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d redRotationSetpoint7 = new Rotation2d(0.0);
-                // public static final Pose2d redSetpoint7 = new Pose2d(redTranslationSetpoint7,
-                // redRotationSetpoint7);
-
-                // public static final Translation2d redTranslationSetpoint8 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d redRotationSetpoint8 = new Rotation2d(0.0);
-                // public static final Pose2d redSetpoint8 = new Pose2d(redTranslationSetpoint8,
-                // redRotationSetpoint8);
-
-                // public static final Translation2d redTranslationSetpoint9 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d redRotationSetpoint9 = new Rotation2d(0.0);
-                // public static final Pose2d redSetpoint9 = new Pose2d(redTranslationSetpoint9,
-                // redRotationSetpoint9);
-
-                // public static final Translation2d redTranslationSetpoint10 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d redRotationSetpoint10 = new Rotation2d(0.0);
-                // public static final Pose2d redSetpoint10 = new
-                // Pose2d(redTranslationSetpoint10, redRotationSetpoint10);
-
-                // public static final Translation2d redTranslationSetpoint11 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d redRotationSetpoint11 = new Rotation2d(0.0);
-                // public static final Pose2d redSetpoint11 = new
-                // Pose2d(redTranslationSetpoint11, redRotationSetpoint11);
-
-                // public static final Translation2d redTranslationSetpoint12 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d redRotationSetpoint12 = new Rotation2d(0.0);
-                // public static final Pose2d redSetpoint12 = new
-                // Pose2d(redTranslationSetpoint12, redRotationSetpoint12);
-
-                // public static final Translation2d blueTranslationSetpoint1 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d blueRotationSetpoint1 = new Rotation2d(0.0);
-                // public static final Pose2d blueSetpoint1 = new
-                // Pose2d(blueTranslationSetpoint1, blueRotationSetpoint1);
-
-                // public static final Translation2d blueTranslationSetpoint2 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d blueRotationSetpoint2 = new Rotation2d(0.0);
-                // public static final Pose2d blueSetpoint2 = new
-                // Pose2d(blueTranslationSetpoint2, blueRotationSetpoint2);
-
-                // public static final Translation2d blueTranslationSetpoint3 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d blueRotationSetpoint3 = new Rotation2d(0.0);
-                // public static final Pose2d blueSetpoint3 = new
-                // Pose2d(blueTranslationSetpoint3, blueRotationSetpoint3);
-
-                // public static final Translation2d blueTranslationSetpoint4 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d blueRotationSetpoint4 = new Rotation2d(0.0);
-                // public static final Pose2d blueSetpoint4 = new
-                // Pose2d(blueTranslationSetpoint4, blueRotationSetpoint4);
-
-                // public static final Translation2d blueTranslationSetpoint5 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d blueRotationSetpoint5 = new Rotation2d(0.0);
-                // public static final Pose2d blueSetpoint5 = new
-                // Pose2d(blueTranslationSetpoint5, blueRotationSetpoint5);
-
-                // public static final Translation2d blueTranslationSetpoint6 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d blueRotationSetpoint6 = new Rotation2d(0.0);
-                // public static final Pose2d blueSetpoint6 = new
-                // Pose2d(blueTranslationSetpoint6, blueRotationSetpoint6);
-
-                // public static final Translation2d blueTranslationSetpoint7 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d blueRotationSetpoint7 = new Rotation2d(0.0);
-                // public static final Pose2d blueSetpoint7 = new
-                // Pose2d(blueTranslationSetpoint7, blueRotationSetpoint7);
-
-                // public static final Translation2d blueTranslationSetpoint8 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d blueRotationSetpoint8 = new Rotation2d(0.0);
-                // public static final Pose2d blueSetpoint8 = new
-                // Pose2d(blueTranslationSetpoint8, blueRotationSetpoint8);
-
-                // public static final Translation2d blueTranslationSetpoint9 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d blueRotationSetpoint9 = new Rotation2d(0.0);
-                // public static final Pose2d blueSetpoint9 = new
-                // Pose2d(blueTranslationSetpoint9, blueRotationSetpoint9);
-
-                // public static final Translation2d blueTranslationSetpoint10 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d blueRotationSetpoint10 = new Rotation2d(0.0);
-                // public static final Pose2d blueSetpoint10 = new
-                // Pose2d(blueTranslationSetpoint10, blueRotationSetpoint10);
-
-                // public static final Translation2d blueTranslationSetpoint11 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d blueRotationSetpoint11 = new Rotation2d(0.0);
-                // public static final Pose2d blueSetpoint11 = new
-                // Pose2d(blueTranslationSetpoint11, blueRotationSetpoint11);
-
-                // public static final Translation2d blueTranslationSetpoint12 = new
-                // Translation2d(0.0, 0.0);
-                // public static final Rotation2d blueRotationSetpoint12 = new Rotation2d(0.0);
-                // public static final Pose2d blueSetpoint12 = new
-                // Pose2d(blueTranslationSetpoint12, blueRotationSetpoint12);
-
-                // // x, y, theta
-                // public static final ArrayList<Pose2d> redCoralScoringPositions = new
-                // ArrayList<Pose2d>();
-                // public static final ArrayList<Pose2d> blueCoralScoringPositions = new
-                // ArrayList<Pose2d>();
         }
 
         // Subsystem setpoint constants
         public static final class SetPoints {
+                public static class IntakeSetpoints {
+                        public static final double INTAKE_ACCELERATION = 500.0;
+                        public static final double INTAKE_CRUISE_VELOCITY = 400.0;
+                        public static final double INTAKE_MOTION_PROFILE_SCALAR = 1.0;
+                        public static final double INTAKE_DOWN = 0.25; // rotations
+                        public static final double INTAKE_UP = 0.0; // rotations
+                        public static final double INTAKE_ROLLER_MAX_SPEED = 1.0; // percent
+                        public static final double INTAKE_ROLLER_TORQUE = 40.0; // amps
+                        public static final double INTAKE_HOLDING_TORQUE = 40.0; // amps
+                }
+
                 public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
                 public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
                 public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
@@ -3743,6 +3588,7 @@ public final class Constants {
                 public static final double ELEVATOR_L3_ALGAE_POSITION_M = inchesToMeters(38);
                 public static final double ELEVATOR_PROCESSOR_POSITION_M = inchesToMeters(6.5);
                 public static final double ELEVATOR_LOLLIPOP_POSITION_M = inchesToMeters(0.0);
+                public static final double ELEVATOR_HANDOFF_POSITION_M = inchesToMeters(28.00);
 
                 public enum ElevatorPosition {
                         kDOWN(ELEVATOR_BOTTOM_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_BOTTOM_POSITION_M)),
@@ -3777,7 +3623,9 @@ public final class Constants {
                                         Ratios.elevatorMetersToRotations(ELEVATOR_L3_ALGAE_POSITION_M)),
                         kOVER(ELEVATOR_OVER_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_OVER_POSITION_M)),
                         kLOLLIPOP(ELEVATOR_LOLLIPOP_POSITION_M, Ratios.elevatorMetersToRotations(
-                                        ELEVATOR_LOLLIPOP_POSITION_M));
+                                        ELEVATOR_LOLLIPOP_POSITION_M)),
+                        kHANDOFF(ELEVATOR_HANDOFF_POSITION_M,
+                                        Ratios.elevatorMetersToRotations(ELEVATOR_HANDOFF_POSITION_M));
 
                         public final double meters;
                         public final double rotations;
@@ -3814,6 +3662,7 @@ public final class Constants {
                 public static final double PIVOT_REEF_ALGAE_POSITION_D = 90.0;
                 public static final double PIVOT_CLIMB_POSITION_D = 45.0;
                 public static final double PIVOT_LOLLIPOP_POSITION_D = -98.0;
+                public static final double PIVOT_HANDOFF_POSITION_D = 135.0;
 
                 public enum PivotPosition {
                         kL1(PIVOT_L1_POSITION_D, Constants.degreesToRotations(PIVOT_L1_POSITION_D)),
@@ -3849,7 +3698,8 @@ public final class Constants {
                                         Constants.degreesToRotations(PIVOT_REEF_ALGAE_POSITION_D)),
                         kPREP(PIVOT_PREP_POSITION_D, Constants.degreesToRotations(PIVOT_PREP_POSITION_D)),
                         kCLIMB(PIVOT_CLIMB_POSITION_D, Constants.degreesToRotations(PIVOT_CLIMB_POSITION_D)),
-                        kLOLLIPOP(PIVOT_LOLLIPOP_POSITION_D, Constants.degreesToRotations(PIVOT_LOLLIPOP_POSITION_D));
+                        kLOLLIPOP(PIVOT_LOLLIPOP_POSITION_D, Constants.degreesToRotations(PIVOT_LOLLIPOP_POSITION_D)),
+                        kHANDOFF(PIVOT_HANDOFF_POSITION_D, Constants.degreesToRotations(PIVOT_HANDOFF_POSITION_D));
 
                         public final double degrees;
                         public final double rotations;
@@ -4156,6 +4006,9 @@ public final class Constants {
                 public static double elevatorMetersToRotations(double meters) {
                         return meters * ELEVATOR_MOTOR_ROTATIONS_PER_METER;
                 }
+
+                // intake
+                public static final double INTAKE_PIVOT_GEAR_RATIO = 30.0;
         }
 
         // Can info such as IDs
@@ -4193,12 +4046,16 @@ public final class Constants {
                 public static final int TWIST_MOTOR_ID = 12;
                 public static final int TWIST_CANCODER_ID = 6;
 
-                // Intake
-                public static final int INTAKE_MOTOR_ID = 13;
+                // Manipulator
+                public static final int MANIPULATOR_MOTOR_ID = 13;
 
                 // Climber
-                public static final int CLIMBER_ROLLER_MOTOR_ID = 14;
                 public static final int CLIMBER_PIVOT_MOTOR_ID = 15;
+
+                // Intake
+                public static final int INTAKE_ROLLER_MOTOR_ID = 16;
+                public static final int INTAKE_PIVOT_MOTOR_ID = 17;
+                public static final int INTAKE_BEAM_BREAK_PORT = 0;
         }
 
         // Misc. controller values

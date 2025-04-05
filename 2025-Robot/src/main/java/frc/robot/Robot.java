@@ -40,7 +40,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.elevator.init();
     m_robotContainer.pivot.init();
     m_robotContainer.twist.init();
-    m_robotContainer.intake.init();
+    m_robotContainer.manipulator.init();
     m_robotContainer.climber.init();
     m_robotContainer.lights.init(m_fieldSide);
     Constants.init();
@@ -161,8 +161,9 @@ public class Robot extends LoggedRobot {
         Constants.metersToInches(Constants.Physical.INTAKE_Y_OFFSET_BACK_ALGAE)));
     // m_robotContainer.twist.setAlgaeMode(m_robotContainer.algaeMode);
     // m_robotContainer.pivot.setAlgaeMode(m_robotContainer.algaeMode);
-    m_robotContainer.lights.updateIntakeItem(m_robotContainer.intake.getIntakeItem());
-    m_robotContainer.intake.updateAlgaeMode(m_robotContainer.algaeMode);
+    m_robotContainer.superstructure.algaeMode = m_robotContainer.algaeMode;
+    m_robotContainer.lights.updateIntakeItem(m_robotContainer.manipulator.getArmItem());
+    m_robotContainer.manipulator.updateAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateManualMode(m_robotContainer.manualMode);
     Logger.recordOutput("Algae Mode", m_robotContainer.algaeMode);

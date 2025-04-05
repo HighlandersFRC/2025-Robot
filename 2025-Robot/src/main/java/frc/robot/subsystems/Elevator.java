@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.Constants.SetPoints.ElevatorPosition;
-import frc.robot.subsystems.Manipulator.IntakeItem;
+import frc.robot.subsystems.Manipulator.ArmItem;
 
 public class Elevator extends SubsystemBase {
   private final TalonFX elevatorMotorMaster = new TalonFX(Constants.CANInfo.MASTER_ELEVATOR_MOTOR_ID,
@@ -56,7 +56,8 @@ public class Elevator extends SubsystemBase {
     SCORE_L4,
     NET,
     OVER,
-    LOLLIPOP
+    LOLLIPOP,
+    HANDOFF
   }
 
   private double idleTime;
@@ -66,9 +67,9 @@ public class Elevator extends SubsystemBase {
   private double distanceFromL23DriveSetpoint = 0.0;
   private boolean firstTimeDefault = false;
 
-  private IntakeItem intakeItem = IntakeItem.NONE;
+  private ArmItem intakeItem = ArmItem.NONE;
 
-  public void updateIntakeItem(IntakeItem intakeItem) {
+  public void updateIntakeItem(ArmItem intakeItem) {
     this.intakeItem = intakeItem;
   }
 
@@ -235,6 +236,8 @@ public class Elevator extends SubsystemBase {
         return ElevatorState.NET;
       case LOLLIPOP:
         return ElevatorState.LOLLIPOP;
+      case HANDOFF:
+        return ElevatorState.HANDOFF;
       default:
         return ElevatorState.DEFAULT;
     }
@@ -352,6 +355,10 @@ public class Elevator extends SubsystemBase {
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kLOLLIPOP.meters);
         break;
+      case HANDOFF:
+        firstTimeDefault = true;
+        moveElevatorToPosition(ElevatorPosition.kHANDOFF.meters);
+        break;
       default:
         if (DriverStation.isTeleopEnabled()) {
           // System.out.println("Stupid ahh ts pmo 1");
@@ -381,7 +388,7 @@ public class Elevator extends SubsystemBase {
             } else {
               // System.out.println("Stupid ahh ts pmo 7");
               // System.out.println("Running down to zero");
-              if (intakeItem == IntakeItem.ALGAE) {
+              if (intakeItem == ArmItem.ALGAE) {
                 // System.out.println("Stupid ahh ts pmo 8");
 
                 moveWithTorque(-40, 0.1);
@@ -426,7 +433,7 @@ public class Elevator extends SubsystemBase {
                 // System.out.println("Stupid ahh ts pmo 17");
                 // IntakeItem.ALGAE) {
 
-                if (intakeItem == IntakeItem.ALGAE) {
+                if (intakeItem == ArmItem.ALGAE) {
                   // System.out.println("Stupid ahh ts pmo 18");
                   moveWithTorque(-40, 0.1);
                 } else {

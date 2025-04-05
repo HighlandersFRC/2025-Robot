@@ -33,6 +33,7 @@ import frc.robot.commands.ZeroAngleMidMatch;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Manipulator;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Peripherals;
@@ -56,13 +57,14 @@ public class RobotContainer {
         Peripherals peripherals = new Peripherals();
         Elevator elevator = new Elevator();
         Drive drive = new Drive(peripherals, elevator);
-        Manipulator intake = new Manipulator();
+        Manipulator manipulator = new Manipulator();
         Lights lights = new Lights();
         Pivot pivot = new Pivot();
         Twist twist = new Twist();
         Climber climber = new Climber();
-        Superstructure superstructure = new Superstructure(drive, elevator, intake, pivot, twist, climber, lights,
-                        peripherals);
+        Intake intake = new Intake();
+        Superstructure superstructure = new Superstructure(drive, elevator, manipulator, pivot, twist, climber, lights,
+                        peripherals, intake);
 
         boolean algaeMode = false;
         boolean manualMode = false;

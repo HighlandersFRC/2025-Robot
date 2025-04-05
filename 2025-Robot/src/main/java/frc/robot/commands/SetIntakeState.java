@@ -6,15 +6,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Manipulator;
-import frc.robot.subsystems.Manipulator.IntakeState;
+import frc.robot.subsystems.Manipulator.ManipulatorState;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SetIntakeState extends Command {
   /** Creates a new L3Setup. */
   Manipulator manipulator;
-  IntakeState intakeState;
+  ManipulatorState intakeState;
 
-  public SetIntakeState(Manipulator manipulator, IntakeState intakeState) {
+  public SetIntakeState(Manipulator manipulator, ManipulatorState intakeState) {
     this.manipulator = manipulator;
     this.intakeState = intakeState;
     addRequirements(this.manipulator);
