@@ -115,7 +115,7 @@ public class Elevator extends SubsystemBase {
 
   public void init() {
     TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
-    double elevatorMultiplier = 40.86 / 33.39;
+    double elevatorMultiplier = 45.01 / 33.39;
     elevatorConfig.Slot0.kP = 33.39 * elevatorMultiplier;
     elevatorConfig.Slot0.kI = 0.0 * elevatorMultiplier;
     elevatorConfig.Slot0.kD = 2.7 * elevatorMultiplier;

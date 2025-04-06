@@ -299,7 +299,7 @@ public class Manipulator extends SubsystemBase {
         if (algaeMode) {
           setIntakeTorque(55, 0.4);
         } else {
-          setIntakeTorque(30, 0.2);
+          setIntakeTorque(20, 0.2);
         }
     }
   }

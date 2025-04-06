@@ -720,7 +720,7 @@ public class Superstructure extends SubsystemBase {
       // } else {
       // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
       // }
-      manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
 
       // if (isClimbing) {
       // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
@@ -748,7 +748,7 @@ public class Superstructure extends SubsystemBase {
       // Logger.recordOutput("Elevator Correct",
       //     Math.abs(elevator.getElevatorPosition() - Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
       twist.setWantedState(TwistState.UP);
-      manipulator.setWantedState(ManipulatorState.DEFAULT);
+      manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
       // Wait for the elevator to come up to move the pivot
       if (Math.abs(elevator.getElevatorPosition()) > 15.0 / 39.37) {
         pivot.setWantedState(PivotState.HANDOFF);
@@ -758,7 +758,7 @@ public class Superstructure extends SubsystemBase {
       if (Math.abs(twist.getTwistPosition() + 90) < 10
           && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.05
           && Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.05
-          && (intake.hasCoral() || continueFeeding)) {
+          && (intake.hasCoralSticky() || continueFeeding)) {
         elevator.setWantedState(ElevatorState.HANDOFF);
       } else {
         elevator.setWantedState(ElevatorState.PREHANDOFF);

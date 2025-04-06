@@ -140,7 +140,7 @@ public class RobotContainer {
         private void configureBindings() {
                 // COMPETITION CONTROLS
                 // Driver
-                OI.driverViewButton.onTrue(new SetRobotStateSimpleOnce(superstructure, SuperState.ZERO));
+                OI.driverMenuButton.onTrue(new SetRobotStateSimpleOnce(superstructure, SuperState.ZERO));
                 OI.driverViewButton.whileTrue(new ConditionalCommand(new ZeroAngleMidMatch(
                                 drive),
                                 new SetRobotStateSimple(superstructure, SuperState.RUN_CLIMB_BACK),
@@ -192,7 +192,7 @@ public class RobotContainer {
                                                 || superstructure.getCurrentSuperState() == SuperState.AUTO_SCORE_L4
                                                 || algaeMode)));
 
-                OI.driverMenuButton.whileTrue(new SetRobotState(superstructure, SuperState.DEFAULT));
+                // OI.driverMenuButton.whileTrue(new SetRobotState(superstructure, SuperState.DEFAULT));
 
                 // OI.driverA.onTrue(new SetRobotStateSimpleOnce(superstructure,
                 // SuperState.CLIMB));

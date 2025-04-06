@@ -102,6 +102,10 @@ public class Intake extends SubsystemBase {
     roller.setControl(m_torqueCurrentFOCRequest.withOutput(amps).withMaxAbsDutyCycle(maxPercent));
   }
 
+  public void setRollerPercent(double percent) {
+    roller.set(percent);
+  }
+
   public void setWantedState(IntakeState wantedState) {
     this.wantedState = wantedState;
   }
@@ -146,8 +150,9 @@ public class Intake extends SubsystemBase {
         }
         break;
       case OUTAKING:
-        setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-            Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+        // setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+        //     Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+        setRollerPercent(-1.0);
         pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
         break;
       case HANDOFF:
@@ -156,8 +161,9 @@ public class Intake extends SubsystemBase {
           handOffTime = Timer.getFPGATimestamp();
         }
         // if (Timer.getFPGATimestamp() - handOffTime < 3.0) {
-        setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-            Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+        // setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+        //     Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+        setRollerPercent(-1.0);
         pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
         // } else {
         //   pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
@@ -200,6 +206,10 @@ public class Intake extends SubsystemBase {
     pivot.setControl(m_torqueCurrentFOCRequest.withOutput(amps).withMaxAbsDutyCycle(maxPercent));
   }
 
+  private boolean lastCoralValue = false;
+  private double switchTime = Timer.getFPGATimestamp();
+  private boolean hasCoralSticky = false;
+
   public boolean hasCoral() {
     Logger.recordOutput("Intake Velocity",
         roller.getVelocity().getValueAsDouble());
@@ -213,9 +223,29 @@ public class Intake extends SubsystemBase {
     /* && Math.abs(roller.getAcceleration().getValueAsDouble()) < 10 */
     // && beamBreak.isTripped()
     ) {
+      if (lastCoralValue != true) {
+        switchTime = Timer.getFPGATimestamp();
+        System.out.println("Switch Ground Intake Item: Has Coral");
+      }
+      lastCoralValue = true;
       return true;
     } else {
+      if (lastCoralValue != false) {
+        switchTime = Timer.getFPGATimestamp();
+        System.out.println("Switch Ground Intake Item: Empty");
+      }
+      lastCoralValue = false;
       return false;
     }
   }
+
+  public boolean hasCoralSticky() {
+    if (hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.2) {
+      hasCoralSticky = true;
+    } else if (!hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.2) {
+      hasCoralSticky = false;
+    }
+    return hasCoralSticky;
+  }
+
 }
