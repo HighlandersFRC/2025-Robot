@@ -715,7 +715,7 @@ public class Superstructure extends SubsystemBase {
       if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) > 90.0 / 360.0) {
         elevator.setWantedState(ElevatorState.PREHANDOFF);
       } else {
-        elevator.setWantedState(ElevatorState.L3);
+        elevator.setWantedState(ElevatorState.L2);
       }
       // } else {
       // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
@@ -727,9 +727,9 @@ public class Superstructure extends SubsystemBase {
       // } else {
       // if (Math.abs(twist.getTwistPosition()) < 30.0) {
       pivot.setWantedState(PivotState.DEFAULT);
-      //   firstTimeDefault = false;
+      // firstTimeDefault = false;
       // } else if (firstTimeDefault) {
-      //   pivot.setWantedState(PivotState.PREP);
+      // pivot.setWantedState(PivotState.PREP);
       // }
       intake.setWantedState(IntakeState.DEFAULT);
       // }
@@ -739,14 +739,20 @@ public class Superstructure extends SubsystemBase {
       // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
       twist.setWantedState(TwistState.SIDE);
     } else {
-      // Logger.recordOutput("Can Handoff", Math.abs(twist.getTwistPosition() + 90) < 10
-      //     && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02
-      //     && Math.abs(elevator.getElevatorPosition() - Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
-      // Logger.recordOutput("Twist Correct", Math.abs(twist.getTwistPosition() + 90) < 10);
+      // Logger.recordOutput("Can Handoff", Math.abs(twist.getTwistPosition() + 90) <
+      // 10
+      // && Math.abs(pivot.getPivotPosition() -
+      // Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02
+      // && Math.abs(elevator.getElevatorPosition() -
+      // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
+      // Logger.recordOutput("Twist Correct", Math.abs(twist.getTwistPosition() + 90)
+      // < 10);
       // Logger.recordOutput("Pivot Correct",
-      //     Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02);
+      // Math.abs(pivot.getPivotPosition() -
+      // Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02);
       // Logger.recordOutput("Elevator Correct",
-      //     Math.abs(elevator.getElevatorPosition() - Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
+      // Math.abs(elevator.getElevatorPosition() -
+      // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
       twist.setWantedState(TwistState.UP);
       manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
       // Wait for the elevator to come up to move the pivot
@@ -779,7 +785,7 @@ public class Superstructure extends SubsystemBase {
       if (continueFeeding && handoffInitTime == 0.0) {
         handoffInitTime = Timer.getFPGATimestamp();
       } else {
-        if (Timer.getFPGATimestamp() - handoffInitTime > 0.5) {
+        if (Timer.getFPGATimestamp() - handoffInitTime > 0.1) {
           continueFeeding = false;
           handoffInitTime = 0.0;
         }
@@ -1591,6 +1597,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.CLIMB_DEPLOY);
     climber.setWantedState(ClimbState.EXTENDING);
     pivot.setWantedState(PivotState.CLIMB);
+    intake.setWantedState(IntakeState.INTAKING);
     // peripherals.setBackCamPipline(1);
   }
 
@@ -1598,12 +1605,14 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.CLIMB);
     climber.setWantedState(ClimbState.RETRACTING);
     pivot.setWantedState(PivotState.CLIMB);
+    intake.setWantedState(IntakeState.INTAKING);
   }
 
   public void handleClimberIdleState() {
     lights.setWantedState(LightsState.CLIMB_IDLE);
     climber.setWantedState(ClimbState.IDLE);
     pivot.setWantedState(PivotState.CLIMB);
+    intake.setWantedState(IntakeState.INTAKING);
   }
 
   public void handleOutakeState() {
@@ -2083,6 +2092,7 @@ public class Superstructure extends SubsystemBase {
       climber.setWantedState(ClimbState.IDLE);
     }
     pivot.setWantedState(PivotState.CLIMB);
+    intake.setWantedState(IntakeState.INTAKING);
   }
 
   public void handleAutoClimbState() {
@@ -2104,6 +2114,7 @@ public class Superstructure extends SubsystemBase {
       drive.setWantedState(DriveState.DEFAULT);
     }
 
+    intake.setWantedState(IntakeState.INTAKING);
   }
 
   public void handleLollipopPickup() {

@@ -75,11 +75,11 @@ public class Manipulator extends SubsystemBase {
     // && intakeMotor.getTorqueCurrent().getValueAsDouble() < -15
     // && intakeMotor.getAcceleration().getValueAsDouble() < -100));
     // Logger.recordOutput("Intake Velocity",
-    //     manipulatorMotor.getVelocity().getValueAsDouble());
+    // manipulatorMotor.getVelocity().getValueAsDouble());
     // Logger.recordOutput("Intake Torque",
-    //     manipulatorMotor.getTorqueCurrent().getValueAsDouble());
+    // manipulatorMotor.getTorqueCurrent().getValueAsDouble());
     // Logger.recordOutput("Intake Acceleration",
-    //     manipulatorMotor.getAcceleration().getValueAsDouble());
+    // manipulatorMotor.getAcceleration().getValueAsDouble());
     if (Math.abs(manipulatorMotor.getVelocity().getValueAsDouble()) < 5
         && Math.abs(manipulatorMotor.getTorqueCurrent().getValueAsDouble()) > 20
     /* && Math.abs(manipulatorMotor.getAcceleration().getValueAsDouble()) < 10 */) {
@@ -106,9 +106,9 @@ public class Manipulator extends SubsystemBase {
   }
 
   public boolean hasCoralSticky() {
-    if (hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.2) {
+    if (hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.1) {
       hasCoralSticky = true;
-    } else if (!hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.2) {
+    } else if (!hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.1) {
       hasCoralSticky = false;
     }
     return hasCoralSticky;
@@ -120,11 +120,11 @@ public class Manipulator extends SubsystemBase {
     // && intakeMotor.getTorqueCurrent().getValueAsDouble() < -15
     // && intakeMotor.getAcceleration().getValueAsDouble() < -100));
     // Logger.recordOutput("Intake Velocity",
-    //     manipulatorMotor.getVelocity().getValueAsDouble());
+    // manipulatorMotor.getVelocity().getValueAsDouble());
     // Logger.recordOutput("Intake Torque",
-    //     manipulatorMotor.getTorqueCurrent().getValueAsDouble());
+    // manipulatorMotor.getTorqueCurrent().getValueAsDouble());
     // Logger.recordOutput("Intake Acceleration",
-    //     manipulatorMotor.getAcceleration().getValueAsDouble());
+    // manipulatorMotor.getAcceleration().getValueAsDouble());
     if (hasCoral() && Timer.getFPGATimestamp() - coralTime > time) {
       return true;
     } else {
