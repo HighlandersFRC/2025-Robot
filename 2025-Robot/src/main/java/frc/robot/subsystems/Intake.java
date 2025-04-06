@@ -242,7 +242,7 @@ public class Intake extends SubsystemBase {
   public boolean hasCoralSuperSticky() {
     if (hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.05) {
       hasCoralSticky = true;
-    } else if (!hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.5) {
+    } else if (!hasCoral() && Timer.getFPGATimestamp() - switchTime > 1.5) {
       hasCoralSticky = false;
     }
     return hasCoralSticky;
