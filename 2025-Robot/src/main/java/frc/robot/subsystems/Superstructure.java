@@ -1432,22 +1432,16 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoGroundCoralPickupFrontState() {
     lights.setWantedState(LightsState.INTAKING);
-    if (Math.abs(intake.getPosition()) > 0.25) {
-      drive.setWantedState(DriveState.PIECE_PICKUP);
-    } else {
-      if (DriverStation.isAutonomousEnabled()) {
-        drive.setWantedState(DriveState.STOP);
-      } else {
-        drive.setWantedState(DriveState.DEFAULT);
-      }
-    }
+    // if (Math.abs(intake.getPosition()) > 0.25) {
+    drive.setWantedState(DriveState.PIECE_PICKUP);
+    // } else {
+    // if (DriverStation.isAutonomousEnabled()) {
+    // drive.setWantedState(DriveState.STOP);
+    // } else {
+    // drive.setWantedState(DriveState.DEFAULT);
+    // }
+    // }
     intake.setWantedState(IntakeState.INTAKING);
-    pivot.setWantedState(PivotState.HANDOFF);
-    manipulator.setWantedState(ManipulatorState.DEFAULT);
-    elevator.setWantedState(ElevatorState.PREHANDOFF);
-    if (pivot.getPivotPosition() > 15.0 / 360.0) {
-      twist.setWantedState(TwistState.UP);
-    }
   }
 
   public void handleAutoGroundCoralPickupBackState() {

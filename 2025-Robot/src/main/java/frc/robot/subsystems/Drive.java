@@ -2242,20 +2242,20 @@ public class Drive extends SubsystemBase {
       // if (){
 
       // } else
-      if (Math.abs(yFromIntake) < 0.2) {
-        System.out.println("going in");
-        // if (!firstTimeGoingInCalculated) {
-        // firstTimeCalculated = false;
-        // }
-        firstTimeGoingIn = true;
-        return targetPose;
-      } else if (yFromIntake < 0.0 && !firstTimeGoingIn) {
-        System.out.println("to the left");
-        return c1;
-      } else {
-        System.out.println("to the right");
-        return c2;
-      }
+      // if (Math.abs(yFromIntake) < 0.2) {
+      System.out.println("going in");
+      // if (!firstTimeGoingInCalculated) {
+      // firstTimeCalculated = false;
+      // }
+      firstTimeGoingIn = true;
+      return targetPose;
+      // } else if (yFromIntake < 0.0 && !firstTimeGoingIn) {
+      // System.out.println("to the left");
+      // return c1;
+      // } else {
+      // System.out.println("to the right");
+      // return c2;
+      // }
       // double pieceXFromIntake = noteX - intakeXOffset;
       // double pieceYFromIntake = noteY - intakeYOffset;
     } else
@@ -3884,8 +3884,16 @@ public class Drive extends SubsystemBase {
         if (!target.equals(new Pose2d())) {
           targetPointPickup = target;
         }
-        driveToPoint(targetPointPickup.getX(), targetPointPickup.getY(),
-            targetPointPickup.getRotation().getRadians());
+        if (!target.equals(new Pose2d())) {
+          driveToPoint(targetPointPickup.getX(), targetPointPickup.getY(),
+              targetPointPickup.getRotation().getRadians());
+        } else {
+          Vector v = new Vector();
+          v.setI(0);
+          v.setJ(0);
+          double d = 0.0;
+          autoDrive(v, d);
+        }
         break;
       case ALGAE:
         driveToPoint(getAlgaeClosestSetpoint(getMT2Odometry())[0],
