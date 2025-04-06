@@ -482,7 +482,7 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.FEEDER;
         break;
       case GROUND_CORAL_PICKUP_FRONT:
-        if (intake.hasCoral() || manipulator.hasCoral() || continueFeeding) {
+        if (intake.hasCoral() || manipulator.getArmItem() == ArmItem.CORAL || continueFeeding) {
           currentSuperState = SuperState.DEFAULT;
         } else {
           currentSuperState = SuperState.GROUND_CORAL_PICKUP_FRONT;
