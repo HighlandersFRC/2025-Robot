@@ -722,8 +722,9 @@ public class Superstructure extends SubsystemBase {
       manipulator.setWantedState(ManipulatorState.DEFAULT);
       intake.setWantedState(IntakeState.DEFAULT);
       // Wait for the elevator to come up to move the pivot
-      if (Math.abs(elevator.getElevatorPosition() - Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.15)
+      if (Math.abs(elevator.getElevatorPosition() - Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.15) {
         pivot.setWantedState(PivotState.HANDOFF);
+      }
       // If everything is in pre-handoff position and there is a coral to be picked
       // up, move the elevator down to pick up.
       if (Math.abs(twist.getTwistPosition() + 90) < 10
