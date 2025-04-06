@@ -499,7 +499,10 @@ public class Superstructure extends SubsystemBase {
         break;
       case GROUND_CORAL_PICKUP_FRONT:
         if (intake.hasCoral() || manipulator.getArmItem() == ArmItem.CORAL || continueFeeding) {
-          currentSuperState = SuperState.DEFAULT;
+          if (DriverStation.isAutonomous())
+            currentSuperState = SuperState.IDLE;
+          else
+            currentSuperState = SuperState.DEFAULT;
         } else {
           currentSuperState = SuperState.GROUND_CORAL_PICKUP_FRONT;
         }
@@ -1901,20 +1904,97 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleIdleState() {
+    // peripherals.setBackCamPipline(0);
     lights.setWantedState(LightsState.DEFAULT);
-    drive.setWantedState(DriveState.IDLE);
+    drive.setWantedState(DriveState.DEFAULT);
     // pivot.setWantedFlip(PivotFlip.FRONT);
-    // if (twist.getTwistPosition() < 45) {
-    elevator.setWantedState(ElevatorState.DEFAULT);
-    // } else {
-    // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
-    // }
-    manipulator.setWantedState(ManipulatorState.DEFAULT);
-    if (Math.abs(twist.getTwistPosition()) < 15.0) {
+    // if ()
+    if (manipulator.hasCoralSticky()) {
+      // if (/* Math.abs(twist.getTwistPosition()) < 45 && */
+      // Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) > 90.0 / 360.0) {
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      } else {
+        elevator.setWantedState(ElevatorState.L2);
+      }
+      // } else {
+      // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+      // }
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
+
+      // if (isClimbing) {
+      // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
+      // } else {
+      // if (Math.abs(twist.getTwistPosition()) < 30.0) {
       pivot.setWantedState(PivotState.DEFAULT);
+      // firstTimeDefault = false;
+      // } else if (firstTimeDefault) {
+      // pivot.setWantedState(PivotState.PREP);
+      // }
+      intake.setWantedState(IntakeState.DEFAULT);
+      // }
+
+      // if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
+      // }
+      // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      twist.setWantedState(TwistState.SIDE);
+    } else {
+      // Logger.recordOutput("Can Handoff", Math.abs(twist.getTwistPosition() + 90) <
+      // 10
+      // && Math.abs(pivot.getPivotPosition() -
+      // Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02
+      // && Math.abs(elevator.getElevatorPosition() -
+      // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
+      // Logger.recordOutput("Twist Correct", Math.abs(twist.getTwistPosition() + 90)
+      // < 10);
+      // Logger.recordOutput("Pivot Correct",
+      // Math.abs(pivot.getPivotPosition() -
+      // Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02);
+      // Logger.recordOutput("Elevator Correct",
+      // Math.abs(elevator.getElevatorPosition() -
+      // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
+      twist.setWantedState(TwistState.UP);
+      // Wait for the elevator to come up to move the pivot
+      if (Math.abs(elevator.getElevatorPosition()) > 15.0 / 39.37) {
+        pivot.setWantedState(PivotState.HANDOFF);
+      }
+      // If everything is in pre-handoff position and there is a coral to be picked
+      // up, move the elevator down to pick up.
+      if (Math.abs(twist.getTwistPosition() + 90) < 10
+          && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.05
+          && Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.05
+          && (intake.hasCoralSuperSticky())) {
+        manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
+        elevator.setWantedState(ElevatorState.HANDOFF);
+      } else {
+        manipulator.setWantedState(ManipulatorState.DEFAULT);
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      }
+      // Once the elevator makes it down to the handoff position, outake into the arm
+      if ((Math.abs(twist.getTwistPosition() + 90) < 10
+          && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.05
+          && Math.abs(elevator.getElevatorPosition() - Constants.SetPoints.ElevatorPosition.kHANDOFF.meters) < 2.0
+              / 39.37
+          && Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.05)
+          || continueFeeding) {
+        intake.setWantedState(IntakeState.HANDOFF);
+        continueFeeding = true;
+      } else {
+        intake.setWantedState(IntakeState.DEFAULT);
+      }
+      // Timeout for the pass off
+      if (continueFeeding && handoffInitTime == 0.0) {
+        handoffInitTime = Timer.getFPGATimestamp();
+      } else {
+        if (Timer.getFPGATimestamp() - handoffInitTime > 0.1) {
+          continueFeeding = false;
+          handoffInitTime = 0.0;
+        }
+      }
     }
-    twist.setWantedState(TwistState.SIDE);
+    // }
     climber.setWantedState(ClimbState.IDLE);
+
   }
 
   public void handleOutakeIdleState() {

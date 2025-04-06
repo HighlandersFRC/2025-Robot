@@ -82,7 +82,8 @@ public class RobotContainer {
                         put("Full Send", () -> new FullSendFollower(drive, null, false));
                         put("IntakeLollipop", () -> new SetRobotState(superstructure, SuperState.LOLLIOP_PICKUP));
                         put("Net", () -> new SetRobotStateSimple(superstructure, SuperState.NET));
-                        put("AutoIntake", () -> new AutoIntakeFollower(superstructure, drive, 2.3));
+                        put("AutoIntake",
+                                        () -> new SetRobotState(superstructure, SuperState.GROUND_ALGAE_PICKUP_FRONT));
                         put("ReefAlgae", () -> new SetRobotState(superstructure, SuperState.AUTO_ALGAE_PICKUP));
                         put("AutoIntake", () -> new AutoCoralGroundPickupFollower(superstructure, drive, 4.0));
                 }
@@ -192,7 +193,8 @@ public class RobotContainer {
                                                 || superstructure.getCurrentSuperState() == SuperState.AUTO_SCORE_L4
                                                 || algaeMode)));
 
-                // OI.driverMenuButton.whileTrue(new SetRobotState(superstructure, SuperState.DEFAULT));
+                // OI.driverMenuButton.whileTrue(new SetRobotState(superstructure,
+                // SuperState.DEFAULT));
 
                 // OI.driverA.onTrue(new SetRobotStateSimpleOnce(superstructure,
                 // SuperState.CLIMB));
