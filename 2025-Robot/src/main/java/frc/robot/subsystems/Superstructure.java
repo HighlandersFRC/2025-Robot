@@ -482,7 +482,7 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.FEEDER;
         break;
       case GROUND_CORAL_PICKUP_FRONT:
-        if (intake.hasCoral() || manipulator.hasCoral() || continueFeeding) {
+        if (intake.hasCoral() || manipulator.getArmItem() == ArmItem.CORAL || continueFeeding) {
           currentSuperState = SuperState.DEFAULT;
         } else {
           currentSuperState = SuperState.GROUND_CORAL_PICKUP_FRONT;
@@ -661,7 +661,7 @@ public class Superstructure extends SubsystemBase {
     // pivot.setWantedFlip(PivotFlip.FRONT);
     // if ()
     if (algaeMode) {
-      if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) > 90.0 / 360.0) {
         elevator.setWantedState(ElevatorState.PREHANDOFF);
       } else {
         elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
@@ -1407,12 +1407,12 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
     intake.setWantedState(IntakeState.INTAKING);
-    pivot.setWantedState(PivotState.HANDOFF);
-    manipulator.setWantedState(ManipulatorState.DEFAULT);
-    elevator.setWantedState(ElevatorState.PREHANDOFF);
-    if (pivot.getPivotPosition() > 15.0 / 360.0) {
-      twist.setWantedState(TwistState.UP);
-    }
+    // pivot.setWantedState(PivotState.HANDOFF);
+    // manipulator.setWantedState(ManipulatorState.DEFAULT);
+    // elevator.setWantedState(ElevatorState.PREHANDOFF);
+    // if (pivot.getPivotPosition() > 15.0 / 360.0) {
+    // twist.setWantedState(TwistState.UP);
+    // }
   }
 
   public void handleGroundCoralPickupBackState() {
