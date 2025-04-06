@@ -140,7 +140,7 @@ public class RobotContainer {
         private void configureBindings() {
                 // COMPETITION CONTROLS
                 // Driver
-
+                OI.driverViewButton.onTrue(new SetRobotStateSimpleOnce(superstructure, SuperState.ZERO));
                 OI.driverViewButton.whileTrue(new ConditionalCommand(new ZeroAngleMidMatch(
                                 drive),
                                 new SetRobotStateSimple(superstructure, SuperState.RUN_CLIMB_BACK),
@@ -149,7 +149,7 @@ public class RobotContainer {
                 // OI.driverRT.whileTrue(new SetRobotState(superstructure,
                 // SuperState.GROUND_CORAL_PICKUP_FRONT));
                 OI.driverRT.whileTrue(
-                                new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_FRONT));
+                                new SetRobotStateOnce(superstructure, SuperState.GROUND_CORAL_PICKUP_FRONT));
                 // OI.driverRB.whileTrue(new SetRobotState(superstructure,
                 // SuperState.GROUND_CORAL_PICKUP_BACK));
                 OI.driverRB.whileTrue(new ConditionalCommand(new InstantCommand(),

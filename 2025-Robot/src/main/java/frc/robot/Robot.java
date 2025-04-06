@@ -215,7 +215,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.elevator.teleopInit();
     m_robotContainer.twist.teleopInit();
     m_robotContainer.lights.clearAnimations();
-    m_robotContainer.superstructure.setWantedState(SuperState.DEFAULT);
+    m_robotContainer.superstructure.setWantedState(SuperState.ZERO);
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

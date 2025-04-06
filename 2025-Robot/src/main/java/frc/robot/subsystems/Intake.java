@@ -40,6 +40,7 @@ public class Intake extends SubsystemBase {
     HANDOFF,
     IDLE,
     DEFAULT,
+    ZERO,
   }
 
   public Intake() {
@@ -70,6 +71,8 @@ public class Intake extends SubsystemBase {
     switch (wantedState) {
       case INTAKING:
         return IntakeState.INTAKING;
+      case ZERO:
+        return IntakeState.ZERO;
       case OUTAKING:
         return IntakeState.OUTAKING;
       case IDLE:
@@ -107,6 +110,15 @@ public class Intake extends SubsystemBase {
     return pivot.getPosition().getValueAsDouble() / Constants.Ratios.INTAKE_PIVOT_GEAR_RATIO;
   }
 
+  public boolean getZeroed() {
+    if (Math.abs(pivot.getStatorCurrent().getValueAsDouble()) > 10.0
+        && Math.abs(pivot.getVelocity().getValueAsDouble()) < 5.0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @Override
   public void periodic() {
     Logger.recordOutput("Intake Motor Current", roller.getStatorCurrent().getValueAsDouble());
@@ -124,6 +136,14 @@ public class Intake extends SubsystemBase {
         pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
         setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
             Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+        break;
+      case ZERO:
+        setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+            Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
+        pivotWithTorque(-20, 0.5);
+        if (getZeroed()) {
+          pivot.setPosition(0.0);
+        }
         break;
       case OUTAKING:
         setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
