@@ -519,11 +519,11 @@ public class Superstructure extends SubsystemBase {
         if (drive.hitSetPointGenerous(drive.getAlgaeClosestSetpoint(drive.getMT2Odometry())[0],
             drive.getAlgaeClosestSetpoint(drive.getMT2Odometry())[1],
             drive.getAlgaeClosestSetpoint(drive.getMT2Odometry())[2])
-            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kL2ALGAE.meters - 5.0 / 39.37) {
+            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kL2ALGAE.meters - 5.0 / 39.37
+            && Math.abs(pivot.getPivotPosition())
+                - Math.abs(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations) < 0.06) {
           currentSuperState = SuperState.AUTO_ALGAE_PICKUP_MORE;
           wantedSuperState = SuperState.AUTO_ALGAE_PICKUP_MORE;
-          // algaePickupTime = Timer.getFPGATimestamp();
-          // finishedAlgae1 = false;
         } else {
           currentSuperState = SuperState.AUTO_ALGAE_PICKUP;
         }
@@ -686,7 +686,11 @@ public class Superstructure extends SubsystemBase {
     } else if (manipulator.hasCoral()) {
       // if (/* Math.abs(twist.getTwistPosition()) < 45 && */
       // Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
-      elevator.setWantedState(ElevatorState.PREHANDOFF);
+      if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) > 90.0 / 360.0) {
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      } else {
+        elevator.setWantedState(ElevatorState.L3);
+      }
       // } else {
       // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
       // }
