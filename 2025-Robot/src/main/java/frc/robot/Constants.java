@@ -3562,7 +3562,7 @@ public final class Constants {
                         public static final double INTAKE_DOWN = 0.36163; // rotations
                         public static final double INTAKE_UP = -0.014; // rotations
                         public static final double INTAKE_ROLLER_MAX_SPEED = 1.0; // percent
-                        public static final double INTAKE_ROLLER_HOLDING_SPEED = 0.2; // percent
+                        public static final double INTAKE_ROLLER_HOLDING_SPEED = 0.1; // percent
                         public static final double INTAKE_ROLLER_TORQUE = 80.0; // amps
                         public static final double INTAKE_HOLDING_TORQUE = 40.0; // amps
                 }
