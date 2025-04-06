@@ -13,6 +13,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.tools.BeamBreak;
@@ -30,6 +31,8 @@ public class Intake extends SubsystemBase {
   private IntakeState systemState = IntakeState.DEFAULT;
   private boolean isZeroed = false;
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
+  private double handOffTime = Timer.getFPGATimestamp();
+  private boolean firstTimeHandOff = true;
 
   public enum IntakeState {
     INTAKING,
@@ -108,6 +111,9 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     Logger.recordOutput("Intake Motor Current", roller.getStatorCurrent().getValueAsDouble());
     systemState = handleStateTransition();
+    if (systemState != IntakeState.HANDOFF) {
+      firstTimeHandOff = true;
+    }
     // System.out.println("Intake Current: " +
     // intakeMotor.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput("Intake State", systemState);
@@ -125,9 +131,20 @@ public class Intake extends SubsystemBase {
         pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
         break;
       case HANDOFF:
-        setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-            Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
-        pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+        if (firstTimeHandOff) {
+          firstTimeHandOff = false;
+          handOffTime = Timer.getFPGATimestamp();
+        }
+        if (Timer.getFPGATimestamp() - handOffTime < 3.0) {
+          setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+              Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+          pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+        } else {
+          pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+          setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+              Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
+
+        }
         break;
       case IDLE:
         pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
