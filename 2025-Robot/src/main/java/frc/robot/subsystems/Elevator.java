@@ -29,11 +29,11 @@ public class Elevator extends SubsystemBase {
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
   private final double elevatorAcceleration = 500.0;
   private final double elevatorCruiseVelocity = 400.0;
-
   private final MotionMagicTorqueCurrentFOC elevatorMotionProfileRequest = new MotionMagicTorqueCurrentFOC(0);
 
   public enum ElevatorState {
     DEFAULT,
+    ZERO,
     AUTO_L1,
     AUTO_L2,
     AUTO_L3,
@@ -216,6 +216,8 @@ public class Elevator extends SubsystemBase {
     switch (wantedState) {
       case DEFAULT:
         return ElevatorState.DEFAULT;
+      case ZERO:
+        return ElevatorState.ZERO;
       case OVER:
         return ElevatorState.OVER;
       case L1:
@@ -271,6 +273,15 @@ public class Elevator extends SubsystemBase {
     }
   }
 
+  public boolean getZeroed() {
+    if (Math.abs(elevatorMotorMaster.getStatorCurrent().getValueAsDouble()) > 10.0
+        && Math.abs(elevatorMotorMaster.getVelocity().getValueAsDouble()) < 5.0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   private double zeroTime = 0.0;
 
   @Override
@@ -295,6 +306,12 @@ public class Elevator extends SubsystemBase {
       case GROUND_CORAL_INTAKE:
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kGROUNDCORAL.meters);
+        break;
+      case ZERO:
+        moveWithTorque(-40, 0.7);
+        if (getZeroed()) {
+          setElevatorEncoderPosition(0.0);
+        }
         break;
       case NET:
         firstTimeIdle = true;

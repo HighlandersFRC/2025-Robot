@@ -12,6 +12,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
@@ -62,20 +63,69 @@ public class Manipulator extends SubsystemBase {
     manipulatorMotor.setControl(torqueCurrentFOCRequest.withOutput(current).withMaxAbsDutyCycle(maxPercent));
   }
 
+  private boolean firstTimeCoral = true;
+  private double coralTime = Timer.getFPGATimestamp();
+  private boolean lastCoralValue = false;
+  private double switchTime = Timer.getFPGATimestamp();
+  private boolean hasCoralSticky = false;
+
   public boolean hasCoral() {
     // Logger.recordOutput("Has Coral",
     // (intakeMotor.getVelocity().getValueAsDouble() > -10
     // && intakeMotor.getTorqueCurrent().getValueAsDouble() < -15
     // && intakeMotor.getAcceleration().getValueAsDouble() < -100));
-    Logger.recordOutput("Intake Velocity",
-        manipulatorMotor.getVelocity().getValueAsDouble());
-    Logger.recordOutput("Intake Torque",
-        manipulatorMotor.getTorqueCurrent().getValueAsDouble());
-    Logger.recordOutput("Intake Acceleration",
-        manipulatorMotor.getAcceleration().getValueAsDouble());
-    if (Math.abs(manipulatorMotor.getVelocity().getValueAsDouble()) < 15
+    // Logger.recordOutput("Intake Velocity",
+    //     manipulatorMotor.getVelocity().getValueAsDouble());
+    // Logger.recordOutput("Intake Torque",
+    //     manipulatorMotor.getTorqueCurrent().getValueAsDouble());
+    // Logger.recordOutput("Intake Acceleration",
+    //     manipulatorMotor.getAcceleration().getValueAsDouble());
+    if (Math.abs(manipulatorMotor.getVelocity().getValueAsDouble()) < 5
         && Math.abs(manipulatorMotor.getTorqueCurrent().getValueAsDouble()) > 20
     /* && Math.abs(manipulatorMotor.getAcceleration().getValueAsDouble()) < 10 */) {
+      if (firstTimeCoral) {
+        firstTimeCoral = false;
+        coralTime = Timer.getFPGATimestamp();
+      }
+      if (lastCoralValue != true) {
+        switchTime = Timer.getFPGATimestamp();
+        System.out.println("Switch Intake Item: Has Coral");
+      }
+      lastCoralValue = true;
+      return true;
+    } else {
+      firstTimeCoral = true;
+      coralTime = Timer.getFPGATimestamp();
+      if (lastCoralValue != false) {
+        switchTime = Timer.getFPGATimestamp();
+        System.out.println("Switch Intake Item: Empty");
+      }
+      lastCoralValue = false;
+      return false;
+    }
+  }
+
+  public boolean hasCoralSticky() {
+    if (hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.2) {
+      hasCoralSticky = true;
+    } else if (!hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.2) {
+      hasCoralSticky = false;
+    }
+    return hasCoralSticky;
+  }
+
+  public boolean hasCoralForTime(double time) {
+    // Logger.recordOutput("Has Coral",
+    // (intakeMotor.getVelocity().getValueAsDouble() > -10
+    // && intakeMotor.getTorqueCurrent().getValueAsDouble() < -15
+    // && intakeMotor.getAcceleration().getValueAsDouble() < -100));
+    // Logger.recordOutput("Intake Velocity",
+    //     manipulatorMotor.getVelocity().getValueAsDouble());
+    // Logger.recordOutput("Intake Torque",
+    //     manipulatorMotor.getTorqueCurrent().getValueAsDouble());
+    // Logger.recordOutput("Intake Acceleration",
+    //     manipulatorMotor.getAcceleration().getValueAsDouble());
+    if (hasCoral() && Timer.getFPGATimestamp() - coralTime > time) {
       return true;
     } else {
       return false;
