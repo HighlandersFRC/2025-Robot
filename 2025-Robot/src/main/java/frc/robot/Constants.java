@@ -3590,7 +3590,7 @@ public final class Constants {
                 public static final double ELEVATOR_PROCESSOR_POSITION_M = inchesToMeters(6.5);
                 public static final double ELEVATOR_LOLLIPOP_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_PRE_HANDOFF_POSITION_M = inchesToMeters(37.0);
-                public static final double ELEVATOR_HANDOFF_POSITION_M = inchesToMeters(34.5);
+                public static final double ELEVATOR_HANDOFF_POSITION_M = inchesToMeters(33.0);
 
                 public enum ElevatorPosition {
                         kDOWN(ELEVATOR_BOTTOM_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_BOTTOM_POSITION_M)),
