@@ -124,12 +124,13 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.Slot1.kI = 0.0 * elevatorMultiplier;
     elevatorConfig.Slot1.kD = 4.690 * elevatorMultiplier;
     elevatorConfig.Slot1.kG = 8.044 * elevatorMultiplier;
-    elevatorConfig.Slot0.kP = 33.39 * elevatorMultiplier * 0.5;
-    elevatorConfig.Slot0.kI = 0.0 * elevatorMultiplier * 0.5;
-    elevatorConfig.Slot0.kD = 2.7 * elevatorMultiplier * 0.5;
-    elevatorConfig.Slot0.kG = 4.499 * elevatorMultiplier * 0.5;
+    elevatorConfig.Slot2.kP = 33.39 * elevatorMultiplier * 0.5;
+    elevatorConfig.Slot2.kI = 0.0 * elevatorMultiplier * 0.5;
+    elevatorConfig.Slot2.kD = 2.7 * elevatorMultiplier * 0.5;
+    elevatorConfig.Slot2.kG = 4.499 * elevatorMultiplier * 0.5;
     elevatorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
     elevatorConfig.Slot1.GravityType = GravityTypeValue.Elevator_Static;
+    elevatorConfig.Slot2.GravityType = GravityTypeValue.Elevator_Static;
     elevatorConfig.MotionMagic.MotionMagicAcceleration = this.elevatorAcceleration;
     elevatorConfig.MotionMagic.MotionMagicCruiseVelocity = this.elevatorCruiseVelocity;
     elevatorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
