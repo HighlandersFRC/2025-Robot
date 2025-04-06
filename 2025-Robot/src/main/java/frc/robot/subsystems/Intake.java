@@ -180,11 +180,11 @@ public class Intake extends SubsystemBase {
         if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.1) {
           pivotWithTorque(-20, 0.2);
           setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-              Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
+              0.1);
         } else {
           pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
           setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-              Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
+              0.1);
         }
         break;
       default:
@@ -211,15 +211,15 @@ public class Intake extends SubsystemBase {
   private boolean hasCoralSticky = false;
 
   public boolean hasCoral() {
-    Logger.recordOutput("Intake Velocity",
-        roller.getVelocity().getValueAsDouble());
-    Logger.recordOutput("Intake Torque",
-        roller.getTorqueCurrent().getValueAsDouble());
-    Logger.recordOutput("Intake Acceleration",
-        roller.getAcceleration().getValueAsDouble());
-    Logger.recordOutput("Intake Position", getPosition());
-    if (Math.abs(roller.getVelocity().getValueAsDouble()) < 1
-        && Math.abs(roller.getTorqueCurrent().getValueAsDouble()) > 30
+    // Logger.recordOutput("Intake Velocity",
+    //     roller.getVelocity().getValueAsDouble());
+    // Logger.recordOutput("Intake Torque",
+    //     roller.getTorqueCurrent().getValueAsDouble());
+    // Logger.recordOutput("Intake Acceleration",
+    //     roller.getAcceleration().getValueAsDouble());
+    // Logger.recordOutput("Intake Position", getPosition());
+    if (Math.abs(roller.getVelocity().getValueAsDouble()) < 5
+        && Math.abs(roller.getTorqueCurrent().getValueAsDouble()) > 20
     /* && Math.abs(roller.getAcceleration().getValueAsDouble()) < 10 */
     // && beamBreak.isTripped()
     ) {
@@ -239,10 +239,10 @@ public class Intake extends SubsystemBase {
     }
   }
 
-  public boolean hasCoralSticky() {
-    if (hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.2) {
+  public boolean hasCoralSuperSticky() {
+    if (hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.05) {
       hasCoralSticky = true;
-    } else if (!hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.2) {
+    } else if (!hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.5) {
       hasCoralSticky = false;
     }
     return hasCoralSticky;

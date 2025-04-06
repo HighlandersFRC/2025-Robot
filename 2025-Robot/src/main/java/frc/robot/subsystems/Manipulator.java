@@ -81,7 +81,7 @@ public class Manipulator extends SubsystemBase {
     // Logger.recordOutput("Intake Acceleration",
     // manipulatorMotor.getAcceleration().getValueAsDouble());
     if (Math.abs(manipulatorMotor.getVelocity().getValueAsDouble()) < 5
-        && Math.abs(manipulatorMotor.getTorqueCurrent().getValueAsDouble()) > 20
+        && Math.abs(manipulatorMotor.getTorqueCurrent().getValueAsDouble()) > 15
     /* && Math.abs(manipulatorMotor.getAcceleration().getValueAsDouble()) < 10 */) {
       if (firstTimeCoral) {
         firstTimeCoral = false;
@@ -106,9 +106,9 @@ public class Manipulator extends SubsystemBase {
   }
 
   public boolean hasCoralSticky() {
-    if (hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.1) {
+    if (hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.05) {
       hasCoralSticky = true;
-    } else if (!hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.1) {
+    } else if (!hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.3) {
       hasCoralSticky = false;
     }
     return hasCoralSticky;

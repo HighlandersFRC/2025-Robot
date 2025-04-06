@@ -754,7 +754,6 @@ public class Superstructure extends SubsystemBase {
       // Math.abs(elevator.getElevatorPosition() -
       // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
       twist.setWantedState(TwistState.UP);
-      manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
       // Wait for the elevator to come up to move the pivot
       if (Math.abs(elevator.getElevatorPosition()) > 15.0 / 39.37) {
         pivot.setWantedState(PivotState.HANDOFF);
@@ -764,9 +763,11 @@ public class Superstructure extends SubsystemBase {
       if (Math.abs(twist.getTwistPosition() + 90) < 10
           && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.05
           && Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.05
-          && (intake.hasCoralSticky() || continueFeeding)) {
+          && (intake.hasCoralSuperSticky())) {
+        manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
         elevator.setWantedState(ElevatorState.HANDOFF);
       } else {
+        manipulator.setWantedState(ManipulatorState.DEFAULT);
         elevator.setWantedState(ElevatorState.PREHANDOFF);
       }
       // Once the elevator makes it down to the handoff position, outake into the arm
