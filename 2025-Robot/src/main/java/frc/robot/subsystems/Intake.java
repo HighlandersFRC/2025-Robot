@@ -135,16 +135,16 @@ public class Intake extends SubsystemBase {
           firstTimeHandOff = false;
           handOffTime = Timer.getFPGATimestamp();
         }
-        if (Timer.getFPGATimestamp() - handOffTime < 3.0) {
-          setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-              Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
-          pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
-        } else {
-          pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
-          setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-              Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
+        // if (Timer.getFPGATimestamp() - handOffTime < 3.0) {
+        setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+            Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+        pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+        // } else {
+        //   pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+        //   setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+        //       Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
 
-        }
+        // }
         break;
       case IDLE:
         pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
@@ -153,6 +153,8 @@ public class Intake extends SubsystemBase {
       case DEFAULT:
         if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.1) {
           pivotWithTorque(-20, 0.2);
+          setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
+              Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
         } else {
           pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
           setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
