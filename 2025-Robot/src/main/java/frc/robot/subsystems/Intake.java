@@ -29,6 +29,7 @@ public class Intake extends SubsystemBase {
   private IntakeState wantedState = IntakeState.DEFAULT;
   private IntakeState systemState = IntakeState.DEFAULT;
   private boolean isZeroed = false;
+  private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
 
   public enum IntakeState {
     INTAKING,
@@ -77,6 +78,10 @@ public class Intake extends SubsystemBase {
       default:
         return IntakeState.IDLE;
     }
+  }
+
+  public void pivotWithTorque(double current, double maxPercent) {
+    pivot.setControl(torqueCurrentFOCRequest.withOutput(current).withMaxAbsDutyCycle(maxPercent));
   }
 
   public void pivotToPosition(double pivotRotations) {
@@ -129,9 +134,13 @@ public class Intake extends SubsystemBase {
         roller.set(0);
         break;
       case DEFAULT:
-        pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
-        setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-            Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
+        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.1) {
+          pivotWithTorque(-20, 0.2);
+        } else {
+          pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+          setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
+              Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
+        }
         break;
       default:
         if (Math.abs(pivot.getVelocity().getValueAsDouble()) < 0.01 && !isZeroed) {
