@@ -74,7 +74,7 @@ public class Manipulator extends SubsystemBase {
     Logger.recordOutput("Intake Acceleration",
         manipulatorMotor.getAcceleration().getValueAsDouble());
     if (Math.abs(manipulatorMotor.getVelocity().getValueAsDouble()) < 15
-        && Math.abs(manipulatorMotor.getTorqueCurrent().getValueAsDouble()) > 8
+        && Math.abs(manipulatorMotor.getTorqueCurrent().getValueAsDouble()) > 20
     /* && Math.abs(manipulatorMotor.getAcceleration().getValueAsDouble()) < 10 */) {
       return true;
     } else {
@@ -84,7 +84,7 @@ public class Manipulator extends SubsystemBase {
 
   public ArmItem getArmItem() {
     // System.out.println(Math.abs(intakeMotor.getAcceleration().getValueAsDouble()));
-    if (!algaeMode && manipulatorMotor.getTorqueCurrent().getValueAsDouble() > 1.0) {
+    if (!algaeMode && manipulatorMotor.getTorqueCurrent().getValueAsDouble() > 5.0) {
       if (Math.abs(manipulatorMotor.getVelocity().getValueAsDouble()) < 5.0) {
         if (Math.abs(manipulatorMotor.getAcceleration().getValueAsDouble()) < 10.0) {
           return ArmItem.CORAL;
@@ -180,7 +180,7 @@ public class Manipulator extends SubsystemBase {
     // System.out.println("Intake Current: " +
     // intakeMotor.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput("Intake State", systemState);
-    Logger.recordOutput("Has coral", hasCoral());
+    Logger.recordOutput("Manipulator Has coral", hasCoral());
     Logger.recordOutput("Intake Item", armItem);
     // Logger.recordOutput("Has Coral", hasCoral());
     switch (systemState) {

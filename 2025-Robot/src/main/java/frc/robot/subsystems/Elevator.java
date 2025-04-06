@@ -57,6 +57,7 @@ public class Elevator extends SubsystemBase {
     NET,
     OVER,
     LOLLIPOP,
+    PREHANDOFF,
     HANDOFF
   }
 
@@ -123,6 +124,10 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.Slot1.kI = 0.0 * elevatorMultiplier;
     elevatorConfig.Slot1.kD = 4.690 * elevatorMultiplier;
     elevatorConfig.Slot1.kG = 8.044 * elevatorMultiplier;
+    elevatorConfig.Slot0.kP = 33.39 * elevatorMultiplier * 0.5;
+    elevatorConfig.Slot0.kI = 0.0 * elevatorMultiplier * 0.5;
+    elevatorConfig.Slot0.kD = 2.7 * elevatorMultiplier * 0.5;
+    elevatorConfig.Slot0.kG = 4.499 * elevatorMultiplier * 0.5;
     elevatorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
     elevatorConfig.Slot1.GravityType = GravityTypeValue.Elevator_Static;
     elevatorConfig.MotionMagic.MotionMagicAcceleration = this.elevatorAcceleration;
@@ -158,6 +163,27 @@ public class Elevator extends SubsystemBase {
           elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
       elevatorMotorFollower.setControl(
           elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
+    } else {
+      if (position > Constants.inchesToMeters(64.0) && getElevatorPosition() > Constants.inchesToMeters(62.0)) {
+        moveWithTorque(18, 0.20);
+        // System.out.println("running torque");
+      } else {
+        elevatorMotorMaster.setControl(
+            elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))
+                .withSlot(1));
+        elevatorMotorFollower.setControl(
+            elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position))
+                .withSlot(1));
+      }
+    }
+  }
+
+  public void moveElevatorToPositionSlow(double position) {
+    if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
+      elevatorMotorMaster.setControl(
+          elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(2));
+      elevatorMotorFollower.setControl(
+          elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(2));
     } else {
       if (position > Constants.inchesToMeters(64.0) && getElevatorPosition() > Constants.inchesToMeters(62.0)) {
         moveWithTorque(18, 0.20);
@@ -238,6 +264,8 @@ public class Elevator extends SubsystemBase {
         return ElevatorState.LOLLIPOP;
       case HANDOFF:
         return ElevatorState.HANDOFF;
+      case PREHANDOFF:
+        return ElevatorState.PREHANDOFF;
       default:
         return ElevatorState.DEFAULT;
     }
@@ -357,7 +385,11 @@ public class Elevator extends SubsystemBase {
         break;
       case HANDOFF:
         firstTimeDefault = true;
-        moveElevatorToPosition(ElevatorPosition.kHANDOFF.meters);
+        moveElevatorToPositionSlow(ElevatorPosition.kHANDOFF.meters);
+        break;
+      case PREHANDOFF:
+        firstTimeDefault = true;
+        moveElevatorToPosition(ElevatorPosition.kPREHANDOFF.meters);
         break;
       default:
         if (DriverStation.isTeleopEnabled()) {

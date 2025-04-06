@@ -98,9 +98,6 @@ public class Pivot extends SubsystemBase {
     if (Timer.getFPGATimestamp() - nonAlgaeTime < 1.0) {
       pivotToPositionSlower(pivotPosition);
     } else {
-      if (Math.abs(pivotPosition) * 360.0 > 135.0) {
-        pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
-      }
       pivotMotor.setControl(this.pivotMotionProfileRequest
           .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
           .withVelocity(this.pivotCruiseVelocity * pivotProfileScalarFactor)

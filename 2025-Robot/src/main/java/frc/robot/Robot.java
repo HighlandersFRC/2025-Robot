@@ -42,6 +42,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.twist.init();
     m_robotContainer.manipulator.init();
     m_robotContainer.climber.init();
+    m_robotContainer.intake.init();
     m_robotContainer.lights.init(m_fieldSide);
     Constants.init();
 

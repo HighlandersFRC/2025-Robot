@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,6 +33,7 @@ public class Intake extends SubsystemBase {
   public enum IntakeState {
     INTAKING,
     OUTAKING,
+    HANDOFF,
     IDLE,
     DEFAULT,
   }
@@ -44,11 +46,13 @@ public class Intake extends SubsystemBase {
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    config.CurrentLimits.StatorCurrentLimit = 80;
-    config.CurrentLimits.SupplyCurrentLimit = 80;
-    config.Slot0.kP = 1;
+    config.CurrentLimits.StatorCurrentLimit = 40;
+    config.CurrentLimits.SupplyCurrentLimit = 40;
+    config.Slot0.kP = 4;
     config.Slot0.kI = 0.0;
     config.Slot0.kD = 0;
+    config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
+    config.Slot0.kG = 0;
     config.MotionMagic.MotionMagicAcceleration = Constants.SetPoints.IntakeSetpoints.INTAKE_ACCELERATION;
     config.MotionMagic.MotionMagicCruiseVelocity = Constants.SetPoints.IntakeSetpoints.INTAKE_CRUISE_VELOCITY;
     roller.getConfigurator().apply(config);
@@ -68,6 +72,8 @@ public class Intake extends SubsystemBase {
         return IntakeState.IDLE;
       case DEFAULT:
         return IntakeState.DEFAULT;
+      case HANDOFF:
+        return IntakeState.HANDOFF;
       default:
         return IntakeState.IDLE;
     }
@@ -89,6 +95,10 @@ public class Intake extends SubsystemBase {
     this.wantedState = wantedState;
   }
 
+  public double getPosition() {
+    return pivot.getPosition().getValueAsDouble() / Constants.Ratios.INTAKE_PIVOT_GEAR_RATIO;
+  }
+
   @Override
   public void periodic() {
     Logger.recordOutput("Intake Motor Current", roller.getStatorCurrent().getValueAsDouble());
@@ -96,7 +106,7 @@ public class Intake extends SubsystemBase {
     // System.out.println("Intake Current: " +
     // intakeMotor.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput("Intake State", systemState);
-    Logger.recordOutput("Has coral", hasCoral());
+    Logger.recordOutput("Intake Has coral", hasCoral());
     // Logger.recordOutput("Has Coral", hasCoral());
     switch (systemState) {
       case INTAKING:
@@ -107,17 +117,21 @@ public class Intake extends SubsystemBase {
       case OUTAKING:
         setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
             Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+        pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
+        break;
+      case HANDOFF:
+        setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+            Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+        pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
         break;
       case IDLE:
         pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
         roller.set(0);
         break;
       case DEFAULT:
-        if (hasCoral())
-          setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-              Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
-        else
-          setRollerCurrent(0, 0);
+        pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+        setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
+            Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
         break;
       default:
         if (Math.abs(pivot.getVelocity().getValueAsDouble()) < 0.01 && !isZeroed) {
@@ -145,9 +159,12 @@ public class Intake extends SubsystemBase {
         roller.getTorqueCurrent().getValueAsDouble());
     Logger.recordOutput("Intake Acceleration",
         roller.getAcceleration().getValueAsDouble());
-    if (Math.abs(roller.getVelocity().getValueAsDouble()) < 15
-        && Math.abs(roller.getTorqueCurrent().getValueAsDouble()) > 8
-        /* && Math.abs(roller.getAcceleration().getValueAsDouble()) < 10 */ && beamBreak.isTripped()) {
+    Logger.recordOutput("Intake Position", getPosition());
+    if (Math.abs(roller.getVelocity().getValueAsDouble()) < 1
+        && Math.abs(roller.getTorqueCurrent().getValueAsDouble()) > 30
+    /* && Math.abs(roller.getAcceleration().getValueAsDouble()) < 10 */
+    // && beamBreak.isTripped()
+    ) {
       return true;
     } else {
       return false;

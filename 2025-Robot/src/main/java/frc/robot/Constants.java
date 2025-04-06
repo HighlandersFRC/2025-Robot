@@ -3559,10 +3559,11 @@ public final class Constants {
                         public static final double INTAKE_ACCELERATION = 500.0;
                         public static final double INTAKE_CRUISE_VELOCITY = 400.0;
                         public static final double INTAKE_MOTION_PROFILE_SCALAR = 1.0;
-                        public static final double INTAKE_DOWN = 0.25; // rotations
-                        public static final double INTAKE_UP = 0.0; // rotations
+                        public static final double INTAKE_DOWN = 0.36163; // rotations
+                        public static final double INTAKE_UP = -0.014; // rotations
                         public static final double INTAKE_ROLLER_MAX_SPEED = 1.0; // percent
-                        public static final double INTAKE_ROLLER_TORQUE = 40.0; // amps
+                        public static final double INTAKE_ROLLER_HOLDING_SPEED = 0.2; // percent
+                        public static final double INTAKE_ROLLER_TORQUE = 80.0; // amps
                         public static final double INTAKE_HOLDING_TORQUE = 40.0; // amps
                 }
 
@@ -3588,7 +3589,8 @@ public final class Constants {
                 public static final double ELEVATOR_L3_ALGAE_POSITION_M = inchesToMeters(38);
                 public static final double ELEVATOR_PROCESSOR_POSITION_M = inchesToMeters(6.5);
                 public static final double ELEVATOR_LOLLIPOP_POSITION_M = inchesToMeters(0.0);
-                public static final double ELEVATOR_HANDOFF_POSITION_M = inchesToMeters(28.00);
+                public static final double ELEVATOR_PRE_HANDOFF_POSITION_M = inchesToMeters(37.0);
+                public static final double ELEVATOR_HANDOFF_POSITION_M = inchesToMeters(34.5);
 
                 public enum ElevatorPosition {
                         kDOWN(ELEVATOR_BOTTOM_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_BOTTOM_POSITION_M)),
@@ -3625,7 +3627,9 @@ public final class Constants {
                         kLOLLIPOP(ELEVATOR_LOLLIPOP_POSITION_M, Ratios.elevatorMetersToRotations(
                                         ELEVATOR_LOLLIPOP_POSITION_M)),
                         kHANDOFF(ELEVATOR_HANDOFF_POSITION_M,
-                                        Ratios.elevatorMetersToRotations(ELEVATOR_HANDOFF_POSITION_M));
+                                        Ratios.elevatorMetersToRotations(ELEVATOR_HANDOFF_POSITION_M)),
+                        kPREHANDOFF(ELEVATOR_PRE_HANDOFF_POSITION_M,
+                                        Ratios.elevatorMetersToRotations(ELEVATOR_PRE_HANDOFF_POSITION_M));
 
                         public final double meters;
                         public final double rotations;
@@ -3662,7 +3666,7 @@ public final class Constants {
                 public static final double PIVOT_REEF_ALGAE_POSITION_D = 90.0;
                 public static final double PIVOT_CLIMB_POSITION_D = 45.0;
                 public static final double PIVOT_LOLLIPOP_POSITION_D = -98.0;
-                public static final double PIVOT_HANDOFF_POSITION_D = 135.0;
+                public static final double PIVOT_HANDOFF_POSITION_D = 150.0;
 
                 public enum PivotPosition {
                         kL1(PIVOT_L1_POSITION_D, Constants.degreesToRotations(PIVOT_L1_POSITION_D)),
@@ -3987,7 +3991,7 @@ public final class Constants {
                 public static final double TWIST_GEAR_RATIO = 31.5;
 
                 // pivot
-                public static final double PIVOT_GEAR_RATIO = 91.4285714;
+                public static final double PIVOT_GEAR_RATIO = 95.238;
 
                 // drive
                 public static final double DRIVE_GEAR_RATIO = 6.12;

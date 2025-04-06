@@ -150,7 +150,7 @@ public class RobotContainer {
                 // SuperState.GROUND_CORAL_PICKUP_FRONT));
                 OI.driverRT.whileTrue(new ConditionalCommand(new SetRobotState(superstructure,
                                 SuperState.GROUND_ALGAE_PICKUP_FRONT),
-                                new SetRobotState(superstructure, SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT),
+                                new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_FRONT),
                                 () -> (algaeMode)));
                 // OI.driverRB.whileTrue(new SetRobotState(superstructure,
                 // SuperState.GROUND_CORAL_PICKUP_BACK));
