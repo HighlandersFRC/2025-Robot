@@ -332,13 +332,19 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.DEFAULT_DRIVE;
         break;
       case AUTO_L1_PLACE:
-        if (Math.abs(Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kL1.rotations) < 10.0
-            / 360.0) {
-          currentSuperState = SuperState.AUTO_L1_PLACE_MORE;
-          wantedSuperState = SuperState.AUTO_L1_PLACE_MORE;
-        } else {
-          currentSuperState = SuperState.AUTO_L1_PLACE;
-        }
+        if (manipulator.hasCoral())
+          if (Math.abs(Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kL1.rotations) < 10.0
+              / 360.0) {
+            currentSuperState = SuperState.AUTO_L1_PLACE_MORE;
+            wantedSuperState = SuperState.AUTO_L1_PLACE_MORE;
+          } else {
+            currentSuperState = SuperState.AUTO_L1_PLACE;
+          }
+
+        else if (DriverStation.isAutonomous())
+          currentSuperState = SuperState.IDLE;
+        else
+          currentSuperState = SuperState.DEFAULT;
         break;
       case AUTO_L1_PLACE_MORE:
         if (drive.hitSetPointSemiGenerous(drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), false)[0],
@@ -354,18 +360,24 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.OUTAKE_DRIVE;
         break;
       case AUTO_L2_PLACE:
-        if (drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
-            .getDriverA())[0],
-            drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
-                .getDriverA())[1],
-            drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
-                .getDriverA())[2])
-            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 3.0 / 39.37) {
-          currentSuperState = SuperState.AUTO_SCORE_L2;
-          wantedSuperState = SuperState.AUTO_SCORE_L2;
-        } else {
-          currentSuperState = SuperState.AUTO_L2_PLACE;
-        }
+        if (manipulator.hasCoral())
+          if (drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+              .getDriverA())[0],
+              drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+                  .getDriverA())[1],
+              drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+                  .getDriverA())[2])
+              && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 3.0 / 39.37) {
+            currentSuperState = SuperState.AUTO_SCORE_L2;
+            wantedSuperState = SuperState.AUTO_SCORE_L2;
+          } else {
+            currentSuperState = SuperState.AUTO_L2_PLACE;
+          }
+
+        else if (DriverStation.isAutonomous())
+          currentSuperState = SuperState.IDLE;
+        else
+          currentSuperState = SuperState.DEFAULT;
         break;
       case AUTO_L3_PLACE:
         // System.out.println(
@@ -389,33 +401,44 @@ public class Superstructure extends SubsystemBase {
         // currentSuperState = SuperState.AUTO_L3_PLACE;
         // }
         // break;
-        if (drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
-            .getDriverA())[0],
-            drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
-                .getDriverA())[1],
-            drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
-                .getDriverA())[2])
-            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 3.0 / 39.37) {
-          currentSuperState = SuperState.AUTO_SCORE_L3;
-          wantedSuperState = SuperState.AUTO_SCORE_L3;
-        } else {
-          currentSuperState = SuperState.AUTO_L3_PLACE;
-        }
+        if (manipulator.hasCoral())
+          if (drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
+              .getDriverA())[0],
+              drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
+                  .getDriverA())[1],
+              drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
+                  .getDriverA())[2])
+              && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 3.0 / 39.37) {
+            currentSuperState = SuperState.AUTO_SCORE_L3;
+            wantedSuperState = SuperState.AUTO_SCORE_L3;
+          } else {
+            currentSuperState = SuperState.AUTO_L3_PLACE;
+          }
+
+        else if (DriverStation.isAutonomous())
+          currentSuperState = SuperState.IDLE;
+        else
+          currentSuperState = SuperState.DEFAULT;
         break;
       case AUTO_L4_PLACE:
-        if (drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
-            .getDriverA())[0],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
-                .getDriverA())[1],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
-                .getDriverA())[2])
-            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 3.0 / 39.37
-            && Math.abs(peripherals.getPigeonPitch()) < 2.0) {
-          currentSuperState = SuperState.AUTO_SCORE_L4;
-          wantedSuperState = SuperState.AUTO_SCORE_L4;
-        } else {
-          currentSuperState = SuperState.AUTO_L4_PLACE;
-        }
+        if (manipulator.hasCoral())
+          if (drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
+              .getDriverA())[0],
+              drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
+                  .getDriverA())[1],
+              drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
+                  .getDriverA())[2])
+              && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 3.0 / 39.37
+              && Math.abs(peripherals.getPigeonPitch()) < 2.0) {
+            currentSuperState = SuperState.AUTO_SCORE_L4;
+            wantedSuperState = SuperState.AUTO_SCORE_L4;
+          } else {
+            currentSuperState = SuperState.AUTO_L4_PLACE;
+          }
+        else if (DriverStation.isAutonomous())
+          currentSuperState = SuperState.IDLE;
+        else
+          currentSuperState = SuperState.DEFAULT;
         break;
       case L1_PLACE:
         currentSuperState = SuperState.L1_PLACE;
@@ -513,10 +536,8 @@ public class Superstructure extends SubsystemBase {
       case AUTO_GROUND_CORAL_PICKUP_FRONT:
         if (intake.hasCoral() || manipulator.hasCoral() || continueFeeding) {
           currentSuperState = SuperState.DEFAULT;
-        } else if (peripherals.getFrontGamePieceCamResult().hasTargets()) {
-          currentSuperState = SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT;
         } else {
-          currentSuperState = SuperState.GROUND_CORAL_PICKUP_FRONT;
+          currentSuperState = SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT;
         }
         break;
       case AUTO_GROUND_CORAL_PICKUP_BACK:
@@ -1446,7 +1467,10 @@ public class Superstructure extends SubsystemBase {
    */
   public void handleGroundCoralPickupFrontState() {
     lights.setWantedState(LightsState.INTAKING);
-    drive.setWantedState(DriveState.DEFAULT);
+    if (DriverStation.isTeleopEnabled())
+      drive.setWantedState(DriveState.DEFAULT);
+    else
+      drive.setWantedState(DriveState.IDLE);
     intake.setWantedState(IntakeState.INTAKING);
     // pivot.setWantedState(PivotState.HANDOFF);
     // manipulator.setWantedState(ManipulatorState.DEFAULT);
@@ -1904,97 +1928,9 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleIdleState() {
-    // peripherals.setBackCamPipline(0);
+    handleDefaultState();
+    drive.setWantedState(DriveState.IDLE);
     lights.setWantedState(LightsState.DEFAULT);
-    drive.setWantedState(DriveState.DEFAULT);
-    // pivot.setWantedFlip(PivotFlip.FRONT);
-    // if ()
-    if (manipulator.hasCoralSticky()) {
-      // if (/* Math.abs(twist.getTwistPosition()) < 45 && */
-      // Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
-      if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) > 90.0 / 360.0) {
-        elevator.setWantedState(ElevatorState.PREHANDOFF);
-      } else {
-        elevator.setWantedState(ElevatorState.L2);
-      }
-      // } else {
-      // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
-      // }
-      manipulator.setWantedState(ManipulatorState.DEFAULT);
-
-      // if (isClimbing) {
-      // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
-      // } else {
-      // if (Math.abs(twist.getTwistPosition()) < 30.0) {
-      pivot.setWantedState(PivotState.DEFAULT);
-      // firstTimeDefault = false;
-      // } else if (firstTimeDefault) {
-      // pivot.setWantedState(PivotState.PREP);
-      // }
-      intake.setWantedState(IntakeState.DEFAULT);
-      // }
-
-      // if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
-      // }
-      // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
-      twist.setWantedState(TwistState.SIDE);
-    } else {
-      // Logger.recordOutput("Can Handoff", Math.abs(twist.getTwistPosition() + 90) <
-      // 10
-      // && Math.abs(pivot.getPivotPosition() -
-      // Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02
-      // && Math.abs(elevator.getElevatorPosition() -
-      // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
-      // Logger.recordOutput("Twist Correct", Math.abs(twist.getTwistPosition() + 90)
-      // < 10);
-      // Logger.recordOutput("Pivot Correct",
-      // Math.abs(pivot.getPivotPosition() -
-      // Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02);
-      // Logger.recordOutput("Elevator Correct",
-      // Math.abs(elevator.getElevatorPosition() -
-      // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
-      twist.setWantedState(TwistState.UP);
-      // Wait for the elevator to come up to move the pivot
-      if (Math.abs(elevator.getElevatorPosition()) > 15.0 / 39.37) {
-        pivot.setWantedState(PivotState.HANDOFF);
-      }
-      // If everything is in pre-handoff position and there is a coral to be picked
-      // up, move the elevator down to pick up.
-      if (Math.abs(twist.getTwistPosition() + 90) < 10
-          && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.05
-          && Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.05
-          && (intake.hasCoralSuperSticky())) {
-        manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
-        elevator.setWantedState(ElevatorState.HANDOFF);
-      } else {
-        manipulator.setWantedState(ManipulatorState.DEFAULT);
-        elevator.setWantedState(ElevatorState.PREHANDOFF);
-      }
-      // Once the elevator makes it down to the handoff position, outake into the arm
-      if ((Math.abs(twist.getTwistPosition() + 90) < 10
-          && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.05
-          && Math.abs(elevator.getElevatorPosition() - Constants.SetPoints.ElevatorPosition.kHANDOFF.meters) < 2.0
-              / 39.37
-          && Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.05)
-          || continueFeeding) {
-        intake.setWantedState(IntakeState.HANDOFF);
-        continueFeeding = true;
-      } else {
-        intake.setWantedState(IntakeState.DEFAULT);
-      }
-      // Timeout for the pass off
-      if (continueFeeding && handoffInitTime == 0.0) {
-        handoffInitTime = Timer.getFPGATimestamp();
-      } else {
-        if (Timer.getFPGATimestamp() - handoffInitTime > 0.1) {
-          continueFeeding = false;
-          handoffInitTime = 0.0;
-        }
-      }
-    }
-    // }
-    climber.setWantedState(ClimbState.IDLE);
-
   }
 
   public void handleOutakeIdleState() {

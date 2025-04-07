@@ -2099,6 +2099,7 @@ public class Drive extends SubsystemBase {
   boolean firstTimeCalculated = false;
   boolean firstTimeGoingInCalculated = false;
   boolean firstTimeGoingIn = false;
+  boolean hasTrack = false;
 
   Pose2d targetPose = new Pose2d();
   Pose2d c1 = new Pose2d();
@@ -2151,8 +2152,8 @@ public class Drive extends SubsystemBase {
       double cameraYaw = 15.0;
       double limelightXOffset = Constants.inchesToMeters(2.25);
       double limelightYOffset = Constants.inchesToMeters(-11.5);
-      double intakeXOffset = Constants.inchesToMeters(22.0);
-      double intakeYOffset = Constants.inchesToMeters(4.0); // 4.0
+      double intakeXOffset = Constants.inchesToMeters(20.5);
+      double intakeYOffset = Constants.inchesToMeters(3.0); // 4.0
 
       double robotX = getMT2OdometryX();
       double robotY = getMT2OdometryY();
@@ -2180,6 +2181,7 @@ public class Drive extends SubsystemBase {
       double xFromIntake = xFromRobot - intakeXOffset;
       double yFromIntake = yFromRobot - intakeYOffset;
       if (!firstTimeCalculated) {
+        hasTrack = true;
         targetPose = robotPose.transformBy(new Transform2d(xFromIntake,
             yFromIntake, new Rotation2d()));
         Logger.recordOutput("coral intake x", xFromIntake);
@@ -3754,6 +3756,7 @@ public class Drive extends SubsystemBase {
       firstTimeCalculated = false;
       firstTimeGoingInCalculated = false;
       firstTimeGoingIn = false;
+      hasTrack = false;
     }
     if (!OI.getDriverA()) {
       firstTimeReef = true;
@@ -3884,15 +3887,17 @@ public class Drive extends SubsystemBase {
         if (!target.equals(new Pose2d())) {
           targetPointPickup = target;
         }
-        if (!target.equals(new Pose2d())) {
+        if (hasTrack) {
           driveToPoint(targetPointPickup.getX(), targetPointPickup.getY(),
               targetPointPickup.getRotation().getRadians());
+          System.out.println("Driving to point");
         } else {
+          System.out.println("forward");
           Vector v = new Vector();
-          v.setI(0);
+          v.setI(0.4);
           v.setJ(0);
           double d = 0.0;
-          autoDrive(v, d);
+          autoRobotCentricDrive(v, d);
         }
         break;
       case ALGAE:

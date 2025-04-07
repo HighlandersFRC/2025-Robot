@@ -3912,18 +3912,19 @@ public final class Constants {
                                         + Math.pow(pose1.getY() - pose2.getY(), 2)));
                 }
 
-                public static final double DISTANCE_OFFSET = 6.0;
+                public static final double DISTANCE_OFFSET = 7.0;
                 public static final double CAMERA_ANGLE_OFFSET = 0.0;
                 // pitch, distance
                 public static final double[][] CORAL_LOOKUP_TABLE = {
                                 { -17.72 + CAMERA_ANGLE_OFFSET, 24.5 + DISTANCE_OFFSET },
-                                { -8.36 + CAMERA_ANGLE_OFFSET, 34.0 + DISTANCE_OFFSET },
-                                { -0.8 + CAMERA_ANGLE_OFFSET, 45.75 + DISTANCE_OFFSET },
-                                { 4.81 + CAMERA_ANGLE_OFFSET, 64.0 + DISTANCE_OFFSET },
-                                { 5.12 + CAMERA_ANGLE_OFFSET, 70.0 + DISTANCE_OFFSET },
-                                { 8.24 + CAMERA_ANGLE_OFFSET, 85.0 + DISTANCE_OFFSET },
-                                { 10.82 + CAMERA_ANGLE_OFFSET, 109.0 + DISTANCE_OFFSET },
-                                { 12.02 + CAMERA_ANGLE_OFFSET, 132.0 + DISTANCE_OFFSET }
+                                { -12.22 + CAMERA_ANGLE_OFFSET, 28.5 + DISTANCE_OFFSET },
+                                { -8.02 + CAMERA_ANGLE_OFFSET, 33.0 + DISTANCE_OFFSET },
+                                { -5.69 + CAMERA_ANGLE_OFFSET, 38.25 + DISTANCE_OFFSET },
+                                { -2.73 + CAMERA_ANGLE_OFFSET, 43.75 + DISTANCE_OFFSET },
+                                { -0.05 + CAMERA_ANGLE_OFFSET, 50.0 + DISTANCE_OFFSET },
+                                { 2.09 + CAMERA_ANGLE_OFFSET, 56.0 + DISTANCE_OFFSET },
+                                { 3.55 + CAMERA_ANGLE_OFFSET, 61.5 + DISTANCE_OFFSET },
+                                { 5.87 + CAMERA_ANGLE_OFFSET, 71.75 + DISTANCE_OFFSET }
                 };
 
                 /**
