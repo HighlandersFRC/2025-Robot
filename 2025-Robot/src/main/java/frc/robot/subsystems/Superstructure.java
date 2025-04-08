@@ -131,6 +131,10 @@ public class Superstructure extends SubsystemBase {
     return manipulator.hasCoral();
   }
 
+  public boolean hasCoralSticky() {
+    return manipulator.hasCoralSticky();
+  }
+
   private void applyStates() {
     switch (currentSuperState) {
       case DEFAULT:
@@ -704,6 +708,7 @@ public class Superstructure extends SubsystemBase {
     intake.setWantedState(IntakeState.ZERO);
     pivot.setWantedState(PivotState.DEFAULT);
     twist.setWantedState(TwistState.SIDE);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
   }
 
   public void handleDefaultState() {
@@ -959,9 +964,9 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoL4PlaceState() {
     // if (drive.getAutoPlacementSideIsFront()) {
-    //   intake.setWantedState(IntakeState.L4);
+    // intake.setWantedState(IntakeState.L4);
     // } else {
-    //   intake.setWantedState(IntakeState.DEFAULT);
+    // intake.setWantedState(IntakeState.DEFAULT);
     // }
     if (OI.driverLB.getAsBoolean()) {
       setWantedState(SuperState.AUTO_SCORE_L4);
@@ -1836,7 +1841,7 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoL4ScoreState() {
     // if (drive.getAutoPlacementSideIsFront()) {
-    //   intake.setWantedState(IntakeState.L4);
+    // intake.setWantedState(IntakeState.L4);
     // } else {
     intake.setWantedState(IntakeState.DEFAULT);
     // }

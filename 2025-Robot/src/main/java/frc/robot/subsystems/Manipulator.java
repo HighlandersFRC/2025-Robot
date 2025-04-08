@@ -80,8 +80,8 @@ public class Manipulator extends SubsystemBase {
     // manipulatorMotor.getTorqueCurrent().getValueAsDouble());
     // Logger.recordOutput("Intake Acceleration",
     // manipulatorMotor.getAcceleration().getValueAsDouble());
-    if (Math.abs(manipulatorMotor.getVelocity().getValueAsDouble()) < 5
-        && Math.abs(manipulatorMotor.getTorqueCurrent().getValueAsDouble()) > 15
+    if (Math.abs(manipulatorMotor.getVelocity().getValueAsDouble()) < 5.0
+        && Math.abs(manipulatorMotor.getTorqueCurrent().getValueAsDouble()) > 5.0
     /* && Math.abs(manipulatorMotor.getAcceleration().getValueAsDouble()) < 10 */) {
       if (firstTimeCoral) {
         firstTimeCoral = false;
@@ -222,7 +222,8 @@ public class Manipulator extends SubsystemBase {
 
   @Override
   public void periodic() {
-    Logger.recordOutput("Intake Motor Current", manipulatorMotor.getStatorCurrent().getValueAsDouble());
+    Logger.recordOutput("Manipulator Motor Current", manipulatorMotor.getTorqueCurrent().getValueAsDouble());
+    Logger.recordOutput("Manipulator Torque Current", manipulatorMotor.getStatorCurrent().getValueAsDouble());
     if (armItem != getArmItem()) {
       armItem = getArmItem();
     }

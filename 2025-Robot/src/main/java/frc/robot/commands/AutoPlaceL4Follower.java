@@ -59,7 +59,8 @@ public class AutoPlaceL4Follower extends AutoFollower {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (superstructure.placedCoralL4() || Timer.getFPGATimestamp() - initTime > timeout) {
+    if (superstructure.placedCoralL4() || Timer.getFPGATimestamp() - initTime > timeout
+        || !superstructure.hasCoralSticky() != false) {
       return true;
     } else {
       return false;

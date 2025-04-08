@@ -317,7 +317,7 @@ public class Pivot extends SubsystemBase {
   public void periodic() {
     // System.out.println("Pivot Current: " +
     // pivotMotor.getStatorCurrent().getValueAsDouble());
-    System.out.println("Pivot Position: " + (getPivotPosition() * 360.0));
+    // System.out.println("Pivot Position: " + (getPivotPosition() * 360.0));
     Logger.recordOutput("Pivot Position", getPivotPosition());
     if (systemState != PivotState.L23 && systemState != PivotState.L4 && systemState != PivotState.MANUAL_PLACE
         && systemState != PivotState.MANUAL_RESET) {
