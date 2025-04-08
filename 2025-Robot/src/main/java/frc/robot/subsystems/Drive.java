@@ -415,14 +415,14 @@ public class Drive extends SubsystemBase {
     thetaaPID.setMinOutput(-3.0);
     thetaaPID.setMaxOutput(3.0);
 
-    xxPID4.setMinOutput(-3.0);
-    xxPID4.setMaxOutput(3.0);
+    xxPID4.setMinOutput(-2.0);
+    xxPID4.setMaxOutput(2.0);
 
-    yyPID4.setMinOutput(-3.0);
-    yyPID4.setMaxOutput(3.0);
+    yyPID4.setMinOutput(-2.0);
+    yyPID4.setMaxOutput(2.0);
 
-    thetaaPID4.setMinOutput(-3.0);
-    thetaaPID4.setMaxOutput(3.0);
+    thetaaPID4.setMinOutput(-2.0);
+    thetaaPID4.setMaxOutput(2.0);
 
     xxPIDPickup.setMinOutput(-1.0);
     xxPIDPickup.setMaxOutput(1.0);

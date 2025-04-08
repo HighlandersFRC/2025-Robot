@@ -33,6 +33,8 @@ public class Superstructure extends SubsystemBase {
   double outakeIdleInitTime = 0;
   boolean outakeIdleInit = false;
   boolean firstTimeDefault = true;
+  private SuperState lastState = SuperState.DEFAULT;
+  private SuperState tempLastState = SuperState.DEFAULT;
 
   public enum SuperState {
     DEFAULT,
@@ -671,7 +673,7 @@ public class Superstructure extends SubsystemBase {
     // Pivot has abs to account for placing backwards
     return Math
         .abs(Math.abs(pivot.getPivotPosition())
-            - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (20.0 / 360.0);
+            - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (25.0 / 360.0);
   }
 
   public boolean placedCoralL2() {
@@ -777,10 +779,21 @@ public class Superstructure extends SubsystemBase {
       // Logger.recordOutput("Elevator Correct",
       // Math.abs(elevator.getElevatorPosition() -
       // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
-      twist.setWantedState(TwistState.UP);
+      if (Math.abs(pivot.getPivotPosition()) > 25.0 / 360.0) {
+        twist.setWantedState(TwistState.UP);
+      } else {
+        twist.setWantedState(TwistState.SIDE);
+      }
       // Wait for the elevator to come up to move the pivot
       if (Math.abs(elevator.getElevatorPosition()) > 15.0 / 39.37) {
         pivot.setWantedState(PivotState.HANDOFF);
+      }
+      if (Math.abs(elevator.getElevatorPosition()) < Constants.SetPoints.ElevatorPosition.kHANDOFF.meters
+          - (5.0 / 39.37)) {
+        pivot.setMaxPivotDegrees(
+            (39.37 * Math.abs(elevator.getElevatorPosition() - 15.0 / 360.0)) * 3 + 90.0);
+      } else {
+        pivot.setMaxPivotDegrees(180.0);
       }
       // If everything is in pre-handoff position and there is a coral to be picked
       // up, move the elevator down to pick up.
@@ -945,6 +958,11 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoL4PlaceState() {
+    // if (drive.getAutoPlacementSideIsFront()) {
+    //   intake.setWantedState(IntakeState.L4);
+    // } else {
+    //   intake.setWantedState(IntakeState.DEFAULT);
+    // }
     if (OI.driverLB.getAsBoolean()) {
       setWantedState(SuperState.AUTO_SCORE_L4);
     }
@@ -1037,6 +1055,7 @@ public class Superstructure extends SubsystemBase {
       pivot.setWantedState(PivotState.L4);
     }
     twist.setWantedState(TwistState.SIDE);
+    intake.setWantedState(IntakeState.L4);
   }
 
   public void handleProcessorState() {
@@ -1816,6 +1835,11 @@ public class Superstructure extends SubsystemBase {
   private boolean hasPlaced = false;
 
   public void handleAutoL4ScoreState() {
+    // if (drive.getAutoPlacementSideIsFront()) {
+    //   intake.setWantedState(IntakeState.L4);
+    // } else {
+    intake.setWantedState(IntakeState.DEFAULT);
+    // }
     lights.setWantedState(LightsState.SCORING);
     if (OI.operatorLT.getAsBoolean() && OI.operatorRT.getAsBoolean()) {
       drive.setWantedState(DriveState.DEFAULT);
@@ -1837,7 +1861,9 @@ public class Superstructure extends SubsystemBase {
       if (drive.hitSetPointGenerous(drive.getReefMoreClosestSetpoint(drive.getMT2Odometry())[0],
           drive.getReefMoreClosestSetpoint(drive.getMT2Odometry())[1],
           drive.getReefMoreClosestSetpoint(drive.getMT2Odometry())[2])) {
-        setWantedState(SuperState.DEFAULT);
+        if (DriverStation.isTeleopEnabled()) {
+          setWantedState(SuperState.DEFAULT);
+        }
       }
 
       if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
@@ -1928,12 +1954,150 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleIdleState() {
-    handleDefaultState();
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.DEFAULT);
+    elevator.setWantedState(ElevatorState.DEFAULT);
     drive.setWantedState(DriveState.IDLE);
     lights.setWantedState(LightsState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
+    climber.setWantedState(ClimbState.IDLE);
+  }
+
+  public void handleFeederAutoIdleState() {
+
+    // peripherals.setBackCamPipline(0);
+    lights.setWantedState(LightsState.DEFAULT);
+    drive.setWantedState(DriveState.IDLE);
+    // pivot.setWantedFlip(PivotFlip.FRONT);
+    // if ()
+    if (algaeMode) {
+      if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) > 90.0 / 360.0) {
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      } else {
+        elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+      }
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
+      intake.setWantedState(IntakeState.DEFAULT);
+      // if (isClimbing) {
+      // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
+      // } else {
+      if (Math.abs(twist.getTwistPosition()) < 30.0) {
+        pivot.setWantedState(PivotState.DEFAULT);
+        firstTimeDefault = false;
+      } else if (firstTimeDefault) {
+        pivot.setWantedState(PivotState.PREP);
+      }
+      // }
+
+      if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
+      }
+      // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      twist.setWantedState(TwistState.SIDE);
+    } else if (manipulator.hasCoralSticky()) {
+      // if (/* Math.abs(twist.getTwistPosition()) < 45 && */
+      // Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) > 90.0 / 360.0) {
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      } else {
+        elevator.setWantedState(ElevatorState.L2);
+      }
+      // } else {
+      // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+      // }
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
+
+      // if (isClimbing) {
+      // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
+      // } else {
+      // if (Math.abs(twist.getTwistPosition()) < 30.0) {
+      pivot.setWantedState(PivotState.DEFAULT);
+      // firstTimeDefault = false;
+      // } else if (firstTimeDefault) {
+      // pivot.setWantedState(PivotState.PREP);
+      // }
+      intake.setWantedState(IntakeState.DEFAULT);
+      // }
+
+      // if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
+      // }
+      // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      twist.setWantedState(TwistState.SIDE);
+    } else {
+      // Logger.recordOutput("Can Handoff", Math.abs(twist.getTwistPosition() + 90) <
+      // 10
+      // && Math.abs(pivot.getPivotPosition() -
+      // Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02
+      // && Math.abs(elevator.getElevatorPosition() -
+      // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
+      // Logger.recordOutput("Twist Correct", Math.abs(twist.getTwistPosition() + 90)
+      // < 10);
+      // Logger.recordOutput("Pivot Correct",
+      // Math.abs(pivot.getPivotPosition() -
+      // Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02);
+      // Logger.recordOutput("Elevator Correct",
+      // Math.abs(elevator.getElevatorPosition() -
+      // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
+      twist.setWantedState(TwistState.UP);
+      // Wait for the elevator to come up to move the pivot
+      if (Math.abs(elevator.getElevatorPosition()) > 15.0 / 39.37) {
+        pivot.setWantedState(PivotState.HANDOFF);
+      }
+      if (Math.abs(elevator.getElevatorPosition()) < Constants.SetPoints.ElevatorPosition.kHANDOFF.meters
+          - (5.0 / 39.37)) {
+        pivot.setMaxPivotDegrees(
+            (39.37 * Math.abs(elevator.getElevatorPosition() - 15.0 / 360.0)) * 3 + 90.0);
+      } else {
+        pivot.setMaxPivotDegrees(180.0);
+      }
+      // If everything is in pre-handoff position and there is a coral to be picked
+      // up, move the elevator down to pick up.
+      if (Math.abs(twist.getTwistPosition() + 90) < 10
+          && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.05
+          && Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.05
+          && (intake.hasCoralSuperSticky())) {
+        manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
+        elevator.setWantedState(ElevatorState.HANDOFF);
+      } else {
+        manipulator.setWantedState(ManipulatorState.DEFAULT);
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      }
+      // Once the elevator makes it down to the handoff position, outake into the arm
+      if ((Math.abs(twist.getTwistPosition() + 90) < 10
+          && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.05
+          && Math.abs(elevator.getElevatorPosition() - Constants.SetPoints.ElevatorPosition.kHANDOFF.meters) < 2.0
+              / 39.37
+          && Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.05)
+          || continueFeeding) {
+        intake.setWantedState(IntakeState.HANDOFF);
+        continueFeeding = true;
+      } else {
+        intake.setWantedState(IntakeState.DEFAULT);
+      }
+      // Timeout for the pass off
+      if (continueFeeding && handoffInitTime == 0.0) {
+        handoffInitTime = Timer.getFPGATimestamp();
+      } else {
+        if (Timer.getFPGATimestamp() - handoffInitTime > 0.1) {
+          continueFeeding = false;
+          handoffInitTime = 0.0;
+        }
+      }
+    }
+    // }
+    climber.setWantedState(ClimbState.IDLE);
   }
 
   public void handleOutakeIdleState() {
+    intake.setWantedState(IntakeState.DEFAULT);
+    pivot.setWantedState(PivotState.DEFAULT);
+    elevator.setWantedState(ElevatorState.DEFAULT);
+    drive.setWantedState(DriveState.IDLE);
+    lights.setWantedState(LightsState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.OUTAKE);
+    climber.setWantedState(ClimbState.IDLE);
+  }
+
+  public void handleFeederAutoOutakeIdleState() {
     manipulator.setWantedState(ManipulatorState.OUTAKE);
     if (!outakeIdleInit) {
       outakeIdleInitTime = Timer.getFPGATimestamp();
@@ -2135,6 +2299,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleLollipopPickup() {
+    intake.setWantedState(IntakeState.DEFAULT);
     lights.setWantedState(LightsState.INTAKING);
     elevator.setWantedState(ElevatorState.LOLLIPOP);
     manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
@@ -2155,6 +2320,12 @@ public class Superstructure extends SubsystemBase {
       isClimbing = true;
     }
     currentSuperState = handleStateTransitions();
+
+    if (currentSuperState != tempLastState) {
+
+      tempLastState = currentSuperState;
+    }
+
     if (currentSuperState != SuperState.ZERO) {
       firstTimeZero = true;
     }
@@ -2180,5 +2351,6 @@ public class Superstructure extends SubsystemBase {
     }
     // Logger.recordOutput("Hit Time", hitAutoSetpointTime);
     applyStates();
+    System.out.println("Super State: " + currentSuperState);
   }
 }

@@ -20,7 +20,7 @@ public final class Constants {
                 // lookahead distance is a function:
                 // LOOKAHEAD = AUTONOMOUS_LOOKAHEAD_DISTANCE * velocity + MIN_LOOKAHEAD_DISTANCE
                 // their constants
-                public static final double AUTONOMOUS_LOOKAHEAD_DISTANCE = 0.06; // Lookahead at 1m/s scaled by wanted
+                public static final double AUTONOMOUS_LOOKAHEAD_DISTANCE = 0.04; // Lookahead at 1m/s scaled by wanted
                                                                                  // velocity
                 public static final double FULL_SEND_LOOKAHEAD = 1;
                 public static final double MIN_LOOKAHEAD_DISTANCE = 0.01; // Lookahead distance at 0m/s

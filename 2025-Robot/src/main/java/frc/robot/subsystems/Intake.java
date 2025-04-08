@@ -41,6 +41,7 @@ public class Intake extends SubsystemBase {
     IDLE,
     DEFAULT,
     ZERO,
+    L4,
   }
 
   public Intake() {
@@ -81,6 +82,8 @@ public class Intake extends SubsystemBase {
         return IntakeState.DEFAULT;
       case HANDOFF:
         return IntakeState.HANDOFF;
+      case L4:
+        return IntakeState.L4;
       default:
         return IntakeState.IDLE;
     }
@@ -140,6 +143,11 @@ public class Intake extends SubsystemBase {
         pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
         setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
             Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+        break;
+      case L4:
+        pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
+        setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+            0.5);
         break;
       case ZERO:
         setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,

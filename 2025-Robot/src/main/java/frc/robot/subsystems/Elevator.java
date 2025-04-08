@@ -27,8 +27,8 @@ public class Elevator extends SubsystemBase {
       new CANBus(Constants.CANInfo.CANBUS_NAME));
 
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
-  private final double elevatorAcceleration = 500.0;
-  private final double elevatorCruiseVelocity = 400.0;
+  private final double elevatorAcceleration = 1482542976.0;
+  private final double elevatorCruiseVelocity = 449929104911.0;
   private final MotionMagicTorqueCurrentFOC elevatorMotionProfileRequest = new MotionMagicTorqueCurrentFOC(0);
 
   public enum ElevatorState {
@@ -445,7 +445,7 @@ public class Elevator extends SubsystemBase {
               } else {
                 // System.out.println("Stupid ahh ts pmo 9");
                 if (getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
-                  moveWithTorque(-50, 0.8);
+                  moveWithTorque(-50, 1.0);
                   // System.out.println("Stupid ahh ts pmo 25");
                 } else if (getElevatorPosition() > (Constants.inchesToMeters(1.0))) {
                   moveWithTorque(-30, 0.4);
@@ -456,7 +456,7 @@ public class Elevator extends SubsystemBase {
           } else {
             // System.out.println("Stupid ahh ts pmo 10");
             if (getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
-              moveWithTorque(-50, 0.8);
+              moveWithTorque(-50, 1.0);
               // System.out.println("Stupid ahh ts pmo 11");
             } else if (getElevatorPosition() > (Constants.inchesToMeters(1.0))) {
               moveWithTorque(-30, 0.4);

@@ -38,6 +38,8 @@ public class Pivot extends SubsystemBase {
 
   private final double pivotProfileScalarFactor = 1;
 
+  private double maxPivotDegrees = 180.0;
+
   private final DynamicMotionMagicVoltage pivotMotionProfileRequest = new DynamicMotionMagicVoltage(0,
       pivotCruiseVelocity,
       pivotAcceleration,
@@ -95,6 +97,9 @@ public class Pivot extends SubsystemBase {
     // } else if (fastMode != Speed.FAST) {
     // flashFast();
     // }
+    if (Math.abs(pivotPosition) * 360.0 > maxPivotDegrees) {
+      pivotPosition = Math.copySign(maxPivotDegrees / 360.0, pivotPosition);
+    }
     if (Timer.getFPGATimestamp() - nonAlgaeTime < 1.0) {
       pivotToPositionSlower(pivotPosition);
     } else {
@@ -112,8 +117,8 @@ public class Pivot extends SubsystemBase {
     // if (Math.abs(pivotPosition) * 360.0 > 135.0) {
     // pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
     // }
-    if (Math.abs(pivotPosition) * 360.0 > 135.0) {
-      pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
+    if (Math.abs(pivotPosition) * 360.0 > maxPivotDegrees) {
+      pivotPosition = Math.copySign(maxPivotDegrees / 360.0, pivotPosition);
     }
     pivotMotor.setControl(this.pivotMotionProfileRequest
         .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
@@ -128,8 +133,8 @@ public class Pivot extends SubsystemBase {
     // if (fastMode) {
     // flashSlow();
     // }
-    if (Math.abs(pivotPosition) * 360.0 > 135.0) {
-      pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
+    if (Math.abs(pivotPosition) * 360.0 > maxPivotDegrees) {
+      pivotPosition = Math.copySign(maxPivotDegrees / 360.0, pivotPosition);
     }
 
     pivotMotor.setControl(this.pivotMotionProfileRequest
@@ -151,6 +156,10 @@ public class Pivot extends SubsystemBase {
 
   public void setPivotPercent(double percent) {
     pivotMotor.set(percent);
+  }
+
+  public void setMaxPivotDegrees(double degrees) {
+    maxPivotDegrees = degrees;
   }
 
   public enum PivotFlip {
@@ -308,7 +317,7 @@ public class Pivot extends SubsystemBase {
   public void periodic() {
     // System.out.println("Pivot Current: " +
     // pivotMotor.getStatorCurrent().getValueAsDouble());
-    // System.out.println("Pivot Position: " + getPivotPosition());
+    System.out.println("Pivot Position: " + (getPivotPosition() * 360.0));
     Logger.recordOutput("Pivot Position", getPivotPosition());
     if (systemState != PivotState.L23 && systemState != PivotState.L4 && systemState != PivotState.MANUAL_PLACE
         && systemState != PivotState.MANUAL_RESET) {
