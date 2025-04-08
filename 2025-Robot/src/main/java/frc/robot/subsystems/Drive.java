@@ -208,9 +208,9 @@ public class Drive extends SubsystemBase {
   double diffAngle;
 
   // path following PID values
-  private double kXP = 8.044;
+  private double kXP = 4.00;
   private double kXI = 0.00;
-  private double kXD = 1.79;
+  private double kXD = 1.20;
 
   private double kYP = kXP;
   private double kYI = kXI;
@@ -433,11 +433,11 @@ public class Drive extends SubsystemBase {
     thetaaPIDPickup.setMinOutput(-2.0);
     thetaaPIDPickup.setMaxOutput(2.0);
 
-    xPID.setMinOutput(-5.5);
-    xPID.setMaxOutput(5.5);
+    xPID.setMinOutput(-4.9);
+    xPID.setMaxOutput(4.9);
 
-    yPID.setMinOutput(-5.5);
-    yPID.setMaxOutput(5.5);
+    yPID.setMinOutput(-4.9);
+    yPID.setMaxOutput(4.9);
 
     thetaPID.setMinOutput(-3);
     thetaPID.setMaxOutput(3);
@@ -718,7 +718,7 @@ public class Drive extends SubsystemBase {
                     * Constants.Vision.getTagDistStdDevScalar(distToTag));
             // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
             // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 1.48);
+            standardDeviation.set(2, 0, 0.9);
           } else {
             standardDeviation.set(0, 0,
                 Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
@@ -730,7 +730,7 @@ public class Drive extends SubsystemBase {
                     * Constants.Vision.getTagDistStdDevScalar(distToTag));
             // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
             // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 1.48);
+            standardDeviation.set(2, 0, 0.9);
           }
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
@@ -766,7 +766,7 @@ public class Drive extends SubsystemBase {
                     * Constants.Vision.getTagDistStdDevScalar(distToTag));
             // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
             // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 1.48);
+            standardDeviation.set(2, 0, 0.9);
           } else {
             standardDeviation.set(0, 0,
                 Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
@@ -778,7 +778,7 @@ public class Drive extends SubsystemBase {
                     * Constants.Vision.getTagDistStdDevScalar(distToTag));
             // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
             // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 1.48);
+            standardDeviation.set(2, 0, 0.9);
           }
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
@@ -815,7 +815,7 @@ public class Drive extends SubsystemBase {
                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-          standardDeviation.set(2, 0, 1.48);
+          standardDeviation.set(2, 0, 0.9);
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
           mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
@@ -851,7 +851,7 @@ public class Drive extends SubsystemBase {
                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-          standardDeviation.set(2, 0, 1.48);
+          standardDeviation.set(2, 0, 0.9);
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
           mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),

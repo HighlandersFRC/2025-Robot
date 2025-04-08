@@ -427,7 +427,7 @@ public class Superstructure extends SubsystemBase {
           currentSuperState = SuperState.DEFAULT;
         break;
       case AUTO_L4_PLACE:
-        if (manipulator.hasCoral())
+        if (manipulator.hasCoral() || DriverStation.isAutonomousEnabled()) {
           if (drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
               .getDriverA())[0],
               drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
@@ -441,10 +441,11 @@ public class Superstructure extends SubsystemBase {
           } else {
             currentSuperState = SuperState.AUTO_L4_PLACE;
           }
-        else if (DriverStation.isAutonomous())
-          currentSuperState = SuperState.IDLE;
-        else
+          // } else if (DriverStation.isAutonomous()) {
+          // currentSuperState = SuperState.IDLE;
+        } else {
           currentSuperState = SuperState.DEFAULT;
+        }
         break;
       case L1_PLACE:
         currentSuperState = SuperState.L1_PLACE;
@@ -709,6 +710,11 @@ public class Superstructure extends SubsystemBase {
     pivot.setWantedState(PivotState.DEFAULT);
     twist.setWantedState(TwistState.SIDE);
     manipulator.setWantedState(ManipulatorState.DEFAULT);
+    if (DriverStation.isAutonomousEnabled()) {
+      drive.setWantedState(DriveState.IDLE);
+    } else {
+      drive.setWantedState(DriveState.DEFAULT);
+    }
   }
 
   public void handleDefaultState() {
@@ -756,12 +762,12 @@ public class Superstructure extends SubsystemBase {
       // if (isClimbing) {
       // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
       // } else {
-      // if (Math.abs(twist.getTwistPosition()) < 30.0) {
-      pivot.setWantedState(PivotState.DEFAULT);
-      // firstTimeDefault = false;
-      // } else if (firstTimeDefault) {
-      // pivot.setWantedState(PivotState.PREP);
-      // }
+      if (Math.abs(twist.getTwistPosition()) < 30.0 || Math.abs(pivot.getPivotPosition()) > 60.0 / 360.0) {
+        pivot.setWantedState(PivotState.DEFAULT);
+        firstTimeDefault = false;
+      } else if (firstTimeDefault) {
+        pivot.setWantedState(PivotState.PREP);
+      }
       intake.setWantedState(IntakeState.DEFAULT);
       // }
 
@@ -1877,7 +1883,7 @@ public class Superstructure extends SubsystemBase {
         manipulator.setWantedState(ManipulatorState.OUTAKE);
       } else {
         if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations
-            - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+            - 25.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
           hasPlaced = true;
           drive.setWantedState(DriveState.REEF_MORE);
           manipulator.setWantedState(ManipulatorState.OUTAKE);
@@ -1960,7 +1966,13 @@ public class Superstructure extends SubsystemBase {
 
   public void handleIdleState() {
     intake.setWantedState(IntakeState.DEFAULT);
-    pivot.setWantedState(PivotState.DEFAULT);
+    if (Math.abs(twist.getTwistPosition()) < 30.0 || Math.abs(pivot.getPivotPosition()) > 60.0 / 360.0) {
+      pivot.setWantedState(PivotState.DEFAULT);
+      firstTimeDefault = false;
+    } else if (firstTimeDefault) {
+      pivot.setWantedState(PivotState.PREP);
+    }
+    twist.setWantedState(TwistState.SIDE);
     elevator.setWantedState(ElevatorState.DEFAULT);
     drive.setWantedState(DriveState.IDLE);
     lights.setWantedState(LightsState.DEFAULT);
@@ -2094,7 +2106,13 @@ public class Superstructure extends SubsystemBase {
 
   public void handleOutakeIdleState() {
     intake.setWantedState(IntakeState.DEFAULT);
-    pivot.setWantedState(PivotState.DEFAULT);
+    if (Math.abs(twist.getTwistPosition()) < 30.0 || Math.abs(pivot.getPivotPosition()) > 60.0 / 360.0) {
+      pivot.setWantedState(PivotState.DEFAULT);
+      firstTimeDefault = false;
+    } else if (firstTimeDefault) {
+      pivot.setWantedState(PivotState.PREP);
+    }
+    twist.setWantedState(TwistState.SIDE);
     elevator.setWantedState(ElevatorState.DEFAULT);
     drive.setWantedState(DriveState.IDLE);
     lights.setWantedState(LightsState.DEFAULT);
