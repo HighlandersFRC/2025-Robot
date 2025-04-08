@@ -26,6 +26,7 @@ import frc.robot.commands.PolarAutoFollower;
 import frc.robot.commands.SetClimberPivotTorque;
 import frc.robot.commands.SetRobotState;
 import frc.robot.commands.SetRobotStateComplicated;
+import frc.robot.commands.SetRobotStateComplicatedContinuous;
 import frc.robot.commands.SetRobotStateOnce;
 import frc.robot.commands.SetRobotStateSimple;
 import frc.robot.commands.SetRobotStateSimpleOnce;
@@ -82,8 +83,9 @@ public class RobotContainer {
                         put("Full Send", () -> new FullSendFollower(drive, null, false));
                         put("IntakeLollipop", () -> new SetRobotState(superstructure, SuperState.LOLLIOP_PICKUP));
                         put("Net", () -> new SetRobotStateSimple(superstructure, SuperState.NET));
-                        put("AutoIntake",
-                                        () -> new SetRobotState(superstructure, SuperState.GROUND_ALGAE_PICKUP_FRONT));
+                        put("GroundIntake",
+                                        () -> new SetRobotStateComplicatedContinuous(superstructure,
+                                                        SuperState.GROUND_CORAL_PICKUP_FRONT, SuperState.PASSOFF_IDLE));
                         put("ReefAlgae", () -> new SetRobotState(superstructure, SuperState.AUTO_ALGAE_PICKUP));
                         put("AutoIntake", () -> new AutoCoralGroundPickupFollower(superstructure, drive, 4.0));
                 }
