@@ -87,6 +87,8 @@ public class RobotContainer {
                                                         SuperState.GROUND_CORAL_PICKUP_FRONT, SuperState.PASSOFF_IDLE));
                         put("ReefAlgae", () -> new SetRobotState(superstructure, SuperState.AUTO_ALGAE_PICKUP));
                         put("AutoIntake", () -> new AutoCoralGroundPickupFollower(superstructure, drive, 4.0));
+                        put("PassoffOutakeIdle", () -> new SetRobotStateSimpleOnce(superstructure,
+                                        SuperState.PASSOFF_OUTAKE_IDLE));
                 }
         };
 
