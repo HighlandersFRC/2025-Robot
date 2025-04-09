@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoCoralGroundPickupFollower;
-import frc.robot.commands.AutoIntakeFollower;
 import frc.robot.commands.AutoPlaceL2Follower;
 import frc.robot.commands.AutoPlaceL4Follower;
 import frc.robot.commands.DoNothing;

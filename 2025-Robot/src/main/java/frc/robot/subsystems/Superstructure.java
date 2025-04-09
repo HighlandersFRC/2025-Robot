@@ -133,6 +133,10 @@ public class Superstructure extends SubsystemBase {
     return manipulator.hasCoral();
   }
 
+  public boolean intakeHasCoral() {
+    return intake.hasCoral();
+  }
+
   public boolean hasCoralSticky() {
     return manipulator.hasCoralSticky();
   }
