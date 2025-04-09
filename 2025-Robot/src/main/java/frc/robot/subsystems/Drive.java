@@ -221,9 +221,9 @@ public class Drive extends SubsystemBase {
   private double kThetaD = 2.00;
 
   // auto placement PID values
-  private double kkXP = 3.60;
+  private double kkXP = 5.50;
   private double kkXI = 0.00;
-  private double kkXD = 1.40;
+  private double kkXD = 1.60;
 
   private double kkYP = kkXP;
   private double kkYI = kkXI;
@@ -234,7 +234,7 @@ public class Drive extends SubsystemBase {
   private double kkThetaD = 0.971;
 
   // l4 pid values
-  private double kkXP4 = 3.30;
+  private double kkXP4 = 4.30;
   private double kkXI4 = 0.00;
   private double kkXD4 = 1.70;
 
