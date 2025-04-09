@@ -820,7 +820,7 @@ public class Superstructure extends SubsystemBase {
       if (Math.abs(elevator.getElevatorPosition()) < Constants.SetPoints.ElevatorPosition.kHANDOFF.meters
           - (5.0 / 39.37)) {
         pivot.setMaxPivotDegrees(
-            (39.37 * Math.abs(elevator.getElevatorPosition() - 15.0 / 360.0)) * 3 + 90.0);
+            (39.37 * Math.abs(elevator.getElevatorPosition() - 15.0 / 360.0)) * 2.5 + 90.0);
       } else {
         pivot.setMaxPivotDegrees(180.0);
       }
@@ -1210,7 +1210,12 @@ public class Superstructure extends SubsystemBase {
         elevator.setWantedState(ElevatorState.NET);
       }
     }
-    manipulator.setWantedState(ManipulatorState.DEFAULT);
+    if (Math.abs(drive.getMT2OdometryX() - Constants.Physical.FIELD_LENGTH / 2) < Constants.Reef.NET_X_OFFSET_MORE
+        + 2.0) {
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
+    } else {
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
+    }
     if (!drive.getAutoPlacementSideIsFront()) {
       pivot.setWantedFlip(PivotFlip.BACK);
       twist.setWantedState(TwistState.DOWN);
