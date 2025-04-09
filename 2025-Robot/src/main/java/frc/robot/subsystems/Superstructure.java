@@ -33,8 +33,8 @@ public class Superstructure extends SubsystemBase {
   double outakeIdleInitTime = 0;
   boolean outakeIdleInit = false;
   boolean firstTimeDefault = true;
-  private SuperState lastState = SuperState.DEFAULT;
-  private SuperState tempLastState = SuperState.DEFAULT;
+  private SuperState lastState = SuperState.IDLE;
+  private SuperState tempLastState = SuperState.IDLE;
 
   public enum SuperState {
     DEFAULT,
@@ -95,8 +95,8 @@ public class Superstructure extends SubsystemBase {
     ZERO
   }
 
-  private SuperState wantedSuperState = SuperState.DEFAULT;
-  private SuperState currentSuperState = SuperState.DEFAULT;
+  private SuperState wantedSuperState = SuperState.IDLE;
+  private SuperState currentSuperState = SuperState.IDLE;
 
   private boolean continueClimbing = false;
   public boolean algaeMode = false;
