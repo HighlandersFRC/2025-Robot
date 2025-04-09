@@ -263,6 +263,9 @@ public class Drive extends SubsystemBase {
   private double kTurningP = 0.04;
   private double kTurningI = 0;
   private double kTurningD = 0.06;
+  private double kRotateP = 0.04;
+  private double kRotateI = 0.0;
+  private double kRotateD = 0.06;
 
   private PID xxPID = new PID(kkXP, kkXI, kkXD);
   private PID yyPID = new PID(kkYP, kkYI, kkYD);
@@ -280,6 +283,7 @@ public class Drive extends SubsystemBase {
   private PID yPID = new PID(kYP, kYI, kYD);
   private PID thetaPID = new PID(kThetaP, kThetaI, kThetaD);
   private PID turningPID = new PID(kTurningP, kTurningI, kTurningD);
+  private PID rotatePID = new PID(kRotateP, kRotateI, kRotateD);
 
   private String m_fieldSide = "blue";
 
@@ -444,6 +448,9 @@ public class Drive extends SubsystemBase {
 
     turningPID.setMinOutput(-3);
     turningPID.setMaxOutput(3);
+
+    rotatePID.setMinOutput(-2);
+    rotatePID.setMaxOutput(2);
   }
 
   public void teleopInit() {
@@ -2268,6 +2275,49 @@ public class Drive extends SubsystemBase {
     }
   }
 
+  public void goToCoral() {
+
+    double yaw = 0.0;
+    double pitch = 0.0;
+    var result = peripherals.getFrontGamePieceCamResult();
+    if (result.hasTargets()) {
+      List<PhotonTrackedTarget> tracks = result.getTargets();
+      // for (int i = 0; i < tracks.size(); i++) {
+      // int id = tracks.get(i).getDetectedObjectClassID();
+      // if (id == 0) {
+      // tracks.remove(i);
+      // i--;
+      // }
+      // }
+      // if (tracks.isEmpty()) {
+      // } else {
+      // double minPitch = tracks.get(0).getPitch();
+      // int index = 0;
+      // for (int i = 1; i < tracks.size(); i++) {
+      // int id = tracks.get(0).getDetectedObjectClassID();
+      // System.out.println("id: " + id);
+      // if (tracks.get(i).getPitch() < minPitch) {
+      // minPitch = tracks.get(i).getPitch();
+      // index = i;
+      // }
+      // }
+      pitch = tracks.get(0).getYaw();
+      yaw = tracks.get(0).getYaw();
+      // }
+    }
+
+    if (yaw != 0.0 && pitch != 0.0) {
+      double currentAngle = yaw + 3.64;
+      System.out.println("currentAngle: " + currentAngle);
+      rotatePID.setSetPoint(0.0);
+      rotatePID.updatePID(currentAngle);
+      double r = -rotatePID.getResult();
+
+      autoRobotCentricDrive(new Vector(1.75, 0), r);
+
+    }
+  }
+
   /**
    * Retrieves the current X-coordinate of the robot from fused odometry.
    *
@@ -3883,22 +3933,21 @@ public class Drive extends SubsystemBase {
             getReefL3ClosestSetpoint(getMT2Odometry(), OI.getDriverA())[2]);
         break;
       case PIECE_PICKUP:
-        Pose2d target = getGamePiecePosition();
-        if (!target.equals(new Pose2d())) {
-          targetPointPickup = target;
-        }
-        if (hasTrack) {
-          driveToPoint(targetPointPickup.getX(), targetPointPickup.getY(),
-              targetPointPickup.getRotation().getRadians());
-          System.out.println("Driving to point");
-        } else {
-          System.out.println("forward");
-          Vector v = new Vector();
-          v.setI(0.4);
-          v.setJ(0);
-          double d = 0.0;
-          autoRobotCentricDrive(v, d);
-        }
+        // Pose2d target = getGamePiecePosition();
+        // if (!target.equals(new Pose2d())) {
+        // targetPointPickup = target;
+        // }
+        // if (hasTrack) {
+        goToCoral();
+        System.out.println("Driving to point");
+        // } else {
+        // System.out.println("forward");
+        // Vector v = new Vector();
+        // v.setI(0.4);
+        // v.setJ(0);
+        // double d = 0.0;
+        // autoRobotCentricDrive(v, d);
+        // }
         break;
       case ALGAE:
         driveToPoint(getAlgaeClosestSetpoint(getMT2Odometry())[0],
