@@ -52,9 +52,9 @@ public class Intake extends SubsystemBase {
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    config.CurrentLimits.StatorCurrentLimit = 40;
-    config.CurrentLimits.SupplyCurrentLimit = 40;
-    config.Slot0.kP = 4;
+    config.CurrentLimits.StatorCurrentLimit = 50;
+    config.CurrentLimits.SupplyCurrentLimit = 50;
+    config.Slot0.kP = 4.068;
     config.Slot0.kI = 0.0;
     config.Slot0.kD = 0;
     config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
@@ -188,11 +188,11 @@ public class Intake extends SubsystemBase {
         if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.1) {
           pivotWithTorque(-20, 0.2);
           setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-              0.1);
+              0.2);
         } else {
           pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
           setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-              0.1);
+              0.2);
         }
         break;
       default:

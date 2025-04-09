@@ -39,7 +39,7 @@ public final class Constants {
                                 "JackInTheBot.polarauto",
                                 "3PieceFeederSmart.polarauto",
                                 "4PieceLollipop.polarauto",
-                                "3PieceFeederGround.polarauto",
+                                "4PieceFeederGround.polarauto",
                 };
 
                 public static int getSelectedPathIndex() {
@@ -3564,7 +3564,7 @@ public final class Constants {
                         public static final double INTAKE_ROLLER_MAX_SPEED = 1.0; // percent
                         public static final double INTAKE_ROLLER_HOLDING_SPEED = 0.1; // percent
                         public static final double INTAKE_ROLLER_TORQUE = 80.0; // amps
-                        public static final double INTAKE_HOLDING_TORQUE = 40.0; // amps
+                        public static final double INTAKE_HOLDING_TORQUE = 80.0; // amps
                 }
 
                 public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
