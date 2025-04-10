@@ -2486,6 +2486,11 @@ public class Superstructure extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (DriverStation.isTeleopEnabled()) {
+      peripherals.setGamePieceCamPipline(1);
+    } else {
+      peripherals.setGamePieceCamPipline(0);
+    }
     pivot.updateIntakeItem(manipulator.getArmItem());
     twist.updateIntakeItem(manipulator.getArmItem());
     if (OI.getDriverA()) {
