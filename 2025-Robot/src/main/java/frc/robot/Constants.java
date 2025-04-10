@@ -202,7 +202,7 @@ public final class Constants {
 
                 // positive is from face of reef towards center of reef
                 // negative means futher from reef
-                public static final double A_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.0);
+                public static final double A_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.5);
                 public static final double B_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.875);
                 public static final double C_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
                 public static final double D_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.25);
@@ -223,8 +223,8 @@ public final class Constants {
                 public static final double F_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
                 public static final double G_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
                 public static final double H_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double I_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.125);
-                public static final double J_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.5);
+                public static final double I_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.125);
+                public static final double J_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.5);
                 public static final double K_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(3.0);
                 public static final double L_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(3.0);
 
@@ -236,10 +236,10 @@ public final class Constants {
                 public static final double F_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
                 public static final double G_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
                 public static final double H_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double I_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.25);
-                public static final double J_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.75);
-                public static final double K_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(3.0);
-                public static final double L_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(3.0);
+                public static final double I_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.25);
+                public static final double J_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.75);
+                public static final double K_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
+                public static final double L_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
 
                 // right when facing the reef side is positive
                 // negative makes robot go more to the left
@@ -743,7 +743,7 @@ public final class Constants {
                                 double adjustY = inchesToMeters(6.469);
                                 double adjustXL1 = inchesToMeters(30.738);
                                 double adjustYL1 = inchesToMeters(9.0);
-                                double adjustXMore = inchesToMeters(50.738);
+                                double adjustXMore = inchesToMeters(70.738);
                                 double adjustYMore = inchesToMeters(6.469);
                                 double adjustAlgaeX = inchesToMeters(35.738);
                                 double adjustAlgaeY = inchesToMeters(0.0);
@@ -3520,9 +3520,9 @@ public final class Constants {
                 public static final double MODULE_OFFSET = inchesToMeters(2.5);
                 public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
                                 ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
-                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(22.7);
+                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(21.5);
                 public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(1.2);
-                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(22.7);
+                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(21.5);
                 public static double INTAKE_Y_OFFSET_BACK = inchesToMeters(-1.2);
 
                 public static double INTAKE_X_OFFSET_FRONT_ALGAE = inchesToMeters(23.0 + 5.0);
@@ -3540,9 +3540,9 @@ public final class Constants {
                 public static double L1_INTAKE_X_OFFSET_BACK_MORE = inchesToMeters(23.5);
                 public static double L1_INTAKE_Y_OFFSET_BACK_MORE = inchesToMeters(-1.5);
 
-                public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(22.7);
+                public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(21.9);
                 public static double L2_INTAKE_Y_OFFSET_FRONT = inchesToMeters(1.2);
-                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(22.7);
+                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(21.9);
                 public static double L2_INTAKE_Y_OFFSET_BACK = inchesToMeters(-1.2);
 
                 public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(25.65);
@@ -3564,7 +3564,7 @@ public final class Constants {
                         public static final double INTAKE_ROLLER_MAX_SPEED = 1.0; // percent
                         public static final double INTAKE_ROLLER_HOLDING_SPEED = 0.1; // percent
                         public static final double INTAKE_ROLLER_TORQUE = 80.0; // amps
-                        public static final double INTAKE_HOLDING_TORQUE = 80.0; // amps
+                        public static final double INTAKE_HOLDING_TORQUE = 60.0; // amps
                 }
 
                 public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
@@ -3647,7 +3647,7 @@ public final class Constants {
                 public static final double PIVOT_AUTO_L3_POSITION_D = 38.0;
                 // public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
                 public static final double PIVOT_AUTO_L4_POSITION_D = 60.0;
-                public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 115.0;
+                public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 100.0;
                 public static final double PIVOT_AUTO_L3_SCORE_POSITION_D = 90.0;
                 public static final double PIVOT_AUTO_L2_SCORE_POSITION_D = 85.0;
                 public static final double PIVOT_L4_POSITION_D = 60.0;

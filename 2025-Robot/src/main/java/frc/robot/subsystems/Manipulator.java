@@ -106,7 +106,7 @@ public class Manipulator extends SubsystemBase {
   }
 
   public boolean hasCoralSticky() {
-    if (hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.05) {
+    if (hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.1) {
       hasCoralSticky = true;
     } else if (!hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.3) {
       hasCoralSticky = false;
@@ -275,17 +275,17 @@ public class Manipulator extends SubsystemBase {
           default:
             if (algaeMode) {
               if (OI.driverPOVUp.getAsBoolean()) {
-                setIntakePercent(-0.3);
+                setIntakePercent(-0.5);
               } else {
                 setIntakePercent(-0.8);
               }
             } else {
               if (OI.driverPOVDown.getAsBoolean() || OI.driverPOVLeft.getAsBoolean() || OI.driverPOVRight.getAsBoolean()
                   || OI.driverPOVUp.getAsBoolean()) {
-                setIntakePercent(-1.0);
+                setIntakePercent(-0.5);
 
               } else {
-                setIntakePercent(-0.2);
+                setIntakePercent(-1.0);
 
               }
             }

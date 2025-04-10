@@ -246,6 +246,32 @@ public class Drive extends SubsystemBase {
   private double kkThetaI4 = 0.00;
   private double kkThetaD4 = 0.971;
 
+  // l23 pid values
+  private double kkXP23 = 3.70;
+  private double kkXI23 = 0.00;
+  private double kkXD23 = 1.70;
+
+  private double kkYP23 = kkXP23;
+  private double kkYI23 = kkXI23;
+  private double kkYD23 = kkXD23;
+
+  private double kkThetaP23 = 2.481;
+  private double kkThetaI23 = 0.00;
+  private double kkThetaD23 = 0.971;
+
+  // l1 pid values
+  private double kkXP1 = 4.00;
+  private double kkXI1 = 0.00;
+  private double kkXD1 = 1.40;
+
+  private double kkYP1 = kkXP1;
+  private double kkYI1 = kkXI1;
+  private double kkYD1 = kkXD1;
+
+  private double kkThetaP1 = 3.005;
+  private double kkThetaI1 = 0.00;
+  private double kkThetaD1 = 0.971;
+
   // Piece pickup values
   private double kkkXPPickup = 3.30;
   private double kkkXIPickup = 0.00;
@@ -275,6 +301,14 @@ public class Drive extends SubsystemBase {
   private PID yyPID4 = new PID(kkYP4, kkYI4, kkYD4);
   private PID thetaaPID4 = new PID(kkThetaP4, kkThetaI4, kkThetaD4);
 
+  private PID xxPID23 = new PID(kkXP23, kkXI23, kkXD23);
+  private PID yyPID23 = new PID(kkYP23, kkYI23, kkYD23);
+  private PID thetaaPID23 = new PID(kkThetaP23, kkThetaI23, kkThetaD23);
+
+  private PID xxPID1 = new PID(kkXP1, kkXI1, kkXD1);
+  private PID yyPID1 = new PID(kkYP1, kkYI1, kkYD1);
+  private PID thetaaPID1 = new PID(kkThetaP1, kkThetaI1, kkThetaD1);
+
   private PID xxPIDPickup = new PID(kkkXPPickup, kkkXIPickup, kkkXDPickup);
   private PID yyPIDPickup = new PID(kkkYPPickup, kkkYIPickup, kkkYDPickup);
   private PID thetaaPIDPickup = new PID(kkkThetaPPickup, kkkThetaIPickup, kkkThetaDPickup);
@@ -299,6 +333,7 @@ public class Drive extends SubsystemBase {
     STOP,
     REEF,
     REEF_MORE,
+    BACK,
     L3_REEF,
     L4_REEF,
     ALGAE,
@@ -427,6 +462,24 @@ public class Drive extends SubsystemBase {
 
     thetaaPID4.setMinOutput(-2.0);
     thetaaPID4.setMaxOutput(2.0);
+
+    xxPID23.setMinOutput(-4.0);
+    xxPID23.setMaxOutput(4.0);
+
+    yyPID23.setMinOutput(-4.0);
+    yyPID23.setMaxOutput(4.0);
+
+    thetaaPID23.setMinOutput(-4.0);
+    thetaaPID23.setMaxOutput(4.0);
+
+    xxPID1.setMinOutput(-4.0);
+    xxPID1.setMaxOutput(4.0);
+
+    yyPID1.setMinOutput(-4.0);
+    yyPID1.setMaxOutput(4.0);
+
+    thetaaPID1.setMinOutput(-4.0);
+    thetaaPID1.setMaxOutput(4.0);
 
     xxPIDPickup.setMinOutput(-1.0);
     xxPIDPickup.setMaxOutput(1.0);
@@ -1692,7 +1745,7 @@ public class Drive extends SubsystemBase {
       }
     }
     System.out.println(chosenSetpoint[0] + " " + chosenSetpoint[1] + " " + chosenSetpoint[2]);
-    if (Math.hypot(chosenSetpoint[0] - getMT2OdometryX(), chosenSetpoint[1] - getMT2OdometryY()) > 1.0) {
+    if (Math.hypot(chosenSetpoint[0] - getMT2OdometryX(), chosenSetpoint[1] - getMT2OdometryY()) > 2.0) {
       return getMT2Odometry();
     } else {
       return chosenSetpoint;
@@ -2733,14 +2786,14 @@ public class Drive extends SubsystemBase {
     // + hitNumber);
     if (Math
         .sqrt(Math.pow((x - getMT2OdometryX()), 2)
-            + Math.pow((y - getMT2OdometryY()), 2)) < 0.0325
+            + Math.pow((y - getMT2OdometryY()), 2)) < 0.035
         && getAngleDifferenceDegrees(Math.toDegrees(theta),
             Math.toDegrees(getMT2OdometryAngle())) < 1.5) {
       hitNumber += 1;
     } else {
       hitNumber = 0;
     }
-    if (hitNumber > 5) {
+    if (hitNumber > 1) {
       return true;
     } else {
       return false;
@@ -2767,7 +2820,7 @@ public class Drive extends SubsystemBase {
     } else {
       hitNumber = 0;
     }
-    if (hitNumber > 5) {
+    if (hitNumber > 3) {
       return true;
     } else {
       return false;
@@ -2912,6 +2965,35 @@ public class Drive extends SubsystemBase {
       xVelNoFF = xxPID4.getResult();
       yVelNoFF = yyPID4.getResult();
       thetaVelNoFF = -thetaaPID4.getResult();
+
+    } else if (DriverStation.isTeleopEnabled()
+        && (OI.driverPOVLeft.getAsBoolean() || OI.driverPOVDown.getAsBoolean())) {
+
+      xxPID23.setSetPoint(x);
+      yyPID23.setSetPoint(y);
+      thetaaPID23.setSetPoint(theta);
+
+      xxPID23.updatePID(getMT2OdometryX());
+      yyPID23.updatePID(getMT2OdometryY());
+      thetaaPID23.updatePID(getMT2OdometryAngle());
+
+      xVelNoFF = xxPID23.getResult();
+      yVelNoFF = yyPID23.getResult();
+      thetaVelNoFF = -thetaaPID23.getResult();
+
+    } else if (DriverStation.isTeleopEnabled() && OI.driverPOVUp.getAsBoolean()) {
+
+      xxPID1.setSetPoint(x);
+      yyPID1.setSetPoint(y);
+      thetaaPID1.setSetPoint(theta);
+
+      xxPID1.updatePID(getMT2OdometryX());
+      yyPID1.updatePID(getMT2OdometryY());
+      thetaaPID1.updatePID(getMT2OdometryAngle());
+
+      xVelNoFF = xxPID1.getResult();
+      yVelNoFF = yyPID1.getResult();
+      thetaVelNoFF = -thetaaPID1.getResult();
 
     } else if (systemState.equals(DriveState.PIECE_PICKUP)) {
 
@@ -3339,6 +3421,8 @@ public class Drive extends SubsystemBase {
         return DriveState.REEF;
       case REEF_MORE:
         return DriveState.REEF_MORE;
+      case BACK:
+        return DriveState.BACK;
       case L3_REEF:
         return DriveState.L3_REEF;
       case L4_REEF:
@@ -3775,6 +3859,19 @@ public class Drive extends SubsystemBase {
     return xTheta;
   }
 
+  public double distanceFromCenterOfReef() {
+    if (isOnBlueSide()) {
+      return Math.hypot((getMT2OdometryX() - Constants.Reef.centerBlue.getX()),
+          ((getMT2OdometryY() - Constants.Reef.centerBlue.getY())));
+    } else {
+      return Math.hypot((getMT2OdometryX() - Constants.Reef.centerRed.getX()),
+          ((getMT2OdometryY() - Constants.Reef.centerRed.getY())));
+    }
+  }
+
+  private final Vector backupVector = new Vector(-20.0, 0.0);
+  private final Vector otherBackupVector = new Vector(20.0, 0.0);
+
   @Override
   public void periodic() {
     // Pose2d target = getGamePiecePosition();
@@ -3908,6 +4005,13 @@ public class Drive extends SubsystemBase {
       case REEF_MORE:
         driveToPoint(getReefMoreClosestSetpoint(getMT2Odometry())[0], getReefMoreClosestSetpoint(getMT2Odometry())[1],
             getReefMoreClosestSetpoint(getMT2Odometry())[2]);
+        break;
+      case BACK:
+        if (autoPlacingFront) {
+          autoRobotCentricDrive(backupVector, 0.0);
+        } else {
+          autoRobotCentricDrive(otherBackupVector, 0.0);
+        }
         break;
       case L4_REEF:
         if (firstTimeReef) {

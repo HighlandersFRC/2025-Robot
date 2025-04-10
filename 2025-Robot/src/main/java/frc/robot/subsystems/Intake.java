@@ -126,6 +126,9 @@ public class Intake extends SubsystemBase {
     }
   }
 
+  private boolean firstTimeDefault = true;
+  private double defaultTime = 0.0;
+
   @Override
   public void periodic() {
     Logger.recordOutput("Intake Motor Current", roller.getStatorCurrent().getValueAsDouble());
@@ -138,6 +141,10 @@ public class Intake extends SubsystemBase {
     Logger.recordOutput("Intake State", systemState);
     Logger.recordOutput("Intake Has coral", hasCoral());
     // Logger.recordOutput("Has Coral", hasCoral());
+    if (systemState != IntakeState.DEFAULT) {
+      firstTimeDefault = true;
+      defaultTime = Timer.getFPGATimestamp();
+    }
     switch (systemState) {
       case INTAKING:
         pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
@@ -172,7 +179,20 @@ public class Intake extends SubsystemBase {
         // setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
         //     Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
         setRollerPercent(-1.0);
-        pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 10.0 / 360.0) {
+          pivotWithTorque(-10, 0.1);
+          // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
+          //     0.2);
+        } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 20.0 / 360.0) {
+          pivotWithTorque(-20, 0.2);
+          // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
+          //     0.2);
+        } else {
+          pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+          // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
+          //     0.2);
+        }
+        // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
         // } else {
         //   pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
         //   setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
@@ -185,14 +205,25 @@ public class Intake extends SubsystemBase {
         roller.set(0);
         break;
       case DEFAULT:
-        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.1) {
-          pivotWithTorque(-20, 0.2);
+        if (firstTimeDefault) {
+          firstTimeDefault = false;
+          defaultTime = Timer.getFPGATimestamp();
+        }
+
+        if (Timer.getFPGATimestamp() - defaultTime > 1.0) {
           setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
               0.2);
         } else {
+          setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+              0.5);
+        }
+
+        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 10.0 / 360.0) {
+          pivotWithTorque(-15, 0.2);
+        } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 20.0 / 360.0) {
+          pivotWithTorque(-30, 0.4);
+        } else {
           pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
-          setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-              0.2);
         }
         break;
       default:
