@@ -104,6 +104,10 @@ public class Peripherals {
     backReefCam.setPipelineIndex(index);
   }
 
+  public void setGamePieceCamPipline(int index) {
+    gamePieceCamera.setPipelineIndex(index);
+  }
+
   public double getGamePieceCamYaw() {
     double yaw = 0.0;
     var result = gamePieceCamera.getLatestResult();
