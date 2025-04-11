@@ -52,6 +52,7 @@ public class Elevator extends SubsystemBase {
     PROCESSOR,
     SCORE_L1,
     SCORE_L2,
+    AUTO_SCORE_L2,
     SCORE_L3,
     SCORE_L4,
     NET,
@@ -257,6 +258,8 @@ public class Elevator extends SubsystemBase {
         return ElevatorState.SCORE_L1;
       case SCORE_L2:
         return ElevatorState.SCORE_L2;
+      case AUTO_SCORE_L2:
+        return ElevatorState.AUTO_SCORE_L2;
       case SCORE_L3:
         return ElevatorState.SCORE_L3;
       case SCORE_L4:
@@ -348,6 +351,9 @@ public class Elevator extends SubsystemBase {
       case L2:
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kL2.meters);
+        break;
+      case AUTO_SCORE_L2:
+        moveElevatorToPosition(ElevatorPosition.kAUTOL2SCORE.meters);
         break;
       case SCORE_L2:
         firstTimeIdle = true;

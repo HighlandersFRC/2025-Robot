@@ -1828,7 +1828,7 @@ public class Superstructure extends SubsystemBase {
       }
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
           - 15.0 / 360.0) {
-        elevator.setWantedState(ElevatorState.AUTO_L1);
+        elevator.setWantedState(ElevatorState.AUTO_SCORE_L2);
       }
     }
   }
