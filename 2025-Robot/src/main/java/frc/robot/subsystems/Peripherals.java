@@ -108,6 +108,42 @@ public class Peripherals {
     gamePieceCamera.setPipelineIndex(index);
   }
 
+  private static List<TargetCorner> CoralCorners = new ArrayList<>();
+
+  public void updateDetectionCorners() {
+    var result = getFrontGamePieceCamResult();
+
+    if (result.hasTargets()) {
+      List<PhotonTrackedTarget> tracks = new ArrayList<>(result.getTargets());
+
+      if (!tracks.isEmpty()) {
+        PhotonTrackedTarget bestTrack = tracks.get(0);
+
+        for (PhotonTrackedTarget track : tracks) {
+          if (track.getPitch() < bestTrack.getPitch()) {
+            bestTrack = track;
+          }
+        }
+
+        List<TargetCorner> corners = result.getBestTarget().minAreaRectCorners;
+        if (corners != null && !corners.isEmpty()) {
+          CoralCorners = corners;
+          return;
+        }
+      }
+    }
+
+    CoralCorners = getDefaultCorners();
+  }
+
+  private List<TargetCorner> getDefaultCorners() {
+    List<TargetCorner> defaultCorners = new ArrayList<>();
+    for (int i = 0; i < 4; i++) {
+      defaultCorners.add(new TargetCorner(-1, -1));
+    }
+    return defaultCorners;
+  }
+
   public double getGamePieceCamYaw() {
     double yaw = 0.0;
     var result = gamePieceCamera.getLatestResult();
@@ -420,6 +456,10 @@ public class Peripherals {
   }
 
   double cameraScreenshotTime = 0.0;
+
+  public static double calculateAngle(double x) {
+    return 102 + (-25.6 * x) + (-7.16 * Math.pow(x, 2) - 10 * x / 90 / 2);
+  }
 
   public void periodic() {
     Logger.recordOutput("Pigeon Pitch", getPigeonPitchAdjusted());

@@ -11,6 +11,8 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonTrackedTarget;
+import org.photonvision.targeting.TargetCorner;
+
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -2329,34 +2331,31 @@ public class Drive extends SubsystemBase {
   }
 
   public void goToCoral() {
-
+    boolean reorienting = false;
     double yaw = 0.0;
     double pitch = 0.0;
+    double coralAngle = 0.0;
+
+    List<TargetCorner> coralCorners = new ArrayList<>();
     var result = peripherals.getFrontGamePieceCamResult();
-    if (result.hasTargets()) {
-      List<PhotonTrackedTarget> tracks = result.getTargets();
-      // for (int i = 0; i < tracks.size(); i++) {
-      // int id = tracks.get(i).getDetectedObjectClassID();
-      // if (id == 0) {
-      // tracks.remove(i);
-      // i--;
-      // }
-      // }
-      // if (tracks.isEmpty()) {
-      // } else {
-      // double minPitch = tracks.get(0).getPitch();
-      // int index = 0;
-      // for (int i = 1; i < tracks.size(); i++) {
-      // int id = tracks.get(0).getDetectedObjectClassID();
-      // System.out.println("id: " + id);
-      // if (tracks.get(i).getPitch() < minPitch) {
-      // minPitch = tracks.get(i).getPitch();
-      // index = i;
-      // }
-      // }
-      pitch = tracks.get(0).getYaw();
-      yaw = tracks.get(0).getYaw();
-      // }
+    List<PhotonTrackedTarget> tracks = new ArrayList<>(result.getTargets());
+
+    if (result.hasTargets() && !tracks.isEmpty()) {
+      PhotonTrackedTarget bestTrack = tracks.get(0);
+      for (PhotonTrackedTarget track : tracks) {
+        if (track.getPitch() < bestTrack.getPitch()) {
+          bestTrack = track;
+        }
+      }
+      yaw = bestTrack.getYaw();
+      pitch = bestTrack.getPitch();
+
+      List<TargetCorner> corners = result.getBestTarget().minAreaRectCorners;
+      if (corners != null && corners.size() >= 4) {
+        coralCorners = corners;
+        coralAngle = (coralCorners.get(1).x - coralCorners.get(0).x) /
+            (coralCorners.get(3).y - coralCorners.get(0).y);
+      }
     }
 
     if (yaw != 0.0 && pitch != 0.0) {
@@ -2366,8 +2365,34 @@ public class Drive extends SubsystemBase {
       rotatePID.updatePID(currentAngle);
       double r = -rotatePID.getResult();
 
-      autoRobotCentricDrive(new Vector(1.75, 0), r);
+      double correctedYaw = yaw;
+      Vector driveVector = new Vector(0.0, 0.0);
 
+      if (peripherals.calculateAngle(coralAngle) > 75) {
+        reorienting = true;
+        if (Math.abs(correctedYaw) < 15) {
+          driveVector.setI(1);
+          driveVector.setJ(-1);
+        } else if (correctedYaw > 0) {
+          driveVector.setI(1);
+          driveVector.setJ(1);
+        } else {
+          driveVector.setI(1);
+          driveVector.setJ(-1);
+        }
+        autoRobotCentricDrive(driveVector, r);
+      } else {
+        reorienting = false;
+        autoRobotCentricDrive(new Vector(1.75, 0), r);
+      }
+
+      // Log outputs for debugging and information purposes.
+      Logger.recordOutput("Drive Vector I", driveVector.getI());
+      Logger.recordOutput("Drive Vector J", driveVector.getJ());
+      Logger.recordOutput("R", r);
+      Logger.recordOutput("Coral Angle", peripherals.calculateAngle(coralAngle));
+      Logger.recordOutput("Corrected Yaw", correctedYaw);
+      Logger.recordOutput("Reorienting?", reorienting);
     }
   }
 
@@ -3874,6 +3899,9 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
+    goToCoral();
+    setWantedState(DriveState.PIECE_PICKUP);
+
     // Pose2d target = getGamePiecePosition();
     // System.out.println(Math.toDegrees(getThetaToCenterReef()));
     // Translation2d t1 = new Translation2d(getMT2OdometryX(), getMT2OdometryY());
