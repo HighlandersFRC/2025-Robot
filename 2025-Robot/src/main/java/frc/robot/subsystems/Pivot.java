@@ -621,15 +621,27 @@ public class Pivot extends SubsystemBase {
         }
         break;
       case AUTO_SCORE_L4_SLOW:
+        // switch (systemFlip) {
+        //   case FRONT:
+        //     setPivotPercent(0.1);
+        //     break;
+        //   case BACK:
+        //     setPivotPercent(-0.1);
+        //     break;
+        //   default:
+        //     setPivotPercent(0.1);
+        //     break;
+        // }
+        // break;
         switch (systemFlip) {
           case FRONT:
-            setPivotPercent(0.1);
+            pivotToPositionSlow(Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
             break;
           case BACK:
-            setPivotPercent(-0.1);
+            pivotToPositionSlow(-Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
             break;
           default:
-            setPivotPercent(0.1);
+            pivotToPositionSlow(Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
             break;
         }
         break;

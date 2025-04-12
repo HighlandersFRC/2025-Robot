@@ -3651,6 +3651,7 @@ public final class Constants {
                 // public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
                 public static final double PIVOT_AUTO_L4_POSITION_D = 60.0;
                 public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 100.0;
+                public static final double PIVOT_AUTO_L4_SCORE_SLOW_POSITION_D = 70.0;
                 public static final double PIVOT_AUTO_L3_SCORE_POSITION_D = 100.0;
                 public static final double PIVOT_AUTO_L2_SCORE_POSITION_D = 100.0;
                 public static final double PIVOT_L4_POSITION_D = 60.0;
@@ -3697,6 +3698,8 @@ public final class Constants {
                                         Constants.degreesToRotations(PIVOT_AUTO_L3_SCORE_POSITION_D)),
                         kAUTOL4SCORE(PIVOT_AUTO_L4_SCORE_POSITION_D,
                                         Constants.degreesToRotations(PIVOT_AUTO_L4_SCORE_POSITION_D)),
+                        kAUTOL4SCORESLOW(PIVOT_AUTO_L4_SCORE_SLOW_POSITION_D,
+                                        Constants.degreesToRotations(PIVOT_AUTO_L4_SCORE_SLOW_POSITION_D)),
                         kDEFAULT(PIVOT_DEFAULT_POSITION_D, Constants.degreesToRotations(PIVOT_DEFAULT_POSITION_D)),
                         kDEFAULTCLIMB(PIVOT_DEFAULT_CLIMB_POSITION_D,
                                         Constants.degreesToRotations(PIVOT_DEFAULT_CLIMB_POSITION_D)),
