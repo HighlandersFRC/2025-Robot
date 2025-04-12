@@ -381,12 +381,11 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_L2_PLACE:
         if (manipulator.hasCoralSticky())
-          if ((drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
-              .getDriverA())[0],
-              drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
-                  .getDriverA())[1],
-              drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
-                  .getDriverA())[2])
+          if ((drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[0],
+              drive.getReefClosestSetpoint(drive.getMT2Odometry(),
+                  false)[1],
+              drive.getReefClosestSetpoint(drive.getMT2Odometry(),
+                  false)[2])
               && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 3.0 / 39.37)
               || OI.getDriverLB()) {
             currentSuperState = SuperState.AUTO_SCORE_L2;
@@ -423,12 +422,12 @@ public class Superstructure extends SubsystemBase {
         // }
         // break;
         if (manipulator.hasCoralSticky())
-          if ((drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
-              .getDriverA())[0],
-              drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
-                  .getDriverA())[1],
-              drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
-                  .getDriverA())[2])
+          if ((drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
+              false)[0],
+              drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
+                  false)[1],
+              drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
+                  false)[2])
               && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 3.0 / 39.37)
               || OI.getDriverLB()) {
             currentSuperState = SuperState.AUTO_SCORE_L3;
@@ -444,12 +443,12 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_L4_PLACE:
         if (manipulator.hasCoralSticky() || DriverStation.isAutonomousEnabled()) {
-          if ((drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
-              .getDriverA())[0],
-              drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
-                  .getDriverA())[1],
-              drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
-                  .getDriverA())[2])
+          if ((drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
+              false)[0],
+              drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
+                  false)[1],
+              drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
+                  false)[2])
               && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 3.0 / 39.37
               && (Math.abs(peripherals.getPigeonPitch()) < 2.0 || true)) || OI.getDriverLB()) {
             currentSuperState = SuperState.AUTO_SCORE_L4;
