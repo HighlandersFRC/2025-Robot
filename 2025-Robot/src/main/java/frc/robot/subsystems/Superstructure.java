@@ -2539,11 +2539,13 @@ public class Superstructure extends SubsystemBase {
     if (climber.getTimesTriggered() && climber.getPosition() > -150) {
       PARTY();
     }
-    if (DriverStation.isTeleopEnabled()) {
+    if (DriverStation.isTeleopEnabled()) { // Change the condition of when to localize as well in
+                                           // updateOdometryFusedArray() in drive.java
       peripherals.setGamePieceCamPipline(1);
     } else {
       peripherals.setGamePieceCamPipline(0);
     }
+
     pivot.updateIntakeItem(manipulator.getArmItem());
     twist.updateIntakeItem(manipulator.getArmItem());
     if (OI.getDriverA()) {
