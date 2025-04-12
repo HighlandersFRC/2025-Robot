@@ -22,6 +22,7 @@ import frc.robot.commands.DoNothing;
 import frc.robot.commands.FeederPickupFollower;
 import frc.robot.commands.FullSendFollower;
 import frc.robot.commands.PolarAutoFollower;
+import frc.robot.commands.ReefAlgaePickupFollower;
 import frc.robot.commands.SetClimberPivotTorque;
 import frc.robot.commands.SetRobotState;
 import frc.robot.commands.SetRobotStateComplicated;
@@ -85,7 +86,7 @@ public class RobotContainer {
                         put("GroundIntake",
                                         () -> new SetRobotStateComplicatedContinuous(superstructure,
                                                         SuperState.GROUND_CORAL_PICKUP_FRONT, SuperState.PASSOFF_IDLE));
-                        put("ReefAlgae", () -> new SetRobotState(superstructure, SuperState.AUTO_ALGAE_PICKUP));
+                        put("ReefAlgae", () -> new ReefAlgaePickupFollower(superstructure, drive, 5.0));
                         put("AutoIntake", () -> new AutoCoralGroundPickupFollower(superstructure, drive, 4.0));
                         put("PassoffOutakeIdle", () -> new SetRobotStateSimpleOnce(superstructure,
                                         SuperState.PASSOFF_OUTAKE_IDLE));
