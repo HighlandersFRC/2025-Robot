@@ -83,9 +83,8 @@ public class RobotContainer {
                         put("Full Send", () -> new FullSendFollower(drive, null, false));
                         put("IntakeLollipop", () -> new SetRobotState(superstructure, SuperState.LOLLIOP_PICKUP));
                         put("Net", () -> new SetRobotStateSimple(superstructure, SuperState.NET));
-                        put("GroundIntake",
-                                        () -> new SetRobotStateComplicatedContinuous(superstructure,
-                                                        SuperState.GROUND_CORAL_PICKUP_FRONT, SuperState.PASSOFF_IDLE));
+                        put("GroundIntake", () -> new SetRobotStateComplicatedContinuous(superstructure,
+                                        SuperState.GROUND_CORAL_PICKUP_FRONT, SuperState.PASSOFF_IDLE));
                         put("ReefAlgae", () -> new ReefAlgaePickupFollower(superstructure, drive, 5.0));
                         put("AutoIntake", () -> new AutoCoralGroundPickupFollower(superstructure, drive, 4.0));
                         put("PassoffOutakeIdle", () -> new SetRobotStateSimpleOnce(superstructure,
@@ -100,6 +99,7 @@ public class RobotContainer {
 
         HashMap<String, BooleanSupplier> conditionMap = new HashMap<String, BooleanSupplier>() {
                 {
+                        put("HasCoral", () -> manipulator.hasCoralSticky() || intake.hasCoral());
                 }
         };
 
@@ -170,7 +170,7 @@ public class RobotContainer {
                 // OI.driverLT.onFalse(new SetIntakeState(intake, IntakeState.DEFAULT));
 
                 OI.driverLB.whileTrue(new ConditionalCommand(
-                                new SetRobotState(superstructure, SuperState.LOLLIOP_PICKUP),
+                                new InstantCommand(),
                                 new ConditionalCommand(
                                                 new SetRobotState(superstructure,
                                                                 SuperState.FEEDER),

@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.lang.annotation.ElementType;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -365,9 +367,9 @@ public class Superstructure extends SubsystemBase {
           currentSuperState = SuperState.DEFAULT;
         break;
       case AUTO_L1_PLACE_MORE:
-        if (drive.hitSetPointSemiGenerous(drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), false)[0],
+        if ((drive.hitSetPointSemiGenerous(drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), false)[0],
             drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), false)[1],
-            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), false)[2])) {
+            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), false)[2])) || OI.getDriverLB()) {
           currentSuperState = SuperState.AUTO_SCORE_L1;
           wantedSuperState = SuperState.AUTO_SCORE_L1;
         } else {
@@ -379,13 +381,14 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_L2_PLACE:
         if (manipulator.hasCoralSticky())
-          if (drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+          if ((drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
               .getDriverA())[0],
               drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
                   .getDriverA())[1],
               drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
                   .getDriverA())[2])
-              && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 3.0 / 39.37) {
+              && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 3.0 / 39.37)
+              || OI.getDriverLB()) {
             currentSuperState = SuperState.AUTO_SCORE_L2;
             wantedSuperState = SuperState.AUTO_SCORE_L2;
           } else {
@@ -420,13 +423,14 @@ public class Superstructure extends SubsystemBase {
         // }
         // break;
         if (manipulator.hasCoralSticky())
-          if (drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
+          if ((drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
               .getDriverA())[0],
               drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
                   .getDriverA())[1],
               drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
                   .getDriverA())[2])
-              && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 3.0 / 39.37) {
+              && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 3.0 / 39.37)
+              || OI.getDriverLB()) {
             currentSuperState = SuperState.AUTO_SCORE_L3;
             wantedSuperState = SuperState.AUTO_SCORE_L3;
           } else {
@@ -440,14 +444,14 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_L4_PLACE:
         if (manipulator.hasCoralSticky() || DriverStation.isAutonomousEnabled()) {
-          if (drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
+          if ((drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
               .getDriverA())[0],
               drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
                   .getDriverA())[1],
               drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
                   .getDriverA())[2])
               && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 3.0 / 39.37
-              && (Math.abs(peripherals.getPigeonPitch()) < 2.0 || true)) {
+              && (Math.abs(peripherals.getPigeonPitch()) < 2.0 || true)) || OI.getDriverLB()) {
             currentSuperState = SuperState.AUTO_SCORE_L4;
             wantedSuperState = SuperState.AUTO_SCORE_L4;
           } else {
@@ -1110,7 +1114,7 @@ public class Superstructure extends SubsystemBase {
       pivot.setWantedState(PivotState.L4);
     }
     twist.setWantedState(TwistState.SIDE);
-    intake.setWantedState(IntakeState.L4);
+    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleProcessorState() {
@@ -1713,7 +1717,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.CLIMB_DEPLOY);
     climber.setWantedState(ClimbState.EXTENDING);
     pivot.setWantedState(PivotState.CLIMB);
-    intake.setWantedState(IntakeState.INTAKING);
+    intake.setWantedState(IntakeState.DOWN);
     // peripherals.setBackCamPipline(1);
   }
 
@@ -1721,14 +1725,18 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.CLIMB);
     climber.setWantedState(ClimbState.RETRACTING);
     pivot.setWantedState(PivotState.CLIMB);
-    intake.setWantedState(IntakeState.INTAKING);
+    if (Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN) < 0.1) {
+      elevator.setWantedState(ElevatorState.DEFAULT);
+      twist.setWantedState(TwistState.SIDE);
+    }
+    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleClimberIdleState() {
     lights.setWantedState(LightsState.CLIMB_IDLE);
     climber.setWantedState(ClimbState.IDLE);
     pivot.setWantedState(PivotState.CLIMB);
-    intake.setWantedState(IntakeState.INTAKING);
+    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleOutakeState() {
@@ -2483,11 +2491,15 @@ public class Superstructure extends SubsystemBase {
       climber.setWantedState(ClimbState.IDLE);
     }
     pivot.setWantedState(PivotState.CLIMB);
-    intake.setWantedState(IntakeState.INTAKING);
+    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleAutoClimbState() {
     pivot.setWantedState(PivotState.CLIMB);
+    if (Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN) < 0.1) {
+      elevator.setWantedState(ElevatorState.DEFAULT);
+      twist.setWantedState(TwistState.SIDE);
+    }
 
     if (!continueClimbing && climber.getPosition() > -400) {
       climber.setWantedState(ClimbState.EXTENDING);
@@ -2505,7 +2517,7 @@ public class Superstructure extends SubsystemBase {
       drive.setWantedState(DriveState.DEFAULT);
     }
 
-    intake.setWantedState(IntakeState.INTAKING);
+    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleLollipopPickup() {
@@ -2519,8 +2531,15 @@ public class Superstructure extends SubsystemBase {
     }
   }
 
+  public void PARTY() {
+    lights.PARTY();
+  }
+
   @Override
   public void periodic() {
+    if (climber.getTimesTriggered() && climber.getPosition() > -150) {
+      PARTY();
+    }
     if (DriverStation.isTeleopEnabled()) { // Change the condition of when to localize as well in
                                            // updateOdometryFusedArray() in drive.java
       peripherals.setGamePieceCamPipline(1);

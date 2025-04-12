@@ -50,6 +50,8 @@ public class Lights extends SubsystemBase {
   StrobeAnimation redFlash = new StrobeAnimation(255, 0, 0, 0, 0.1, ledNumber, 0);
   StrobeAnimation blueFlash = new StrobeAnimation(0, 0, 255, 0, 0.1, ledNumber, 0);
 
+  RainbowAnimation party = new RainbowAnimation(1.0, 1.0, ledNumber, false, 0);
+
   StrobeAnimation greenStrobe = new StrobeAnimation(0, 255, 0, 0, strobeSpeed, ledNumber, 0);
   StrobeAnimation purpleStrobe = new StrobeAnimation(100, 0, 100, 0, strobeSpeed, ledNumber, 0);
   StrobeAnimation yellowStrobe = new StrobeAnimation(100, 100, 0, 0, strobeSpeed, ledNumber, 0);
@@ -78,6 +80,12 @@ public class Lights extends SubsystemBase {
       100, 0);
   LarsonAnimation blueCylonAnimation = new LarsonAnimation(0, 0, 255, 0, 0.8, ledNumber, BounceMode.Back,
       100, 0);
+
+  private boolean partyMode = false;
+
+  public void PARTY() {
+    partyMode = true;
+  }
 
   public enum LightsState {
     DISABLED,
@@ -246,104 +254,122 @@ public class Lights extends SubsystemBase {
       systemState = newState;
     }
 
-    if (systemState != LightsState.DISABLED) {
-      switch (manualState) {
-        case MANUAL:
-          setManual();
-          break;
-        case AUTO:
-          setAuto();
-          break;
-        default:
-          candleFront.setLEDs(10, 50, 10);
-          candleSwerve.setLEDs(10, 50, 10);
-          break;
-      }
-    } else {
-      switch (allianceState) {
-        case RED:
-          candleSwerve.setLEDs(50, 0, 0);
-          break;
-        case BLUE:
-          candleSwerve.setLEDs(0, 0, 50);
-          break;
-        default:
-          break;
-      }
-    }
-
     Logger.recordOutput("Lights State", systemState);
-    switch (systemState) {
-      case DEFAULT:
-        switch (itemState) {
-          case CORAL:
-            setCoralBouncing();
+    if (partyMode /* party mode */) { //TODO: enable or disable party mode here
+      weLikeToParty();
+      // System.out.println("Jam Peanut Butter Bread Bread Make a sandwich eat it");
+      // System.out.println("You want it? I got it");
+      // System.out.println("You want it? I got it");
+      // System.out.println("Don't you know you want my peanut butter?");
+      // System.out.println("Don't you know you want my jam?");
+      // System.out.println("Cause cowboys");
+      // System.out.println("got what?");
+      // System.out.println("got guns");
+      // System.out.println("and lassos");
+      // System.out.println("reach reach reach reach");
+      // System.out.println("sock it to me sock it to me sock it to me sock it to me");
+      // System.out.println("left right left left right left right right left right left left right left right right");
+      // System.out.println("travolta! travolta! travolta! travolta!");
+      // System.out.println("Party! wooo wooo wooo wooo");
+    } else {
+
+      if (systemState != LightsState.DISABLED) {
+        switch (manualState) {
+          case MANUAL:
+            setManual();
             break;
-          case ALGAE:
-            setAlgaeBouncing();
+          case AUTO:
+            setAuto();
             break;
           default:
-            switch (algaeState) {
-              case ALGAE:
-                setAlgaeSolid();
-                break;
-              default:
-                setCoralSolid();
-                break;
-            }
+            candleFront.setLEDs(10, 50, 10);
+            candleSwerve.setLEDs(10, 50, 10);
             break;
         }
-        break;
-      case INTAKING:
-        switch (itemState) {
-          case CORAL:
-            setFlashGreen();
+      } else {
+        switch (allianceState) {
+          case RED:
+            candleSwerve.setLEDs(50, 0, 0);
             break;
-          case ALGAE:
-            setFlashGreen();
+          case BLUE:
+            candleSwerve.setLEDs(0, 0, 50);
+            break;
           default:
-            setFlashPurple();
             break;
         }
-        break;
-      case PLACING:
-        setFlashYellow();
-        break;
-      case SCORING:
-        setStrobeGreen();
-        break;
-      case FEEDER:
-        setFlashPurple();
-        break;
-      case CLIMB_DEPLOY:
-        setFlashPurple();
-        break;
-      case CLIMB_IDLE:
-        setStrobeGreen();
-        break;
-      case CLIMB:
-        setFlashYellow();
-        break;
-      default:
-        if (OI.autoChooser.isConnected()) {
-          switch (allianceState) {
-            case RED:
-              setRedBouncing();
-              // setAllBlue();
-              // candleSwerve.clearAnimation(0);
-              // candleSwerve.setLEDs(0, 0, 0);
+      }
+      switch (systemState) {
+        case DEFAULT:
+          switch (itemState) {
+            case CORAL:
+              setCoralBouncing();
+              break;
+            case ALGAE:
+              setAlgaeBouncing();
               break;
             default:
-              setBlueBouncing();
-              // setAllRed();
-              // candleSwerve.clearAnimation(0);
-              // candleSwerve.setLEDs(0, 0, 0);
+              switch (algaeState) {
+                case ALGAE:
+                  setAlgaeSolid();
+                  break;
+                default:
+                  setCoralSolid();
+                  break;
+              }
               break;
           }
-          ;
-        } else {
+          break;
+        case INTAKING:
+          switch (itemState) {
+            case CORAL:
+              setFlashGreen();
+              break;
+            case ALGAE:
+              setFlashGreen();
+            default:
+              setFlashPurple();
+              break;
+          }
+          break;
+        case PLACING:
           setFlashYellow();
-        }
+          break;
+        case SCORING:
+          setStrobeGreen();
+          break;
+        case FEEDER:
+          setFlashPurple();
+          break;
+        case CLIMB_DEPLOY:
+          setFlashPurple();
+          break;
+        case CLIMB_IDLE:
+          setStrobeGreen();
+          break;
+        case CLIMB:
+          setFlashYellow();
+          break;
+        default:
+          if (OI.autoChooser.isConnected()) {
+            switch (allianceState) {
+              case RED:
+                setRedBouncing();
+                // setAllBlue();
+                // candleSwerve.clearAnimation(0);
+                // candleSwerve.setLEDs(0, 0, 0);
+                break;
+              default:
+                setBlueBouncing();
+                // setAllRed();
+                // candleSwerve.clearAnimation(0);
+                // candleSwerve.setLEDs(0, 0, 0);
+                break;
+            }
+            ;
+          } else {
+            setFlashYellow();
+          }
+      }
     }
     // // This method will be called once per scheduler run
     // if (!commandRunning) { // only makes lights red/blue if a command is not
@@ -569,6 +595,12 @@ public class Lights extends SubsystemBase {
     // candleSwerve.animate(blueCylonAnimation);
     candleBack.animate(blueCylonAnimation);
     candleFront.animate(blueCylonAnimation);
+  }
+
+  public void weLikeToParty() {
+    candleBack.animate(party);
+    candleFront.animate(party);
+    candleSwerve.animate(party);
   }
 
   public void setManual() {
