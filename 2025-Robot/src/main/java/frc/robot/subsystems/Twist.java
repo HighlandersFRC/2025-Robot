@@ -12,7 +12,6 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake.IntakeItem;
@@ -28,10 +27,7 @@ public class Twist extends SubsystemBase {
   private final double twistAcceleration = 50.0;
   private final double twistCruiseVelocity = 200.0;
 
-  private final double twistProfileScalarFactor = 3;
-  private boolean startedZero = false;
   // private double zeroInitTime = 0.0;
-  private boolean algaeMode = false;
 
   private final MotionMagicExpoVoltage twistTorqueCurrentFOC = new MotionMagicExpoVoltage(
       0.0);
@@ -102,7 +98,7 @@ public class Twist extends SubsystemBase {
   }
 
   public double getTwistPosition() {
-    return 360 * twistMotor.getPosition().getValueAsDouble();
+    return 360.0 * twistMotor.getPosition().getValueAsDouble();
   }
 
   public void setTwistEncoderPosition(double position) {
@@ -120,10 +116,6 @@ public class Twist extends SubsystemBase {
 
   public void setWantedState(TwistState wantedState) {
     this.wantedState = wantedState;
-  }
-
-  public void setAlgaeMode(boolean algaeMode) {
-    this.algaeMode = algaeMode;
   }
 
   private TwistState handleStateTransition() {
@@ -158,8 +150,6 @@ public class Twist extends SubsystemBase {
     switch (systemState) {
       case DOWN:
         // if (!startedZero) {
-        //   zeroInitTime = Timer.getFPGATimestamp();
-        //   startedZero = true;
         // }
         // if (Timer.getFPGATimestamp() - zeroInitTime > 1.3) {
         // setTwistPercent(0.0);
@@ -172,17 +162,14 @@ public class Twist extends SubsystemBase {
         twistToPosition(0.25);
         break;
       case SIDE:
-        startedZero = false;
         // zeroInitTime = 0.0;
         twistToPosition(0.0);
         break;
       case UP:
-        startedZero = false;
         // zeroInitTime = 0.0;
         twistToPosition(-0.25);
         break;
       default:
-        startedZero = false;
         // zeroInitTime = 0.0;
         twistToPosition(0.0);
         break;

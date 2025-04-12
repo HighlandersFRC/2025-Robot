@@ -4,10 +4,8 @@
 
 package frc.robot.commands;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.SuperState;
@@ -18,9 +16,6 @@ public class FeederPickupFollower extends AutoFollower {
   Superstructure superstructure;
   Drive drive;
   private int currentPathPointIndex = 0;
-  private JSONArray path;
-  private boolean reset = true;
-  private int endIndex = 0;
 
   /** Creates a new AutoPlaceL4Follower. */
   public FeederPickupFollower(Superstructure superstructure, Drive drive) {
@@ -37,9 +32,6 @@ public class FeederPickupFollower extends AutoFollower {
   public void from(int pointIndex, JSONObject pathJSON, int to) {
     System.out.println("Running L4 in auto");
     this.currentPathPointIndex = pointIndex;
-    path = pathJSON.getJSONArray("sampled_points");
-    endIndex = to;
-    reset = false;
   }
 
   // Called when the command is initially scheduled.

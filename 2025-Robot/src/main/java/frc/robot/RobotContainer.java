@@ -15,6 +15,9 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AutoCoralGroundPickupFollower;
+import frc.robot.commands.AutoIntakeFollower;
+import frc.robot.commands.AutoPlaceL2Follower;
 import frc.robot.commands.AutoPlaceL4Follower;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.FeederPickupFollower;
@@ -67,6 +70,7 @@ public class RobotContainer {
 
         HashMap<String, Supplier<Command>> commandMap = new HashMap<String, Supplier<Command>>() {
                 {
+                        put("AutoPlaceL2", () -> new AutoPlaceL2Follower(superstructure, drive, 2.3));
                         put("AutoPlaceL4", () -> new AutoPlaceL4Follower(superstructure, drive, 2.3));
                         put("AutoFeeder", () -> new FeederPickupFollower(superstructure, drive));
                         put("FeederIntake", () -> new SetRobotState(superstructure, SuperState.FEEDER));
@@ -75,6 +79,10 @@ public class RobotContainer {
                         put("Idle", () -> new SetRobotStateSimple(superstructure, SuperState.IDLE));
                         put("Full Send", () -> new FullSendFollower(drive, null, false));
                         put("IntakeLollipop", () -> new SetRobotState(superstructure, SuperState.LOLLIOP_PICKUP));
+                        put("Net", () -> new SetRobotStateSimple(superstructure, SuperState.NET));
+                        put("AutoIntake", () -> new AutoIntakeFollower(superstructure, drive, 2.3));
+                        put("ReefAlgae", () -> new SetRobotState(superstructure, SuperState.AUTO_ALGAE_PICKUP));
+                        put("AutoIntake", () -> new AutoCoralGroundPickupFollower(superstructure, drive, 4.0));
                 }
         };
 
@@ -140,7 +148,7 @@ public class RobotContainer {
                 // SuperState.GROUND_CORAL_PICKUP_FRONT));
                 OI.driverRT.whileTrue(new ConditionalCommand(new SetRobotState(superstructure,
                                 SuperState.GROUND_ALGAE_PICKUP_FRONT),
-                                new SetRobotState(superstructure, SuperState.GROUND_CORAL_PICKUP_FRONT),
+                                new SetRobotState(superstructure, SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT),
                                 () -> (algaeMode)));
                 // OI.driverRB.whileTrue(new SetRobotState(superstructure,
                 // SuperState.GROUND_CORAL_PICKUP_BACK));
@@ -156,7 +164,8 @@ public class RobotContainer {
                 // OI.driverLT.whileTrue(new SetIntakeState(intake, IntakeState.OUTAKE));
                 // OI.driverLT.onFalse(new SetIntakeState(intake, IntakeState.DEFAULT));
 
-                OI.driverLB.whileTrue(new ConditionalCommand(new InstantCommand(),
+                OI.driverLB.whileTrue(new ConditionalCommand(
+                                new SetRobotState(superstructure, SuperState.LOLLIOP_PICKUP),
                                 new ConditionalCommand(
                                                 new SetRobotState(superstructure,
                                                                 SuperState.FEEDER),

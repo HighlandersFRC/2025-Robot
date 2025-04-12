@@ -5,6 +5,7 @@ package frc.robot;
 
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -205,7 +206,11 @@ public class OI {
     }
 
     public static boolean isRedSide() {
-        return !autoChooser.getRawButton(8);
+        if (autoChooserConnected()) {
+            return !autoChooser.getRawButton(8);
+        } else {
+            return DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+        }
     }
 
     public static boolean isProcessorSide() {
@@ -221,7 +226,11 @@ public class OI {
     }
 
     public static boolean isBlueSide() {
-        return autoChooser.getRawButton(8);
+        if (autoChooserConnected()) {
+            return autoChooser.getRawButton(8);
+        } else {
+            return DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
+        }
     }
 
     public static boolean is4PieceFarBottom231Auto() {

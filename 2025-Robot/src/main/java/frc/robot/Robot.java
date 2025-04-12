@@ -52,7 +52,6 @@ public class Robot extends LoggedRobot {
     PortForwarder.add(5801, "10.44.99.34", 5801);
 
     m_robotContainer.lights.clearAnimations();
-    m_robotContainer.lights.setCommandRunning(true);
     SmartDashboard.putNumber("L2/3 Front X", Constants.metersToInches(Constants.Physical.INTAKE_X_OFFSET_FRONT));
     SmartDashboard.putNumber("L2/3 Front Y", Constants.metersToInches(Constants.Physical.INTAKE_Y_OFFSET_FRONT));
     SmartDashboard.putNumber("L2/3 Back X", Constants.metersToInches(Constants.Physical.INTAKE_X_OFFSET_BACK));
@@ -160,8 +159,8 @@ public class Robot extends LoggedRobot {
         Constants.metersToInches(Constants.Physical.INTAKE_X_OFFSET_BACK_ALGAE)));
     Constants.Physical.INTAKE_Y_OFFSET_BACK_ALGAE = Constants.inchesToMeters(SmartDashboard.getNumber("Algae Back Y",
         Constants.metersToInches(Constants.Physical.INTAKE_Y_OFFSET_BACK_ALGAE)));
-    m_robotContainer.twist.setAlgaeMode(m_robotContainer.algaeMode);
-    m_robotContainer.pivot.setAlgaeMode(m_robotContainer.algaeMode);
+    // m_robotContainer.twist.setAlgaeMode(m_robotContainer.algaeMode);
+    // m_robotContainer.pivot.setAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateIntakeItem(m_robotContainer.intake.getIntakeItem());
     m_robotContainer.intake.updateAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateAlgaeMode(m_robotContainer.algaeMode);
@@ -181,8 +180,6 @@ public class Robot extends LoggedRobot {
     OI.driverController.setRumble(RumbleType.kBothRumble, 0);
     OI.operatorController.setRumble(RumbleType.kBothRumble, 0);
     m_robotContainer.lights.clearAnimations();
-    m_robotContainer.lights.setCommandRunning(true);
-    // m_robotContainer.lights.setFlashYellow();
   }
 
   @Override
@@ -215,7 +212,6 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     m_robotContainer.elevator.teleopInit();
     m_robotContainer.twist.teleopInit();
-    m_robotContainer.lights.setCommandRunning(false);
     m_robotContainer.lights.clearAnimations();
     m_robotContainer.superstructure.setWantedState(SuperState.DEFAULT);
     if (m_autonomousCommand != null) {

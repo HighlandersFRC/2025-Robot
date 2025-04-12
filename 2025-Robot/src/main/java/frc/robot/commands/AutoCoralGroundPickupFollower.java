@@ -13,7 +13,7 @@ import frc.robot.subsystems.Superstructure.SuperState;
 import frc.robot.tools.wrappers.AutoFollower;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AutoPlaceL4Follower extends AutoFollower {
+public class AutoCoralGroundPickupFollower extends AutoFollower {
   Superstructure superstructure;
   Drive drive;
   private int currentPathPointIndex = 0;
@@ -21,7 +21,7 @@ public class AutoPlaceL4Follower extends AutoFollower {
   double timeout = 0.0;
 
   /** Creates a new AutoPlaceL4Follower. */
-  public AutoPlaceL4Follower(Superstructure superstructure, Drive drive, double timeout) {
+  public AutoCoralGroundPickupFollower(Superstructure superstructure, Drive drive, double timeout) {
     this.superstructure = superstructure;
     this.drive = drive;
     this.timeout = timeout;
@@ -41,25 +41,25 @@ public class AutoPlaceL4Follower extends AutoFollower {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    superstructure.setWantedState(SuperState.AUTO_L4_PLACE);
     initTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    superstructure.setWantedState(SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    superstructure.setWantedState(SuperState.OUTAKE_IDLE);
+    superstructure.setWantedState(SuperState.IDLE);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (superstructure.placedCoralL4() || Timer.getFPGATimestamp() - initTime > timeout) {
+    if (superstructure.hasCoral() || Timer.getFPGATimestamp() - initTime > timeout) {
       return true;
     } else {
       return false;

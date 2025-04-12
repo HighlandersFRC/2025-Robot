@@ -2,14 +2,10 @@ package frc.robot.subsystems;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
@@ -18,17 +14,12 @@ import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.tools.math.Vector;
 
 public class Peripherals {
@@ -110,8 +101,8 @@ public class Peripherals {
     return pitch;
   }
 
-  public void setBackCamPipline(int index) {
-    backReefCam.setPipelineIndex(index);
+  public void setPipelineIndex(int index) {
+    gamePieceCamera.setPipelineIndex(index);
   }
 
   public double getGamePieceCamYaw() {
@@ -172,18 +163,117 @@ public class Peripherals {
     CoralCorners = getDefaultCorners();
   }
 
-  public double getCoralArea() {
-    PhotonPipelineResult result = getFrontGamePieceCamResult();
+  private double frontCoralLabel = 3;
+  private double backCoralLabel = 4;
 
-    if (result.hasTargets()) {
-      List<PhotonTrackedTarget> tracks = result.getTargets();
+  private double lastValidAngle = Double.NaN;
+  private double lastFrontAngle = Double.NaN;
+  private double lastBackAngle = Double.NaN;
 
-      if (!tracks.isEmpty()) {
-        PhotonTrackedTarget bestTrack = tracks.get(0);
-        return bestTrack.getArea();
+  private List<PhotonTrackedTarget> frontCoralList = new ArrayList<>();
+  private List<PhotonTrackedTarget> coralList = new ArrayList<>();
+  private List<PhotonTrackedTarget> backCoralList = new ArrayList<>();
+
+  public double getCoralAngle(double rawAngle) {
+    try {
+      var result = gamePieceCamera.getLatestResult();
+      if (result == null || result.targets == null) {
+        return fallbackAngle(rawAngle);
       }
+
+      frontCoralList.removeIf(t -> result.targets.stream()
+          .noneMatch(ct -> ct.equals(t) && ct.objDetectId == frontCoralLabel));
+      for (PhotonTrackedTarget target : result.targets) {
+        if (target.objDetectId == frontCoralLabel && !frontCoralList.contains(target)) {
+          frontCoralList.add(target);
+        }
+      }
+
+      coralList.removeIf(t -> result.targets.stream()
+          .noneMatch(ct -> ct.equals(t) && ct.objDetectId == 2));
+      for (PhotonTrackedTarget target : result.targets) {
+        if (target.objDetectId == 2 && !coralList.contains(target)) {
+          coralList.add(target);
+        }
+      }
+
+      backCoralList.removeIf(t -> result.targets.stream()
+          .noneMatch(ct -> ct.equals(t) && ct.objDetectId == backCoralLabel));
+      for (PhotonTrackedTarget target : result.targets) {
+        if (target.objDetectId == backCoralLabel && !backCoralList.contains(target)) {
+          backCoralList.add(target);
+        }
+      }
+
+      double adjustedAngle = normalizeAngle(rawAngle);
+
+      if (!frontCoralList.isEmpty() && !coralList.isEmpty()) {
+        PhotonTrackedTarget front = frontCoralList.get(0);
+        PhotonTrackedTarget normal = coralList.get(0);
+        if (hasValidCorner(front) && hasValidCorner(normal)) {
+          if (front.getDetectedCorners().get(0).x > normal.getDetectedCorners().get(0).x) {
+            adjustedAngle = normalizeAngle(180.0 - rawAngle);
+          } else {
+            adjustedAngle = normalizeAngle(rawAngle);
+          }
+        }
+        if (isValidAngle(adjustedAngle)) {
+          lastFrontAngle = adjustedAngle;
+        } else {
+          adjustedAngle = lastFrontAngle;
+        }
+      } else if (!backCoralList.isEmpty() && !coralList.isEmpty()) {
+        PhotonTrackedTarget back = backCoralList.get(0);
+        PhotonTrackedTarget normal = coralList.get(0);
+        if (hasValidCorner(back) && hasValidCorner(normal)) {
+          if (back.getDetectedCorners().get(0).x < normal.getDetectedCorners().get(0).x) {
+            adjustedAngle = normalizeAngle(180.0 - rawAngle);
+          } else {
+            adjustedAngle = normalizeAngle(rawAngle);
+          }
+        }
+        if (isValidAngle(adjustedAngle)) {
+          lastBackAngle = adjustedAngle;
+        } else {
+          adjustedAngle = lastBackAngle;
+        }
+      } else if (!coralList.isEmpty()) {
+        adjustedAngle = normalizeAngle(rawAngle);
+      } else {
+        adjustedAngle = normalizeAngle(rawAngle);
+      }
+
+      if (isValidAngle(adjustedAngle)) {
+        lastValidAngle = adjustedAngle;
+      } else {
+        adjustedAngle = lastValidAngle;
+      }
+
+      return adjustedAngle;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return lastValidAngle;
     }
-    return -1;
+  }
+
+  private double normalizeAngle(double angle) {
+    angle %= 360.0;
+    if (angle < 0)
+      angle += 360.0;
+    return angle;
+  }
+
+  private boolean isValidAngle(double angle) {
+    return angle != 0.0 && !Double.isInfinite(angle) && !Double.isNaN(angle);
+  }
+
+  private double fallbackAngle(double rawAngle) {
+    double norm = normalizeAngle(rawAngle);
+    return isValidAngle(norm) ? norm : lastValidAngle;
+  }
+
+  private boolean hasValidCorner(PhotonTrackedTarget target) {
+    return target != null && target.getDetectedCorners() != null && !target.getDetectedCorners().isEmpty();
   }
 
   private List<TargetCorner> getDefaultCorners() {
@@ -324,6 +414,9 @@ public class Peripherals {
   // return defaultPose;
   // }
   // }
+  public void switchPipeline(int pipeline) {
+    gamePieceCamera.setPipelineIndex(pipeline);
+  }
 
   public PhotonPipelineResult getFrontReefCamResult() {
     var result = frontReefCam.getAllUnreadResults();
@@ -489,9 +582,11 @@ public class Peripherals {
 
   public void periodic() {
     updateDetectionCorners();
+    double coralAngle = calculateAngle(
+        (CoralCorners.get(1).x - CoralCorners.get(0).x) / (CoralCorners.get(3).y - CoralCorners.get(0).y));
+    Logger.recordOutput("Coral Angle", getCoralAngle(coralAngle));
+    Logger.recordOutput("Current Pipeline", gamePieceCamera.getPipelineIndex());
 
-    Logger.recordOutput("Coral Angle", calculateAngle(
-        (CoralCorners.get(1).x - CoralCorners.get(0).x) / (CoralCorners.get(3).y - CoralCorners.get(0).y)));
     // Logger.recordOutput("Coral Area", getCoralArea());
     // Logger.recordOutput("Bottom Left Corner", CoralCorners.get(0));
     // Logger.recordOutput("Bottom Right Corner", CoralCorners.get(1));

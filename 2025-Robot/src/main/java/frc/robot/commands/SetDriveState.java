@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Drive.DriveState;
@@ -16,6 +15,7 @@ public class SetDriveState extends Command {
   Drive drive;
   DriveState driveState;
   Peripherals peripherals;
+
   public SetDriveState(Drive drive, Peripherals peripherals, DriveState driveState) {
     this.drive = drive;
     this.peripherals = peripherals;
@@ -32,7 +32,8 @@ public class SetDriveState extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+  }
 
   // Called once the command ends or is interrupted.
   @Override

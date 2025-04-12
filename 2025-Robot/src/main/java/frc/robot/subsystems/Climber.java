@@ -13,7 +13,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -22,11 +21,8 @@ public class Climber extends SubsystemBase {
       Constants.CANInfo.CANBUS_NAME);
   private final DigitalInput climbSensor = new DigitalInput(1);
 
-  private final TorqueCurrentFOC rollerTorqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
   private final TorqueCurrentFOC pivotTorqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
   public int timesTriggered = 0;
-
-  private boolean wasTriggered = false;
 
   /** Creates a new Climiber. */
   public Climber() {
