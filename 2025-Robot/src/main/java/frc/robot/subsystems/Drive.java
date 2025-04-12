@@ -2629,34 +2629,26 @@ public class Drive extends SubsystemBase {
   }
 
   public void goToCoral() {
-
     double yaw = 0.0;
     double pitch = 0.0;
     var result = peripherals.getFrontGamePieceCamResult();
-    if (result.hasTargets()) {
-      List<PhotonTrackedTarget> tracks = result.getTargets();
-      // for (int i = 0; i < tracks.size(); i++) {
-      // int id = tracks.get(i).getDetectedObjectClassID();
-      // if (id == 0) {
-      // tracks.remove(i);
-      // i--;
-      // }
-      // }
-      // if (tracks.isEmpty()) {
-      // } else {
-      // double minPitch = tracks.get(0).getPitch();
-      // int index = 0;
-      // for (int i = 1; i < tracks.size(); i++) {
-      // int id = tracks.get(0).getDetectedObjectClassID();
-      // System.out.println("id: " + id);
-      // if (tracks.get(i).getPitch() < minPitch) {
-      // minPitch = tracks.get(i).getPitch();
-      // index = i;
-      // }
-      // }
-      pitch = tracks.get(0).getYaw();
-      yaw = tracks.get(0).getYaw();
-      // }
+    List<PhotonTrackedTarget> tracks = new ArrayList<>(result.getTargets());
+    List<PhotonTrackedTarget> coralTargets = new ArrayList<>();
+    for (PhotonTrackedTarget track : tracks) {
+      if (track.objDetectId == 1) {
+        coralTargets.add(track);
+      }
+    }
+
+    if (result.hasTargets() && !coralTargets.isEmpty()) {
+      PhotonTrackedTarget bestTrack = coralTargets.get(0);
+      for (PhotonTrackedTarget track : coralTargets) {
+        if (track.getPitch() < bestTrack.getPitch()) {
+          bestTrack = track;
+        }
+      }
+      yaw = bestTrack.getYaw();
+      pitch = bestTrack.getPitch();
     }
 
     if (yaw != 0.0 && pitch != 0.0) {

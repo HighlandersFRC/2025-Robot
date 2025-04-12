@@ -383,7 +383,18 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_L2_PLACE:
         if (manipulator.hasCoralSticky()) {
-          System.out.println("Drive: " + drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI // DO NOT COMMENT OUT THESE PRINT STATEMENTS THE CODE WILL NOT WORK
+          System.out.println("Drive: " + drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI // DO
+                                                                                                                   // NOT
+                                                                                                                   // COMMENT
+                                                                                                                   // OUT
+                                                                                                                   // THESE
+                                                                                                                   // PRINT
+                                                                                                                   // STATEMENTS
+                                                                                                                   // THE
+                                                                                                                   // CODE
+                                                                                                                   // WILL
+                                                                                                                   // NOT
+                                                                                                                   // WORK
               .getDriverA())[0],
               drive.getReefClosestSetpoint(drive.getMT2Odometry(),
                   OI.getDriverA())[1],
@@ -433,7 +444,18 @@ public class Superstructure extends SubsystemBase {
         // }
         // break;
         if (manipulator.hasCoralSticky()) {
-          System.out.println("Drive: " + drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI // DO NOT COMMENT OUT THESE PRINT STATEMENTS THE CODE WILL NOT WORK
+          System.out.println("Drive: " + drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI // DO
+                                                                                                                     // NOT
+                                                                                                                     // COMMENT
+                                                                                                                     // OUT
+                                                                                                                     // THESE
+                                                                                                                     // PRINT
+                                                                                                                     // STATEMENTS
+                                                                                                                     // THE
+                                                                                                                     // CODE
+                                                                                                                     // WILL
+                                                                                                                     // NOT
+                                                                                                                     // WORK
               .getDriverA())[0],
               drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
                   OI.getDriverA())[1],
@@ -462,7 +484,18 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_L4_PLACE:
         if (manipulator.hasCoralSticky() || DriverStation.isAutonomousEnabled()) {
-          System.out.println("Drive: " + drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI // DO NOT COMMENT OUT THESE PRINT STATEMENTS THE CODE WILL NOT WORK
+          System.out.println("Drive: " + drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI // DO
+                                                                                                                     // NOT
+                                                                                                                     // COMMENT
+                                                                                                                     // OUT
+                                                                                                                     // THESE
+                                                                                                                     // PRINT
+                                                                                                                     // STATEMENTS
+                                                                                                                     // THE
+                                                                                                                     // CODE
+                                                                                                                     // WILL
+                                                                                                                     // NOT
+                                                                                                                     // WORK
               .getDriverA())[0],
               drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
                   OI.getDriverA())[1],
@@ -2566,12 +2599,13 @@ public class Superstructure extends SubsystemBase {
     if (climber.getTimesTriggered() && climber.getPosition() > -150) {
       PARTY();
     }
-    if (DriverStation.isTeleopEnabled()) { // Change the condition of when to localize as well in
-                                           // updateOdometryFusedArray() in drive.java
-      peripherals.setGamePieceCamPipline(1);
-    } else {
-      peripherals.setGamePieceCamPipline(0);
-    }
+    // if (DriverStation.isTeleopEnabled()) { // Change the condition of when to
+    // localize as well in
+    // // updateOdometryFusedArray() in drive.java
+    // peripherals.setGamePieceCamPipline(1);
+    // } else {
+    // peripherals.setGamePieceCamPipline(0);
+    // }
 
     pivot.updateIntakeItem(manipulator.getArmItem());
     twist.updateIntakeItem(manipulator.getArmItem());
