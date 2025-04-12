@@ -2340,18 +2340,24 @@ public class Drive extends SubsystemBase {
     var result = peripherals.getFrontGamePieceCamResult();
     List<PhotonTrackedTarget> tracks = new ArrayList<>(result.getTargets());
 
-    if (result.hasTargets() && !tracks.isEmpty()) {
-      PhotonTrackedTarget bestTrack = tracks.get(0);
-      for (PhotonTrackedTarget track : tracks) {
+    List<PhotonTrackedTarget> coralTargets = new ArrayList<>();
+    for (PhotonTrackedTarget track : tracks) {
+      if (track.objDetectId == 1) {
+        coralTargets.add(track);
+      }
+    }
+
+    if (result.hasTargets() && !coralTargets.isEmpty()) {
+      PhotonTrackedTarget bestTrack = coralTargets.get(0);
+      for (PhotonTrackedTarget track : coralTargets) {
         if (track.getPitch() < bestTrack.getPitch()) {
           bestTrack = track;
         }
       }
       yaw = bestTrack.getYaw();
       pitch = bestTrack.getPitch();
-
-      List<TargetCorner> corners = result.getBestTarget().minAreaRectCorners;
-      if (corners != null && corners.size() >= 4) {
+      List<TargetCorner> corners = bestTrack.minAreaRectCorners;
+      if (corners != null) {
         coralCorners = corners;
         coralAngle = (coralCorners.get(1).x - coralCorners.get(0).x) /
             (coralCorners.get(3).y - coralCorners.get(0).y);
@@ -2393,6 +2399,8 @@ public class Drive extends SubsystemBase {
       Logger.recordOutput("Coral Angle", peripherals.calculateAngle(coralAngle));
       Logger.recordOutput("Corrected Yaw", correctedYaw);
       Logger.recordOutput("Reorienting?", reorienting);
+      Logger.recordOutput("LW Ratio", (coralCorners.get(1).x - coralCorners.get(0).x) /
+          (coralCorners.get(3).y - coralCorners.get(0).y));
     }
   }
 
