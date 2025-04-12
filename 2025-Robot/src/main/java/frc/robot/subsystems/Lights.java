@@ -50,7 +50,7 @@ public class Lights extends SubsystemBase {
   StrobeAnimation redFlash = new StrobeAnimation(255, 0, 0, 0, 0.1, ledNumber, 0);
   StrobeAnimation blueFlash = new StrobeAnimation(0, 0, 255, 0, 0.1, ledNumber, 0);
 
-  RainbowAnimation party = new RainbowAnimation(1.0, flashSpeed, ledNumber, false, 0);
+  RainbowAnimation party = new RainbowAnimation(1.0, 1.0, ledNumber, false, 0);
 
   StrobeAnimation greenStrobe = new StrobeAnimation(0, 255, 0, 0, strobeSpeed, ledNumber, 0);
   StrobeAnimation purpleStrobe = new StrobeAnimation(100, 0, 100, 0, strobeSpeed, ledNumber, 0);
@@ -80,6 +80,12 @@ public class Lights extends SubsystemBase {
       100, 0);
   LarsonAnimation blueCylonAnimation = new LarsonAnimation(0, 0, 255, 0, 0.8, ledNumber, BounceMode.Back,
       100, 0);
+
+  private boolean partyMode = false;
+
+  public void PARTY() {
+    partyMode = true;
+  }
 
   public enum LightsState {
     DISABLED,
@@ -249,7 +255,7 @@ public class Lights extends SubsystemBase {
     }
 
     Logger.recordOutput("Lights State", systemState);
-    if (false /* party mode */) { //TODO: enable or disable party mode here
+    if (partyMode /* party mode */) { //TODO: enable or disable party mode here
       weLikeToParty();
       // System.out.println("Jam Peanut Butter Bread Bread Make a sandwich eat it");
       // System.out.println("You want it? I got it");

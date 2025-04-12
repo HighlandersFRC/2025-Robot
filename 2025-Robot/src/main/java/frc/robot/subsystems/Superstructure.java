@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.lang.annotation.ElementType;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -1112,7 +1114,7 @@ public class Superstructure extends SubsystemBase {
       pivot.setWantedState(PivotState.L4);
     }
     twist.setWantedState(TwistState.SIDE);
-    intake.setWantedState(IntakeState.L4);
+    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleProcessorState() {
@@ -1715,7 +1717,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.CLIMB_DEPLOY);
     climber.setWantedState(ClimbState.EXTENDING);
     pivot.setWantedState(PivotState.CLIMB);
-    intake.setWantedState(IntakeState.INTAKING);
+    intake.setWantedState(IntakeState.DOWN);
     // peripherals.setBackCamPipline(1);
   }
 
@@ -1723,14 +1725,18 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.CLIMB);
     climber.setWantedState(ClimbState.RETRACTING);
     pivot.setWantedState(PivotState.CLIMB);
-    intake.setWantedState(IntakeState.INTAKING);
+    if (Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN) < 0.1) {
+      elevator.setWantedState(ElevatorState.DEFAULT);
+      twist.setWantedState(TwistState.SIDE);
+    }
+    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleClimberIdleState() {
     lights.setWantedState(LightsState.CLIMB_IDLE);
     climber.setWantedState(ClimbState.IDLE);
     pivot.setWantedState(PivotState.CLIMB);
-    intake.setWantedState(IntakeState.INTAKING);
+    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleOutakeState() {
@@ -2485,11 +2491,15 @@ public class Superstructure extends SubsystemBase {
       climber.setWantedState(ClimbState.IDLE);
     }
     pivot.setWantedState(PivotState.CLIMB);
-    intake.setWantedState(IntakeState.INTAKING);
+    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleAutoClimbState() {
     pivot.setWantedState(PivotState.CLIMB);
+    if (Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN) < 0.1) {
+      elevator.setWantedState(ElevatorState.DEFAULT);
+      twist.setWantedState(TwistState.SIDE);
+    }
 
     if (!continueClimbing && climber.getPosition() > -400) {
       climber.setWantedState(ClimbState.EXTENDING);
@@ -2507,7 +2517,7 @@ public class Superstructure extends SubsystemBase {
       drive.setWantedState(DriveState.DEFAULT);
     }
 
-    intake.setWantedState(IntakeState.INTAKING);
+    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleLollipopPickup() {
@@ -2521,8 +2531,15 @@ public class Superstructure extends SubsystemBase {
     }
   }
 
+  public void PARTY() {
+    lights.PARTY();
+  }
+
   @Override
   public void periodic() {
+    if (climber.getTimesTriggered() && climber.getPosition() > -150) {
+      PARTY();
+    }
     if (DriverStation.isTeleopEnabled()) {
       peripherals.setGamePieceCamPipline(1);
     } else {
