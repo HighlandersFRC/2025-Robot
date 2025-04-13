@@ -29,8 +29,8 @@ public class Pivot extends SubsystemBase {
   private final double pivotCruiseVelocity = 6.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
 
   private final double pivotJerkSlow = 0.0;
-  private final double pivotAccelerationSlow = 2.0;
-  private final double pivotCruiseVelocitySlow = 2.0;
+  private final double pivotAccelerationSlow = 3.0;
+  private final double pivotCruiseVelocitySlow = 3.0;
 
   private final double pivotJerkSlower = 0.0;
   private final double pivotAccelerationSlower = 1.0;

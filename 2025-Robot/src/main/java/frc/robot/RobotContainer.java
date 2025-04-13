@@ -23,6 +23,7 @@ import frc.robot.commands.FeederPickupFollower;
 import frc.robot.commands.FullSendFollower;
 import frc.robot.commands.PolarAutoFollower;
 import frc.robot.commands.ReefAlgaePickupFollower;
+import frc.robot.commands.SetAlgaeMode;
 import frc.robot.commands.SetClimberPivotTorque;
 import frc.robot.commands.SetRobotState;
 import frc.robot.commands.SetRobotStateComplicated;
@@ -67,9 +68,10 @@ public class RobotContainer {
         Superstructure superstructure = new Superstructure(drive, elevator, manipulator, pivot, twist, climber, lights,
                         peripherals, intake);
 
-        boolean algaeMode = false;
+        public boolean algaeMode = false;
         boolean manualMode = false;
         boolean yPressed = false;
+        RobotContainer m_container = this;
 
         HashMap<String, Supplier<Command>> commandMap = new HashMap<String, Supplier<Command>>() {
                 {
@@ -85,10 +87,14 @@ public class RobotContainer {
                         put("Net", () -> new SetRobotStateSimple(superstructure, SuperState.NET));
                         put("GroundIntake", () -> new SetRobotStateComplicatedContinuous(superstructure,
                                         SuperState.GROUND_CORAL_PICKUP_FRONT, SuperState.PASSOFF_IDLE));
-                        put("ReefAlgae", () -> new ReefAlgaePickupFollower(superstructure, drive, 5.0));
+                        put("ReefAlgaeL2", () -> new SetRobotState(superstructure, SuperState.L2_ALGAE_PICKUP));
+                        put("ReefAlgaeL3", () -> new SetRobotState(superstructure, SuperState.L3_ALGAE_PICKUP));
+                        // put("ReefAlgae", () -> new ReefAlgaePickupFollower(superstructure, drive,
+                        // 5.0, m_container));
                         put("AutoIntake", () -> new AutoCoralGroundPickupFollower(superstructure, drive, 4.0));
                         put("PassoffOutakeIdle", () -> new SetRobotStateSimpleOnce(superstructure,
                                         SuperState.PASSOFF_OUTAKE_IDLE));
+                        put("ToggleAlgaeMode", () -> new SetAlgaeMode(m_container));
                 }
         };
 

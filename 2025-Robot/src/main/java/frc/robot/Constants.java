@@ -39,7 +39,7 @@ public final class Constants {
                                 "JackInTheBot.polarauto",
                                 "3PieceFeederSmart.polarauto",
                                 "4PieceLollipop.polarauto",
-                                "4PieceFeederGroundSmart.polarauto",
+                                "4PieceFeederGroundFast.polarauto",
                 };
 
                 public static int getSelectedPathIndex() {
@@ -210,9 +210,9 @@ public final class Constants {
                 public static final double F_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
                 public static final double G_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
                 public static final double H_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
-                public static final double I_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.0);
+                public static final double I_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(-0.5940);
                 public static final double J_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.375);
-                public static final double K_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.5);
+                public static final double K_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.7157);
                 public static final double L_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.75);
 
                 public static final double A_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.0);
@@ -419,8 +419,8 @@ public final class Constants {
                                                                           // redBranchPositions = new
                                                                           // ArrayList<>(); // Starting at the right
 
-                public static final double RED_LEFT_FEEDER_X = 16.404;
-                public static final double RED_LEFT_FEEDER_Y = 0.990;
+                public static final double RED_LEFT_FEEDER_X = 16.33;
+                public static final double RED_LEFT_FEEDER_Y = 0.9483;
                 public static final double RED_LEFT_FEEDER_THETA = Math.toRadians(126.0);
 
                 public static final double RED_LEFT_FEEDER_X_TELEOP = 16.544;
@@ -3545,9 +3545,9 @@ public final class Constants {
                 public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(23.7);
                 public static double L2_INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
-                public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(25.65);
+                public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.9);
                 public static double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(25.65);
+                public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(26.9);
                 public static double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
                 public static final double GRAVITY_ACCEL_MS2 = 9.806;
@@ -3649,7 +3649,7 @@ public final class Constants {
                 public static final double PIVOT_AUTO_L2_POSITION_D = 50.0;
                 public static final double PIVOT_AUTO_L3_POSITION_D = 50.0;
                 // public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
-                public static final double PIVOT_AUTO_L4_POSITION_D = 60.0;
+                public static final double PIVOT_AUTO_L4_POSITION_D = 0.0;
                 public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 100.0;
                 public static final double PIVOT_AUTO_L4_SCORE_SLOW_POSITION_D = 70.0;
                 public static final double PIVOT_AUTO_L3_SCORE_POSITION_D = 100.0;
