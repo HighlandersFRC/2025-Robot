@@ -52,8 +52,8 @@ public class Intake extends SubsystemBase {
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    config.CurrentLimits.StatorCurrentLimit = 50;
-    config.CurrentLimits.SupplyCurrentLimit = 50;
+    config.CurrentLimits.StatorCurrentLimit = 60;
+    config.CurrentLimits.SupplyCurrentLimit = 60;
     config.Slot0.kP = 4.068;
     config.Slot0.kI = 0.0;
     config.Slot0.kD = 0;
@@ -166,7 +166,7 @@ public class Intake extends SubsystemBase {
         break;
       case OUTAKING:
         // setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-        //     Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+        // Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
         setRollerPercent(-1.0);
         pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
         break;
@@ -177,26 +177,26 @@ public class Intake extends SubsystemBase {
         }
         // if (Timer.getFPGATimestamp() - handOffTime < 3.0) {
         // setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-        //     Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+        // Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
         setRollerPercent(-1.0);
         if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 10.0 / 360.0) {
           pivotWithTorque(-10, 0.1);
           // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-          //     0.2);
+          // 0.2);
         } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 20.0 / 360.0) {
           pivotWithTorque(-20, 0.2);
           // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-          //     0.2);
+          // 0.2);
         } else {
           pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
           // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-          //     0.2);
+          // 0.2);
         }
         // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
         // } else {
-        //   pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
-        //   setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-        //       Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
+        // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+        // setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+        // Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
 
         // }
         break;
@@ -251,11 +251,11 @@ public class Intake extends SubsystemBase {
 
   public boolean hasCoral() {
     // Logger.recordOutput("Intake Velocity",
-    //     roller.getVelocity().getValueAsDouble());
+    // roller.getVelocity().getValueAsDouble());
     // Logger.recordOutput("Intake Torque",
-    //     roller.getTorqueCurrent().getValueAsDouble());
+    // roller.getTorqueCurrent().getValueAsDouble());
     // Logger.recordOutput("Intake Acceleration",
-    //     roller.getAcceleration().getValueAsDouble());
+    // roller.getAcceleration().getValueAsDouble());
     // Logger.recordOutput("Intake Position", getPosition());
     if (Math.abs(roller.getVelocity().getValueAsDouble()) < 5
         && Math.abs(roller.getTorqueCurrent().getValueAsDouble()) > 20

@@ -285,7 +285,7 @@ public class Manipulator extends SubsystemBase {
                 setIntakePercent(-0.5);
 
               } else if (OI.driverPOVUp.getAsBoolean()) {
-                setIntakePercent(-0.2);
+                setIntakePercent(-0.4);
               } else {
                 setIntakePercent(-1.0);
 

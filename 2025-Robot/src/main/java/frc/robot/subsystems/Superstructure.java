@@ -400,7 +400,7 @@ public class Superstructure extends SubsystemBase {
                   OI.getDriverA())[2]));
           System.out.println(
               "Elevator: " + (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters));
-          if ((drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+          if ((drive.hitSetPointSemiGenerous(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
               .getDriverA())[0],
               drive.getReefClosestSetpoint(drive.getMT2Odometry(),
                   OI.getDriverA())[1],
@@ -461,7 +461,7 @@ public class Superstructure extends SubsystemBase {
                   OI.getDriverA())[2]));
           System.out.println(
               "Elevator: " + (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters));
-          if ((drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
+          if ((drive.hitSetPointSemiGenerous(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
               OI.getDriverA())[0],
               drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
                   OI.getDriverA())[1],
@@ -1898,13 +1898,13 @@ public class Superstructure extends SubsystemBase {
       manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
-          - 15.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+          - 25.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
         manipulator.setWantedState(ManipulatorState.OUTAKE);
       } else {
         manipulator.setWantedState(ManipulatorState.OFF);
       }
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
-          - 15.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+          - 25.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
         if (drive.distanceFromCenterOfReef() > 60.0 / 39.37) {
           drive.setWantedState(DriveState.REEF_MORE);
         } else {
@@ -1974,13 +1974,13 @@ public class Superstructure extends SubsystemBase {
       manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations
-          - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+          - 25.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
         manipulator.setWantedState(ManipulatorState.OUTAKE);
       } else {
         manipulator.setWantedState(ManipulatorState.OFF);
       }
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations
-          - 15.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+          - 25.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
         drive.setWantedState(DriveState.REEF_MORE);
         elevator.setWantedState(ElevatorState.AUTO_L3);
       } else {

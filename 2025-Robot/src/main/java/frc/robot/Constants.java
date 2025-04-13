@@ -3540,9 +3540,9 @@ public final class Constants {
                 public static double L1_INTAKE_X_OFFSET_BACK_MORE = inchesToMeters(23.5);
                 public static double L1_INTAKE_Y_OFFSET_BACK_MORE = inchesToMeters(-1.5);
 
-                public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(23.7);
+                public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(23.45);
                 public static double L2_INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(23.7);
+                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(23.45);
                 public static double L2_INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
                 public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.9);
@@ -3570,7 +3570,7 @@ public final class Constants {
                 public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
                 public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
                 public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
-                public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(18.0);
+                public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(7.157);
                 public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(15);
                 public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(20);
                 public static final double ELEVATOR_AUTO_L2_POSITION_SCORE_M = inchesToMeters(16);
@@ -3643,10 +3643,10 @@ public final class Constants {
                         }
                 }
 
-                public static final double PIVOT_L1_POSITION_D = 92.0;
+                public static final double PIVOT_L1_POSITION_D = 67.0;
                 public static final double PIVOT_L23_POSITION_D = 52.5;
                 // public static final double PIVOT_AUTO_L23_POSITION_D = 45.0;
-                public static final double PIVOT_AUTO_L2_POSITION_D = 50.0;
+                public static final double PIVOT_AUTO_L2_POSITION_D = 60.0;
                 public static final double PIVOT_AUTO_L3_POSITION_D = 50.0;
                 // public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
                 public static final double PIVOT_AUTO_L4_POSITION_D = 0.0;
