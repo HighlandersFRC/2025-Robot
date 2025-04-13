@@ -755,11 +755,21 @@ public class Superstructure extends SubsystemBase {
     // &&
 
     // Pivot has abs to account for placing backwards
-    double[] setpoint = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), algaeMode);
-    return Math
+    // double[] setpoint = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false);
+    System.out.println((Math
         .abs(Math.abs(pivot.getPivotPosition())
             - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (10.0 / 360.0)
-        && drive.hitSetPointUltraGenerous(setpoint[0], setpoint[1], setpoint[2]);
+        && drive.hitSetPointGenerous(
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[0],
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[1],
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[2])));
+    return (Math
+        .abs(Math.abs(pivot.getPivotPosition())
+            - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (10.0 / 360.0)
+        && drive.hitSetPointGenerous(
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[0],
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[1],
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[2]));
   }
 
   public boolean placedCoralL2() {
