@@ -492,7 +492,7 @@ public final class Constants {
                 public static final double PROCESSOR_Y_OFFSET_M = inchesToMeters(50.0);
                 public static final double PROCESSOR_MORE_Y_OFFSET_M = inchesToMeters(20.0);
                 public static final double NET_X_OFFSET_M = inchesToMeters(50.0);
-                public static final double NET_X_OFFSET_MORE = inchesToMeters(35.0);
+                public static final double NET_X_OFFSET_MORE = inchesToMeters(34.0);
 
                 public static final Translation2d processorBlueFrontPlacingTranslation = new Translation2d(
                                 inchesToMeters(238.79),
@@ -3587,7 +3587,7 @@ public final class Constants {
                 public static final double ELEVATOR_OVER_POSITION_M = inchesToMeters(20);
                 public static final double ELEVATOR_NET_POSITION_M = inchesToMeters(65);
                 public static final double ELEVATOR_L2_ALGAE_POSITION_M = inchesToMeters(19);
-                public static final double ELEVATOR_L3_ALGAE_POSITION_M = inchesToMeters(38);
+                public static final double ELEVATOR_L3_ALGAE_POSITION_M = inchesToMeters(35);
                 public static final double ELEVATOR_PROCESSOR_POSITION_M = inchesToMeters(6.5);
                 public static final double ELEVATOR_LOLLIPOP_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_PRE_HANDOFF_POSITION_M = inchesToMeters(39.0);
@@ -3667,7 +3667,7 @@ public final class Constants {
                 public static final double PIVOT_FEEDER_POSITION_D = 21.0;
                 public static final double PIVOT_NET_POSITION_D = 15.0;
                 public static final double PIVOT_PROCESSOR_POSITION_D = 76.0;
-                public static final double PIVOT_REEF_ALGAE_POSITION_D = 90.0;
+                public static final double PIVOT_REEF_ALGAE_POSITION_D = 80.0;
                 public static final double PIVOT_CLIMB_POSITION_D = 45.0;
                 public static final double PIVOT_LOLLIPOP_POSITION_D = -98.0;
                 public static final double PIVOT_HANDOFF_POSITION_D = 145.0;

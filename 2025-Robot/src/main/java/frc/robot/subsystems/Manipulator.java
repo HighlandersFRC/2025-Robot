@@ -298,7 +298,7 @@ public class Manipulator extends SubsystemBase {
       default:
         // System.out.println("Motor Current: " + intakeMotor.getTorqueCurrent());
         if (algaeMode) {
-          setIntakeTorque(55, 0.4);
+          setIntakeTorque(67, 0.4);
         } else {
           setIntakeTorque(20, 0.2);
         }

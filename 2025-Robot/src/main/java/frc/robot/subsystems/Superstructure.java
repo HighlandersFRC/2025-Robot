@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.lang.annotation.ElementType;
-
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -1276,6 +1274,9 @@ public class Superstructure extends SubsystemBase {
     pivot.setWantedState(PivotState.NET);
   }
 
+  private double netHitTime = Timer.getFPGATimestamp();
+  private boolean netHit = false;
+
   public void handleAutoNetStateMore() {
     lights.setWantedState(LightsState.PLACING);
     if (OI.getDriverLTPercent() > 0.2) {
@@ -1305,7 +1306,16 @@ public class Superstructure extends SubsystemBase {
     }
     if (Math.abs(drive.getMT2OdometryX() - Constants.Physical.FIELD_LENGTH / 2) < Constants.Reef.NET_X_OFFSET_MORE
         + 2.0) {
-      manipulator.setWantedState(ManipulatorState.OUTAKE);
+      if (netHit == false) {
+        netHitTime = Timer.getFPGATimestamp();
+        netHit = true;
+      }
+      if (netHit && Timer.getFPGATimestamp() - netHitTime > 0.5) {
+        manipulator.setWantedState(ManipulatorState.OUTAKE);
+      } else {
+
+        manipulator.setWantedState(ManipulatorState.DEFAULT);
+      }
     } else {
       manipulator.setWantedState(ManipulatorState.DEFAULT);
     }
@@ -2626,6 +2636,10 @@ public class Superstructure extends SubsystemBase {
       isClimbing = true;
     }
     currentSuperState = handleStateTransitions();
+
+    if (currentSuperState != SuperState.AUTO_NET_MORE) {
+      netHit = false;
+    }
 
     if (currentSuperState != tempLastState) {
       lastState = tempLastState;
