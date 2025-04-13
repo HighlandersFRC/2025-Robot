@@ -1175,7 +1175,6 @@ public class Superstructure extends SubsystemBase {
       pivot.setWantedState(PivotState.L4);
     }
     twist.setWantedState(TwistState.SIDE);
-    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleProcessorState() {
