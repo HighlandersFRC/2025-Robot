@@ -3064,6 +3064,9 @@ public class Drive extends SubsystemBase {
   }
 
   private int hitNumber = 0;
+  private int hitNumberSemiGenerous = 0;
+  private int hitNumberGenerous = 0;
+  private int hitNumberUltraGenerous = 0;
 
   public boolean hitSetPoint(double x, double y, double theta) { // adjust for l4 TODO:
     // Logger.recordOutput("Error for setpoint",
@@ -3108,11 +3111,11 @@ public class Drive extends SubsystemBase {
             + Math.pow((y - getMT2OdometryY()), 2)) < 0.05
         && getAngleDifferenceDegrees(Math.toDegrees(theta),
             Math.toDegrees(getMT2OdometryAngle())) < 2) {
-      hitNumber += 1;
+      hitNumberSemiGenerous += 1;
     } else {
-      hitNumber = 0;
+      hitNumberSemiGenerous = 0;
     }
-    if (hitNumber > 3) {
+    if (hitNumberSemiGenerous > 3) {
       return true;
     } else {
       return false;
@@ -3185,11 +3188,11 @@ public class Drive extends SubsystemBase {
             + Math.pow((y - getMT2OdometryY()), 2)) < 0.10
         && getAngleDifferenceDegrees(Math.toDegrees(theta),
             Math.toDegrees(getMT2OdometryAngle())) < 2.5) {
-      hitNumber += 1;
+      hitNumberGenerous += 1;
     } else {
-      hitNumber = 0;
+      hitNumberGenerous = 0;
     }
-    if (hitNumber > 3) {
+    if (hitNumberGenerous > 3) {
       return true;
     } else {
       return false;
@@ -3212,11 +3215,11 @@ public class Drive extends SubsystemBase {
             + Math.pow((y - getMT2OdometryY()), 2)) < 0.10
         && getAngleDifferenceDegrees(Math.toDegrees(theta),
             Math.toDegrees(getMT2OdometryAngle())) < 10.0) {
-      hitNumber += 1;
+      hitNumberUltraGenerous += 1;
     } else {
-      hitNumber = 0;
+      hitNumberUltraGenerous = 0;
     }
-    if (hitNumber > 2) {
+    if (hitNumberUltraGenerous > 2) {
       return true;
     } else {
       return false;
