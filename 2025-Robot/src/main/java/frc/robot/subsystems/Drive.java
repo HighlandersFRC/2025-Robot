@@ -2658,7 +2658,7 @@ public class Drive extends SubsystemBase {
       rotatePID.updatePID(currentAngle);
       double r = -rotatePID.getResult();
 
-      autoRobotCentricDrive(new Vector(1.25, 0), r);
+      autoRobotCentricDrive(new Vector(1.75, 0), r);
 
     }
   }

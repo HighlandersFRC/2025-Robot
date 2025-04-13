@@ -2411,7 +2411,11 @@ public class Superstructure extends SubsystemBase {
         intake.setWantedState(IntakeState.HANDOFF);
         continueFeeding = true;
       } else {
-        intake.setWantedState(IntakeState.DEFAULT);
+        if (OI.is4PieceAmpSideAuto()) {
+          intake.setWantedState(IntakeState.DOWN);
+        } else {
+          intake.setWantedState(IntakeState.DEFAULT);
+        }
       }
       // Timeout for the pass off
       if (continueFeeding && handoffInitTime == 0.0) {
