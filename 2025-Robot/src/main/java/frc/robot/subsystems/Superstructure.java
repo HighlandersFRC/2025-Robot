@@ -1104,7 +1104,7 @@ public class Superstructure extends SubsystemBase {
         pivot.setWantedFlip(PivotFlip.BACK);
       }
       if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 25.0 / 39.37) {
-        if (drive.hitSetPointUltraGenerous(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
+        if (drive.hitSetPointGenerous(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
             drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[1],
             drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2])) {
           pivot.setWantedState(PivotState.AUTO_SCORE_L4_SLOW);
