@@ -36,10 +36,10 @@ public final class Constants {
                 public static final double ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER = 1;
                 public static final String[] paths = new String[] {
                                 "2AlgaeCenter.polarauto",
-                                "JackInTheBot.polarauto",
+                                "2+1PieceFeeder.polarauto",
                                 "3PieceFeederSmart.polarauto",
-                                "4PieceLollipop.polarauto",
                                 "4PieceFeederGroundFast.polarauto",
+                                "TushPush.polarauto",
                 };
 
                 public static int getSelectedPathIndex() {
@@ -3995,7 +3995,8 @@ public final class Constants {
         public static final class Ratios {
 
                 // twist
-                public static final double TWIST_GEAR_RATIO = 31.5;
+                public static final double TWIST_GEAR_RATIO_ROTOR = 28.8;
+                public static final double TWIST_GEAR_RATIO_ENCODER = 5.0 / 4.0;
 
                 // pivot
                 public static final double PIVOT_GEAR_RATIO = 95.238;
