@@ -610,26 +610,38 @@ public class Pivot extends SubsystemBase {
       case AUTO_SCORE_L4:
         switch (systemFlip) {
           case FRONT:
-            pivotToPositionSlow(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
             break;
           case BACK:
-            pivotToPositionSlow(-Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
             break;
           default:
-            pivotToPositionSlow(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
             break;
         }
         break;
       case AUTO_SCORE_L4_SLOW:
+        // switch (systemFlip) {
+        //   case FRONT:
+        //     setPivotPercent(0.1);
+        //     break;
+        //   case BACK:
+        //     setPivotPercent(-0.1);
+        //     break;
+        //   default:
+        //     setPivotPercent(0.1);
+        //     break;
+        // }
+        // break;
         switch (systemFlip) {
           case FRONT:
-            setPivotPercent(0.1);
+            pivotToPositionSlow(Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
             break;
           case BACK:
-            setPivotPercent(-0.1);
+            pivotToPositionSlow(-Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
             break;
           default:
-            setPivotPercent(0.1);
+            pivotToPositionSlow(Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
             break;
         }
         break;
