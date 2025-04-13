@@ -2842,11 +2842,11 @@ public class Drive extends SubsystemBase {
 
     if (OI.driverController.getRightTriggerAxis() > 0.2 || OI.getDriverRB()) {
       // activate slowy spin
-      turnLimit = 0.1;
-      oiRX = oiRX * 0.8;
-      oiLX = oiLX * 0.8;
-      oiRY = oiRY * 0.8;
-      oiLY = oiLY * 0.8;
+      // turnLimit = 0.1;
+      // oiRX = oiRX * 0.8;
+      // oiLX = oiLX * 0.8;
+      // oiRY = oiRY * 0.8;
+      // oiLY = oiLY * 0.8;
     }
     double originalX = -(Math.copySign(oiLY * oiLY, oiLY));
     double originalY = -(Math.copySign(oiLX * oiLX, oiLX));
