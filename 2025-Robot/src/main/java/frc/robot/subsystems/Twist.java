@@ -78,7 +78,7 @@ public class Twist extends SubsystemBase {
 
   public void twistToPosition(double rotations) {
 
-    if (intakeItem == ArmItem.ALGAE || algaeMode) { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
+    if (intakeItem == ArmItem.ALGAE) { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
       twistMotor.setControl(this.twistTorqueCurrentFOC // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
           .withPosition(rotations)
           .withEnableFOC(true).withSlot(1)); // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
