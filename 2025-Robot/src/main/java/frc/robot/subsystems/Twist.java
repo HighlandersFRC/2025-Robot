@@ -44,10 +44,10 @@ public class Twist extends SubsystemBase {
     twistConfig.Slot0.kI = 0.0;
     twistConfig.Slot0.kD = 4.6;
     twistConfig.Slot0.kS = 5.0;
-    twistConfig.Slot1.kP = 13.0;
+    twistConfig.Slot1.kP = 33.0;
     twistConfig.Slot1.kI = 0.0;
-    twistConfig.Slot1.kD = 5.0;
-    twistConfig.Slot1.kS = 1.0;
+    twistConfig.Slot1.kD = 6.0;
+    twistConfig.Slot1.kS = 3.0;
     twistConfig.MotionMagic.MotionMagicJerk = this.twistJerk;
     twistConfig.MotionMagic.MotionMagicAcceleration = this.twistAcceleration;
     twistConfig.MotionMagic.MotionMagicCruiseVelocity = this.twistCruiseVelocity;
