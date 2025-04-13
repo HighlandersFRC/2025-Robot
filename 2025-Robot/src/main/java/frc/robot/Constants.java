@@ -3570,7 +3570,7 @@ public final class Constants {
                 public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
                 public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
                 public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
-                public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(16.0);
+                public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(18.0);
                 public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(15);
                 public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(20);
                 public static final double ELEVATOR_AUTO_L2_POSITION_SCORE_M = inchesToMeters(16);
