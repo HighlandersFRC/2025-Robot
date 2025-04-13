@@ -7,6 +7,7 @@ package frc.robot.commands;
 import org.json.JSONObject;
 
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.SuperState;
@@ -19,12 +20,15 @@ public class ReefAlgaePickupFollower extends AutoFollower {
   private int currentPathPointIndex = 0;
   private double initTime = 0.0;
   double timeout = 0.0;
+  RobotContainer robotContainer;
 
   /** Creates a new AutoPlaceL4Follower. */
-  public ReefAlgaePickupFollower(Superstructure superstructure, Drive drive, double timeout) {
+  public ReefAlgaePickupFollower(Superstructure superstructure, Drive drive, double timeout,
+      RobotContainer robotContainer) {
     this.superstructure = superstructure;
     this.drive = drive;
     this.timeout = timeout;
+    this.robotContainer = robotContainer;
     addRequirements(superstructure, drive);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -41,6 +45,7 @@ public class ReefAlgaePickupFollower extends AutoFollower {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    robotContainer.algaeMode = true;
     superstructure.setWantedState(SuperState.AUTO_ALGAE_PICKUP);
     initTime = Timer.getFPGATimestamp();
   }

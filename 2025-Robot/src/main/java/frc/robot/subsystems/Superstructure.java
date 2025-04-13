@@ -757,9 +757,11 @@ public class Superstructure extends SubsystemBase {
     // &&
 
     // Pivot has abs to account for placing backwards
+    double[] setpoint = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), algaeMode);
     return Math
         .abs(Math.abs(pivot.getPivotPosition())
-            - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (10.0 / 360.0);
+            - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (10.0 / 360.0)
+        && drive.hitSetPointUltraGenerous(setpoint[0], setpoint[1], setpoint[2]);
   }
 
   public boolean placedCoralL2() {
@@ -1103,7 +1105,7 @@ public class Superstructure extends SubsystemBase {
       } else {
         pivot.setWantedFlip(PivotFlip.BACK);
       }
-      if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 25.0 / 39.37) {
+      if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 35.0 / 39.37) {
         if (drive.hitSetPointGenerous(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
             drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[1],
             drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2])) {
@@ -1187,7 +1189,10 @@ public class Superstructure extends SubsystemBase {
 
   public void handleNetState() {
     lights.setWantedState(LightsState.PLACING);
-    drive.setWantedState(DriveState.DEFAULT);
+    if (DriverStation.isTeleopEnabled())
+      drive.setWantedState(DriveState.DEFAULT);
+    else
+      drive.setWantedState(DriveState.IDLE);
     elevator.setWantedState(ElevatorState.NET);
     manipulator.setWantedState(ManipulatorState.DEFAULT);
     pivot.setWantedFlip(PivotFlip.FRONT);
@@ -1701,22 +1706,28 @@ public class Superstructure extends SubsystemBase {
 
   public void handleL2AlgaePickupState() {
     lights.setWantedState(LightsState.FEEDER);
-    drive.setWantedState(DriveState.DEFAULT);
+    if (DriverStation.isTeleopEnabled())
+      drive.setWantedState(DriveState.DEFAULT);
+    else
+      drive.setWantedState(DriveState.IDLE);
     elevator.setWantedState(ElevatorState.L2_ALGAE);
     manipulator.setWantedState(ManipulatorState.ALGAE_INTAKE);
-    pivot.setWantedFlip(PivotFlip.FRONT);
+    pivot.setWantedFlip(PivotFlip.BACK);
     pivot.setWantedState(PivotState.REEF_ALGAE);
-    twist.setWantedState(TwistState.DOWN);
+    twist.setWantedState(TwistState.UP);
   }
 
   public void handleL3AlgaePickupState() {
     lights.setWantedState(LightsState.FEEDER);
-    drive.setWantedState(DriveState.DEFAULT);
+    if (DriverStation.isTeleopEnabled())
+      drive.setWantedState(DriveState.DEFAULT);
+    else
+      drive.setWantedState(DriveState.IDLE);
     elevator.setWantedState(ElevatorState.L3_ALGAE);
     manipulator.setWantedState(ManipulatorState.ALGAE_INTAKE);
-    pivot.setWantedFlip(PivotFlip.FRONT);
+    pivot.setWantedFlip(PivotFlip.BACK);
     pivot.setWantedState(PivotState.REEF_ALGAE);
-    twist.setWantedState(TwistState.DOWN);
+    twist.setWantedState(TwistState.UP);
   }
 
   public void handleAutoAlgaePickupState() {
