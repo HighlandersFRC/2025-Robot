@@ -183,6 +183,15 @@ public class Drive extends SubsystemBase {
       new Translation3d(Constants.inchesToMeters(2.0), Constants.inchesToMeters(-11.5),
           Constants.inchesToMeters(23.625)),
       new Rotation3d(Math.toRadians(0.3), Math.toRadians(25.6), Math.toRadians(15.0)));
+
+  // Transform3d frontReefRobotToCam = new Transform3d( // front reef cam swerve
+  // module
+  // new Translation3d(Constants.inchesToMeters(11.625),
+  // Constants.inchesToMeters(-8.5),
+  // Constants.inchesToMeters(10.0)),
+  // new Rotation3d(Math.toRadians(-0.8), Math.toRadians(13.6),
+  // Math.toRadians(35.0)));
+
   // 25.2, 25.8
   // Transform2d frontReefCamPos = new Transform2d(
   // new Translation2d(Constants.inchesToMeters(2.25),
@@ -2842,11 +2851,11 @@ public class Drive extends SubsystemBase {
 
     if (OI.driverController.getRightTriggerAxis() > 0.2 || OI.getDriverRB()) {
       // activate slowy spin
-      // turnLimit = 0.1;
-      // oiRX = oiRX * 0.8;
-      // oiLX = oiLX * 0.8;
-      // oiRY = oiRY * 0.8;
-      // oiLY = oiLY * 0.8;
+      turnLimit = 0.1;
+      oiRX = oiRX * 0.8;
+      oiLX = oiLX * 0.8;
+      oiRY = oiRY * 0.8;
+      oiLY = oiLY * 0.8;
     }
     double originalX = -(Math.copySign(oiLY * oiLY, oiLY));
     double originalY = -(Math.copySign(oiLX * oiLX, oiLX));

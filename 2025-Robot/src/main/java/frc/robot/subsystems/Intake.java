@@ -180,7 +180,7 @@ public class Intake extends SubsystemBase {
         // Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
         setRollerPercent(-1.0);
         if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 10.0 / 360.0) {
-          pivotWithTorque(-10, 0.1);
+          pivotWithTorque(-15, 0.1);
           // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
           // 0.2);
         } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 20.0 / 360.0) {

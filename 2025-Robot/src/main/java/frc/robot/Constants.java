@@ -856,8 +856,8 @@ public final class Constants {
                                                                                 .getX(),
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                -adjustY,
+                                                                                                adjustXL1,
+                                                                                                -adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_FRONT_MORE,
@@ -881,8 +881,8 @@ public final class Constants {
                                                                                 .getX(),
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                -adjustY,
+                                                                                                adjustXL1,
+                                                                                                -adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_BACK_MORE,
@@ -906,8 +906,8 @@ public final class Constants {
                                                                                 .getX(),
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                adjustY,
+                                                                                                adjustXL1,
+                                                                                                adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_FRONT,
@@ -3566,15 +3566,15 @@ public final class Constants {
                 public static double INTAKE_X_OFFSET_BACK_ALGAE = inchesToMeters(23.0 + 5.0);
                 public static double INTAKE_Y_OFFSET_BACK_ALGAE = inchesToMeters(-3.8);
 
-                public static double L1_INTAKE_X_OFFSET_FRONT = inchesToMeters(35.0);
-                public static double L1_INTAKE_Y_OFFSET_FRONT = inchesToMeters(1.5);
-                public static double L1_INTAKE_X_OFFSET_BACK = inchesToMeters(35.0);
-                public static double L1_INTAKE_Y_OFFSET_BACK = inchesToMeters(-1.5);
+                public static double L1_INTAKE_X_OFFSET_FRONT = inchesToMeters(35.3);
+                public static double L1_INTAKE_Y_OFFSET_FRONT = inchesToMeters(3.0);
+                public static double L1_INTAKE_X_OFFSET_BACK = inchesToMeters(35.3);
+                public static double L1_INTAKE_Y_OFFSET_BACK = inchesToMeters(-9.0);
 
                 public static double L1_INTAKE_X_OFFSET_FRONT_MORE = inchesToMeters(23.5);
-                public static double L1_INTAKE_Y_OFFSET_FRONT_MORE = inchesToMeters(1.5);
+                public static double L1_INTAKE_Y_OFFSET_FRONT_MORE = inchesToMeters(3.0);
                 public static double L1_INTAKE_X_OFFSET_BACK_MORE = inchesToMeters(23.5);
-                public static double L1_INTAKE_Y_OFFSET_BACK_MORE = inchesToMeters(-1.5);
+                public static double L1_INTAKE_Y_OFFSET_BACK_MORE = inchesToMeters(-9.0);
 
                 public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(23.45);
                 public static double L2_INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
@@ -3617,13 +3617,13 @@ public final class Constants {
                 public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(28);
                 public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(64.0);
                 public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8.0);
-                public static final double ELEVATOR_GROUND_CORAL_POSITION_M = inchesToMeters(4.3);
+                public static final double ELEVATOR_GROUND_CORAL_POSITION_M = inchesToMeters(5.4);
                 public static final double ELEVATOR_GROUND_ALGAE_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_FEEDER_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_OVER_POSITION_M = inchesToMeters(20);
                 public static final double ELEVATOR_NET_POSITION_M = inchesToMeters(65);
-                public static final double ELEVATOR_L2_ALGAE_POSITION_M = inchesToMeters(19);
-                public static final double ELEVATOR_L3_ALGAE_POSITION_M = inchesToMeters(35);
+                public static final double ELEVATOR_L2_ALGAE_POSITION_M = inchesToMeters(15.7);
+                public static final double ELEVATOR_L3_ALGAE_POSITION_M = inchesToMeters(33.0);
                 public static final double ELEVATOR_PROCESSOR_POSITION_M = inchesToMeters(6.5);
                 public static final double ELEVATOR_LOLLIPOP_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_PRE_HANDOFF_POSITION_M = inchesToMeters(39.0);
@@ -3682,7 +3682,7 @@ public final class Constants {
                 public static final double PIVOT_L1_POSITION_D = 67.0;
                 public static final double PIVOT_L23_POSITION_D = 52.5;
                 // public static final double PIVOT_AUTO_L23_POSITION_D = 45.0;
-                public static final double PIVOT_AUTO_L2_POSITION_D = 60.0;
+                public static final double PIVOT_AUTO_L2_POSITION_D = 65.0;
                 public static final double PIVOT_AUTO_L3_POSITION_D = 50.0;
                 // public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
                 public static final double PIVOT_AUTO_L4_POSITION_D = 0.0;

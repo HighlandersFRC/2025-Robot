@@ -275,7 +275,7 @@ public class Manipulator extends SubsystemBase {
           default:
             if (algaeMode) {
               if (OI.driverPOVUp.getAsBoolean()) {
-                setIntakePercent(-0.5);
+                setIntakePercent(-0.4);
               } else {
                 setIntakePercent(-0.8);
               }
