@@ -778,7 +778,7 @@ public final class Constants {
                                 double adjustX = inchesToMeters(30.738);
                                 double adjustY = inchesToMeters(6.469);
                                 double adjustXL1 = inchesToMeters(30.738);
-                                double adjustYL1 = inchesToMeters(9.0);
+                                double adjustYL1 = inchesToMeters(6.469);
                                 double adjustXMore = inchesToMeters(70.738);
                                 double adjustYMore = inchesToMeters(6.469);
                                 double adjustAlgaeX = inchesToMeters(35.738);
@@ -3567,13 +3567,13 @@ public final class Constants {
                 public static double INTAKE_Y_OFFSET_BACK_ALGAE = inchesToMeters(-3.8);
 
                 public static double L1_INTAKE_X_OFFSET_FRONT = inchesToMeters(35.3);
-                public static double L1_INTAKE_Y_OFFSET_FRONT = inchesToMeters(3.0);
+                public static double L1_INTAKE_Y_OFFSET_FRONT = inchesToMeters(5.0);
                 public static double L1_INTAKE_X_OFFSET_BACK = inchesToMeters(35.3);
-                public static double L1_INTAKE_Y_OFFSET_BACK = inchesToMeters(-9.0);
+                public static double L1_INTAKE_Y_OFFSET_BACK = inchesToMeters(-7.0);
 
-                public static double L1_INTAKE_X_OFFSET_FRONT_MORE = inchesToMeters(23.5);
-                public static double L1_INTAKE_Y_OFFSET_FRONT_MORE = inchesToMeters(3.0);
-                public static double L1_INTAKE_X_OFFSET_BACK_MORE = inchesToMeters(23.5);
+                public static double L1_INTAKE_X_OFFSET_FRONT_MORE = inchesToMeters(24.5);
+                public static double L1_INTAKE_Y_OFFSET_FRONT_MORE = inchesToMeters(5.0);
+                public static double L1_INTAKE_X_OFFSET_BACK_MORE = inchesToMeters(24.5);
                 public static double L1_INTAKE_Y_OFFSET_BACK_MORE = inchesToMeters(-9.0);
 
                 public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(23.45);
@@ -3606,7 +3606,7 @@ public final class Constants {
                 public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
                 public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
                 public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
-                public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(7.157);
+                public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(6.6);
                 public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(15);
                 public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(20);
                 public static final double ELEVATOR_AUTO_L2_POSITION_SCORE_M = inchesToMeters(16);

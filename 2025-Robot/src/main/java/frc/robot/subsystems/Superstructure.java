@@ -352,7 +352,12 @@ public class Superstructure extends SubsystemBase {
       case AUTO_L1_PLACE:
         if (manipulator.hasCoral())
           if (Math.abs(Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kL1.rotations) < 10.0
-              / 360.0) {
+              / 360.0
+              && (drive.hitSetPointUltraGenerous(drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(),
+                  OI.getDriverA())[0],
+                  drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(), OI
+                      .getDriverA())[1],
+                  drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2]))) {
             currentSuperState = SuperState.AUTO_L1_PLACE_MORE;
             wantedSuperState = SuperState.AUTO_L1_PLACE_MORE;
           } else {
@@ -366,10 +371,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_L1_PLACE_MORE:
         if ((drive.hitSetPointSemiGenerous(drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(),
-            OI.getDriverA())[0],
-            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), OI
-                .getDriverA())[1],
-            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), OI.getDriverA())[2])) || OI.getDriverLB()) {
+            false)[0],
+            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), false)[1],
+            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), false)[2])) || OI.getDriverLB()) {
           currentSuperState = SuperState.AUTO_SCORE_L1;
           wantedSuperState = SuperState.AUTO_SCORE_L1;
         } else {
@@ -1909,7 +1913,7 @@ public class Superstructure extends SubsystemBase {
       manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
-          - 25.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+          - 22.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
         manipulator.setWantedState(ManipulatorState.OUTAKE);
       } else {
         manipulator.setWantedState(ManipulatorState.OFF);

@@ -176,6 +176,7 @@ public class Drive extends SubsystemBase {
   PhotonPoseEstimator backPhotonPoseEstimator;
   PhotonPoseEstimator rightPhotonPoseEstimator;
   PhotonPoseEstimator leftPhotonPoseEstimator;
+  // PhotonPoseEstimator swervePhotonPoseEstimator;
   PhotonPoseEstimator gamePiecePhotonPoseEstimator;
   AprilTagFieldLayout aprilTagFieldLayout;
 
@@ -184,13 +185,13 @@ public class Drive extends SubsystemBase {
           Constants.inchesToMeters(23.625)),
       new Rotation3d(Math.toRadians(0.3), Math.toRadians(25.6), Math.toRadians(15.0)));
 
-  // Transform3d frontReefRobotToCam = new Transform3d( // front reef cam swerve
+  // Transform3d frontSwerveRobotToCam = new Transform3d( // front reef cam swerve
   // module
-  // new Translation3d(Constants.inchesToMeters(11.625),
-  // Constants.inchesToMeters(-8.5),
+  // new Translation3d(Constants.inchesToMeters(-12.0),
+  // Constants.inchesToMeters(8.75),
   // Constants.inchesToMeters(10.0)),
-  // new Rotation3d(Math.toRadians(-0.8), Math.toRadians(13.6),
-  // Math.toRadians(35.0)));
+  // new Rotation3d(Math.toRadians(1.6), Math.toRadians(15.3),
+  // Math.toRadians(215.0)));
 
   // 25.2, 25.8
   // Transform2d frontReefCamPos = new Transform2d(
@@ -448,6 +449,9 @@ public class Drive extends SubsystemBase {
 
     backPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backReefRobotToCam);
+
+    // swervePhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+    // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontSwerveRobotToCam);
 
     rightPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontBargeRobotToCam);
@@ -770,6 +774,7 @@ public class Drive extends SubsystemBase {
     if (systemState == DriveState.L4_REEF || systemState == DriveState.L3_REEF || systemState == DriveState.REEF) {
       photonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
       backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+      // swervePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
       gamePiecePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     }
     Optional<EstimatedRobotPose> multiTagResult = photonPoseEstimator.update(result);
@@ -1007,6 +1012,55 @@ public class Drive extends SubsystemBase {
         }
       }
     }
+    // }
+
+    // var swerveResult = peripherals.getFrontSwerveCamResult();
+    // Optional<EstimatedRobotPose> swerveMultiTagResult =
+    // swervePhotonPoseEstimator.update(swerveResult);
+    // if (swerveMultiTagResult.isPresent()) {
+    // if (swerveResult.getBestTarget().getPoseAmbiguity() < 0.3) {
+    // Pose3d robotPose = swerveMultiTagResult.get().estimatedPose;
+    // Logger.recordOutput("multitag result", robotPose);
+    // int numFrontTracks = swerveResult.getTargets().size();
+    // Pose3d tagPose =
+    // aprilTagFieldLayout.getTagPose(swerveResult.getBestTarget().getFiducialId()).get();
+    // double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+    // // Logger.recordOutput("Distance to tag", distToTag);
+    // if (distToTag < 3.2) {
+    // if (systemState.equals(DriveState.REEF) ||
+    // systemState.equals(DriveState.L3_REEF)
+    // || systemState.equals(DriveState.L4_REEF)) {
+    // standardDeviation.set(0, 0,
+    // 0.5
+    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    // standardDeviation.set(1, 0,
+    // 0.5
+    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    // standardDeviation.set(2, 0, 0.9);
+    // } else {
+    // standardDeviation.set(0, 0,
+    // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    // standardDeviation.set(1, 0,
+    // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    // standardDeviation.set(2, 0, 0.9);
+    // }
+    // // Pose2d poseWithoutAngle = new
+    // Pose2d(robotPose.toPose2d().getTranslation(),
+    // // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+    // mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+    // swerveResult.getTimestampSeconds());
+    // }
+    // }
     // }
 
     var rightResult = peripherals.getFrontBargeCamResult();
@@ -1722,16 +1776,16 @@ public class Drive extends SubsystemBase {
         // + Math.pow((y - Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getY()),
         // 2));
         currentDist = Math.hypot(
-            x - (Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getX()
+            x - (Constants.Reef.redL1BackPlacingPositionsMore.get(i).getX()
                 + Constants.Reef.redL1BackPlacingPositionsMore
                     .get(i)
                     .getX())
                 / 2,
-            y - (Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getY()
+            y - (Constants.Reef.redL1BackPlacingPositionsMore.get(i).getY()
                 + Constants.Reef.redL1BackPlacingPositionsMore.get(i)
                     .getY())
                 / 2);
-        if (currentDist < dist && !notClosest) {
+        if (currentDist < dist && (!notClosest || true)) {
           dist = currentDist;
           if (getAngleDifferenceDegrees(theta,
               Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getRotation().getDegrees()) <= 90) {
@@ -1745,7 +1799,7 @@ public class Drive extends SubsystemBase {
             chosenSetpoint[1] = Constants.Reef.redL1BackPlacingPositionsMore.get(i).getY();
             chosenSetpoint[2] = Constants.Reef.redL1BackPlacingPositionsMore.get(i).getRotation().getRadians();
           }
-        } else if (notClosest) {
+        } else if (notClosest && false) {
           if ((Math.hypot(
               origionalSetpointPose[0] - Constants.Reef.redL1FrontPlacingPositionsMore.get(i)
                   .getX(),
@@ -1785,16 +1839,16 @@ public class Drive extends SubsystemBase {
     } else {
       for (int i = 0; i < Constants.Reef.blueL1FrontPlacingPositionsMore.size(); i++) {
         currentDist = Math.hypot(
-            x - (Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getX()
+            x - (Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getX()
                 + Constants.Reef.blueL1BackPlacingPositionsMore
                     .get(i)
                     .getX())
                 / 2,
-            y - (Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getY()
+            y - (Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getY()
                 + Constants.Reef.blueL1BackPlacingPositionsMore.get(i)
                     .getY())
                 / 2);
-        if (currentDist < dist && !notClosest) {
+        if (currentDist < dist && (!notClosest || true)) {
           dist = currentDist;
           if (getAngleDifferenceDegrees(theta,
               Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getRotation().getDegrees()) <= 90) {
@@ -1808,7 +1862,7 @@ public class Drive extends SubsystemBase {
             chosenSetpoint[1] = Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getY();
             chosenSetpoint[2] = Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getRotation().getRadians();
           }
-        } else if (notClosest) {
+        } else if (notClosest && false) {
           if ((Math.hypot(
               origionalSetpointPose[0] - Constants.Reef.blueL1FrontPlacingPositionsMore.get(i)
                   .getX(),
