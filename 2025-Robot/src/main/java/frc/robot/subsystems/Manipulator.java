@@ -280,10 +280,11 @@ public class Manipulator extends SubsystemBase {
                 setIntakePercent(-0.8);
               }
             } else {
-              if (OI.driverPOVDown.getAsBoolean() || OI.driverPOVLeft.getAsBoolean()
+              if (OI.driverPOVLeft.getAsBoolean()
                   || OI.driverPOVRight.getAsBoolean()) {
                 setIntakePercent(-0.5);
-
+              } else if (OI.driverPOVDown.getAsBoolean()) {
+                setIntakePercent(-0.4);
               } else if (OI.driverPOVUp.getAsBoolean()) {
                 setIntakePercent(-0.4);
               } else {
