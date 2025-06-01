@@ -50,7 +50,7 @@ public class Lights extends SubsystemBase {
   StrobeAnimation redFlash = new StrobeAnimation(255, 0, 0, 0, 0.1, ledNumber, 0);
   StrobeAnimation blueFlash = new StrobeAnimation(0, 0, 255, 0, 0.1, ledNumber, 0);
 
-  RainbowAnimation party = new RainbowAnimation(1.0, 1.0, ledNumber, false, 0);
+  RainbowAnimation party = new RainbowAnimation(1.0, 0.5, ledNumber, false, 0);
 
   StrobeAnimation greenStrobe = new StrobeAnimation(0, 255, 0, 0, strobeSpeed, ledNumber, 0);
   StrobeAnimation purpleStrobe = new StrobeAnimation(100, 0, 100, 0, strobeSpeed, ledNumber, 0);
@@ -353,13 +353,15 @@ public class Lights extends SubsystemBase {
           if (OI.autoChooser.isConnected()) {
             switch (allianceState) {
               case RED:
-                setRedBouncing();
+                // setRedBouncing();
+                weLikeToParty();
                 // setAllBlue();
                 // candleSwerve.clearAnimation(0);
                 // candleSwerve.setLEDs(0, 0, 0);
                 break;
               default:
-                setBlueBouncing();
+                // setBlueBouncing();
+                weLikeToParty();
                 // setAllRed();
                 // candleSwerve.clearAnimation(0);
                 // candleSwerve.setLEDs(0, 0, 0);

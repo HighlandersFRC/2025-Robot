@@ -99,6 +99,7 @@ public class Climber extends SubsystemBase {
     }
 
     Logger.recordOutput("Climber State", systemState);
+    systemState = ClimbState.IDLE;
     switch (systemState) {
       case EXTENDING:
         setPivotTorque(-160.0, 1.0);

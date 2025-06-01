@@ -3622,6 +3622,8 @@ public final class Constants {
                 public static final double ELEVATOR_FEEDER_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_OVER_POSITION_M = inchesToMeters(20);
                 public static final double ELEVATOR_NET_POSITION_M = inchesToMeters(65);
+                public static final double ELEVATOR_SHOOT_ALGAE_SMALL_POSITION_M = inchesToMeters(10.0);
+                public static final double ELEVATOR_SHOOT_ALGAE_SMALL_MORE_POSITION_M = inchesToMeters(55.0);
                 public static final double ELEVATOR_L2_ALGAE_POSITION_M = inchesToMeters(15.7);
                 public static final double ELEVATOR_L3_ALGAE_POSITION_M = inchesToMeters(33.0);
                 public static final double ELEVATOR_PROCESSOR_POSITION_M = inchesToMeters(6.5);
@@ -3656,6 +3658,10 @@ public final class Constants {
                                         Ratios.elevatorMetersToRotations(ELEVATOR_GROUND_ALGAE_POSITION_M)),
                         kNET(ELEVATOR_NET_POSITION_M,
                                         Ratios.elevatorMetersToRotations(ELEVATOR_NET_POSITION_M)),
+                        kSHOOTALGAESMALL(ELEVATOR_SHOOT_ALGAE_SMALL_POSITION_M,
+                                        Ratios.elevatorMetersToRotations(ELEVATOR_SHOOT_ALGAE_SMALL_POSITION_M)),
+                        kSHOOTALGAESMALLMORE(ELEVATOR_SHOOT_ALGAE_SMALL_MORE_POSITION_M,
+                                        Ratios.elevatorMetersToRotations(ELEVATOR_SHOOT_ALGAE_SMALL_MORE_POSITION_M)),
                         kPROCESSOR(ELEVATOR_PROCESSOR_POSITION_M,
                                         Ratios.elevatorMetersToRotations(ELEVATOR_PROCESSOR_POSITION_M)),
                         kL2ALGAE(ELEVATOR_L2_ALGAE_POSITION_M,
@@ -3698,6 +3704,8 @@ public final class Constants {
                 public static final double PIVOT_GROUND_CORAL_PREP_BACK_D = -90;
                 // public static final double PIVOT_DEFAULT_POSITION_D = 30.0;
                 public static final double PIVOT_DEFAULT_POSITION_D = 0.0;
+                public static final double PIVOT_SHOOT_ALGAE_SMALL_POSITION_D = 115.0;
+                public static final double PIVOT_SHOOT_ALGAE_SMALL_MORE_POSITION_D = -10.0;
                 public static final double PIVOT_DEFAULT_CLIMB_POSITION_D = 45.0;
                 public static final double PIVOT_PREP_POSITION_D = 30.0;
                 public static final double PIVOT_FEEDER_POSITION_D = 21.0;
@@ -3737,6 +3745,10 @@ public final class Constants {
                         kAUTOL4SCORESLOW(PIVOT_AUTO_L4_SCORE_SLOW_POSITION_D,
                                         Constants.degreesToRotations(PIVOT_AUTO_L4_SCORE_SLOW_POSITION_D)),
                         kDEFAULT(PIVOT_DEFAULT_POSITION_D, Constants.degreesToRotations(PIVOT_DEFAULT_POSITION_D)),
+                        kSHOOTALGAESMALL(PIVOT_SHOOT_ALGAE_SMALL_POSITION_D,
+                                        Constants.degreesToRotations(PIVOT_SHOOT_ALGAE_SMALL_POSITION_D)),
+                        kSHOOTALGAESMALLMORE(PIVOT_SHOOT_ALGAE_SMALL_MORE_POSITION_D,
+                                        Constants.degreesToRotations(PIVOT_SHOOT_ALGAE_SMALL_MORE_POSITION_D)),
                         kDEFAULTCLIMB(PIVOT_DEFAULT_CLIMB_POSITION_D,
                                         Constants.degreesToRotations(PIVOT_DEFAULT_CLIMB_POSITION_D)),
                         kFEEDER(PIVOT_FEEDER_POSITION_D, Constants.degreesToRotations(PIVOT_FEEDER_POSITION_D)),

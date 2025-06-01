@@ -98,23 +98,27 @@ public class Robot extends LoggedRobot {
     // m_robotContainer.manualMode = false;
     // }
 
-    if (OI.driverB.getAsBoolean()) {
-      if (bPressed) {
-        m_robotContainer.algaeMode = !m_robotContainer.algaeMode;
-        bPressed = false;
-      }
-    } else {
-      bPressed = true;
-    }
+    // if (OI.driverB.getAsBoolean()) {
+    //   if (bPressed) {
+    //     m_robotContainer.algaeMode = !m_robotContainer.algaeMode;
+    //     bPressed = false;
+    //   }
+    // } else {
+    //   bPressed = true;
+    // }
 
-    if (OI.driverX.getAsBoolean()) {
-      if (xPressed) {
-        m_robotContainer.manualMode = !m_robotContainer.manualMode;
-        xPressed = false;
-      }
-    } else {
-      xPressed = true;
-    }
+    m_robotContainer.algaeMode = true;
+
+    // if (OI.driverX.getAsBoolean()) {
+    //   if (xPressed) {
+    //     m_robotContainer.manualMode = !m_robotContainer.manualMode;
+    //     xPressed = false;
+    //   }
+    // } else {
+    //   xPressed = true;
+    // }
+
+    m_robotContainer.manualMode = true;
 
     if (OI.driverY.getAsBoolean()) {
       if (yPressed) {

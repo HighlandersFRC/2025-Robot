@@ -38,6 +38,8 @@ public class Superstructure extends SubsystemBase {
 
   public enum SuperState {
     DEFAULT,
+    SHOOT_ALGAE_SMALL,
+    SHOOT_ALGAE_SMALL_MORE,
     AUTO_L1_PLACE,
     AUTO_L1_PLACE_MORE,
     AUTO_L2_PLACE,
@@ -145,6 +147,12 @@ public class Superstructure extends SubsystemBase {
     switch (currentSuperState) {
       case DEFAULT:
         handleDefaultState();
+        break;
+      case SHOOT_ALGAE_SMALL:
+        handleShootAlgaeSmallState();
+        break;
+      case SHOOT_ALGAE_SMALL_MORE:
+        handleShootAlgaeSmallMoreState();
         break;
       case ZERO:
         handleZeroState();
@@ -333,6 +341,21 @@ public class Superstructure extends SubsystemBase {
     switch (wantedSuperState) {
       case DEFAULT:
         currentSuperState = SuperState.DEFAULT;
+        break;
+      case SHOOT_ALGAE_SMALL:
+        if (Math.abs(
+            Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kSHOOTALGAESMALL.rotations) < 5.0
+                / 360.0
+            && Math.abs(elevator.getElevatorPosition()
+                - Constants.SetPoints.ElevatorPosition.kSHOOTALGAESMALL.meters) < 3.0 / 39.37) {
+          wantedSuperState = SuperState.SHOOT_ALGAE_SMALL_MORE;
+          currentSuperState = SuperState.SHOOT_ALGAE_SMALL_MORE;
+        } else {
+          currentSuperState = SuperState.SHOOT_ALGAE_SMALL;
+        }
+        break;
+      case SHOOT_ALGAE_SMALL_MORE:
+        currentSuperState = SuperState.SHOOT_ALGAE_SMALL_MORE;
         break;
       case ZERO:
         if (intake.getZeroed() && elevator.getZeroed() && firstTimeZero) {
@@ -954,6 +977,47 @@ public class Superstructure extends SubsystemBase {
     climber.setWantedState(ClimbState.IDLE);
   }
 
+  public void handleShootAlgaeSmallState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
+    elevator.setWantedState(ElevatorState.SHOOT_ALGAE_SMALL);
+    pivot.setWantedFlip(PivotFlip.BACK);
+    pivot.setWantedState(PivotState.SHOOT_ALGAE_SMALL);
+    if (Math.abs(pivot.getPivotPosition()) > 45.0 / 360.0) {
+      twist.setWantedState(TwistState.UP);
+    }
+  }
+
+  public void handleShootAlgaeSmallMoreState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    if ((Math.abs(
+        Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kSHOOTALGAESMALLMORE.rotations) < 65.0
+            / 360.0
+        && Math.abs(elevator.getElevatorPosition()
+            - Constants.SetPoints.ElevatorPosition.kSHOOTALGAESMALLMORE.meters) < 25.0 / 39.37)
+        || Math.abs(
+            Math.abs(pivot.getPivotPosition())
+                - Constants.SetPoints.PivotPosition.kSHOOTALGAESMALLMORE.rotations) < 50.0
+                    / 360.0
+        || Math.abs(elevator.getElevatorPosition()
+            - Constants.SetPoints.ElevatorPosition.kSHOOTALGAESMALLMORE.meters) < 15.0 / 39.37) {
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
+    } else {
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
+    }
+    pivot.setWantedFlip(PivotFlip.BACK);
+    // if (Math.abs(elevator.getElevatorPosition()
+    //     - Constants.SetPoints.ElevatorPosition.kSHOOTALGAESMALLMORE.meters) < 55.0 / 39.37) {
+    pivot.setWantedState(PivotState.SHOOT_ALGAE_SMALL_MORE);
+    // }
+    if (Math.abs(
+        Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kSHOOTALGAESMALLMORE.rotations) < 110.0
+            / 360.0) {
+      elevator.setWantedState(ElevatorState.SHOOT_ALGAE_SMALL_MORE);
+    }
+    twist.setWantedState(TwistState.UP);
+  }
+
   public void handleAutoL1PlaceState() {
     manipulator.inL1State = true;
     lights.setWantedState(LightsState.PLACING);
@@ -1195,8 +1259,9 @@ public class Superstructure extends SubsystemBase {
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.PROCESSOR);
     manipulator.setWantedState(ManipulatorState.DEFAULT);
+    pivot.setWantedFlip(PivotFlip.BACK);
     pivot.setWantedState(PivotState.PROCESSOR);
-    twist.setWantedState(TwistState.UP);
+    twist.setWantedState(TwistState.DOWN);
   }
 
   public void handleNetState() {

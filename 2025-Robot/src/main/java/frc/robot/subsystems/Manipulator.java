@@ -265,35 +265,36 @@ public class Manipulator extends SubsystemBase {
         }
         break;
       case OUTAKE:
-        switch (armItem) {
-          // case CORAL:
-          // setIntakePercent(-0.5);
-          // break;
-          // case ALGAE:
-          // setIntakePercent(0.5);
-          // break;
-          default:
-            if (algaeMode) {
-              if (OI.driverPOVUp.getAsBoolean()) {
-                setIntakePercent(-0.4);
-              } else {
-                setIntakePercent(-0.8);
-              }
-            } else {
-              if (OI.driverPOVLeft.getAsBoolean()
-                  || OI.driverPOVRight.getAsBoolean()) {
-                setIntakePercent(-0.5);
-              } else if (OI.driverPOVDown.getAsBoolean()) {
-                setIntakePercent(-0.4);
-              } else if (OI.driverPOVUp.getAsBoolean()) {
-                setIntakePercent(-0.4);
-              } else {
-                setIntakePercent(-1.0);
+        // switch (armItem) {
+        //   // case CORAL:
+        //   // setIntakePercent(-0.5);
+        //   // break;
+        //   // case ALGAE:
+        //   // setIntakePercent(0.5);
+        //   // break;
+        //   default:
+        //     if (algaeMode) {
+        //       if (OI.driverPOVUp.getAsBoolean()) {
+        //         setIntakePercent(-0.4);
+        //       } else {
+        //         setIntakePercent(-0.8);
+        //       }
+        //     } else {
+        //       if (OI.driverPOVLeft.getAsBoolean()
+        //           || OI.driverPOVRight.getAsBoolean()) {
+        //         setIntakePercent(-0.5);
+        //       } else if (OI.driverPOVDown.getAsBoolean()) {
+        //         setIntakePercent(-0.4);
+        //       } else if (OI.driverPOVUp.getAsBoolean()) {
+        //         setIntakePercent(-0.4);
+        //       } else {
+        //         setIntakePercent(-1.0);
 
-              }
-            }
-            break;
-        }
+        //       }
+        //     }
+        //     break;
+        // }
+        setIntakePercent(-1.0);
         break;
       case OFF:
         setIntakePercent(0.0);
@@ -301,7 +302,7 @@ public class Manipulator extends SubsystemBase {
       default:
         // System.out.println("Motor Current: " + intakeMotor.getTorqueCurrent());
         if (algaeMode) {
-          setIntakeTorque(67, 0.4);
+          setIntakeTorque(67, 0.2);
         } else {
           setIntakeTorque(20, 0.2);
         }

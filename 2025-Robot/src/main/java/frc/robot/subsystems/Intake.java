@@ -145,6 +145,9 @@ public class Intake extends SubsystemBase {
       firstTimeDefault = true;
       defaultTime = Timer.getFPGATimestamp();
     }
+    if (systemState != IntakeState.INTAKING && systemState != IntakeState.ZERO) {
+      systemState = IntakeState.IDLE;
+    }
     switch (systemState) {
       case INTAKING:
         pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);

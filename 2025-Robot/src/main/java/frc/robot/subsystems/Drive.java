@@ -4283,15 +4283,15 @@ public class Drive extends SubsystemBase {
     // getClosestL1PointXY()[1],
     // new Rotation2d(getThetaToPoint(getClosestL1PointXY()[0],
     // getClosestL1PointXY()[1])));
-
+    systemState = DriveState.DEFAULT;
     switch (systemState) {
       case DEFAULT:
-        if (OI.driverA.getAsBoolean() && !(OI.driverPOVDown.getAsBoolean() || OI.driverPOVLeft.getAsBoolean()
-            || OI.driverPOVUp.getAsBoolean() || OI.driverPOVRight.getAsBoolean())) {
-          robotCentricDrive(195.0);
-        } else {
-          teleopDrive();
-        }
+        // if (OI.driverA.getAsBoolean() && !(OI.driverPOVDown.getAsBoolean() || OI.driverPOVLeft.getAsBoolean()
+        //     || OI.driverPOVUp.getAsBoolean() || OI.driverPOVRight.getAsBoolean())) {
+        //   robotCentricDrive(195.0);
+        // } else {
+        teleopDrive();
+        // }
         break;
       case IDLE:
         break;

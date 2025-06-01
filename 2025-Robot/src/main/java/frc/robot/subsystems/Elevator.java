@@ -33,6 +33,8 @@ public class Elevator extends SubsystemBase {
 
   public enum ElevatorState {
     DEFAULT,
+    SHOOT_ALGAE_SMALL,
+    SHOOT_ALGAE_SMALL_MORE,
     ZERO,
     AUTO_L1,
     AUTO_L2,
@@ -218,6 +220,10 @@ public class Elevator extends SubsystemBase {
     switch (wantedState) {
       case DEFAULT:
         return ElevatorState.DEFAULT;
+      case SHOOT_ALGAE_SMALL:
+        return ElevatorState.SHOOT_ALGAE_SMALL;
+      case SHOOT_ALGAE_SMALL_MORE:
+        return ElevatorState.SHOOT_ALGAE_SMALL_MORE;
       case ZERO:
         return ElevatorState.ZERO;
       case OVER:
@@ -320,6 +326,14 @@ public class Elevator extends SubsystemBase {
       case NET:
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kNET.meters);
+        break;
+      case SHOOT_ALGAE_SMALL:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kSHOOTALGAESMALL.meters);
+        break;
+      case SHOOT_ALGAE_SMALL_MORE:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kSHOOTALGAESMALLMORE.meters);
         break;
       case PROCESSOR:
         firstTimeIdle = true;

@@ -175,6 +175,8 @@ public class Pivot extends SubsystemBase {
 
   public enum PivotState {
     PREP,
+    SHOOT_ALGAE_SMALL,
+    SHOOT_ALGAE_SMALL_MORE,
     AUTO_L1,
     AUTO_L2,
     AUTO_L3,
@@ -240,6 +242,10 @@ public class Pivot extends SubsystemBase {
     switch (wantedState) {
       case DEFAULT:
         return PivotState.DEFAULT;
+      case SHOOT_ALGAE_SMALL:
+        return PivotState.SHOOT_ALGAE_SMALL;
+      case SHOOT_ALGAE_SMALL_MORE:
+        return PivotState.SHOOT_ALGAE_SMALL_MORE;
       case DEFAULT_CLIMB:
         return PivotState.DEFAULT_CLIMB;
       case UP:
@@ -345,6 +351,32 @@ public class Pivot extends SubsystemBase {
 
           default:
             pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULT.rotations);
+            break;
+        }
+        break;
+      case SHOOT_ALGAE_SMALL:
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPositionSlow(Constants.SetPoints.PivotPosition.kSHOOTALGAESMALL.rotations);
+            break;
+          case BACK:
+            pivotToPositionSlow(-Constants.SetPoints.PivotPosition.kSHOOTALGAESMALL.rotations);
+            break;
+          default:
+            pivotToPositionSlow(Constants.SetPoints.PivotPosition.kSHOOTALGAESMALL.rotations);
+            break;
+        }
+        break;
+      case SHOOT_ALGAE_SMALL_MORE:
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kSHOOTALGAESMALLMORE.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kSHOOTALGAESMALLMORE.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kSHOOTALGAESMALLMORE.rotations);
             break;
         }
         break;
