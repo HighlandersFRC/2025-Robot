@@ -347,7 +347,7 @@ public class Pivot extends SubsystemBase {
     systemState = handleStateTransition();
     systemFlip = handleFlipTransition();
     Logger.recordOutput("Pivot State", systemState);
-    System.out.println(systemState);
+    // System.out.println(systemState);
     switch (systemState) {
       case DEFAULT:
         switch (intakeItem) {
