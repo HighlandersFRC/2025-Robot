@@ -40,6 +40,8 @@ public class Superstructure extends SubsystemBase {
     DEFAULT,
     SHOOT_ALGAE_SMALL,
     SHOOT_ALGAE_SMALL_MORE,
+    SHOOT_ALGAE_BIG,
+    SHOOT_ALGAE_BIG_MORE,
     AUTO_L1_PLACE,
     AUTO_L1_PLACE_MORE,
     AUTO_L2_PLACE,
@@ -153,6 +155,12 @@ public class Superstructure extends SubsystemBase {
         break;
       case SHOOT_ALGAE_SMALL_MORE:
         handleShootAlgaeSmallMoreState();
+        break;
+      case SHOOT_ALGAE_BIG:
+        handleShootAlgaeBigState();
+        break;
+      case SHOOT_ALGAE_BIG_MORE:
+        handleShootAlgaeBigMoreState();
         break;
       case ZERO:
         handleZeroState();
@@ -356,6 +364,21 @@ public class Superstructure extends SubsystemBase {
         break;
       case SHOOT_ALGAE_SMALL_MORE:
         currentSuperState = SuperState.SHOOT_ALGAE_SMALL_MORE;
+        break;
+      case SHOOT_ALGAE_BIG:
+        if (Math.abs(
+            Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kSHOOTALGAEBIG.rotations) < 5.0
+                / 360.0
+            && Math.abs(elevator.getElevatorPosition()
+                - Constants.SetPoints.ElevatorPosition.kSHOOTALGAEBIG.meters) < 3.0 / 39.37) {
+          wantedSuperState = SuperState.SHOOT_ALGAE_BIG_MORE;
+          currentSuperState = SuperState.SHOOT_ALGAE_BIG_MORE;
+        } else {
+          currentSuperState = SuperState.SHOOT_ALGAE_BIG;
+        }
+        break;
+      case SHOOT_ALGAE_BIG_MORE:
+        currentSuperState = SuperState.SHOOT_ALGAE_BIG_MORE;
         break;
       case ZERO:
         if (intake.getZeroed() && elevator.getZeroed() && firstTimeZero) {
@@ -991,29 +1014,61 @@ public class Superstructure extends SubsystemBase {
   public void handleShootAlgaeSmallMoreState() {
     drive.setWantedState(DriveState.DEFAULT);
     if ((Math.abs(
-        Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kSHOOTALGAESMALLMORE.rotations) < 65.0
+        Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kSHOOTALGAESMALLMORE.rotations) < 45.0
             / 360.0
         && Math.abs(elevator.getElevatorPosition()
-            - Constants.SetPoints.ElevatorPosition.kSHOOTALGAESMALLMORE.meters) < 25.0 / 39.37)
+            - Constants.SetPoints.ElevatorPosition.kSHOOTALGAESMALLMORE.meters) < 5.0 / 39.37)
         || Math.abs(
             Math.abs(pivot.getPivotPosition())
-                - Constants.SetPoints.PivotPosition.kSHOOTALGAESMALLMORE.rotations) < 50.0
+                - Constants.SetPoints.PivotPosition.kSHOOTALGAESMALLMORE.rotations) < 30.0
+                    / 360.0) {
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
+    } else {
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
+    }
+    pivot.setWantedFlip(PivotFlip.BACK);
+    pivot.setWantedState(PivotState.SHOOT_ALGAE_SMALL_MORE);
+    elevator.setWantedState(ElevatorState.SHOOT_ALGAE_SMALL_MORE);
+    twist.setWantedState(TwistState.UP);
+  }
+
+  public void handleShootAlgaeBigState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
+    elevator.setWantedState(ElevatorState.SHOOT_ALGAE_BIG);
+    pivot.setWantedFlip(PivotFlip.BACK);
+    pivot.setWantedState(PivotState.SHOOT_ALGAE_BIG);
+    if (Math.abs(pivot.getPivotPosition()) > 45.0 / 360.0) {
+      twist.setWantedState(TwistState.UP);
+    }
+  }
+
+  public void handleShootAlgaeBigMoreState() {
+    drive.setWantedState(DriveState.DEFAULT);
+    if ((Math.abs(
+        Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kSHOOTALGAEBIGMORE.rotations) < 95.0
+            / 360.0
+        && Math.abs(elevator.getElevatorPosition()
+            - Constants.SetPoints.ElevatorPosition.kSHOOTALGAEBIGMORE.meters) < 25.0 / 39.37)
+        || Math.abs(
+            Math.abs(pivot.getPivotPosition())
+                - Constants.SetPoints.PivotPosition.kSHOOTALGAEBIGMORE.rotations) < 80.0
                     / 360.0
         || Math.abs(elevator.getElevatorPosition()
-            - Constants.SetPoints.ElevatorPosition.kSHOOTALGAESMALLMORE.meters) < 15.0 / 39.37) {
+            - Constants.SetPoints.ElevatorPosition.kSHOOTALGAEBIGMORE.meters) < 15.0 / 39.37) {
       manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
       manipulator.setWantedState(ManipulatorState.DEFAULT);
     }
     pivot.setWantedFlip(PivotFlip.BACK);
     // if (Math.abs(elevator.getElevatorPosition()
-    //     - Constants.SetPoints.ElevatorPosition.kSHOOTALGAESMALLMORE.meters) < 55.0 / 39.37) {
-    pivot.setWantedState(PivotState.SHOOT_ALGAE_SMALL_MORE);
+    //     - Constants.SetPoints.ElevatorPosition.kSHOOTALGAEBIGMORE.meters) < 55.0 / 39.37) {
+    pivot.setWantedState(PivotState.SHOOT_ALGAE_BIG_MORE);
     // }
     if (Math.abs(
-        Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kSHOOTALGAESMALLMORE.rotations) < 110.0
+        Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kSHOOTALGAEBIGMORE.rotations) < 150.0
             / 360.0) {
-      elevator.setWantedState(ElevatorState.SHOOT_ALGAE_SMALL_MORE);
+      elevator.setWantedState(ElevatorState.SHOOT_ALGAE_BIG_MORE);
     }
     twist.setWantedState(TwistState.UP);
   }

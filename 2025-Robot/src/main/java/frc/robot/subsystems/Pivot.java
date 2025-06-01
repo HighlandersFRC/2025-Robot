@@ -100,17 +100,17 @@ public class Pivot extends SubsystemBase {
     if (Math.abs(pivotPosition) * 360.0 > maxPivotDegrees) {
       pivotPosition = Math.copySign(maxPivotDegrees / 360.0, pivotPosition);
     }
-    if (Timer.getFPGATimestamp() - nonAlgaeTime < 1.0) {
-      pivotToPositionSlower(pivotPosition);
-    } else {
-      pivotMotor.setControl(this.pivotMotionProfileRequest
-          .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
-          .withVelocity(this.pivotCruiseVelocity * pivotProfileScalarFactor)
-          .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
-          .withJerk(
-              this.pivotJerk * pivotProfileScalarFactor)
-          .withSlot(0));
-    }
+    // if (Timer.getFPGATimestamp() - nonAlgaeTime < 1.0) {
+    //   pivotToPositionSlower(pivotPosition);
+    // } else {
+    pivotMotor.setControl(this.pivotMotionProfileRequest
+        .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
+        .withVelocity(this.pivotCruiseVelocity * pivotProfileScalarFactor)
+        .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
+        .withJerk(
+            this.pivotJerk * pivotProfileScalarFactor)
+        .withSlot(0));
+    // }
   }
 
   public void pivotToPositionSlow(double pivotPosition) {
@@ -177,6 +177,8 @@ public class Pivot extends SubsystemBase {
     PREP,
     SHOOT_ALGAE_SMALL,
     SHOOT_ALGAE_SMALL_MORE,
+    SHOOT_ALGAE_BIG,
+    SHOOT_ALGAE_BIG_MORE,
     AUTO_L1,
     AUTO_L2,
     AUTO_L3,
@@ -246,6 +248,10 @@ public class Pivot extends SubsystemBase {
         return PivotState.SHOOT_ALGAE_SMALL;
       case SHOOT_ALGAE_SMALL_MORE:
         return PivotState.SHOOT_ALGAE_SMALL_MORE;
+      case SHOOT_ALGAE_BIG:
+        return PivotState.SHOOT_ALGAE_BIG;
+      case SHOOT_ALGAE_BIG_MORE:
+        return PivotState.SHOOT_ALGAE_BIG_MORE;
       case DEFAULT_CLIMB:
         return PivotState.DEFAULT_CLIMB;
       case UP:
@@ -341,6 +347,7 @@ public class Pivot extends SubsystemBase {
     systemState = handleStateTransition();
     systemFlip = handleFlipTransition();
     Logger.recordOutput("Pivot State", systemState);
+    System.out.println(systemState);
     switch (systemState) {
       case DEFAULT:
         switch (intakeItem) {
@@ -377,6 +384,32 @@ public class Pivot extends SubsystemBase {
             break;
           default:
             pivotToPosition(Constants.SetPoints.PivotPosition.kSHOOTALGAESMALLMORE.rotations);
+            break;
+        }
+        break;
+      case SHOOT_ALGAE_BIG:
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPositionSlow(Constants.SetPoints.PivotPosition.kSHOOTALGAEBIG.rotations);
+            break;
+          case BACK:
+            pivotToPositionSlow(-Constants.SetPoints.PivotPosition.kSHOOTALGAEBIG.rotations);
+            break;
+          default:
+            pivotToPositionSlow(Constants.SetPoints.PivotPosition.kSHOOTALGAEBIG.rotations);
+            break;
+        }
+        break;
+      case SHOOT_ALGAE_BIG_MORE:
+        switch (systemFlip) {
+          case FRONT:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kSHOOTALGAEBIGMORE.rotations);
+            break;
+          case BACK:
+            pivotToPosition(-Constants.SetPoints.PivotPosition.kSHOOTALGAEBIGMORE.rotations);
+            break;
+          default:
+            pivotToPosition(Constants.SetPoints.PivotPosition.kSHOOTALGAEBIGMORE.rotations);
             break;
         }
         break;

@@ -35,6 +35,8 @@ public class Elevator extends SubsystemBase {
     DEFAULT,
     SHOOT_ALGAE_SMALL,
     SHOOT_ALGAE_SMALL_MORE,
+    SHOOT_ALGAE_BIG,
+    SHOOT_ALGAE_BIG_MORE,
     ZERO,
     AUTO_L1,
     AUTO_L2,
@@ -224,6 +226,10 @@ public class Elevator extends SubsystemBase {
         return ElevatorState.SHOOT_ALGAE_SMALL;
       case SHOOT_ALGAE_SMALL_MORE:
         return ElevatorState.SHOOT_ALGAE_SMALL_MORE;
+      case SHOOT_ALGAE_BIG:
+        return ElevatorState.SHOOT_ALGAE_BIG;
+      case SHOOT_ALGAE_BIG_MORE:
+        return ElevatorState.SHOOT_ALGAE_BIG_MORE;
       case ZERO:
         return ElevatorState.ZERO;
       case OVER:
@@ -334,6 +340,14 @@ public class Elevator extends SubsystemBase {
       case SHOOT_ALGAE_SMALL_MORE:
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kSHOOTALGAESMALLMORE.meters);
+        break;
+      case SHOOT_ALGAE_BIG:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kSHOOTALGAEBIG.meters);
+        break;
+      case SHOOT_ALGAE_BIG_MORE:
+        firstTimeIdle = true;
+        moveElevatorToPosition(ElevatorPosition.kSHOOTALGAEBIGMORE.meters);
         break;
       case PROCESSOR:
         firstTimeIdle = true;

@@ -155,7 +155,8 @@ public class RobotContainer {
                 OI.driverViewButton.whileTrue(new ZeroAngleMidMatch(
                                 drive)); // zero pidgeon and elevator
 
-                OI.driverA.onTrue(new SetRobotStateSimpleOnce(superstructure, SuperState.SHOOT_ALGAE_SMALL));
+                OI.driverA.whileTrue(new SetRobotStateOnce(superstructure, SuperState.SHOOT_ALGAE_SMALL));
+                OI.driverY.whileTrue(new SetRobotStateOnce(superstructure, SuperState.SHOOT_ALGAE_BIG));
 
                 // OI.driverRT.whileTrue(new SetRobotState(superstructure,
                 // SuperState.GROUND_CORAL_PICKUP_FRONT));
