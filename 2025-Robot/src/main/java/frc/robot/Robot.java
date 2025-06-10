@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Superstructure.SuperState;
+import frc.robot.tools.math.Spline;
+import frc.robot.tools.math.Waypoint;
 
 public class Robot extends LoggedRobot {
   private RobotContainer m_robotContainer = new RobotContainer();
@@ -67,6 +69,14 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putNumber("Algae Back X", Constants.metersToInches(Constants.Physical.INTAKE_X_OFFSET_BACK_ALGAE));
     SmartDashboard.putNumber("Algae Back Y", Constants.metersToInches(Constants.Physical.INTAKE_Y_OFFSET_BACK_ALGAE));
 
+    Spline spline = new Spline(new Waypoint[] {
+        new Waypoint(0, 13.0, 2.0, 70.0, 0, 0, 0, 0, 0, 0),
+        new Waypoint(1, 15.0, 4.0, -50.0, 0.5, 2, -80, 0, 0, 0),
+        new Waypoint(2, 14.0, 6, -90, -2, 1, 0, 0, 0, 0),
+        new Waypoint(3, 11.0, 6, 80, 0, 0, 0, 0, 0, 0),
+    });
+    Waypoint point = spline.interpolate(1.5);
+    System.out.println(point.toString());
     // m_robotContainer.lights.setFlashYellow();
   }
 
