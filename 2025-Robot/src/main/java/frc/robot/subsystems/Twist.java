@@ -14,7 +14,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Intake.IntakeItem;
+import frc.robot.subsystems.Manipulator.ArmItem;
 
 public class Twist extends SubsystemBase {
 
@@ -27,6 +27,8 @@ public class Twist extends SubsystemBase {
   private final double twistAcceleration = 50.0;
   private final double twistCruiseVelocity = 200.0;
 
+  public boolean algaeMode = false;
+
   // private double zeroInitTime = 0.0;
 
   private final MotionMagicExpoVoltage twistTorqueCurrentFOC = new MotionMagicExpoVoltage(
@@ -38,14 +40,14 @@ public class Twist extends SubsystemBase {
 
   public void init() {
     TalonFXConfiguration twistConfig = new TalonFXConfiguration();
-    twistConfig.Slot0.kP = 50.0;
+    twistConfig.Slot0.kP = 40.0;
     twistConfig.Slot0.kI = 0.0;
     twistConfig.Slot0.kD = 4.6;
     twistConfig.Slot0.kS = 5.0;
-    twistConfig.Slot1.kP = 13.0;
+    twistConfig.Slot1.kP = 33.0;
     twistConfig.Slot1.kI = 0.0;
-    twistConfig.Slot1.kD = 5.0;
-    twistConfig.Slot1.kS = 1.0;
+    twistConfig.Slot1.kD = 6.0;
+    twistConfig.Slot1.kS = 3.0;
     twistConfig.MotionMagic.MotionMagicJerk = this.twistJerk;
     twistConfig.MotionMagic.MotionMagicAcceleration = this.twistAcceleration;
     twistConfig.MotionMagic.MotionMagicCruiseVelocity = this.twistCruiseVelocity;
@@ -56,8 +58,8 @@ public class Twist extends SubsystemBase {
     twistConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     twistConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     twistConfig.Feedback.FeedbackRemoteSensorID = twistCANcoder.getDeviceID();
-    twistConfig.Feedback.SensorToMechanismRatio = 1.0;
-    twistConfig.Feedback.RotorToSensorRatio = Constants.Ratios.TWIST_GEAR_RATIO;
+    twistConfig.Feedback.SensorToMechanismRatio = Constants.Ratios.TWIST_GEAR_RATIO_ENCODER;
+    twistConfig.Feedback.RotorToSensorRatio = Constants.Ratios.TWIST_GEAR_RATIO_ROTOR;
     twistTorqueCurrentFOC.EnableFOC = true;
     twistMotor.getConfigurator().apply(twistConfig);
     twistMotor.setNeutralMode(NeutralModeValue.Brake);
@@ -68,20 +70,22 @@ public class Twist extends SubsystemBase {
     // zeroInitTime = Timer.getFPGATimestamp();
   }
 
-  private IntakeItem intakeItem = IntakeItem.NONE;
+  private ArmItem intakeItem = ArmItem.NONE;
 
-  public void updateIntakeItem(IntakeItem intakeItem) {
+  public void updateIntakeItem(ArmItem intakeItem) {
     this.intakeItem = intakeItem;
   }
 
   public void twistToPosition(double rotations) {
 
-    if (intakeItem == IntakeItem.ALGAE) { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
+    if (intakeItem == ArmItem.ALGAE) { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
       twistMotor.setControl(this.twistTorqueCurrentFOC // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
-          .withPosition(rotations).withEnableFOC(true).withSlot(1)); // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
+          .withPosition(rotations)
+          .withEnableFOC(true).withSlot(1)); // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
     } else { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
       twistMotor.setControl(this.twistTorqueCurrentFOC // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
-          .withPosition(rotations).withEnableFOC(true).withSlot(0)); // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
+          .withPosition(rotations)
+          .withEnableFOC(true).withSlot(0)); // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
     } // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
 
     // Logger.recordOutput("Twist Setpoint", rotations);

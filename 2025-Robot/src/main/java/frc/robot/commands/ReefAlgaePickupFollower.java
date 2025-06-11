@@ -7,24 +7,28 @@ package frc.robot.commands;
 import org.json.JSONObject;
 
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.SuperState;
 import frc.robot.tools.wrappers.AutoFollower;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AutoIntakeFollower extends AutoFollower {
+public class ReefAlgaePickupFollower extends AutoFollower {
   Superstructure superstructure;
   Drive drive;
   private int currentPathPointIndex = 0;
   private double initTime = 0.0;
   double timeout = 0.0;
+  RobotContainer robotContainer;
 
   /** Creates a new AutoPlaceL4Follower. */
-  public AutoIntakeFollower(Superstructure superstructure, Drive drive, double timeout) {
+  public ReefAlgaePickupFollower(Superstructure superstructure, Drive drive, double timeout,
+      RobotContainer robotContainer) {
     this.superstructure = superstructure;
     this.drive = drive;
     this.timeout = timeout;
+    this.robotContainer = robotContainer;
     addRequirements(superstructure, drive);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -34,14 +38,15 @@ public class AutoIntakeFollower extends AutoFollower {
   }
 
   public void from(int pointIndex, JSONObject pathJSON, int to) {
-    System.out.println("Running Intake in auto");
+    System.out.println("Running L4 in auto");
     this.currentPathPointIndex = pointIndex;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    superstructure.setWantedState(SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT);
+    robotContainer.algaeMode = true;
+    superstructure.setWantedState(SuperState.AUTO_ALGAE_PICKUP);
     initTime = Timer.getFPGATimestamp();
   }
 
@@ -59,7 +64,10 @@ public class AutoIntakeFollower extends AutoFollower {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (superstructure.placedCoralL4() || Timer.getFPGATimestamp() - initTime > timeout) {
+    if ((drive.hitSetPointUltraGenerous(drive.getAlgaeMoreMoreClosestSetpoint(drive.getMT2Odometry())[0],
+        drive.getAlgaeMoreMoreClosestSetpoint(drive.getMT2Odometry())[1],
+        drive.getAlgaeMoreMoreClosestSetpoint(drive.getMT2Odometry())[1]) && superstructure.hasCoral())
+        || Timer.getFPGATimestamp() - initTime > timeout) {
       return true;
     } else {
       return false;

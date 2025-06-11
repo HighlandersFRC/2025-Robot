@@ -5,36 +5,32 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Manipulator;
+import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class SetIntake extends Command {
-  /** Creates a new MoveTestMotor. */
-  Manipulator manipulator;
-  double percent;
+public class SetAlgaeMode extends Command {
+  RobotContainer robotContainer;
 
-  public SetIntake(Manipulator manipulator, double percent) {
+  /** Creates a new SetAlgaeMode. */
+  public SetAlgaeMode(RobotContainer robotContainer) {
+    this.robotContainer = robotContainer;
     // Use addRequirements() here to declare subsystem dependencies.
-    this.manipulator = manipulator;
-    this.percent = percent;
-    addRequirements(this.manipulator);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    robotContainer.algaeMode = !robotContainer.algaeMode;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    manipulator.setIntakePercent(percent);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    manipulator.setIntakePercent(0.0);
   }
 
   // Returns true when the command should end.

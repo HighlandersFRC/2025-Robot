@@ -54,6 +54,7 @@ public class AutoPlaceL4Follower extends AutoFollower {
   @Override
   public void end(boolean interrupted) {
     superstructure.setWantedState(SuperState.OUTAKE_IDLE);
+    System.out.println("L4 fOllower END");
   }
 
   // Returns true when the command should end.

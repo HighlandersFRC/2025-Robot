@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.Constants.SetPoints.ElevatorPosition;
-import frc.robot.subsystems.Intake.IntakeItem;
+import frc.robot.subsystems.Manipulator.ArmItem;
 
 public class Elevator extends SubsystemBase {
   private final TalonFX elevatorMotorMaster = new TalonFX(Constants.CANInfo.MASTER_ELEVATOR_MOTOR_ID,
@@ -27,13 +27,13 @@ public class Elevator extends SubsystemBase {
       new CANBus(Constants.CANInfo.CANBUS_NAME));
 
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
-  private final double elevatorAcceleration = 500.0;
-  private final double elevatorCruiseVelocity = 400.0;
-
+  private final double elevatorAcceleration = 1482542976.0;
+  private final double elevatorCruiseVelocity = 449929104911.0;
   private final MotionMagicTorqueCurrentFOC elevatorMotionProfileRequest = new MotionMagicTorqueCurrentFOC(0);
 
   public enum ElevatorState {
     DEFAULT,
+    ZERO,
     AUTO_L1,
     AUTO_L2,
     AUTO_L3,
@@ -52,11 +52,14 @@ public class Elevator extends SubsystemBase {
     PROCESSOR,
     SCORE_L1,
     SCORE_L2,
+    AUTO_SCORE_L2,
     SCORE_L3,
     SCORE_L4,
     NET,
     OVER,
-    LOLLIPOP
+    LOLLIPOP,
+    PREHANDOFF,
+    HANDOFF
   }
 
   private double idleTime;
@@ -66,9 +69,9 @@ public class Elevator extends SubsystemBase {
   private double distanceFromL23DriveSetpoint = 0.0;
   private boolean firstTimeDefault = false;
 
-  private IntakeItem intakeItem = IntakeItem.NONE;
+  private ArmItem intakeItem = ArmItem.NONE;
 
-  public void updateIntakeItem(IntakeItem intakeItem) {
+  public void updateIntakeItem(ArmItem intakeItem) {
     this.intakeItem = intakeItem;
   }
 
@@ -113,7 +116,7 @@ public class Elevator extends SubsystemBase {
 
   public void init() {
     TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
-    double elevatorMultiplier = 40.86 / 33.39;
+    double elevatorMultiplier = 45.01 / 33.39;
     elevatorConfig.Slot0.kP = 33.39 * elevatorMultiplier;
     elevatorConfig.Slot0.kI = 0.0 * elevatorMultiplier;
     elevatorConfig.Slot0.kD = 2.7 * elevatorMultiplier;
@@ -122,8 +125,13 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.Slot1.kI = 0.0 * elevatorMultiplier;
     elevatorConfig.Slot1.kD = 4.690 * elevatorMultiplier;
     elevatorConfig.Slot1.kG = 8.044 * elevatorMultiplier;
+    elevatorConfig.Slot2.kP = 33.39 * elevatorMultiplier * 0.5;
+    elevatorConfig.Slot2.kI = 0.0 * elevatorMultiplier * 0.5;
+    elevatorConfig.Slot2.kD = 2.7 * elevatorMultiplier * 0.5;
+    elevatorConfig.Slot2.kG = 4.499 * elevatorMultiplier * 0.5;
     elevatorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
     elevatorConfig.Slot1.GravityType = GravityTypeValue.Elevator_Static;
+    elevatorConfig.Slot2.GravityType = GravityTypeValue.Elevator_Static;
     elevatorConfig.MotionMagic.MotionMagicAcceleration = this.elevatorAcceleration;
     elevatorConfig.MotionMagic.MotionMagicCruiseVelocity = this.elevatorCruiseVelocity;
     elevatorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -172,6 +180,27 @@ public class Elevator extends SubsystemBase {
     }
   }
 
+  public void moveElevatorToPositionSlow(double position) {
+    if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
+      elevatorMotorMaster.setControl(
+          elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(2));
+      elevatorMotorFollower.setControl(
+          elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(2));
+    } else {
+      if (position > Constants.inchesToMeters(64.0) && getElevatorPosition() > Constants.inchesToMeters(62.0)) {
+        moveWithTorque(18, 0.20);
+        // System.out.println("running torque");
+      } else {
+        elevatorMotorMaster.setControl(
+            elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))
+                .withSlot(1));
+        elevatorMotorFollower.setControl(
+            elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position))
+                .withSlot(1));
+      }
+    }
+  }
+
   public double getElevatorPosition() {
     return Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getPosition().getValueAsDouble());
   }
@@ -189,6 +218,8 @@ public class Elevator extends SubsystemBase {
     switch (wantedState) {
       case DEFAULT:
         return ElevatorState.DEFAULT;
+      case ZERO:
+        return ElevatorState.ZERO;
       case OVER:
         return ElevatorState.OVER;
       case L1:
@@ -227,6 +258,8 @@ public class Elevator extends SubsystemBase {
         return ElevatorState.SCORE_L1;
       case SCORE_L2:
         return ElevatorState.SCORE_L2;
+      case AUTO_SCORE_L2:
+        return ElevatorState.AUTO_SCORE_L2;
       case SCORE_L3:
         return ElevatorState.SCORE_L3;
       case SCORE_L4:
@@ -235,8 +268,21 @@ public class Elevator extends SubsystemBase {
         return ElevatorState.NET;
       case LOLLIPOP:
         return ElevatorState.LOLLIPOP;
+      case HANDOFF:
+        return ElevatorState.HANDOFF;
+      case PREHANDOFF:
+        return ElevatorState.PREHANDOFF;
       default:
         return ElevatorState.DEFAULT;
+    }
+  }
+
+  public boolean getZeroed() {
+    if (Math.abs(elevatorMotorMaster.getStatorCurrent().getValueAsDouble()) > 10.0
+        && Math.abs(elevatorMotorMaster.getVelocity().getValueAsDouble()) < 5.0) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -264,6 +310,12 @@ public class Elevator extends SubsystemBase {
       case GROUND_CORAL_INTAKE:
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kGROUNDCORAL.meters);
+        break;
+      case ZERO:
+        moveWithTorque(-40, 0.7);
+        if (getZeroed()) {
+          setElevatorEncoderPosition(0.0);
+        }
         break;
       case NET:
         firstTimeIdle = true;
@@ -299,6 +351,9 @@ public class Elevator extends SubsystemBase {
       case L2:
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kL2.meters);
+        break;
+      case AUTO_SCORE_L2:
+        moveElevatorToPosition(ElevatorPosition.kAUTOL2SCORE.meters);
         break;
       case SCORE_L2:
         firstTimeIdle = true;
@@ -352,6 +407,14 @@ public class Elevator extends SubsystemBase {
         firstTimeIdle = true;
         moveElevatorToPosition(ElevatorPosition.kLOLLIPOP.meters);
         break;
+      case HANDOFF:
+        firstTimeDefault = true;
+        moveElevatorToPositionSlow(ElevatorPosition.kHANDOFF.meters);
+        break;
+      case PREHANDOFF:
+        firstTimeDefault = true;
+        moveElevatorToPosition(ElevatorPosition.kPREHANDOFF.meters);
+        break;
       default:
         if (DriverStation.isTeleopEnabled()) {
           // System.out.println("Stupid ahh ts pmo 1");
@@ -381,14 +444,14 @@ public class Elevator extends SubsystemBase {
             } else {
               // System.out.println("Stupid ahh ts pmo 7");
               // System.out.println("Running down to zero");
-              if (intakeItem == IntakeItem.ALGAE) {
+              if (intakeItem == ArmItem.ALGAE) {
                 // System.out.println("Stupid ahh ts pmo 8");
 
                 moveWithTorque(-40, 0.1);
               } else {
                 // System.out.println("Stupid ahh ts pmo 9");
                 if (getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
-                  moveWithTorque(-50, 0.8);
+                  moveWithTorque(-50, 1.0);
                   // System.out.println("Stupid ahh ts pmo 25");
                 } else if (getElevatorPosition() > (Constants.inchesToMeters(1.0))) {
                   moveWithTorque(-30, 0.4);
@@ -399,7 +462,7 @@ public class Elevator extends SubsystemBase {
           } else {
             // System.out.println("Stupid ahh ts pmo 10");
             if (getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
-              moveWithTorque(-50, 0.8);
+              moveWithTorque(-50, 1.0);
               // System.out.println("Stupid ahh ts pmo 11");
             } else if (getElevatorPosition() > (Constants.inchesToMeters(1.0))) {
               moveWithTorque(-30, 0.4);
@@ -426,7 +489,7 @@ public class Elevator extends SubsystemBase {
                 // System.out.println("Stupid ahh ts pmo 17");
                 // IntakeItem.ALGAE) {
 
-                if (intakeItem == IntakeItem.ALGAE) {
+                if (intakeItem == ArmItem.ALGAE) {
                   // System.out.println("Stupid ahh ts pmo 18");
                   moveWithTorque(-40, 0.1);
                 } else {

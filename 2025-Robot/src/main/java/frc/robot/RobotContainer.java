@@ -16,16 +16,18 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoCoralGroundPickupFollower;
-import frc.robot.commands.AutoIntakeFollower;
 import frc.robot.commands.AutoPlaceL2Follower;
 import frc.robot.commands.AutoPlaceL4Follower;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.FeederPickupFollower;
 import frc.robot.commands.FullSendFollower;
 import frc.robot.commands.PolarAutoFollower;
+import frc.robot.commands.ReefAlgaePickupFollower;
+import frc.robot.commands.SetAlgaeMode;
 import frc.robot.commands.SetClimberPivotTorque;
 import frc.robot.commands.SetRobotState;
 import frc.robot.commands.SetRobotStateComplicated;
+import frc.robot.commands.SetRobotStateComplicatedContinuous;
 import frc.robot.commands.SetRobotStateOnce;
 import frc.robot.commands.SetRobotStateSimple;
 import frc.robot.commands.SetRobotStateSimpleOnce;
@@ -34,6 +36,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Manipulator;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Pivot;
@@ -56,22 +59,24 @@ public class RobotContainer {
         Peripherals peripherals = new Peripherals();
         Elevator elevator = new Elevator();
         Drive drive = new Drive(peripherals, elevator);
-        Intake intake = new Intake();
+        Manipulator manipulator = new Manipulator();
         Lights lights = new Lights();
         Pivot pivot = new Pivot();
         Twist twist = new Twist();
         Climber climber = new Climber();
-        Superstructure superstructure = new Superstructure(drive, elevator, intake, pivot, twist, climber, lights,
-                        peripherals);
+        Intake intake = new Intake();
+        Superstructure superstructure = new Superstructure(drive, elevator, manipulator, pivot, twist, climber, lights,
+                        peripherals, intake);
 
-        boolean algaeMode = false;
+        public boolean algaeMode = false;
         boolean manualMode = false;
         boolean yPressed = false;
+        RobotContainer m_container = this;
 
         HashMap<String, Supplier<Command>> commandMap = new HashMap<String, Supplier<Command>>() {
                 {
-                        put("AutoPlaceL2", () -> new AutoPlaceL2Follower(superstructure, drive, 2.3));
-                        put("AutoPlaceL4", () -> new AutoPlaceL4Follower(superstructure, drive, 2.3));
+                        put("AutoPlaceL2", () -> new AutoPlaceL2Follower(superstructure, drive, 3.3));
+                        put("AutoPlaceL4", () -> new AutoPlaceL4Follower(superstructure, drive, 3.3));
                         put("AutoFeeder", () -> new FeederPickupFollower(superstructure, drive));
                         put("FeederIntake", () -> new SetRobotState(superstructure, SuperState.FEEDER));
                         put("Outake", () -> new SetRobotStateSimple(superstructure, SuperState.OUTAKE));
@@ -80,9 +85,16 @@ public class RobotContainer {
                         put("Full Send", () -> new FullSendFollower(drive, null, false));
                         put("IntakeLollipop", () -> new SetRobotState(superstructure, SuperState.LOLLIOP_PICKUP));
                         put("Net", () -> new SetRobotStateSimple(superstructure, SuperState.NET));
-                        put("AutoIntake", () -> new AutoIntakeFollower(superstructure, drive, 2.3));
-                        put("ReefAlgae", () -> new SetRobotState(superstructure, SuperState.AUTO_ALGAE_PICKUP));
+                        put("GroundIntake", () -> new SetRobotStateComplicatedContinuous(superstructure,
+                                        SuperState.GROUND_CORAL_PICKUP_FRONT, SuperState.PASSOFF_IDLE));
+                        put("ReefAlgaeL2", () -> new SetRobotState(superstructure, SuperState.L2_ALGAE_PICKUP));
+                        put("ReefAlgaeL3", () -> new SetRobotState(superstructure, SuperState.L3_ALGAE_PICKUP));
+                        // put("ReefAlgae", () -> new ReefAlgaePickupFollower(superstructure, drive,
+                        // 5.0, m_container));
                         put("AutoIntake", () -> new AutoCoralGroundPickupFollower(superstructure, drive, 4.0));
+                        put("PassoffOutakeIdle", () -> new SetRobotStateSimpleOnce(superstructure,
+                                        SuperState.PASSOFF_OUTAKE_IDLE));
+                        put("ToggleAlgaeMode", () -> new SetAlgaeMode(m_container));
                 }
         };
 
@@ -93,6 +105,7 @@ public class RobotContainer {
 
         HashMap<String, BooleanSupplier> conditionMap = new HashMap<String, BooleanSupplier>() {
                 {
+                        put("HasCoral", () -> manipulator.hasCoralSticky() || intake.hasCoral());
                 }
         };
 
@@ -138,7 +151,7 @@ public class RobotContainer {
         private void configureBindings() {
                 // COMPETITION CONTROLS
                 // Driver
-
+                OI.driverMenuButton.onTrue(new SetRobotStateSimpleOnce(superstructure, SuperState.ZERO));
                 OI.driverViewButton.whileTrue(new ConditionalCommand(new ZeroAngleMidMatch(
                                 drive),
                                 new SetRobotStateSimple(superstructure, SuperState.RUN_CLIMB_BACK),
@@ -146,10 +159,8 @@ public class RobotContainer {
 
                 // OI.driverRT.whileTrue(new SetRobotState(superstructure,
                 // SuperState.GROUND_CORAL_PICKUP_FRONT));
-                OI.driverRT.whileTrue(new ConditionalCommand(new SetRobotState(superstructure,
-                                SuperState.GROUND_ALGAE_PICKUP_FRONT),
-                                new SetRobotState(superstructure, SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT),
-                                () -> (algaeMode)));
+                OI.driverRT.whileTrue(
+                                new SetRobotStateOnce(superstructure, SuperState.GROUND_CORAL_PICKUP_FRONT));
                 // OI.driverRB.whileTrue(new SetRobotState(superstructure,
                 // SuperState.GROUND_CORAL_PICKUP_BACK));
                 OI.driverRB.whileTrue(new ConditionalCommand(new InstantCommand(),
@@ -165,7 +176,7 @@ public class RobotContainer {
                 // OI.driverLT.onFalse(new SetIntakeState(intake, IntakeState.DEFAULT));
 
                 OI.driverLB.whileTrue(new ConditionalCommand(
-                                new SetRobotState(superstructure, SuperState.LOLLIOP_PICKUP),
+                                new InstantCommand(),
                                 new ConditionalCommand(
                                                 new SetRobotState(superstructure,
                                                                 SuperState.FEEDER),
@@ -192,7 +203,8 @@ public class RobotContainer {
                                                 || superstructure.getCurrentSuperState() == SuperState.AUTO_SCORE_L4
                                                 || algaeMode)));
 
-                OI.driverMenuButton.whileTrue(new SetRobotState(superstructure, SuperState.DEFAULT));
+                // OI.driverMenuButton.whileTrue(new SetRobotState(superstructure,
+                // SuperState.DEFAULT));
 
                 // OI.driverA.onTrue(new SetRobotStateSimpleOnce(superstructure,
                 // SuperState.CLIMB));

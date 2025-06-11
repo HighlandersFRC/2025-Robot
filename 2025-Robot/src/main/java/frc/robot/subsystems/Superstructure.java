@@ -12,25 +12,29 @@ import frc.robot.OI;
 import frc.robot.subsystems.Climber.ClimbState;
 import frc.robot.subsystems.Drive.DriveState;
 import frc.robot.subsystems.Elevator.ElevatorState;
-import frc.robot.subsystems.Intake.IntakeItem;
 import frc.robot.subsystems.Intake.IntakeState;
+import frc.robot.subsystems.Manipulator.ArmItem;
+import frc.robot.subsystems.Manipulator.ManipulatorState;
 import frc.robot.subsystems.Lights.LightsState;
 import frc.robot.subsystems.Pivot.PivotFlip;
 import frc.robot.subsystems.Pivot.PivotState;
 import frc.robot.subsystems.Twist.TwistState;
 
 public class Superstructure extends SubsystemBase {
-  private Drive drive;
-  private Elevator elevator;
-  private Intake intake;
-  private Pivot pivot;
-  private Twist twist;
-  private Climber climber;
-  private Lights lights;
-  private Peripherals peripherals;
+  private final Drive drive;
+  private final Elevator elevator;
+  private final Manipulator manipulator;
+  private final Pivot pivot;
+  private final Twist twist;
+  private final Intake intake;
+  private final Climber climber;
+  private final Lights lights;
+  private final Peripherals peripherals;
   double outakeIdleInitTime = 0;
   boolean outakeIdleInit = false;
   boolean firstTimeDefault = true;
+  private SuperState lastState = SuperState.IDLE;
+  private SuperState tempLastState = SuperState.IDLE;
 
   public enum SuperState {
     DEFAULT,
@@ -79,30 +83,38 @@ public class Superstructure extends SubsystemBase {
     AUTO_SCORE_L4,
     IDLE,
     OUTAKE_IDLE,
+    PASSOFF_IDLE,
+    PASSOFF_OUTAKE_IDLE,
     MANUAL_PLACE,
     MANUAL_RESET,
     AUTO_FEEDER,
     RUN_CLIMB_BACK,
     AUTO_CLIMB,
     DEFAULT_DRIVE,
-    LOLLIOP_PICKUP
+    LOLLIOP_PICKUP,
+    ZERO
   }
 
-  private SuperState wantedSuperState = SuperState.DEFAULT;
-  private SuperState currentSuperState = SuperState.DEFAULT;
+  private SuperState wantedSuperState = SuperState.IDLE;
+  private SuperState currentSuperState = SuperState.IDLE;
 
   private boolean continueClimbing = false;
+  public boolean algaeMode = false;
+  private boolean continueFeeding = false;
+  private double handoffInitTime = 0.0;
 
-  public Superstructure(Drive drive, Elevator elevator, Intake intake, Pivot pivot, Twist twist, Climber climber,
-      Lights lights, Peripherals peripherals) {
+  public Superstructure(Drive drive, Elevator elevator, Manipulator manipulator, Pivot pivot, Twist twist,
+      Climber climber,
+      Lights lights, Peripherals peripherals, Intake intake) {
     this.drive = drive;
     this.elevator = elevator;
-    this.intake = intake;
+    this.manipulator = manipulator;
     this.pivot = pivot;
     this.twist = twist;
     this.climber = climber;
     this.lights = lights;
     this.peripherals = peripherals;
+    this.intake = intake;
   }
 
   public void setWantedState(SuperState wantedState) {
@@ -118,13 +130,24 @@ public class Superstructure extends SubsystemBase {
   }
 
   public boolean hasCoral() {
+    return manipulator.hasCoral();
+  }
+
+  public boolean intakeHasCoral() {
     return intake.hasCoral();
+  }
+
+  public boolean hasCoralSticky() {
+    return manipulator.hasCoralSticky();
   }
 
   private void applyStates() {
     switch (currentSuperState) {
       case DEFAULT:
         handleDefaultState();
+        break;
+      case ZERO:
+        handleZeroState();
         break;
       case DEFAULT_DRIVE:
         handleDefaultDriveState();
@@ -267,6 +290,12 @@ public class Superstructure extends SubsystemBase {
       case OUTAKE_IDLE:
         handleOutakeIdleState();
         break;
+      case PASSOFF_IDLE:
+        handlePassoffIdleState();
+        break;
+      case PASSOFF_OUTAKE_IDLE:
+        handlePassOffIdleOutakeState();
+        break;
       case MANUAL_PLACE:
         handleManualPlaceState();
         break;
@@ -305,22 +334,46 @@ public class Superstructure extends SubsystemBase {
       case DEFAULT:
         currentSuperState = SuperState.DEFAULT;
         break;
+      case ZERO:
+        if (intake.getZeroed() && elevator.getZeroed() && firstTimeZero) {
+          firstTimeZero = false;
+          zeroTime = Timer.getFPGATimestamp();
+        }
+        if (Timer.getFPGATimestamp() - zeroTime > 1.0 && intake.getZeroed() && elevator.getZeroed()) {
+          currentSuperState = SuperState.DEFAULT;
+          wantedSuperState = SuperState.DEFAULT;
+        } else {
+          currentSuperState = SuperState.ZERO;
+        }
+        break;
       case DEFAULT_DRIVE:
         currentSuperState = SuperState.DEFAULT_DRIVE;
         break;
       case AUTO_L1_PLACE:
-        if (Math.abs(Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kL1.rotations) < 10.0
-            / 360.0) {
-          currentSuperState = SuperState.AUTO_L1_PLACE_MORE;
-          wantedSuperState = SuperState.AUTO_L1_PLACE_MORE;
-        } else {
-          currentSuperState = SuperState.AUTO_L1_PLACE;
-        }
+        if (manipulator.hasCoral())
+          if (Math.abs(Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kL1.rotations) < 10.0
+              / 360.0
+              && (drive.hitSetPointUltraGenerous(drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(),
+                  OI.getDriverA())[0],
+                  drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(), OI
+                      .getDriverA())[1],
+                  drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2]))) {
+            currentSuperState = SuperState.AUTO_L1_PLACE_MORE;
+            wantedSuperState = SuperState.AUTO_L1_PLACE_MORE;
+          } else {
+            currentSuperState = SuperState.AUTO_L1_PLACE;
+          }
+
+        else if (DriverStation.isAutonomous())
+          currentSuperState = SuperState.IDLE;
+        else
+          currentSuperState = SuperState.DEFAULT;
         break;
       case AUTO_L1_PLACE_MORE:
-        if (drive.hitSetPointSemiGenerous(drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), false)[0],
+        if ((drive.hitSetPointSemiGenerous(drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(),
+            false)[0],
             drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), false)[1],
-            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), false)[2])) {
+            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), false)[2])) || OI.getDriverLB()) {
           currentSuperState = SuperState.AUTO_SCORE_L1;
           wantedSuperState = SuperState.AUTO_SCORE_L1;
         } else {
@@ -331,18 +384,44 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.OUTAKE_DRIVE;
         break;
       case AUTO_L2_PLACE:
-        if (drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
-            .getDriverA())[0],
-            drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
-                .getDriverA())[1],
-            drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
-                .getDriverA())[2])
-            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 3.0 / 39.37) {
-          currentSuperState = SuperState.AUTO_SCORE_L2;
-          wantedSuperState = SuperState.AUTO_SCORE_L2;
-        } else {
-          currentSuperState = SuperState.AUTO_L2_PLACE;
-        }
+        if (manipulator.hasCoralSticky()) {
+          System.out.println("Drive: " + drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI // DO
+              // NOT
+              // COMMENT
+              // OUT
+              // THESE
+              // PRINT
+              // STATEMENTS
+              // THE
+              // CODE
+              // WILL
+              // NOT
+              // WORK
+              .getDriverA())[0],
+              drive.getReefClosestSetpoint(drive.getMT2Odometry(),
+                  OI.getDriverA())[1],
+              drive.getReefClosestSetpoint(drive.getMT2Odometry(),
+                  OI.getDriverA())[2]));
+          System.out.println(
+              "Elevator: " + (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters));
+          if ((drive.hitSetPointSemiGenerous(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+              .getDriverA())[0],
+              drive.getReefClosestSetpoint(drive.getMT2Odometry(),
+                  OI.getDriverA())[1],
+              drive.getReefClosestSetpoint(drive.getMT2Odometry(),
+                  OI.getDriverA())[2])
+              && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 3.0 / 39.37)
+              || OI.getDriverLB()) {
+            currentSuperState = SuperState.AUTO_SCORE_L2;
+            wantedSuperState = SuperState.AUTO_SCORE_L2;
+          } else {
+            currentSuperState = SuperState.AUTO_L2_PLACE;
+          }
+
+        } else if (DriverStation.isAutonomous())
+          currentSuperState = SuperState.IDLE;
+        else
+          currentSuperState = SuperState.DEFAULT;
         break;
       case AUTO_L3_PLACE:
         // System.out.println(
@@ -366,32 +445,83 @@ public class Superstructure extends SubsystemBase {
         // currentSuperState = SuperState.AUTO_L3_PLACE;
         // }
         // break;
-        if (drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
-            .getDriverA())[0],
-            drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
-                .getDriverA())[1],
-            drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI
-                .getDriverA())[2])
-            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 3.0 / 39.37) {
-          currentSuperState = SuperState.AUTO_SCORE_L3;
-          wantedSuperState = SuperState.AUTO_SCORE_L3;
-        } else {
-          currentSuperState = SuperState.AUTO_L3_PLACE;
-        }
+        if (manipulator.hasCoralSticky()) {
+          System.out.println("Drive: " + drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI // DO
+              // NOT
+              // COMMENT
+              // OUT
+              // THESE
+              // PRINT
+              // STATEMENTS
+              // THE
+              // CODE
+              // WILL
+              // NOT
+              // WORK
+              .getDriverA())[0],
+              drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
+                  OI.getDriverA())[1],
+              drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
+                  OI.getDriverA())[2]));
+          System.out.println(
+              "Elevator: " + (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters));
+          if ((drive.hitSetPointSemiGenerous(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
+              OI.getDriverA())[0],
+              drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
+                  OI.getDriverA())[1],
+              drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
+                  OI.getDriverA())[2])
+              && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 3.0 / 39.37)
+              || OI.getDriverLB()) {
+            currentSuperState = SuperState.AUTO_SCORE_L3;
+            wantedSuperState = SuperState.AUTO_SCORE_L3;
+          } else {
+            currentSuperState = SuperState.AUTO_L3_PLACE;
+          }
+
+        } else if (DriverStation.isAutonomous())
+          currentSuperState = SuperState.IDLE;
+        else
+          currentSuperState = SuperState.DEFAULT;
         break;
       case AUTO_L4_PLACE:
-        if (drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
-            .getDriverA())[0],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
-                .getDriverA())[1],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI
-                .getDriverA())[2])
-            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 3.0 / 39.37
-            && Math.abs(peripherals.getPigeonPitch()) < 2.0) {
-          currentSuperState = SuperState.AUTO_SCORE_L4;
-          wantedSuperState = SuperState.AUTO_SCORE_L4;
+        if (manipulator.hasCoralSticky() || DriverStation.isAutonomousEnabled()) {
+          System.out.println("Drive: " + drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI // DO
+              // NOT
+              // COMMENT
+              // OUT
+              // THESE
+              // PRINT
+              // STATEMENTS
+              // THE
+              // CODE
+              // WILL
+              // NOT
+              // WORK
+              .getDriverA())[0],
+              drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
+                  OI.getDriverA())[1],
+              drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
+                  OI.getDriverA())[2]));
+          System.out.println(
+              "Elevator: " + (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters));
+          if ((drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
+              OI.getDriverA())[0],
+              drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
+                  OI.getDriverA())[1],
+              drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
+                  OI.getDriverA())[2])
+              && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 3.0 / 39.37
+              && (Math.abs(peripherals.getPigeonPitch()) < 2.0 || true)) || OI.getDriverLB()) {
+            currentSuperState = SuperState.AUTO_SCORE_L4;
+            wantedSuperState = SuperState.AUTO_SCORE_L4;
+          } else {
+            currentSuperState = SuperState.AUTO_L4_PLACE;
+          }
+          // } else if (DriverStation.isAutonomous()) {
+          // currentSuperState = SuperState.IDLE;
         } else {
-          currentSuperState = SuperState.AUTO_L4_PLACE;
+          currentSuperState = SuperState.DEFAULT;
         }
         break;
       case L1_PLACE:
@@ -475,13 +605,24 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.FEEDER;
         break;
       case GROUND_CORAL_PICKUP_FRONT:
-        currentSuperState = SuperState.GROUND_CORAL_PICKUP_FRONT;
+        if (intake.hasCoral() || manipulator.getArmItem() == ArmItem.CORAL || continueFeeding) {
+          if (DriverStation.isAutonomous())
+            currentSuperState = SuperState.PASSOFF_IDLE;
+          else
+            currentSuperState = SuperState.DEFAULT;
+        } else {
+          currentSuperState = SuperState.GROUND_CORAL_PICKUP_FRONT;
+        }
         break;
       case GROUND_CORAL_PICKUP_BACK:
         currentSuperState = SuperState.GROUND_CORAL_PICKUP_BACK;
         break;
       case AUTO_GROUND_CORAL_PICKUP_FRONT:
-        currentSuperState = SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT;
+        if (intake.hasCoral() || manipulator.hasCoral() || continueFeeding) {
+          currentSuperState = SuperState.DEFAULT;
+        } else {
+          currentSuperState = SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT;
+        }
         break;
       case AUTO_GROUND_CORAL_PICKUP_BACK:
         currentSuperState = SuperState.AUTO_GROUND_CORAL_PICKUP_BACK;
@@ -502,11 +643,11 @@ public class Superstructure extends SubsystemBase {
         if (drive.hitSetPointGenerous(drive.getAlgaeClosestSetpoint(drive.getMT2Odometry())[0],
             drive.getAlgaeClosestSetpoint(drive.getMT2Odometry())[1],
             drive.getAlgaeClosestSetpoint(drive.getMT2Odometry())[2])
-            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kL2ALGAE.meters - 5.0 / 39.37) {
+            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kL2ALGAE.meters - 5.0 / 39.37
+            && Math.abs(pivot.getPivotPosition())
+                - Math.abs(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations) < 0.06) {
           currentSuperState = SuperState.AUTO_ALGAE_PICKUP_MORE;
           wantedSuperState = SuperState.AUTO_ALGAE_PICKUP_MORE;
-          // algaePickupTime = Timer.getFPGATimestamp();
-          // finishedAlgae1 = false;
         } else {
           currentSuperState = SuperState.AUTO_ALGAE_PICKUP;
         }
@@ -580,6 +721,12 @@ public class Superstructure extends SubsystemBase {
       case OUTAKE_IDLE:
         currentSuperState = SuperState.OUTAKE_IDLE;
         break;
+      case PASSOFF_IDLE:
+        currentSuperState = SuperState.PASSOFF_IDLE;
+        break;
+      case PASSOFF_OUTAKE_IDLE:
+        currentSuperState = SuperState.PASSOFF_OUTAKE_IDLE;
+        break;
       case MANUAL_PLACE:
         currentSuperState = SuperState.MANUAL_PLACE;
         break;
@@ -603,64 +750,6 @@ public class Superstructure extends SubsystemBase {
 
   }
 
-  // /**
-  // * This function handles the CYCLING state of the Superstructure subsystem.
-  // * In the CYCLING state, the drive subsystem is set to its default state.
-  // *
-  // * @return void - This function does not return any value.
-  // */
-  // public void handleCYCLINGState() {
-  // drive.setWantedState(DriveState.DEFAULT);
-  // elevator.setWantedState(ElevatorState.IDLE);
-  // }
-
-  // /**
-  // * This function handles the IDLE state of the Superstructure subsystem.
-  // * In the IDLE state, the drive subsystem is set to its IDLE state.
-  // *
-  // * @return void - This function does not return any value.
-  // */
-  // public void handleIDLEState() {
-  // drive.setWantedState(DriveState.IDLE);
-  // elevator.setWantedState(ElevatorState.IDLE);
-  // }
-
-  // public void handleElevatorOFFState() {
-  // elevator.setWantedState(ElevatorState.OFF);
-  // }
-
-  // public void handleElevatorMIDState() {
-  // elevator.setWantedState(ElevatorState.MID);
-  // }
-
-  // public void handleElevatorUPState() {
-  // elevator.setWantedState(ElevatorState.UP);
-  // }
-
-  // public void handleElevatorL2State() {
-  // elevator.setWantedState(ElevatorState.L2);
-  // }
-
-  // public void handeElevatorAlgaeState() {
-  // elevator.setWantedState(ElevatorState.ALGAE);
-  // }
-
-  // public void handleElevatorL3State() {
-  // elevator.setWantedState(ElevatorState.L3);
-  // }
-
-  // public void handleOutakingState() {
-  // intake.setWantedState(IntakeState.OUTAKE);
-  // }
-
-  // public void handleIntakingState() {
-  // intake.setWantedState(IntakeState.INTAKE);
-  // }
-
-  // public void handleIntakeDefaultState() {
-  // intake.setWantedState(IntakeState.DEFAULT);
-  // }
-
   public boolean placedCoralL4() {
     // return
     // drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry())[0],
@@ -670,9 +759,22 @@ public class Superstructure extends SubsystemBase {
     // &&
 
     // Pivot has abs to account for placing backwards
-    return Math
+    // double[] setpoint = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
+    // false);
+    System.out.println((Math
         .abs(Math.abs(pivot.getPivotPosition())
-            - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (20.0 / 360.0);
+            - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (10.0 / 360.0)
+        && drive.hitSetPointGenerous(
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[0],
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[1],
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[2])));
+    return (Math
+        .abs(Math.abs(pivot.getPivotPosition())
+            - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (10.0 / 360.0)
+        && drive.hitSetPointGenerous(
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[0],
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[1],
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[2]));
   }
 
   public boolean placedCoralL2() {
@@ -688,20 +790,6 @@ public class Superstructure extends SubsystemBase {
         .abs(Math.abs(pivot.getPivotPosition())
             - Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations) < (5.0 / 360.0);
   }
-  // public void handleDefaultState() {
-  // drive.setWantedState(DriveState.DEFAULT);
-  // if (Math.abs(pivot.getPivotPosition()) > 0.05) {
-  // elevator.setWantedState(ElevatorState.DEFAULT);
-  // } else {
-  // elevator.setWantedState(ElevatorState.OVER);
-  // }
-  // intake.setWantedState(IntakeState.DEFAULT);
-  // if (elevator.getElevatorPosition() > 10 / 39.37
-  // || (Math.abs(pivot.getPivotPosition()) > 0.05)) {
-  // pivot.setWantedState(PivotState.DEFAULT);
-  // }
-  // twist.setWantedState(TwistState.SIDE);
-  // }
 
   public boolean isClimbing = false;
 
@@ -709,39 +797,165 @@ public class Superstructure extends SubsystemBase {
     drive.setWantedState(DriveState.DEFAULT);
   }
 
+  private double zeroTime = Timer.getFPGATimestamp();
+  private boolean firstTimeZero = true;
+
+  public void handleZeroState() {
+    elevator.setWantedState(ElevatorState.ZERO);
+    intake.setWantedState(IntakeState.ZERO);
+    pivot.setWantedState(PivotState.DEFAULT);
+    twist.setWantedState(TwistState.SIDE);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
+    if (DriverStation.isAutonomousEnabled()) {
+      drive.setWantedState(DriveState.IDLE);
+    } else {
+      drive.setWantedState(DriveState.DEFAULT);
+    }
+  }
+
   public void handleDefaultState() {
     // peripherals.setBackCamPipline(0);
     lights.setWantedState(LightsState.DEFAULT);
     drive.setWantedState(DriveState.DEFAULT);
     // pivot.setWantedFlip(PivotFlip.FRONT);
-    if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
-      elevator.setWantedState(ElevatorState.DEFAULT);
+    // if ()
+    if (algaeMode) {
+      if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) > 90.0 / 360.0) {
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      } else {
+        elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+      }
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
+      intake.setWantedState(IntakeState.DEFAULT);
+      // if (isClimbing) {
+      // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
+      // } else {
+      if (Math.abs(twist.getTwistPosition()) < 30.0) {
+        pivot.setWantedState(PivotState.DEFAULT);
+        firstTimeDefault = false;
+      } else if (firstTimeDefault) {
+        pivot.setWantedState(PivotState.PREP);
+      }
+      // }
+
+      if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
+      }
+      // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      twist.setWantedState(TwistState.SIDE);
+    } else if (manipulator.hasCoralSticky()) {
+      // if (/* Math.abs(twist.getTwistPosition()) < 45 && */
+      // Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) > 90.0 / 360.0) {
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      } else {
+        elevator.setWantedState(ElevatorState.L2);
+      }
+      // } else {
+      // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+      // }
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
+
+      // if (isClimbing) {
+      // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
+      // } else {
+      if (Math.abs(twist.getTwistPosition()) < 30.0 || Math.abs(pivot.getPivotPosition()) > 60.0 / 360.0) {
+        pivot.setWantedState(PivotState.DEFAULT);
+        firstTimeDefault = false;
+      } else if (firstTimeDefault) {
+        pivot.setWantedState(PivotState.PREP);
+      }
+      intake.setWantedState(IntakeState.DEFAULT);
+      // }
+
+      // if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
+      // }
+      // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      twist.setWantedState(TwistState.SIDE);
     } else {
-      elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+      // Logger.recordOutput("Can Handoff", Math.abs(twist.getTwistPosition() + 90) <
+      // 10
+      // && Math.abs(pivot.getPivotPosition() -
+      // Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02
+      // && Math.abs(elevator.getElevatorPosition() -
+      // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
+      // Logger.recordOutput("Twist Correct", Math.abs(twist.getTwistPosition() + 90)
+      // < 10);
+      // Logger.recordOutput("Pivot Correct",
+      // Math.abs(pivot.getPivotPosition() -
+      // Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02);
+      // Logger.recordOutput("Elevator Correct",
+      // Math.abs(elevator.getElevatorPosition() -
+      // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
+      if (Math.abs(pivot.getPivotPosition()) > 25.0 / 360.0) {
+        twist.setWantedState(TwistState.UP);
+      } else {
+        twist.setWantedState(TwistState.SIDE);
+      }
+      // Wait for the elevator to come up to move the pivot
+      if (Math.abs(elevator.getElevatorPosition()) > 15.0 / 39.37) {
+        pivot.setWantedState(PivotState.HANDOFF);
+      }
+      if (Math.abs(elevator.getElevatorPosition()) < Constants.SetPoints.ElevatorPosition.kHANDOFF.meters
+          - (5.0 / 39.37)) {
+        pivot.setMaxPivotDegrees(
+            (39.37 * Math.abs(elevator.getElevatorPosition() - 15.0 / 360.0)) * 2.5 +
+                90.0);
+      } else {
+        pivot.setMaxPivotDegrees(180.0);
+      }
+      // If everything is in pre-handoff position and there is a coral to be picked
+      // up, move the elevator down to pick up.
+      if (Math.abs(twist.getTwistPosition() + 90) < 10
+          && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.05
+          && Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.05
+          && (intake.hasCoralSuperSticky())
+          && ((lastState == SuperState.AUTO_ALGAE_PICKUP || lastState == SuperState.AUTO_ALGAE_PICKUP_MORE
+              || lastState == SuperState.AUTO_ALGAE_PICKUP_MORE_MORE || lastState == SuperState.AUTO_FEEDER
+              || lastState == SuperState.AUTO_GROUND_CORAL_PICKUP_BACK
+              || lastState == SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT || lastState == SuperState.AUTO_NET
+              || lastState == SuperState.AUTO_NET_MORE || lastState == SuperState.AUTO_PROCESSOR
+              || lastState == SuperState.AUTO_PROCESSOR_MORE || lastState == SuperState.FEEDER
+              || lastState == SuperState.FEEDER_ALIGN || lastState == SuperState.FEEDER_AUTO
+              || lastState == SuperState.GROUND_ALGAE_PICKUP_BACK || lastState == SuperState.GROUND_ALGAE_PICKUP_FRONT
+              || lastState == SuperState.GROUND_CORAL_PICKUP_BACK || lastState == SuperState.GROUND_CORAL_PICKUP_FRONT
+              || lastState == SuperState.L2_ALGAE_PICKUP || lastState == SuperState.L3_ALGAE_PICKUP
+              || lastState == SuperState.LOLLIOP_PICKUP || lastState == SuperState.NET
+              || lastState == SuperState.PASSOFF_IDLE || lastState == SuperState.PASSOFF_OUTAKE_IDLE
+              || lastState == SuperState.PROCESSOR) || intakeHasCoral())) {
+        manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
+        elevator.setWantedState(ElevatorState.HANDOFF);
+      } else {
+        manipulator.setWantedState(ManipulatorState.DEFAULT);
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      }
+      // Once the elevator makes it down to the handoff position, outake into the arm
+      if ((Math.abs(twist.getTwistPosition() + 90) < 10
+          && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.05
+          && Math.abs(elevator.getElevatorPosition() - Constants.SetPoints.ElevatorPosition.kHANDOFF.meters) < 2.0
+              / 39.37
+          && Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.05)
+          || continueFeeding) {
+        intake.setWantedState(IntakeState.HANDOFF);
+        continueFeeding = true;
+      } else {
+        intake.setWantedState(IntakeState.DEFAULT);
+      }
+      // Timeout for the pass off
+      if (continueFeeding && handoffInitTime == 0.0) {
+        handoffInitTime = Timer.getFPGATimestamp();
+      } else {
+        if (Timer.getFPGATimestamp() - handoffInitTime > 0.1) {
+          continueFeeding = false;
+          handoffInitTime = 0.0;
+        }
+      }
     }
-    intake.setWantedState(IntakeState.DEFAULT);
-
-    // if (isClimbing) {
-    // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
-    // } else {
-    if (Math.abs(twist.getTwistPosition()) < 30.0) {
-      pivot.setWantedState(PivotState.DEFAULT);
-      firstTimeDefault = false;
-    } else if (firstTimeDefault) {
-      pivot.setWantedState(PivotState.PREP);
-    }
-    // }
-
-    if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
-    }
-    // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
-    twist.setWantedState(TwistState.SIDE);
     // }
     climber.setWantedState(ClimbState.IDLE);
   }
 
   public void handleAutoL1PlaceState() {
-    intake.inL1State = true;
+    manipulator.inL1State = true;
     lights.setWantedState(LightsState.PLACING);
     if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.05 || Math.hypot(OI.getDriverLeftX(),
         OI.getDriverLeftY()) > 0.05) {
@@ -750,7 +964,7 @@ public class Superstructure extends SubsystemBase {
       drive.setWantedState(DriveState.AUTO_L1);
     }
     elevator.setWantedState(ElevatorState.AUTO_L1);
-    intake.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     // System.out.println(drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
     // Math.toDegrees(drive.getReefClosestSetpointFrontOnly(drive.getMT2Odometry())[2])));
     if (drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
@@ -771,7 +985,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoL1PlaceMoreState() {
-    intake.inL1State = true;
+    manipulator.inL1State = true;
     lights.setWantedState(LightsState.PLACING);
     if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.05 || Math.hypot(OI.getDriverLeftX(),
         OI.getDriverLeftY()) > 0.05) {
@@ -780,7 +994,7 @@ public class Superstructure extends SubsystemBase {
       drive.setWantedState(DriveState.AUTO_L1_MORE);
     }
     elevator.setWantedState(ElevatorState.AUTO_L1);
-    intake.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     // System.out.println(drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
     // Math.toDegrees(drive.getReefClosestSetpointFrontOnly(drive.getMT2Odometry())[2])));
     if (drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
@@ -811,9 +1025,9 @@ public class Superstructure extends SubsystemBase {
     }
     if (Math.abs(pivot.getPivotPosition()) > 80.0 / 360.0
         && Math.abs(elevator.getElevatorPosition() - Constants.SetPoints.ELEVATOR_AUTO_L2_POSITION_M) < 0.1) {
-      intake.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
-      intake.setWantedState(IntakeState.DEFAULT);
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
     }
     if (Math.hypot(
         drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[0],
@@ -827,7 +1041,13 @@ public class Superstructure extends SubsystemBase {
         pivot.setWantedFlip(PivotFlip.BACK);
       }
       if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 10 / 39.37) {
-        pivot.setWantedState(PivotState.AUTO_L2);
+        if (drive.hitSetPointGenerous(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[1],
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2])) {
+          pivot.setWantedState(PivotState.AUTO_SCORE_L4_SLOW);
+        } else {
+          pivot.setWantedState(PivotState.AUTO_L2);
+        }
       }
       twist.setWantedState(TwistState.SIDE);
     }
@@ -842,9 +1062,9 @@ public class Superstructure extends SubsystemBase {
       drive.setWantedState(DriveState.L3_REEF);
     }
     if (Math.abs(pivot.getPivotPosition()) > 80.0 / 360.0) {
-      intake.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
-      intake.setWantedState(IntakeState.DEFAULT);
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
     }
     if (Math.hypot(
         drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[0],
@@ -858,66 +1078,24 @@ public class Superstructure extends SubsystemBase {
         pivot.setWantedFlip(PivotFlip.BACK);
       }
       if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 10 / 39.37) {
-        pivot.setWantedState(PivotState.AUTO_L3);
+        if (drive.hitSetPointGenerous(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[1],
+            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2])) {
+          pivot.setWantedState(PivotState.AUTO_SCORE_L4_SLOW);
+        } else {
+          pivot.setWantedState(PivotState.AUTO_L3);
+        }
       }
       twist.setWantedState(TwistState.SIDE);
     }
   }
 
-  // public void handleAutoL3PlaceState() {
-  // drive.setWantedState(DriveState.REEF);
-  // intake.setWantedState(IntakeState.DEFAULT);
-  // if (Math.hypot(
-  // drive.getMT2OdometryX() -
-  // drive.getReefClosestSetpoint(drive.getMT2Odometry())[0],
-  // drive.getMT2OdometryY() -
-  // drive.getReefClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
-  // && drive.getMT2OdometryAngle() -
-  // drive.getReefClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
-  // elevator.setWantedState(ElevatorState.AUTO_L3);
-  // if (drive.getAutoPlacementSideIsFront()) {
-  // pivot.setWantedFlip(PivotFlip.FRONT);
-  // } else {
-  // pivot.setWantedFlip(PivotFlip.BACK);
-  // }
-  // pivot.setWantedState(PivotState.AUTO_L23);
-  // twist.setWantedState(TwistState.SIDE);
-  // }
-  // }
-
-  // public void handleAutoL3PlaceState() {
-  // lights.setWantedState(LightsState.PLACING);
-  // pivot.setWantedFlip(PivotFlip.FRONT);
-  // drive.setWantedState(DriveState.L3_REEF);
-  // elevator.setWantedState(ElevatorState.AUTO_L3);
-  // intake.setWantedState(IntakeState.DEFAULT);
-  // if (elevator.getElevatorPosition() >
-  // Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 10 / 39.37) {
-  // pivot.setWantedState(PivotState.AUTO_L3);
-  // }
-  // twist.setWantedState(TwistState.SIDE);
-  // if (Math.hypot(
-  // drive.getMT2OdometryX() -
-  // drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[0],
-  // drive.getMT2OdometryY() -
-  // drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[1]) < 1.5
-  // && drive.getMT2OdometryAngle() -
-  // drive.getReefL3ClosestSetpoint(drive.getMT2Odometry())[2] < 1) {
-  // elevator.setWantedState(ElevatorState.AUTO_L3);
-  // if (drive.getAutoPlacementSideIsFront()) {
-  // pivot.setWantedFlip(PivotFlip.FRONT);
-  // } else {
-  // pivot.setWantedFlip(PivotFlip.BACK);
-  // }
-  // if (elevator.getElevatorPosition() >
-  // Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 10 / 39.37) {
-  // pivot.setWantedState(PivotState.AUTO_L3);
-  // }
-  // twist.setWantedState(TwistState.SIDE);
-  // }
-  // }
-
   public void handleAutoL4PlaceState() {
+    // if (drive.getAutoPlacementSideIsFront()) {
+    // intake.setWantedState(IntakeState.L4);
+    // } else {
+    // intake.setWantedState(IntakeState.DEFAULT);
+    // }
     if (OI.driverLB.getAsBoolean()) {
       setWantedState(SuperState.AUTO_SCORE_L4);
     }
@@ -928,7 +1106,7 @@ public class Superstructure extends SubsystemBase {
     } else {
       drive.setWantedState(DriveState.L4_REEF);
     }
-    intake.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (Math.hypot(
         drive.getMT2OdometryX() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[0],
         drive.getMT2OdometryY() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[1]) < 0.8
@@ -956,11 +1134,11 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleL1PlaceState() {
-    intake.inL1State = true;
+    manipulator.inL1State = true;
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L1);
-    intake.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     pivot.setWantedState(PivotState.L1);
     if (Math.abs(pivot.getPivotPosition()) > 30.0 / 360.0) {
       twist.setWantedState(TwistState.UP);
@@ -971,7 +1149,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L2);
-    intake.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (OI.driverLB.getAsBoolean()) {
       pivot.setWantedState(PivotState.MANUAL_PLACE);
     } else if (OI.driverRB.getAsBoolean()) {
@@ -986,7 +1164,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L3);
-    intake.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (OI.driverLB.getAsBoolean()) {
       pivot.setWantedState(PivotState.MANUAL_PLACE);
     } else if (OI.driverRB.getAsBoolean()) {
@@ -1001,7 +1179,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.L4);
-    intake.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (OI.driverLB.getAsBoolean()) {
       pivot.setWantedState(PivotState.MANUAL_PLACE);
     } else if (OI.driverRB.getAsBoolean()) {
@@ -1016,16 +1194,19 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.PROCESSOR);
-    intake.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     pivot.setWantedState(PivotState.PROCESSOR);
     twist.setWantedState(TwistState.UP);
   }
 
   public void handleNetState() {
     lights.setWantedState(LightsState.PLACING);
-    drive.setWantedState(DriveState.DEFAULT);
+    if (DriverStation.isTeleopEnabled())
+      drive.setWantedState(DriveState.DEFAULT);
+    else
+      drive.setWantedState(DriveState.IDLE);
     elevator.setWantedState(ElevatorState.NET);
-    intake.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     pivot.setWantedFlip(PivotFlip.FRONT);
     pivot.setWantedState(PivotState.NET);
     if (elevator.getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
@@ -1037,7 +1218,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.PROCESSOR);
     elevator.setWantedState(ElevatorState.PROCESSOR);
-    intake.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (drive.getAutoPlacementSideIsFront()) {
       pivot.setWantedFlip(PivotFlip.FRONT);
       twist.setWantedState(TwistState.UP);
@@ -1052,7 +1233,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.PROCESSOR_MORE);
     elevator.setWantedState(ElevatorState.PROCESSOR);
-    intake.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (drive.getAutoPlacementSideIsFront()) {
       pivot.setWantedFlip(PivotFlip.FRONT);
       twist.setWantedState(TwistState.UP);
@@ -1066,7 +1247,7 @@ public class Superstructure extends SubsystemBase {
   public void handleOutakeDriveState() {
     lights.setWantedState(LightsState.SCORING);
     drive.setWantedState(DriveState.DEFAULT);
-    intake.setWantedState(IntakeState.OUTAKE);
+    manipulator.setWantedState(ManipulatorState.OUTAKE);
   }
 
   public void handleAutoNetState() {
@@ -1093,7 +1274,7 @@ public class Superstructure extends SubsystemBase {
         elevator.setWantedState(ElevatorState.NET);
       }
     }
-    intake.setWantedState(IntakeState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.DEFAULT);
     if (!drive.getAutoPlacementSideIsFront()) {
       pivot.setWantedFlip(PivotFlip.BACK);
       if (elevator.getElevatorPosition() > (Constants.inchesToMeters(10.0))) {
@@ -1107,6 +1288,9 @@ public class Superstructure extends SubsystemBase {
     }
     pivot.setWantedState(PivotState.NET);
   }
+
+  private double netHitTime = Timer.getFPGATimestamp();
+  private boolean netHit = false;
 
   public void handleAutoNetStateMore() {
     lights.setWantedState(LightsState.PLACING);
@@ -1135,7 +1319,21 @@ public class Superstructure extends SubsystemBase {
         elevator.setWantedState(ElevatorState.NET);
       }
     }
-    intake.setWantedState(IntakeState.DEFAULT);
+    if (Math.abs(drive.getMT2OdometryX() - Constants.Physical.FIELD_LENGTH / 2) < Constants.Reef.NET_X_OFFSET_MORE
+        + 2.0) {
+      if (netHit == false) {
+        netHitTime = Timer.getFPGATimestamp();
+        netHit = true;
+      }
+      if (netHit && Timer.getFPGATimestamp() - netHitTime > 0.5) {
+        manipulator.setWantedState(ManipulatorState.OUTAKE);
+      } else {
+
+        manipulator.setWantedState(ManipulatorState.DEFAULT);
+      }
+    } else {
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
+    }
     if (!drive.getAutoPlacementSideIsFront()) {
       pivot.setWantedFlip(PivotFlip.BACK);
       twist.setWantedState(TwistState.DOWN);
@@ -1149,7 +1347,7 @@ public class Superstructure extends SubsystemBase {
   public void handleFeederAlignState() {
     lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.FEEDER_ALIGN);
-    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     if (drive.getFieldSide() == "red") { // red side
       if (drive.getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
         if (!(Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 324
@@ -1287,7 +1485,7 @@ public class Superstructure extends SubsystemBase {
   public void handleFeederState() {
     lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.DEFAULT);
-    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     if (Math.abs(pivot.getPivotPosition()) > 10.0 / 360.0) {
       twist.setWantedState(TwistState.UP);
     }
@@ -1301,7 +1499,7 @@ public class Superstructure extends SubsystemBase {
     // an actual field
     lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.FEEDER);
-    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     if (drive.getFieldSide() == "red") { // red side
       if (drive.getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
         if (!(Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 324
@@ -1440,12 +1638,25 @@ public class Superstructure extends SubsystemBase {
    */
   public void handleGroundCoralPickupFrontState() {
     lights.setWantedState(LightsState.INTAKING);
-    drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
-    intake.setWantedState(IntakeState.CORAL_INTAKE);
-    pivot.setWantedState(PivotState.GROUND_CORAL_FRONT);
-    if (pivot.getPivotPosition() > 15.0 / 360.0) {
-      twist.setWantedState(TwistState.UP);
+    if (DriverStation.isTeleopEnabled())
+      drive.setWantedState(DriveState.DEFAULT);
+    else
+      drive.setWantedState(DriveState.IDLE);
+    intake.setWantedState(IntakeState.INTAKING);
+    if (algaeMode) {
+      pivot.setWantedState(PivotState.DEFAULT);
+      if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) > 90.0 / 360.0) {
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      } else {
+        elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+      }
+    } else {
+      pivot.setWantedState(PivotState.HANDOFF);
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
+      elevator.setWantedState(ElevatorState.PREHANDOFF);
+      if (pivot.getPivotPosition() > 15.0 / 360.0) {
+        twist.setWantedState(TwistState.UP);
+      }
     }
   }
 
@@ -1453,7 +1664,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
-    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
     if (pivot.getPivotPosition() < -15.0 / 360.0) {
       twist.setWantedState(TwistState.DOWN);
@@ -1462,21 +1673,16 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoGroundCoralPickupFrontState() {
     lights.setWantedState(LightsState.INTAKING);
-    if (Math.abs(pivot.getPivotPosition()) > 0.25) {
-      drive.setWantedState(DriveState.PIECE_PICKUP);
-    } else {
-      if (DriverStation.isAutonomousEnabled()) {
-        drive.setWantedState(DriveState.STOP);
-      } else {
-        drive.setWantedState(DriveState.DEFAULT);
-      }
-    }
-    elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
-    intake.setWantedState(IntakeState.CORAL_INTAKE);
-    pivot.setWantedState(PivotState.GROUND_CORAL_FRONT);
-    if (pivot.getPivotPosition() > 15.0 / 360.0) {
-      twist.setWantedState(TwistState.UP);
-    }
+    // if (Math.abs(intake.getPosition()) > 0.25) {
+    drive.setWantedState(DriveState.PIECE_PICKUP);
+    // } else {
+    // if (DriverStation.isAutonomousEnabled()) {
+    // drive.setWantedState(DriveState.STOP);
+    // } else {
+    // drive.setWantedState(DriveState.DEFAULT);
+    // }
+    // }
+    intake.setWantedState(IntakeState.INTAKING);
   }
 
   public void handleAutoGroundCoralPickupBackState() {
@@ -1491,7 +1697,7 @@ public class Superstructure extends SubsystemBase {
       }
     }
     elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
-    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     pivot.setWantedState(PivotState.GROUND_CORAL_BACK);
     if (pivot.getPivotPosition() < -15.0 / 360.0) {
       twist.setWantedState(TwistState.DOWN);
@@ -1499,22 +1705,22 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleGroundAlgaePickupFrontState() {
-    lights.setWantedState(LightsState.INTAKING);
-    drive.setWantedState(DriveState.DEFAULT);
-    elevator.setWantedState(ElevatorState.GROUND_ALGAE_INTAKE);
-    intake.setWantedState(IntakeState.ALGAE_INTAKE);
-    pivot.setWantedFlip(PivotFlip.FRONT);
-    pivot.setWantedState(PivotState.GROUND_ALGAE);
-    if (Math.abs(pivot.getPivotPosition()) > 10.0 / 360.0) {
-      twist.setWantedState(TwistState.UP);
-    }
+    // lights.setWantedState(LightsState.INTAKING);
+    // drive.setWantedState(DriveState.DEFAULT);
+    // elevator.setWantedState(ElevatorState.GROUND_ALGAE_INTAKE);
+    // manipulator.setWantedState(ManipulatorState.ALGAE_INTAKE);
+    // pivot.setWantedFlip(PivotFlip.FRONT);
+    // pivot.setWantedState(PivotState.GROUND_ALGAE);
+    // if (Math.abs(pivot.getPivotPosition()) > 10.0 / 360.0) {
+    // twist.setWantedState(TwistState.UP);
+    // }
   }
 
   public void handleGroundAlgaePickupBackState() {
     lights.setWantedState(LightsState.INTAKING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.GROUND_ALGAE_INTAKE);
-    intake.setWantedState(IntakeState.ALGAE_INTAKE);
+    manipulator.setWantedState(ManipulatorState.ALGAE_INTAKE);
     pivot.setWantedFlip(PivotFlip.BACK);
     pivot.setWantedState(PivotState.GROUND_ALGAE);
     if (Math.abs(pivot.getPivotPosition()) < 10.0 / 360.0) {
@@ -1524,28 +1730,34 @@ public class Superstructure extends SubsystemBase {
 
   public void handleL2AlgaePickupState() {
     lights.setWantedState(LightsState.FEEDER);
-    drive.setWantedState(DriveState.DEFAULT);
+    if (DriverStation.isTeleopEnabled())
+      drive.setWantedState(DriveState.DEFAULT);
+    else
+      drive.setWantedState(DriveState.IDLE);
     elevator.setWantedState(ElevatorState.L2_ALGAE);
-    intake.setWantedState(IntakeState.ALGAE_INTAKE);
-    pivot.setWantedFlip(PivotFlip.FRONT);
+    manipulator.setWantedState(ManipulatorState.ALGAE_INTAKE);
+    pivot.setWantedFlip(PivotFlip.BACK);
     pivot.setWantedState(PivotState.REEF_ALGAE);
-    twist.setWantedState(TwistState.DOWN);
+    twist.setWantedState(TwistState.UP);
   }
 
   public void handleL3AlgaePickupState() {
     lights.setWantedState(LightsState.FEEDER);
-    drive.setWantedState(DriveState.DEFAULT);
+    if (DriverStation.isTeleopEnabled())
+      drive.setWantedState(DriveState.DEFAULT);
+    else
+      drive.setWantedState(DriveState.IDLE);
     elevator.setWantedState(ElevatorState.L3_ALGAE);
-    intake.setWantedState(IntakeState.ALGAE_INTAKE);
-    pivot.setWantedFlip(PivotFlip.FRONT);
+    manipulator.setWantedState(ManipulatorState.ALGAE_INTAKE);
+    pivot.setWantedFlip(PivotFlip.BACK);
     pivot.setWantedState(PivotState.REEF_ALGAE);
-    twist.setWantedState(TwistState.DOWN);
+    twist.setWantedState(TwistState.UP);
   }
 
   public void handleAutoAlgaePickupState() {
     lights.setWantedState(LightsState.PLACING);
     drive.setWantedState(DriveState.ALGAE);
-    intake.setWantedState(IntakeState.ALGAE_INTAKE);
+    manipulator.setWantedState(ManipulatorState.ALGAE_INTAKE);
     if (drive.isGoingForL3Algae()) {
       elevator.setWantedState(ElevatorState.L3_ALGAE);
     } else {
@@ -1567,7 +1779,7 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoAlgaePickupMoreState() {
     lights.setWantedState(LightsState.FEEDER);
-    if (intake.getIntakeItem() == IntakeItem.NONE
+    if (manipulator.getArmItem() == ArmItem.NONE
         && Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) < 0.1 && Math
             .hypot(OI.getDriverRightX(), OI.getDriverRightY()) < 0.1) {
       drive.setWantedState(DriveState.ALGAE_MORE);
@@ -1599,6 +1811,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.CLIMB_DEPLOY);
     climber.setWantedState(ClimbState.EXTENDING);
     pivot.setWantedState(PivotState.CLIMB);
+    intake.setWantedState(IntakeState.DOWN);
     // peripherals.setBackCamPipline(1);
   }
 
@@ -1606,21 +1819,27 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.CLIMB);
     climber.setWantedState(ClimbState.RETRACTING);
     pivot.setWantedState(PivotState.CLIMB);
+    if (Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN) < 0.1) {
+      elevator.setWantedState(ElevatorState.DEFAULT);
+      twist.setWantedState(TwistState.SIDE);
+    }
+    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleClimberIdleState() {
     lights.setWantedState(LightsState.CLIMB_IDLE);
     climber.setWantedState(ClimbState.IDLE);
     pivot.setWantedState(PivotState.CLIMB);
+    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleOutakeState() {
     lights.setWantedState(LightsState.SCORING);
-    intake.setWantedState(IntakeState.OUTAKE);
+    manipulator.setWantedState(ManipulatorState.OUTAKE);
   }
 
   public void handleAutoL1ScoreState() {
-    intake.inL1State = true;
+    manipulator.inL1State = true;
     // lights.setWantedState(LightsState.SCORING);
     // drive.setWantedState(DriveState.DEFAULT);
     // intake.setWantedState(IntakeState.OUTAKE);
@@ -1637,11 +1856,11 @@ public class Superstructure extends SubsystemBase {
       // drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[1],
       // drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2]))
       // {
-      intake.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
       // } else {
       // intake.setWantedState(IntakeState.OFF);
       // }
-      if (intake.getIntakeItem() == IntakeItem.NONE && !DriverStation.isAutonomousEnabled()) {
+      if (manipulator.getArmItem() == ArmItem.NONE && !DriverStation.isAutonomousEnabled()) {
         drive.setWantedState(DriveState.REEF_MORE);
         // elevator.setWantedState(ElevatorState.DEFAULT);
       } else {
@@ -1673,7 +1892,9 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoL2ScoreState() {
     lights.setWantedState(LightsState.SCORING);
-    if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 15.0 / 39.37) {
+    if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 10.0 / 39.37
+        || drive.hitSetPointSemiGenerous(drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[0],
+            drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[1], drive.getMT2OdometryAngle())) {
       pivot.setWantedState(PivotState.AUTO_SCORE_L2);
     } else {
       pivot.setWantedState(PivotState.DEFAULT);
@@ -1689,23 +1910,27 @@ public class Superstructure extends SubsystemBase {
     if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
         OI.getDriverLeftY()) > 0.25) {
       drive.setWantedState(DriveState.DEFAULT);
-      intake.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
-          - 15.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
-        intake.setWantedState(IntakeState.OUTAKE);
+          - 22.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+        manipulator.setWantedState(ManipulatorState.OUTAKE);
       } else {
-        intake.setWantedState(IntakeState.OFF);
+        manipulator.setWantedState(ManipulatorState.OFF);
       }
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
-          - 15.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
-        drive.setWantedState(DriveState.REEF_MORE);
+          - 25.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+        if (drive.distanceFromCenterOfReef() > 60.0 / 39.37) {
+          drive.setWantedState(DriveState.REEF_MORE);
+        } else {
+          drive.setWantedState(DriveState.BACK);
+        }
       } else {
         drive.setWantedState(DriveState.DEFAULT);
       }
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
           - 15.0 / 360.0) {
-        elevator.setWantedState(ElevatorState.AUTO_L2);
+        elevator.setWantedState(ElevatorState.AUTO_SCORE_L2);
       }
     }
   }
@@ -1743,7 +1968,9 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoL3ScoreState() {
     lights.setWantedState(LightsState.SCORING);
-    if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 15.0 / 39.37) {
+    if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 10.0 / 39.37 || drive
+        .hitSetPointSemiGenerous(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), false)[0],
+            drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), false)[1], drive.getMT2OdometryAngle())) {
       pivot.setWantedState(PivotState.AUTO_SCORE_L3);
     } else {
       pivot.setWantedState(PivotState.DEFAULT);
@@ -1759,16 +1986,16 @@ public class Superstructure extends SubsystemBase {
     if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
         OI.getDriverLeftY()) > 0.25) {
       drive.setWantedState(DriveState.DEFAULT);
-      intake.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations
-          - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
-        intake.setWantedState(IntakeState.OUTAKE);
+          - 25.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+        manipulator.setWantedState(ManipulatorState.OUTAKE);
       } else {
-        intake.setWantedState(IntakeState.OFF);
+        manipulator.setWantedState(ManipulatorState.OFF);
       }
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations
-          - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+          - 25.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
         drive.setWantedState(DriveState.REEF_MORE);
         elevator.setWantedState(ElevatorState.AUTO_L3);
       } else {
@@ -1787,11 +2014,18 @@ public class Superstructure extends SubsystemBase {
   private boolean hasPlaced = false;
 
   public void handleAutoL4ScoreState() {
+    // if (drive.getAutoPlacementSideIsFront()) {
+    // intake.setWantedState(IntakeState.L4);
+    // } else {
+    intake.setWantedState(IntakeState.DEFAULT);
+    // }
     lights.setWantedState(LightsState.SCORING);
     if (OI.operatorLT.getAsBoolean() && OI.operatorRT.getAsBoolean()) {
       drive.setWantedState(DriveState.DEFAULT);
     } else {
-      if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 15.0 / 39.37) {
+      if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 20.0 / 39.37 || drive
+          .hitSetPointUltraGenerous(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[0],
+              drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[1], drive.getMT2OdometryAngle())) {
         pivot.setWantedState(PivotState.AUTO_SCORE_L4);
       } else {
         pivot.setWantedState(PivotState.DEFAULT);
@@ -1808,27 +2042,29 @@ public class Superstructure extends SubsystemBase {
       if (drive.hitSetPointGenerous(drive.getReefMoreClosestSetpoint(drive.getMT2Odometry())[0],
           drive.getReefMoreClosestSetpoint(drive.getMT2Odometry())[1],
           drive.getReefMoreClosestSetpoint(drive.getMT2Odometry())[2])) {
-        setWantedState(SuperState.DEFAULT);
+        if (DriverStation.isTeleopEnabled()) {
+          setWantedState(SuperState.DEFAULT);
+        }
       }
 
       if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
           OI.getDriverLeftY()) > 0.25) {
         drive.setWantedState(DriveState.DEFAULT);
-        intake.setWantedState(IntakeState.OUTAKE);
+        manipulator.setWantedState(ManipulatorState.OUTAKE);
       } else {
         if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations
-            - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+            - 15.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
           hasPlaced = true;
           drive.setWantedState(DriveState.REEF_MORE);
-          intake.setWantedState(IntakeState.OUTAKE);
-          elevator.setWantedState(ElevatorState.DEFAULT);
+          manipulator.setWantedState(ManipulatorState.OUTAKE);
+          elevator.setWantedState(ElevatorState.PREHANDOFF);
         } else {
           if (hasPlaced) {
             drive.setWantedState(DriveState.DEFAULT);
           } else {
             drive.setWantedState(DriveState.L4_REEF);
           }
-          intake.setWantedState(IntakeState.OFF);
+          manipulator.setWantedState(ManipulatorState.OFF);
         }
       }
     }
@@ -1838,7 +2074,7 @@ public class Superstructure extends SubsystemBase {
     lights.setWantedState(LightsState.SCORING);
     drive.setWantedState(DriveState.DEFAULT);
     elevator.setWantedState(ElevatorState.SCORE_L1);
-    intake.setWantedState(IntakeState.OUTAKE);
+    manipulator.setWantedState(ManipulatorState.OUTAKE);
     pivot.setWantedState(PivotState.SCORE_L1);
   }
 
@@ -1853,9 +2089,9 @@ public class Superstructure extends SubsystemBase {
     // } else {
     if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
         OI.getDriverLeftY()) > 0.25) {
-      intake.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
-      intake.setWantedState(IntakeState.OFF);
+      manipulator.setWantedState(ManipulatorState.OFF);
     }
     // }
     pivot.setWantedState(PivotState.SCORE_L23);
@@ -1872,9 +2108,9 @@ public class Superstructure extends SubsystemBase {
     // } else {
     if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
         OI.getDriverLeftY()) > 0.25) {
-      intake.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
-      intake.setWantedState(IntakeState.OFF);
+      manipulator.setWantedState(ManipulatorState.OFF);
     } // }
     pivot.setWantedState(PivotState.SCORE_L23);
   }
@@ -1892,50 +2128,314 @@ public class Superstructure extends SubsystemBase {
     // } else {
     if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.25 || Math.hypot(OI.getDriverLeftX(),
         OI.getDriverLeftY()) > 0.25) {
-      intake.setWantedState(IntakeState.OUTAKE);
+      manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
-      intake.setWantedState(IntakeState.OFF);
+      manipulator.setWantedState(ManipulatorState.OFF);
     } // }
   }
 
   public void handleIdleState() {
+    intake.setWantedState(IntakeState.DEFAULT);
+    if (Math.abs(twist.getTwistPosition()) < 30.0 || Math.abs(pivot.getPivotPosition()) > 60.0 / 360.0) {
+      pivot.setWantedState(PivotState.DEFAULT);
+      firstTimeDefault = false;
+    } else if (firstTimeDefault) {
+      pivot.setWantedState(PivotState.PREP);
+    }
+    twist.setWantedState(TwistState.SIDE);
+    elevator.setWantedState(ElevatorState.DEFAULT);
+    drive.setWantedState(DriveState.IDLE);
+    lights.setWantedState(LightsState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
+    climber.setWantedState(ClimbState.IDLE);
+  }
+
+  public void handlePassoffIdleState() {
+    // peripherals.setBackCamPipline(0);
     lights.setWantedState(LightsState.DEFAULT);
     drive.setWantedState(DriveState.IDLE);
     // pivot.setWantedFlip(PivotFlip.FRONT);
-    // if (twist.getTwistPosition() < 45) {
-    elevator.setWantedState(ElevatorState.DEFAULT);
+    // if ()
+    // if (algaeMode) {
+    // if (/* Math.abs(twist.getTwistPosition()) < 45 && */
+    // Math.abs(pivot.getPivotPosition()) > 90.0 / 360.0) {
+    // elevator.setWantedState(ElevatorState.PREHANDOFF);
     // } else {
     // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
     // }
-    intake.setWantedState(IntakeState.DEFAULT);
-    if (Math.abs(twist.getTwistPosition()) < 15.0) {
-      pivot.setWantedState(PivotState.DEFAULT);
+    // manipulator.setWantedState(ManipulatorState.DEFAULT);
+    // intake.setWantedState(IntakeState.DEFAULT);
+    // // if (isClimbing) {
+    // // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
+    // // } else {
+    // if (Math.abs(twist.getTwistPosition()) < 30.0) {
+    // pivot.setWantedState(PivotState.DEFAULT);
+    // firstTimeDefault = false;
+    // } else if (firstTimeDefault) {
+    // pivot.setWantedState(PivotState.PREP);
+    // }
+    // // }
+
+    // if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
+    // }
+    // // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+    // twist.setWantedState(TwistState.SIDE);
+    // } else
+    if (manipulator.hasCoralSticky()) {
+      // if (/* Math.abs(twist.getTwistPosition()) < 45 && */
+      // Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) > 90.0 / 360.0) {
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      } else {
+        elevator.setWantedState(ElevatorState.L2);
+      }
+      // } else {
+      // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+      // }
+      manipulator.setWantedState(ManipulatorState.DEFAULT);
+
+      // if (isClimbing) {
+      // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
+      // } else {
+      if (Math.abs(twist.getTwistPosition()) < 30.0 || Math.abs(pivot.getPivotPosition()) > 60.0 / 360.0) {
+        pivot.setWantedState(PivotState.DEFAULT);
+        firstTimeDefault = false;
+      } else if (firstTimeDefault) {
+        pivot.setWantedState(PivotState.PREP);
+      }
+      intake.setWantedState(IntakeState.DEFAULT);
+      // }
+
+      // if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
+      // }
+      // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      twist.setWantedState(TwistState.SIDE);
+    } else {
+      // Logger.recordOutput("Can Handoff", Math.abs(twist.getTwistPosition() + 90) <
+      // 10
+      // && Math.abs(pivot.getPivotPosition() -
+      // Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02
+      // && Math.abs(elevator.getElevatorPosition() -
+      // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
+      // Logger.recordOutput("Twist Correct", Math.abs(twist.getTwistPosition() + 90)
+      // < 10);
+      // Logger.recordOutput("Pivot Correct",
+      // Math.abs(pivot.getPivotPosition() -
+      // Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02);
+      // Logger.recordOutput("Elevator Correct",
+      // Math.abs(elevator.getElevatorPosition() -
+      // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
+      if (Math.abs(pivot.getPivotPosition()) > 25.0 / 360.0) {
+        twist.setWantedState(TwistState.UP);
+      } else {
+        twist.setWantedState(TwistState.SIDE);
+      }
+      // Wait for the elevator to come up to move the pivot
+      if (Math.abs(elevator.getElevatorPosition()) > 15.0 / 39.37) {
+        pivot.setWantedState(PivotState.HANDOFF);
+      }
+      if (Math.abs(elevator.getElevatorPosition()) < Constants.SetPoints.ElevatorPosition.kHANDOFF.meters
+          - (5.0 / 39.37)) {
+        pivot.setMaxPivotDegrees(
+            (39.37 * Math.abs(elevator.getElevatorPosition() - 15.0 / 360.0)) * 3 + 90.0);
+      } else {
+        pivot.setMaxPivotDegrees(180.0);
+      }
+      // If everything is in pre-handoff position and there is a coral to be picked
+      // up, move the elevator down to pick up.
+      if (Math.abs(twist.getTwistPosition() + 90) < 10
+          && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.05
+          && Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.05
+          && (intake.hasCoralSuperSticky())) {
+        manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
+        elevator.setWantedState(ElevatorState.HANDOFF);
+      } else {
+        manipulator.setWantedState(ManipulatorState.DEFAULT);
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      }
+      // Once the elevator makes it down to the handoff position, outake into the arm
+      if ((Math.abs(twist.getTwistPosition() + 90) < 10
+          && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.05
+          && Math.abs(elevator.getElevatorPosition() - Constants.SetPoints.ElevatorPosition.kHANDOFF.meters) < 2.0
+              / 39.37
+          && Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.05)
+          || continueFeeding) {
+        intake.setWantedState(IntakeState.HANDOFF);
+        continueFeeding = true;
+      } else {
+        intake.setWantedState(IntakeState.DEFAULT);
+      }
+      // Timeout for the pass off
+      if (continueFeeding && handoffInitTime == 0.0) {
+        handoffInitTime = Timer.getFPGATimestamp();
+      } else {
+        if (Timer.getFPGATimestamp() - handoffInitTime > 0.1) {
+          continueFeeding = false;
+          handoffInitTime = 0.0;
+        }
+      }
     }
-    twist.setWantedState(TwistState.SIDE);
+    // }
     climber.setWantedState(ClimbState.IDLE);
   }
 
   public void handleOutakeIdleState() {
-    intake.setWantedState(IntakeState.OUTAKE);
-    if (!outakeIdleInit) {
-      outakeIdleInitTime = Timer.getFPGATimestamp();
-      outakeIdleInit = true;
-    }
-    if (Timer.getFPGATimestamp() - outakeIdleInitTime > 0.25) {
-      lights.setWantedState(LightsState.DEFAULT);
-      drive.setWantedState(DriveState.IDLE);
-      // pivot.setWantedFlip(PivotFlip.FRONT);
-      if (twist.getTwistPosition() < 45) {
-        elevator.setWantedState(ElevatorState.DEFAULT);
-      } else {
-        elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
-      }
-      if (Math.abs(twist.getTwistPosition()) < 15 && elevator.getElevatorPosition() < Constants.inchesToMeters(48.0)) {
+    intake.setWantedState(IntakeState.DEFAULT);
+    if (elevator.getElevatorPosition() < Constants.inchesToMeters(56.0)) {
+      if (Math.abs(twist.getTwistPosition()) < 30.0 || Math.abs(pivot.getPivotPosition()) > 60.0 / 360.0) {
         pivot.setWantedState(PivotState.DEFAULT);
+        firstTimeDefault = false;
+      } else if (firstTimeDefault) {
+        pivot.setWantedState(PivotState.PREP);
       }
-      twist.setWantedState(TwistState.SIDE);
-      climber.setWantedState(ClimbState.IDLE);
     }
+    twist.setWantedState(TwistState.SIDE);
+    elevator.setWantedState(ElevatorState.DEFAULT);
+    drive.setWantedState(DriveState.IDLE);
+    lights.setWantedState(LightsState.DEFAULT);
+    manipulator.setWantedState(ManipulatorState.OUTAKE);
+    climber.setWantedState(ClimbState.IDLE);
+  }
+
+  public void handlePassOffIdleOutakeState() {
+
+    // peripherals.setBackCamPipline(0);
+    lights.setWantedState(LightsState.DEFAULT);
+    drive.setWantedState(DriveState.IDLE);
+    // pivot.setWantedFlip(PivotFlip.FRONT);
+    // if ()
+    // if (algaeMode) {
+    // if (/* Math.abs(twist.getTwistPosition()) < 45 && */
+    // Math.abs(pivot.getPivotPosition()) > 90.0 / 360.0) {
+    // elevator.setWantedState(ElevatorState.PREHANDOFF);
+    // } else {
+    // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+    // }
+    // manipulator.setWantedState(ManipulatorState.DEFAULT);
+    // intake.setWantedState(IntakeState.DEFAULT);
+    // // if (isClimbing) {
+    // // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
+    // // } else {
+    // if (Math.abs(twist.getTwistPosition()) < 30.0) {
+    // pivot.setWantedState(PivotState.DEFAULT);
+    // firstTimeDefault = false;
+    // } else if (firstTimeDefault) {
+    // pivot.setWantedState(PivotState.PREP);
+    // }
+    // // }
+
+    // if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
+    // }
+    // // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+    // twist.setWantedState(TwistState.SIDE);
+    // } else
+    if (manipulator.hasCoralSticky()) {
+      // if (/* Math.abs(twist.getTwistPosition()) < 45 && */
+      // Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      if (/* Math.abs(twist.getTwistPosition()) < 45 && */ Math.abs(pivot.getPivotPosition()) > 90.0 / 360.0) {
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      } else {
+        elevator.setWantedState(ElevatorState.L2);
+      }
+      // } else {
+      // elevator.setWantedState(ElevatorState.GROUND_CORAL_INTAKE);
+      // }
+      if (elevator.getElevatorPosition() < Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 15.0 / 39.37) {
+        manipulator.setWantedState(ManipulatorState.DEFAULT);
+      } else {
+        manipulator.setWantedState(ManipulatorState.OUTAKE);
+      }
+
+      // if (isClimbing) {
+      // pivot.setWantedState(PivotState.DEFAULT_CLIMB);
+      // } else {
+      if (Math.abs(twist.getTwistPosition()) < 30.0 || Math.abs(pivot.getPivotPosition()) > 60.0 / 360.0) {
+        pivot.setWantedState(PivotState.DEFAULT);
+        firstTimeDefault = false;
+      } else if (firstTimeDefault) {
+        pivot.setWantedState(PivotState.PREP);
+      }
+      intake.setWantedState(IntakeState.DEFAULT);
+      // }
+
+      // if (Math.abs(pivot.getPivotPosition()) > 40.0 / 360.0) {
+      // }
+      // if (Math.abs(pivot.getPivotPosition()) < 90.0 / 360.0) {
+      twist.setWantedState(TwistState.SIDE);
+    } else {
+      // Logger.recordOutput("Can Handoff", Math.abs(twist.getTwistPosition() + 90) <
+      // 10
+      // && Math.abs(pivot.getPivotPosition() -
+      // Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02
+      // && Math.abs(elevator.getElevatorPosition() -
+      // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
+      // Logger.recordOutput("Twist Correct", Math.abs(twist.getTwistPosition() + 90)
+      // < 10);
+      // Logger.recordOutput("Pivot Correct",
+      // Math.abs(pivot.getPivotPosition() -
+      // Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.02);
+      // Logger.recordOutput("Elevator Correct",
+      // Math.abs(elevator.getElevatorPosition() -
+      // Constants.SetPoints.ElevatorPosition.kPREHANDOFF.meters) < 0.05);
+      if (Math.abs(pivot.getPivotPosition()) > 25.0 / 360.0) {
+        twist.setWantedState(TwistState.UP);
+      } else {
+        twist.setWantedState(TwistState.SIDE);
+      }
+      // Wait for the elevator to come up to move the pivot
+      if (Math.abs(elevator.getElevatorPosition()) > 15.0 / 39.37) {
+        pivot.setWantedState(PivotState.HANDOFF);
+      }
+      if (Math.abs(elevator.getElevatorPosition()) < Constants.SetPoints.ElevatorPosition.kHANDOFF.meters
+          - (5.0 / 39.37)) {
+        pivot.setMaxPivotDegrees(
+            (39.37 * Math.abs(elevator.getElevatorPosition() - 15.0 / 360.0)) * 3 + 90.0);
+      } else {
+        pivot.setMaxPivotDegrees(180.0);
+      }
+      // If everything is in pre-handoff position and there is a coral to be picked
+      // up, move the elevator down to pick up.
+      if (Math.abs(twist.getTwistPosition() + 90) < 10
+          && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.05
+          && Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.05
+          && (intake.hasCoralSuperSticky())) {
+        manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
+        elevator.setWantedState(ElevatorState.HANDOFF);
+      } else if (elevator.getElevatorPosition() < Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 15.0 / 39.37) {
+        manipulator.setWantedState(ManipulatorState.DEFAULT);
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      } else {
+        manipulator.setWantedState(ManipulatorState.OUTAKE);
+        elevator.setWantedState(ElevatorState.PREHANDOFF);
+      }
+      // Once the elevator makes it down to the handoff position, outake into the arm
+      if ((Math.abs(twist.getTwistPosition() + 90) < 10
+          && Math.abs(pivot.getPivotPosition() - Constants.SetPoints.PivotPosition.kHANDOFF.rotations) < 0.05
+          && Math.abs(elevator.getElevatorPosition() - Constants.SetPoints.ElevatorPosition.kHANDOFF.meters) < 2.0
+              / 39.37
+          && Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 0.05)
+          || continueFeeding) {
+        intake.setWantedState(IntakeState.HANDOFF);
+        continueFeeding = true;
+      } else {
+        if (OI.is4PieceAmpSideAuto()) {
+          intake.setWantedState(IntakeState.DOWN);
+        } else {
+          intake.setWantedState(IntakeState.DEFAULT);
+        }
+      }
+      // Timeout for the pass off
+      if (continueFeeding && handoffInitTime == 0.0) {
+        handoffInitTime = Timer.getFPGATimestamp();
+      } else {
+        if (Timer.getFPGATimestamp() - handoffInitTime > 0.1) {
+          continueFeeding = false;
+          handoffInitTime = 0.0;
+        }
+      }
+    }
+    // }
+    climber.setWantedState(ClimbState.IDLE);
   }
 
   public void handleManualPlaceState() {
@@ -1949,7 +2449,7 @@ public class Superstructure extends SubsystemBase {
   public void handleAutoFeederState() {
     lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.AUTO_FEEDER);
-    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     if (drive.getFieldSide() == "red") { // red side
       if (drive.getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
         if (!(Constants.standardizeAngleDegrees(Math.toDegrees(drive.getMT2OdometryAngle())) <= 324
@@ -2091,10 +2591,15 @@ public class Superstructure extends SubsystemBase {
       climber.setWantedState(ClimbState.IDLE);
     }
     pivot.setWantedState(PivotState.CLIMB);
+    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleAutoClimbState() {
     pivot.setWantedState(PivotState.CLIMB);
+    if (Math.abs(intake.getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN) < 0.1) {
+      elevator.setWantedState(ElevatorState.DEFAULT);
+      twist.setWantedState(TwistState.SIDE);
+    }
 
     if (!continueClimbing && climber.getPosition() > -400) {
       climber.setWantedState(ClimbState.EXTENDING);
@@ -2112,22 +2617,39 @@ public class Superstructure extends SubsystemBase {
       drive.setWantedState(DriveState.DEFAULT);
     }
 
+    intake.setWantedState(IntakeState.DOWN);
   }
 
   public void handleLollipopPickup() {
+    intake.setWantedState(IntakeState.DEFAULT);
     lights.setWantedState(LightsState.INTAKING);
     elevator.setWantedState(ElevatorState.LOLLIPOP);
-    intake.setWantedState(IntakeState.CORAL_INTAKE);
+    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     pivot.setWantedState(PivotState.LOLLIPOP);
     if (pivot.getPivotPosition() > 15.0 / 360.0) {
       twist.setWantedState(TwistState.SIDE);
     }
   }
 
+  public void PARTY() {
+    lights.PARTY();
+  }
+
   @Override
   public void periodic() {
-    pivot.updateIntakeItem(intake.getIntakeItem());
-    twist.updateIntakeItem(intake.getIntakeItem());
+    if (climber.getTimesTriggered() && climber.getPosition() > -150) {
+      PARTY();
+    }
+    // if (DriverStation.isTeleopEnabled()) { // Change the condition of when to
+    // localize as well in
+    // // updateOdometryFusedArray() in drive.java
+    // peripherals.setGamePieceCamPipline(1);
+    // } else {
+    // peripherals.setGamePieceCamPipline(0);
+    // }
+
+    pivot.updateIntakeItem(manipulator.getArmItem());
+    twist.updateIntakeItem(manipulator.getArmItem());
     if (OI.getDriverA()) {
       isClimbing = false;
     }
@@ -2135,14 +2657,29 @@ public class Superstructure extends SubsystemBase {
       isClimbing = true;
     }
     currentSuperState = handleStateTransitions();
+
+    if (currentSuperState != SuperState.AUTO_NET_MORE) {
+      netHit = false;
+    }
+
+    if (currentSuperState != tempLastState) {
+      lastState = tempLastState;
+      tempLastState = currentSuperState;
+    }
+
+    // System.out.println("Current: " + currentSuperState + " Last: " + lastState);
+
+    if (currentSuperState != SuperState.ZERO) {
+      firstTimeZero = true;
+    }
     if (currentSuperState != SuperState.DEFAULT) {
       firstTimeDefault = true;
     }
     if (currentSuperState == SuperState.AUTO_L1_PLACE || currentSuperState == SuperState.AUTO_SCORE_L1
         || currentSuperState == SuperState.L1_PLACE) {
-      intake.inL1State = true;
+      manipulator.inL1State = true;
     } else {
-      intake.inL1State = false;
+      manipulator.inL1State = false;
     }
     Logger.recordOutput("Super State", currentSuperState);
     if (currentSuperState != SuperState.OUTAKE_IDLE) {
@@ -2157,5 +2694,6 @@ public class Superstructure extends SubsystemBase {
     }
     // Logger.recordOutput("Hit Time", hitAutoSetpointTime);
     applyStates();
+    // System.out.println("Super State: " + currentSuperState);
   }
 }

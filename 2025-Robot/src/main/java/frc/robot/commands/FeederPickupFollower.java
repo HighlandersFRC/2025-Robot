@@ -54,7 +54,7 @@ public class FeederPickupFollower extends AutoFollower {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (superstructure.hasCoral()) {
+    if (superstructure.hasCoralSticky()) {
       return true;
     } else {
       return false;

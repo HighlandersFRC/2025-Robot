@@ -6,6 +6,7 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,8 +41,9 @@ public class Robot extends LoggedRobot {
     m_robotContainer.elevator.init();
     m_robotContainer.pivot.init();
     m_robotContainer.twist.init();
-    m_robotContainer.intake.init();
+    m_robotContainer.manipulator.init();
     m_robotContainer.climber.init();
+    m_robotContainer.intake.init();
     m_robotContainer.lights.init(m_fieldSide);
     Constants.init();
 
@@ -161,10 +163,16 @@ public class Robot extends LoggedRobot {
         Constants.metersToInches(Constants.Physical.INTAKE_Y_OFFSET_BACK_ALGAE)));
     // m_robotContainer.twist.setAlgaeMode(m_robotContainer.algaeMode);
     // m_robotContainer.pivot.setAlgaeMode(m_robotContainer.algaeMode);
-    m_robotContainer.lights.updateIntakeItem(m_robotContainer.intake.getIntakeItem());
-    m_robotContainer.intake.updateAlgaeMode(m_robotContainer.algaeMode);
+    m_robotContainer.superstructure.algaeMode = m_robotContainer.algaeMode;
+    m_robotContainer.lights.updateIntakeItem(m_robotContainer.manipulator.getArmItem());
+    m_robotContainer.manipulator.updateAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateManualMode(m_robotContainer.manualMode);
+    if (DriverStation.isAutonomousEnabled()) {
+      m_robotContainer.twist.algaeMode = m_robotContainer.algaeMode;
+    } else {
+      m_robotContainer.twist.algaeMode = false;
+    }
     Logger.recordOutput("Algae Mode", m_robotContainer.algaeMode);
     Logger.recordOutput("Manual Mode", m_robotContainer.manualMode);
     Logger.recordOutput("Swerve Module States", m_robotContainer.drive.getModuleStates());
@@ -213,7 +221,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.elevator.teleopInit();
     m_robotContainer.twist.teleopInit();
     m_robotContainer.lights.clearAnimations();
-    m_robotContainer.superstructure.setWantedState(SuperState.DEFAULT);
+    m_robotContainer.superstructure.setWantedState(SuperState.ZERO);
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

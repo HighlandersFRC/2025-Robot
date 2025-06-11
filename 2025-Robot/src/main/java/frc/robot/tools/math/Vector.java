@@ -2,8 +2,6 @@
 
 package frc.robot.tools.math;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.geometry.Translation2d;
 
 public class Vector {

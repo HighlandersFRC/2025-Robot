@@ -42,24 +42,25 @@ public class AutoCoralGroundPickupFollower extends AutoFollower {
   @Override
   public void initialize() {
     initTime = Timer.getFPGATimestamp();
+    superstructure.setWantedState(SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    superstructure.setWantedState(SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT);
+    System.out.println("Running Auto Pickup Follower");
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    superstructure.setWantedState(SuperState.IDLE);
+    superstructure.setWantedState(SuperState.PASSOFF_IDLE);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (superstructure.hasCoral() || Timer.getFPGATimestamp() - initTime > timeout) {
+    if (superstructure.intakeHasCoral() || Timer.getFPGATimestamp() - initTime > timeout) {
       return true;
     } else {
       return false;
