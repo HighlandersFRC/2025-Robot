@@ -2,7 +2,7 @@ package frc.robot.tools.math;
 
 import java.util.Arrays;
 
-public class Spline {
+public final class Spline {
     QuiticHermiteSpline x, y, theta;
     Waypoint[] waypoints;
     Derivatives[] xderivatives, yderivatives, thetaderivatives;
@@ -16,20 +16,20 @@ public class Spline {
         Arrays.sort(waypoints, (w1, w2) -> Double.compare(w1.t, w2.t));
         this.waypoints = waypoints;
         optimizeRotation();
-        xderivatives = new Derivatives[waypoints.length];
-        yderivatives = new Derivatives[waypoints.length];
-        thetaderivatives = new Derivatives[waypoints.length];
+        this.xderivatives = new Derivatives[waypoints.length];
+        this.yderivatives = new Derivatives[waypoints.length];
+        this.thetaderivatives = new Derivatives[waypoints.length];
 
         for (int i = 0; i < waypoints.length; i++) {
             Waypoint w = waypoints[i];
-            xderivatives[i] = new Derivatives(w.t, w.x, w.dx, w.d2x);
-            yderivatives[i] = new Derivatives(w.t, w.y, w.dy, w.d2y);
-            thetaderivatives[i] = new Derivatives(w.t, w.theta, w.dtheta, w.d2theta);
+            this.xderivatives[i] = new Derivatives(w.t, w.x, w.dx, w.d2x);
+            this.yderivatives[i] = new Derivatives(w.t, w.y, w.dy, w.d2y);
+            this.thetaderivatives[i] = new Derivatives(w.t, w.theta, w.dtheta, w.d2theta);
         }
 
-        x = new QuiticHermiteSpline(xderivatives);
-        y = new QuiticHermiteSpline(yderivatives);
-        theta = new QuiticHermiteSpline(thetaderivatives);
+        this.x = new QuiticHermiteSpline(this.xderivatives);
+        this.y = new QuiticHermiteSpline(this.yderivatives);
+        this.theta = new QuiticHermiteSpline(this.thetaderivatives);
     }
 
     /**
@@ -66,19 +66,11 @@ public class Spline {
             throw new IndexOutOfBoundsException("Time out of bounds for spline segments");
         }
 
-        int segmentIndex = 0;
-        for (int i = 0; i < waypoints.length - 1; i++) {
-            if (time < waypoints[i + 1].t) {
-                segmentIndex = i;
-                break;
-            }
-        }
+        Derivatives DerX = this.x.interpolate(time);
+        Derivatives DerY = this.y.interpolate(time);
+        Derivatives DerTheta = this.theta.interpolate(time);
 
-        double dt = time - waypoints[segmentIndex].t;
-        Derivatives x = this.x.interpolate(dt);
-        Derivatives y = this.y.interpolate(dt);
-        Derivatives theta = this.theta.interpolate(dt);
-
-        return new Waypoint(time, x.d0, y.d0, theta.d0, x.d1, y.d1, theta.d1, x.d2, y.d2, theta.d2);
+        return new Waypoint(time, DerX.d0, DerY.d0, DerTheta.d0, DerX.d1, DerY.d1, DerTheta.d1, DerX.d2, DerY.d2,
+                DerTheta.d2);
     }
 }

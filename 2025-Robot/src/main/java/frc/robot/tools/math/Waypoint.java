@@ -18,19 +18,26 @@ public class Waypoint {
         this.d2theta = d2theta;
     }
 
+    public static Waypoint fromDegrees(double t, double x, double y, double thetaDegrees, double dx, double dy,
+            double dthetaDegrees, double d2x, double d2y, double d2thetaDegrees) {
+        return new Waypoint(t, x, y, Math.toRadians(thetaDegrees), dx, dy,
+                Math.toRadians(dthetaDegrees), d2x, d2y,
+                Math.toRadians(d2thetaDegrees));
+    }
+
     @Override
     public String toString() {
         return "Waypoint{" +
                 "t=" + t +
                 ", x=" + x +
                 ", y=" + y +
-                ", theta=" + theta +
+                ", theta=" + Math.toDegrees(theta) +
                 ", dx=" + dx +
                 ", dy=" + dy +
-                ", dtheta=" + dtheta +
+                ", dtheta=" + Math.toDegrees(dtheta) +
                 ", d2x=" + d2x +
                 ", d2y=" + d2y +
-                ", d2theta=" + d2theta +
+                ", d2theta=" + Math.toDegrees(d2theta) +
                 '}';
     }
 }
