@@ -2720,7 +2720,9 @@ public class Drive extends SubsystemBase {
 
     if (yaw != 0.0 && pitch != 0.0) {
       double estimatedDistance = Constants.inchesToMeters(Constants.Vision.getCoralDistanceFromPitch(pitch));
-      double lateralAngleCorrection = Math.toDegrees(Math.atan2(lateralOffsetInches, estimatedDistance));
+      double forwardOffsetInches = Constants.inchesToMeters(5.0); // dist from camera to intake
+      double correctedOffset = Math.sqrt(Math.pow(lateralOffsetInches, 2) + Math.pow(forwardOffsetInches, 2));
+      double lateralAngleCorrection = Math.toDegrees(Math.atan2(correctedOffset, estimatedDistance));
       double robotAngleToTarget = yaw + cameraYawOffset;
       double correctedAngle = robotAngleToTarget - intakeYawOffset - lateralAngleCorrection;
       // double currentAngle = yaw + 3.64;
