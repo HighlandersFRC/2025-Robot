@@ -67,7 +67,6 @@ public class QuiticHermiteSpline {
                 break;
             }
         }
-        System.out.println("Segment Index: " + segmentIndex);
 
         // Calculate the time relative to the start of the segment between 0 and 1
         double t = time - derivatives[segmentIndex].t;
