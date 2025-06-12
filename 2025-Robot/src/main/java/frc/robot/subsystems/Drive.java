@@ -2694,6 +2694,10 @@ public class Drive extends SubsystemBase {
   public void goToCoral() {
     double yaw = 0.0;
     double pitch = 0.0;
+    double cameraYawOffset = (15.0);
+    double intakeYawOffset = Constants.Physical.MANIPULATOR_ANGLE;
+    double lateralOffsetInches = Constants.inchesToMeters(13.0);
+
     var result = peripherals.getFrontGamePieceCamResult();
     List<PhotonTrackedTarget> tracks = new ArrayList<>(result.getTargets());
     List<PhotonTrackedTarget> coralTargets = new ArrayList<>();
@@ -2715,13 +2719,18 @@ public class Drive extends SubsystemBase {
     }
 
     if (yaw != 0.0 && pitch != 0.0) {
-      double currentAngle = yaw + 3.64;
+      double estimatedDistance = Constants.inchesToMeters(Constants.Vision.getCoralDistanceFromPitch(pitch));
+      double lateralAngleCorrection = Math.toDegrees(Math.atan2(lateralOffsetInches, estimatedDistance));
+      double robotAngleToTarget = yaw + cameraYawOffset;
+      double correctedAngle = robotAngleToTarget - intakeYawOffset - lateralAngleCorrection;
+      // double currentAngle = yaw + 3.64;
+      double currentAngle = correctedAngle;
       System.out.println("currentAngle: " + currentAngle);
       rotatePID.setSetPoint(0.0);
       rotatePID.updatePID(currentAngle);
       double r = -rotatePID.getResult();
 
-      autoRobotCentricDrive(new Vector(1.75, 0), r);
+      // autoRobotCentricDrive(new Vector(1.75, 0), r);
 
     }
   }

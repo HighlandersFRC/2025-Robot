@@ -3586,6 +3586,8 @@ public final class Constants {
                 public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.1);
                 public static double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
+                public static double MANIPULATOR_ANGLE = (43.1);
+
                 public static final double GRAVITY_ACCEL_MS2 = 9.806;
         }
 
@@ -3954,7 +3956,7 @@ public final class Constants {
                                         + Math.pow(pose1.getY() - pose2.getY(), 2)));
                 }
 
-                public static final double DISTANCE_OFFSET = 7.0;
+                public static final double DISTANCE_OFFSET = 0.0;
                 public static final double CAMERA_ANGLE_OFFSET = 0.0;
                 // pitch, distance
                 public static final double[][] CORAL_LOOKUP_TABLE = {
