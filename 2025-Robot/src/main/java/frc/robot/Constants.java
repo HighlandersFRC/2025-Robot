@@ -781,7 +781,7 @@ public final class Constants {
                                 double adjustYL1 = inchesToMeters(6.469);
                                 double adjustXMore = inchesToMeters(70.738);
                                 double adjustYMore = inchesToMeters(6.469);
-                                double adjustAlgaeX = inchesToMeters(35.738);
+                                double adjustAlgaeX = inchesToMeters(45.738);
                                 double adjustAlgaeY = inchesToMeters(0.0);
                                 double adjustAlgaeMoreX = inchesToMeters(16.738);
                                 double adjustAlgaeMoreY = inchesToMeters(0.0);
@@ -3556,14 +3556,14 @@ public final class Constants {
                 public static final double MODULE_OFFSET = inchesToMeters(2.5);
                 public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
                                 ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
-                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(23.8);
+                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(25.8);
                 public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(23.8);
+                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(25.8);
                 public static double INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
-                public static double INTAKE_X_OFFSET_FRONT_ALGAE = inchesToMeters(23.0 + 5.0);
+                public static double INTAKE_X_OFFSET_FRONT_ALGAE = inchesToMeters(28.0);
                 public static double INTAKE_Y_OFFSET_FRONT_ALGAE = inchesToMeters(3.8);
-                public static double INTAKE_X_OFFSET_BACK_ALGAE = inchesToMeters(23.0 + 5.0);
+                public static double INTAKE_X_OFFSET_BACK_ALGAE = inchesToMeters(28.0);
                 public static double INTAKE_Y_OFFSET_BACK_ALGAE = inchesToMeters(-3.8);
 
                 public static double L1_INTAKE_X_OFFSET_FRONT = inchesToMeters(35.3);
@@ -3576,9 +3576,9 @@ public final class Constants {
                 public static double L1_INTAKE_X_OFFSET_BACK_MORE = inchesToMeters(24.5);
                 public static double L1_INTAKE_Y_OFFSET_BACK_MORE = inchesToMeters(-9.0);
 
-                public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(23.45);
+                public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(23.25);
                 public static double L2_INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(23.45);
+                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(23.25);
                 public static double L2_INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
                 public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(27.1);

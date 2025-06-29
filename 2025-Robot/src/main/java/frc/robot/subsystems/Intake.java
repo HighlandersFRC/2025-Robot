@@ -159,7 +159,7 @@ public class Intake extends SubsystemBase {
       case ZERO:
         setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
             Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
-        pivotWithTorque(-20, 0.5);
+        pivotWithTorque(-40, 0.5);
         if (getZeroed()) {
           pivot.setPosition(0.0);
         }
@@ -217,11 +217,12 @@ public class Intake extends SubsystemBase {
           setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
               0.5);
         }
-
-        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 10.0 / 360.0) {
+        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 2.0 / 360.0) {
           pivotWithTorque(-15, 0.2);
+        } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 10.0 / 360.0) {
+          pivotWithTorque(-45, 0.2);
         } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 20.0 / 360.0) {
-          pivotWithTorque(-30, 0.4);
+          pivotWithTorque(-50, 0.4);
         } else {
           pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
         }

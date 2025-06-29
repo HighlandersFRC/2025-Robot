@@ -1913,13 +1913,13 @@ public class Superstructure extends SubsystemBase {
       manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
-          - 22.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+          - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
         manipulator.setWantedState(ManipulatorState.OUTAKE);
       } else {
         manipulator.setWantedState(ManipulatorState.OFF);
       }
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations
-          - 25.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+          - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
         if (drive.distanceFromCenterOfReef() > 60.0 / 39.37) {
           drive.setWantedState(DriveState.REEF_MORE);
         } else {
