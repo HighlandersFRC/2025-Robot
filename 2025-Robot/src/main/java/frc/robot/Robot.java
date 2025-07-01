@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.logging.Level;
+
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -26,8 +28,8 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotInit() {
-
-    System.out.println("Robot Init");
+    java.util.logging.Logger.getGlobal().setLevel(Level.INFO);
+    java.util.logging.Logger.getGlobal().info("Robot Init");
     Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
     Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
     Logger.start();
@@ -77,19 +79,19 @@ public class Robot extends LoggedRobot {
     try {
       Logger.recordOutput("Localization Odometry", m_robotContainer.drive.getLocalizationOdometry());
     } catch (Exception e) {
-      System.out.println("Problem with logging");
+      java.util.logging.Logger.getGlobal().severe("Problem with logging");
     }
 
     try {
       Logger.recordOutput("Wheel Odometry", m_robotContainer.drive.getOdometry());
     } catch (Exception e) {
-      System.out.println("Problem with logging");
+      java.util.logging.Logger.getGlobal().severe("Problem with logging");
     }
 
     try {
       Logger.recordOutput("MT2 Odometry", m_robotContainer.drive.getMT2Odometry());
     } catch (Exception e) {
-      System.out.println("Problem with logging");
+      java.util.logging.Logger.getGlobal().severe("Problem with logging");
     }
 
     // if (OI.isManualMode()) {
@@ -199,10 +201,10 @@ public class Robot extends LoggedRobot {
     double autoInitTime = Timer.getFPGATimestamp();
     m_robotContainer.superstructure.setWantedState(SuperState.IDLE);
     if (OI.isBlueSide()) {
-      System.out.println("ON BLUE SIDE");
+      java.util.logging.Logger.getGlobal().info("ON BLUE SIDE");
       m_fieldSide = "blue";
     } else {
-      System.out.println("ON RED SIDE");
+      java.util.logging.Logger.getGlobal().info("ON RED SIDE");
       m_fieldSide = "red";
     }
     this.m_robotContainer.drive.setFieldSide(m_fieldSide);

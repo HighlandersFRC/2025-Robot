@@ -38,7 +38,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.tools.controlloops.PID;
+import frc.robot.tools.math.Spline;
 import frc.robot.tools.math.Vector;
+import frc.robot.tools.math.Waypoint;
+import frc.robot.tools.utils.PolarPathing;
 
 // **Zero Wheels with the bolt head showing on the left when the front side(battery) is facing down/away from you**
 
@@ -3573,8 +3576,8 @@ public class Drive extends SubsystemBase {
   }
 
   public Number[] purePursuitController(double currentX, double currentY, double currentTheta, int currentIndex,
-      JSONArray pathPoints, boolean fullSend, boolean accurate) {
-    JSONObject targetPoint = pathPoints.getJSONObject(pathPoints.length() - 1);
+      JSONArray pathPoints, Spline spline, boolean fullSend, boolean accurate) {
+    Waypoint targetPoint = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(pathPoints.length() - 1));
     int targetIndex = pathPoints.length() - 1;
     if (this.m_fieldSide == "blue") {
       currentX = Constants.Physical.FIELD_LENGTH - currentX;
@@ -3586,49 +3589,49 @@ public class Drive extends SubsystemBase {
       currentY = Constants.Physical.FIELD_WIDTH - currentY;
       currentTheta = -currentTheta;
     }
-
-    for (int i = currentIndex; i < pathPoints.length(); i++) {
-      JSONObject point = pathPoints.getJSONObject(i);
-      double targetX = point.getDouble("x"), targetY = point.getDouble("y"),
-          targetTheta = point.getDouble("angle"), targetXvel = point.getDouble("x_velocity"),
-          targetYvel = point.getDouble("y_velocity"), targetThetavel = point.getDouble("angular_velocity");
-      while (Math.abs(targetTheta - currentTheta) > Math.PI) {
-        if (targetTheta - currentTheta > Math.PI) {
-          targetTheta -= 2 * Math.PI;
-        } else if (targetTheta - currentTheta < -Math.PI) {
-          targetTheta += 2 * Math.PI;
-        }
+    Waypoint currentWaypoint = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(currentIndex));
+    double currentCurvature = spline.curvature(currentWaypoint.t);
+    while (Math.abs(currentWaypoint.theta - currentTheta) > Math.PI) {
+      if (currentWaypoint.theta - currentTheta > Math.PI) {
+        currentWaypoint.theta -= 2 * Math.PI;
+      } else if (currentWaypoint.theta - currentTheta < -Math.PI) {
+        currentWaypoint.theta += 2 * Math.PI;
       }
-      double linearVelMag = Math.hypot(targetYvel / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
-          targetXvel / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS);
-      double targetVelMag = Math.hypot(linearVelMag,
-          targetThetavel / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS);
-      double lookaheadRadius = fullSend ? Constants.Autonomous.FULL_SEND_LOOKAHEAD
-          : Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_DISTANCE * targetVelMag
-              + Constants.Autonomous.MIN_LOOKAHEAD_DISTANCE;// If full send mode is enabled, use the full send lookahead
-      double deltaX = (currentX - targetX), deltaY = (currentY - targetY), deltaTheta = (currentTheta - targetTheta);
+    }
+    double linearVelMag = Math.hypot(currentWaypoint.dy / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
+        currentWaypoint.dx / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS);
+    double targetVelMag = Math.hypot(linearVelMag,
+        currentWaypoint.dtheta / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS);
+    double lookaheadRadius = fullSend ? Constants.Autonomous.FULL_SEND_LOOKAHEAD
+        : (Constants.Autonomous.FULL_SEND_LOOKAHEAD - Constants.Autonomous.MIN_LOOKAHEAD_DISTANCE)
+            / (1 + Math.pow(currentCurvature, 2))
+            + Constants.Autonomous.MIN_LOOKAHEAD_DISTANCE;
+
+    for (int i = currentIndex + Constants.Autonomous.MIN_LOOKAHEAD_STEP; i < pathPoints.length(); i++) {
+      Waypoint point = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(i)); // If full send mode is enabled, use
+                                                                                 // the full send lookahead
+      double deltaX = (currentX - point.x), deltaY = (currentY - point.y), deltaTheta = (currentTheta - point.theta);
       if (!insideRadius(deltaX / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
           deltaY / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
           deltaTheta / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS,
           lookaheadRadius)) {
         targetIndex = i;
-        targetPoint = pathPoints.getJSONObject(i);
+        targetPoint = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(i));
         break;
       }
     }
-    double targetX = targetPoint.getDouble("x"), targetY = targetPoint.getDouble("y"),
-        targetTheta = targetPoint.getDouble("angle");
+    ;
 
-    while (Math.abs(targetTheta - currentTheta) > Math.PI) {
-      if (targetTheta - currentTheta > Math.PI) {
-        targetTheta -= 2 * Math.PI;
-      } else if (targetTheta - currentTheta < -Math.PI) {
-        targetTheta += 2 * Math.PI;
+    while (Math.abs(targetPoint.theta - currentTheta) > Math.PI) {
+      if (targetPoint.theta - currentTheta > Math.PI) {
+        targetPoint.theta -= 2 * Math.PI;
+      } else if (targetPoint.theta - currentTheta < -Math.PI) {
+        targetPoint.theta += 2 * Math.PI;
       }
     }
-    xPID.setSetPoint(targetX);
-    yPID.setSetPoint(targetY);
-    thetaPID.setSetPoint(targetTheta);
+    xPID.setSetPoint(targetPoint.x);
+    yPID.setSetPoint(targetPoint.y);
+    thetaPID.setSetPoint(targetPoint.theta);
 
     xPID.updatePID(currentX);
     yPID.updatePID(currentY);
@@ -3637,11 +3640,11 @@ public class Drive extends SubsystemBase {
     double xVelNoFF = xPID.getResult();
     double yVelNoFF = yPID.getResult();
     double thetaVelNoFF = -thetaPID.getResult();
-    double f = (accurate ? Constants.Autonomous.ACCURATE_FOLLOWER_AUTONOMOUS_END_ACCURACY
+    double f = (accurate ? Constants.Autonomous.ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER
         : Constants.Autonomous.FEED_FORWARD_MULTIPLIER);
-    double feedForwardX = targetPoint.getDouble("x_velocity") * f;
-    double feedForwardY = targetPoint.getDouble("y_velocity") * f;
-    double feedForwardTheta = -targetPoint.getDouble("angular_velocity") * f;
+    double feedForwardX = targetPoint.dx * f;
+    double feedForwardY = targetPoint.dy * f;
+    double feedForwardTheta = -targetPoint.dtheta * f;
 
     double finalX = xVelNoFF + feedForwardX;
     double finalY = yVelNoFF + feedForwardY;
@@ -3670,10 +3673,11 @@ public class Drive extends SubsystemBase {
     // targetPoint.getDouble("angular_velocity"));
     // Logger.recordOutput("pid-theta-vel", thetaVelNoFF);
     // Logger.recordOutput("FF-theta-vel", feedForwardTheta);
-    // Logger.recordOutput("current point idx", currentIndex);
-    // Logger.recordOutput("point idx", velocityArray[3].intValue());
-    // Logger.recordOutput("look-ahead",
-    // Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_DISTANCE * velocityMag + 0.01);
+    Logger.recordOutput("current point idx", currentIndex);
+    Logger.recordOutput("point idx", velocityArray[3].intValue());
+    Logger.recordOutput("look-ahead", lookaheadRadius);
+    Logger.recordOutput("time", currentWaypoint.t);
+    Logger.recordOutput("curvature", currentCurvature);
     // Logger.recordOutput("Velocity Array",
     // "X: " + finalX + " Y: " + -finalY + " Theta: " + finalTheta + " Index: " +
     // targetIndex);

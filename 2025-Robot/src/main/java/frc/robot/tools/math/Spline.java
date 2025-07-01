@@ -73,4 +73,28 @@ public final class Spline {
         return new Waypoint(time, DerX.d0, DerY.d0, DerTheta.d0, DerX.d1, DerY.d1, DerTheta.d1, DerX.d2, DerY.d2,
                 DerTheta.d2);
     }
+
+    /**
+     * Calculates the curvature of the spline at a given time.
+     *
+     * @param time The time at which to calculate the curvature.
+     * @return The curvature at the specified time.
+     * @throws IndexOutOfBoundsException if the time is out of bounds for the spline
+     *                                   segments.
+     */
+    public double curvature(double time) {
+        if (time < waypoints[0].t || time > waypoints[waypoints.length - 1].t) {
+            throw new IndexOutOfBoundsException("Time out of bounds for spline segments");
+        }
+
+        Derivatives DerX = this.x.interpolate(time);
+        Derivatives DerY = this.y.interpolate(time);
+
+        double dx = DerX.d1;
+        double dy = DerY.d1;
+        double d2x = DerX.d2;
+        double d2y = DerY.d2;
+
+        return Math.abs(dx * d2y - dy * d2x) / Math.pow(dx * dx + dy * dy, 1.5);
+    }
 }

@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.tools.math.Spline;
 import frc.robot.tools.math.Vector;
+import frc.robot.tools.utils.PolarPathing;
 import frc.robot.tools.wrappers.AutoFollower;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
@@ -19,6 +21,7 @@ public class AccurateFollower extends AutoFollower {
     private Drive drive;
 
     private JSONArray path;
+    private Spline spline;
 
     private double initTime;
     private double currentTime;
@@ -81,7 +84,7 @@ public class AccurateFollower extends AutoFollower {
         // call PIDController function
         currentPathPointIndex = returnPathPointIndex;
         desiredVelocityArray = drive.purePursuitController(odometryFusedX, odometryFusedY, odometryFusedTheta,
-                currentPathPointIndex, path, false, true);
+                currentPathPointIndex, path, spline, false, true);
 
         returnPathPointIndex = desiredVelocityArray[3].intValue();
         if (returnPathPointIndex == currentPathPointIndex && returnPathPointIndex != path.length() - 1) {
@@ -157,6 +160,7 @@ public class AccurateFollower extends AutoFollower {
     public void from(int pointIndex, JSONObject pathJSON, int to) {
         this.currentPathPointIndex = pointIndex;
         path = pathJSON.getJSONArray("sampled_points");
+        spline = PolarPathing.pathJsonToSpline(pathJSON);
         endIndex = to;
         reset = false;
     }

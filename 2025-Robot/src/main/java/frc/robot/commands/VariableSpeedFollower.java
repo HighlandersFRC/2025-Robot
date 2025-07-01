@@ -11,7 +11,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.tools.math.Spline;
 import frc.robot.tools.math.Vector;
+import frc.robot.tools.utils.PolarPathing;
 import frc.robot.tools.wrappers.AutoFollower;
 import frc.robot.Constants;
 import frc.robot.OI;
@@ -21,6 +23,7 @@ public class VariableSpeedFollower extends AutoFollower {
   private Drive drive;
 
   private JSONArray path;
+  private Spline spline;
 
   private double initTime;
   private double currentTime;
@@ -48,12 +51,13 @@ public class VariableSpeedFollower extends AutoFollower {
     return currentPathPointIndex;
   }
 
-  public VariableSpeedFollower(Drive drive, JSONArray pathPoints,
+  public VariableSpeedFollower(Drive drive, JSONObject path,
       boolean record) {
     this.drive = drive;
-    this.path = pathPoints;
+    this.path = path.getJSONArray("sampled_points");
+    this.spline = PolarPathing.pathJsonToSpline(path);
     this.record = record;
-    pathStartTime = pathPoints.getJSONObject(0).getDouble("time");
+    pathStartTime = this.path.getJSONObject(0).getDouble("time");
     addRequirements(drive);
   }
 
@@ -85,7 +89,7 @@ public class VariableSpeedFollower extends AutoFollower {
     // call PIDController function
     currentPathPointIndex = returnPathPointIndex;
     desiredVelocityArray = drive.purePursuitController(odometryFusedX, odometryFusedY, odometryFusedTheta,
-        currentPathPointIndex, path, false, false);
+        currentPathPointIndex, path, spline, false, false);
 
     returnPathPointIndex = desiredVelocityArray[3].intValue();
     if (returnPathPointIndex == currentPathPointIndex && returnPathPointIndex != path.length() - 1) {
@@ -164,6 +168,7 @@ public class VariableSpeedFollower extends AutoFollower {
   public void from(int pointIndex, JSONObject pathJSON, int to) {
     this.currentPathPointIndex = pointIndex;
     path = pathJSON.getJSONArray("sampled_points");
+    spline = PolarPathing.pathJsonToSpline(pathJSON);
     endIndex = to;
     reset = false;
   }
