@@ -23,8 +23,10 @@ import frc.robot.tools.math.Vector;
 
 public class Peripherals {
   private PhotonCamera frontReefCam = new PhotonCamera("Front_Reef");
-  // private PhotonCamera frontSwerveCam = new PhotonCamera("Front_Swerve");
+  private PhotonCamera frontSwerveCam = new PhotonCamera("Front_Swerve");
   private PhotonCamera backReefCam = new PhotonCamera("Back_Reef");
+  private PhotonCamera backLeftReefCam = new PhotonCamera("Back_Left_Reef");
+  private PhotonCamera backRightReefCam = new PhotonCamera("Back_Right_Reef");
   private PhotonCamera frontBargeCam = new PhotonCamera("Front_Barge");
   private PhotonCamera backBargeCam = new PhotonCamera("Back_Barge");
   private PhotonCamera gamePieceCamera = new PhotonCamera("Front_Game_Piece_Cam");
@@ -284,14 +286,32 @@ public class Peripherals {
     }
   }
 
-  // public PhotonPipelineResult getFrontSwerveCamResult() {
-  // var result = frontSwerveCam.getAllUnreadResults();
-  // if (!result.isEmpty()) {
-  // return result.get(0);
-  // } else {
-  // return new PhotonPipelineResult();
-  // }
-  // }
+  public PhotonPipelineResult getBackLeftReefCamResult() {
+    var result = backLeftReefCam.getAllUnreadResults();
+    if (!result.isEmpty()) {
+      return result.get(0);
+    } else {
+      return new PhotonPipelineResult();
+    }
+  }
+
+  public PhotonPipelineResult getBackRightReefCamResult() {
+    var result = backRightReefCam.getAllUnreadResults();
+    if (!result.isEmpty()) {
+      return result.get(0);
+    } else {
+      return new PhotonPipelineResult();
+    }
+  }
+
+  public PhotonPipelineResult getFrontSwerveCamResult() {
+    var result = frontSwerveCam.getAllUnreadResults();
+    if (!result.isEmpty()) {
+      return result.get(0);
+    } else {
+      return new PhotonPipelineResult();
+    }
+  }
 
   public PhotonPipelineResult getFrontBargeCamResult() {
     var result = frontBargeCam.getAllUnreadResults();

@@ -174,9 +174,12 @@ public class Drive extends SubsystemBase {
 
   PhotonPoseEstimator photonPoseEstimator;
   PhotonPoseEstimator backPhotonPoseEstimator;
-  PhotonPoseEstimator rightPhotonPoseEstimator;
-  PhotonPoseEstimator leftPhotonPoseEstimator;
-  // PhotonPoseEstimator swervePhotonPoseEstimator;
+  PhotonPoseEstimator backLeftPhotonPoseEstimator;
+  PhotonPoseEstimator backRightPhotonPoseEstimator;
+
+  // PhotonPoseEstimator rightPhotonPoseEstimator;
+  // PhotonPoseEstimator leftPhotonPoseEstimator;
+  PhotonPoseEstimator swervePhotonPoseEstimator;
   PhotonPoseEstimator gamePiecePhotonPoseEstimator;
   AprilTagFieldLayout aprilTagFieldLayout;
 
@@ -185,36 +188,30 @@ public class Drive extends SubsystemBase {
           Constants.inchesToMeters(23.625)),
       new Rotation3d(Math.toRadians(0.3), Math.toRadians(25.6), Math.toRadians(15.0)));
 
-  // Transform3d frontSwerveRobotToCam = new Transform3d( // front reef cam swerve
-  // module
-  // new Translation3d(Constants.inchesToMeters(-12.0),
-  // Constants.inchesToMeters(8.75),
-  // Constants.inchesToMeters(10.0)),
-  // new Rotation3d(Math.toRadians(1.6), Math.toRadians(15.3),
-  // Math.toRadians(215.0)));
-
-  // 25.2, 25.8
-  // Transform2d frontReefCamPos = new Transform2d(
-  // new Translation2d(Constants.inchesToMeters(2.25),
-  // Constants.inchesToMeters(-11.0)),
-  // new Rotation2d(Math.toRadians(32.0)));
+  Transform3d frontSwerveRobotToCam = new Transform3d( // front reef cam on swerve module
+      new Translation3d(Constants.inchesToMeters(12.0),
+          Constants.inchesToMeters(8.75),
+          Constants.inchesToMeters(10.0)),
+      new Rotation3d(Math.toRadians(1.6), Math.toRadians(15.3),
+          Math.toRadians(35.0)));
 
   Transform3d backReefRobotToCam = new Transform3d( // top back reef cam
       new Translation3d(Constants.inchesToMeters(-2.0), Constants.inchesToMeters(-11.5),
           Constants.inchesToMeters(23.625)),
       new Rotation3d(Math.toRadians(1.5), Math.toRadians(25.2), Math.toRadians(165.0)));
-  // 1.2, 1.0
-  Transform3d frontBargeRobotToCam = new Transform3d( // bottom
-      new Translation3d(Constants.inchesToMeters(2.25), Constants.inchesToMeters(-11.5), // mead to get yaw
-          Constants.inchesToMeters(17.125)),
-      new Rotation3d(Math.toRadians(-2.7), Math.toRadians(-34.7), Math.toRadians(15.0)));
 
-  Transform3d backBargeRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(-2.25), Constants.inchesToMeters(-11.5),
-          Constants.inchesToMeters(17.125)),
-      new Rotation3d(Math.toRadians(-0.8), Math.toRadians(-35.1), Math.toRadians(165.0)));
+  Transform3d backLeftReefRobotToCam = new Transform3d(
+      new Translation3d(Constants.inchesToMeters(-12.25), Constants.inchesToMeters(9.375),
+          Constants.inchesToMeters(8.5)),
+      new Rotation3d(Math.toRadians(0.4), Math.toRadians(21.8), Math.toRadians(181.53)));
 
-  Transform3d gamePieceReefRobotToCam = new Transform3d( // front game piece cam
+  Transform3d backRightReefRobotToCam = new Transform3d(
+      new Translation3d(Constants.inchesToMeters(
+          -12.25), Constants.inchesToMeters(-9.25),
+          Constants.inchesToMeters(8.5)),
+      new Rotation3d(Math.toRadians(0.4), Math.toRadians(20.4), Math.toRadians(178.47)));
+
+  Transform3d gamePieceReefRobotToCam = new Transform3d(
       new Translation3d(Constants.inchesToMeters(2.0), Constants.inchesToMeters(-11.5),
           Constants.inchesToMeters(20.25)),
       new Rotation3d(Math.toRadians(1.0), Math.toRadians(21.4), Math.toRadians(15.0)));
@@ -450,14 +447,20 @@ public class Drive extends SubsystemBase {
     backPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backReefRobotToCam);
 
-    // swervePhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-    // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontSwerveRobotToCam);
+    backLeftPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backLeftReefRobotToCam);
 
-    rightPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontBargeRobotToCam);
+    backRightPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backRightReefRobotToCam);
 
-    leftPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backBargeRobotToCam);
+    swervePhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontSwerveRobotToCam);
+
+    // rightPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+    // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontBargeRobotToCam);
+
+    // leftPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+    // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backBargeRobotToCam);
 
     gamePiecePhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, gamePieceReefRobotToCam);
@@ -882,89 +885,6 @@ public class Drive extends SubsystemBase {
     // }
     // }
 
-    // var backResult = peripherals.getBackReefCamResult();
-    // Optional<EstimatedRobotPose> backMultiTagResult =
-    // backPhotonPoseEstimator.update(backResult);
-    // if (backMultiTagResult.isPresent()) {
-    // if (backResult.getBestTarget().getPoseAmbiguity() < 0.3 &&
-    // backResult.getBestTarget().fiducialId != 5
-    // && backResult.getBestTarget().fiducialId != 4 &&
-    // backResult.getBestTarget().fiducialId != 14
-    // && backResult.getBestTarget().fiducialId != 15 &&
-    // backResult.getBestTarget().fiducialId != 3
-    // && backResult.getBestTarget().fiducialId != 16) {
-    // Pose3d robotPose = backMultiTagResult.get().estimatedPose;
-    // Logger.recordOutput("multitag result", robotPose);
-    // int numFrontTracks = backResult.getTargets().size();
-    // Pose3d tagPose =
-    // aprilTagFieldLayout.getTagPose(backResult.getBestTarget().getFiducialId()).get();
-    // double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-    // // Logger.recordOutput("Distance to tag", distToTag);
-    // if (distToTag < 3.2) {
-    // if (systemState.equals(DriveState.REEF) ||
-    // systemState.equals(DriveState.L3_REEF)
-    // || systemState.equals(DriveState.L4_REEF)) {
-    // standardDeviation.set(0, 0,
-    // 0.5
-    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-    // standardDeviation.set(1, 0,
-    // 0.5
-    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-    // standardDeviation.set(2, 0, 0.9);
-    // } else {
-    // standardDeviation.set(0, 0,
-    // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-    // standardDeviation.set(1, 0,
-    // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-    // standardDeviation.set(2, 0, 0.9);
-    // }
-    // // Pose2d poseWithoutAngle = new
-    // Pose2d(robotPose.toPose2d().getTranslation(),
-    // // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-    // // mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-    // // backResult.getTimestampSeconds());
-
-    // results.add(robotPose.toPose2d());
-    // }
-    // }
-    // }
-
-    // if (!results.isEmpty()) {
-    // double sumX = 0.0;
-    // double sumY = 0.0;
-    // double sumSin = 0.0;
-    // double sumCos = 0.0;
-
-    // for (Pose2d pose : results) {
-    // sumX += pose.getX();
-    // sumY += pose.getY();
-    // sumSin += Math.sin(pose.getRotation().getRadians());
-    // sumCos += Math.cos(pose.getRotation().getRadians());
-    // }
-
-    // int count = results.size();
-    // double avgX = sumX / count;
-    // double avgY = sumY / count;
-    // double avgAngle = Math.atan2(sumSin / count, sumCos / count);
-
-    // Pose2d averagePose = new Pose2d(avgX, avgY, new Rotation2d(avgAngle));
-
-    // mt2Odometry.addVisionMeasurement(averagePose,
-    // backResult.getTimestampSeconds()); // TODO: avg timestamps if both are there
-    // results.clear();
-    // }
-
-    // } else {
     var backResult = peripherals.getBackReefCamResult();
     Optional<EstimatedRobotPose> backMultiTagResult = backPhotonPoseEstimator.update(backResult);
     if (backMultiTagResult.isPresent()) {
@@ -1012,135 +932,145 @@ public class Drive extends SubsystemBase {
         }
       }
     }
-    // }
 
-    // var swerveResult = peripherals.getFrontSwerveCamResult();
-    // Optional<EstimatedRobotPose> swerveMultiTagResult =
-    // swervePhotonPoseEstimator.update(swerveResult);
-    // if (swerveMultiTagResult.isPresent()) {
-    // if (swerveResult.getBestTarget().getPoseAmbiguity() < 0.3) {
-    // Pose3d robotPose = swerveMultiTagResult.get().estimatedPose;
-    // Logger.recordOutput("multitag result", robotPose);
-    // int numFrontTracks = swerveResult.getTargets().size();
-    // Pose3d tagPose =
-    // aprilTagFieldLayout.getTagPose(swerveResult.getBestTarget().getFiducialId()).get();
-    // double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-    // // Logger.recordOutput("Distance to tag", distToTag);
-    // if (distToTag < 3.2) {
-    // if (systemState.equals(DriveState.REEF) ||
-    // systemState.equals(DriveState.L3_REEF)
-    // || systemState.equals(DriveState.L4_REEF)) {
-    // standardDeviation.set(0, 0,
-    // 0.5
-    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-    // standardDeviation.set(1, 0,
-    // 0.5
-    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-    // standardDeviation.set(2, 0, 0.9);
-    // } else {
-    // standardDeviation.set(0, 0,
-    // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-    // standardDeviation.set(1, 0,
-    // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
-    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-    // standardDeviation.set(2, 0, 0.9);
-    // }
-    // // Pose2d poseWithoutAngle = new
-    // Pose2d(robotPose.toPose2d().getTranslation(),
-    // // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-    // mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-    // swerveResult.getTimestampSeconds());
-    // }
-    // }
-    // }
-
-    var rightResult = peripherals.getFrontBargeCamResult();
-    Optional<EstimatedRobotPose> rightMultiTagResult = rightPhotonPoseEstimator
-        .update(rightResult);
-    if (rightMultiTagResult.isPresent()
-        && (systemState != DriveState.L4_REEF && systemState != DriveState.L3_REEF && systemState != DriveState.REEF)) {
-      if (rightResult.getBestTarget().getPoseAmbiguity() < 0.3 /*
-                                                                * && ((rightResult.getBestTarget().fiducialId != 5
-                                                                * && rightResult.getBestTarget().fiducialId != 4 &&
-                                                                * rightResult.getBestTarget().fiducialId != 14
-                                                                * && rightResult.getBestTarget().fiducialId != 15 &&
-                                                                * rightResult.getBestTarget().fiducialId != 3
-                                                                * && rightResult.getBestTarget().fiducialId != 16) ||
-                                                                * systemState.equals(DriveState.NET)
-                                                                * || systemState.equals(DriveState.PROCESSOR))
-                                                                */) { // TODO: adjust tag filters
-        Pose3d robotPose = rightMultiTagResult.get().estimatedPose;
+    var swerveResult = peripherals.getFrontSwerveCamResult();
+    Optional<EstimatedRobotPose> swerveMultiTagResult = swervePhotonPoseEstimator.update(swerveResult);
+    if (swerveMultiTagResult.isPresent()) {
+      if (swerveResult.getBestTarget().getPoseAmbiguity() < 0.3) {
+        Pose3d robotPose = swerveMultiTagResult.get().estimatedPose;
         Logger.recordOutput("multitag result", robotPose);
-        int numFrontTracks = rightResult.getTargets().size();
-        Pose3d tagPose = aprilTagFieldLayout.getTagPose(rightResult.getBestTarget().getFiducialId()).get();
+        int numFrontTracks = swerveResult.getTargets().size();
+        Pose3d tagPose = aprilTagFieldLayout.getTagPose(swerveResult.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+        // Logger.recordOutput("Distance to tag", distToTag);
         if (distToTag < 3.2) {
-          // Logger.recordOutput("Distance to tag", distToTag);
-          standardDeviation.set(0, 0,
-              Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                  * Constants.Vision.getTagDistStdDevScalar(distToTag));
-          // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-          // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-          standardDeviation.set(1, 0,
-              Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                  * Constants.Vision.getTagDistStdDevScalar(distToTag));
-          // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-          // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-          standardDeviation.set(2, 0, 0.9);
+          if (systemState.equals(DriveState.REEF) ||
+              systemState.equals(DriveState.L3_REEF)
+              || systemState.equals(DriveState.L4_REEF)) {
+            standardDeviation.set(0, 0,
+                0.5
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(1, 0,
+                0.5
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(2, 0, 0.9);
+          } else {
+            standardDeviation.set(0, 0,
+                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(1, 0,
+                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(2, 0, 0.9);
+          }
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
           mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-              rightResult.getTimestampSeconds());
+              swerveResult.getTimestampSeconds());
         }
       }
     }
 
-    var leftResult = peripherals.getBackBargeCamResult();
-    Optional<EstimatedRobotPose> leftMultiTagResult = leftPhotonPoseEstimator
-        .update(leftResult);
-    if (leftMultiTagResult.isPresent()
-        && (systemState != DriveState.L4_REEF && systemState != DriveState.L3_REEF && systemState != DriveState.REEF)) {
-      if (leftResult.getBestTarget().getPoseAmbiguity() < 0.3 /*
-                                                               * && ((leftResult.getBestTarget().fiducialId != 5
-                                                               * && leftResult.getBestTarget().fiducialId != 4 &&
-                                                               * leftResult.getBestTarget().fiducialId != 14
-                                                               * && leftResult.getBestTarget().fiducialId != 15 &&
-                                                               * leftResult.getBestTarget().fiducialId != 3
-                                                               * && leftResult.getBestTarget().fiducialId != 16) ||
-                                                               * systemState.equals(DriveState.NET)
-                                                               * || systemState.equals(DriveState.PROCESSOR))
-                                                               */) {
-        Pose3d robotPose = leftMultiTagResult.get().estimatedPose;
+    var backLeftResult = peripherals.getBackLeftReefCamResult();
+    Optional<EstimatedRobotPose> backLeftMultiTagResult = backLeftPhotonPoseEstimator.update(backLeftResult);
+    if (backLeftMultiTagResult.isPresent()) {
+      if (backLeftResult.getBestTarget().getPoseAmbiguity() < 0.3 && backLeftResult.getBestTarget().fiducialId != 5
+          && backLeftResult.getBestTarget().fiducialId != 4 && backLeftResult.getBestTarget().fiducialId != 14
+          && backLeftResult.getBestTarget().fiducialId != 15 && backLeftResult.getBestTarget().fiducialId != 3
+          && backLeftResult.getBestTarget().fiducialId != 16) {
+        Pose3d robotPose = backLeftMultiTagResult.get().estimatedPose;
         Logger.recordOutput("multitag result", robotPose);
-        int numFrontTracks = leftResult.getTargets().size();
-        Pose3d tagPose = aprilTagFieldLayout.getTagPose(leftResult.getBestTarget().getFiducialId()).get();
+        int numFrontTracks = backLeftResult.getTargets().size();
+        Pose3d tagPose = aprilTagFieldLayout.getTagPose(backLeftResult.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+        // Logger.recordOutput("Distance to tag", distToTag);
         if (distToTag < 3.2) {
-          // Logger.recordOutput("Distance to tag", distToTag);
-          standardDeviation.set(0, 0,
-              Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                  * Constants.Vision.getTagDistStdDevScalar(distToTag));
-          // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-          // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-          standardDeviation.set(1, 0,
-              Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                  * Constants.Vision.getTagDistStdDevScalar(distToTag));
-          // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-          // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-          standardDeviation.set(2, 0, 0.9);
+          if (systemState.equals(DriveState.REEF) || systemState.equals(DriveState.L3_REEF)
+              || systemState.equals(DriveState.L4_REEF)) {
+            standardDeviation.set(0, 0,
+                0.5
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(1, 0,
+                0.5
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(2, 0, 0.9);
+          } else {
+            standardDeviation.set(0, 0,
+                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(1, 0,
+                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(2, 0, 0.9);
+          }
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
           mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-              leftResult.getTimestampSeconds());
+              backLeftResult.getTimestampSeconds());
+        }
+      }
+    }
+
+    var backRightResult = peripherals.getBackRightReefCamResult();
+    Optional<EstimatedRobotPose> backRightMultiTagResult = backRightPhotonPoseEstimator.update(backRightResult);
+    if (backRightMultiTagResult.isPresent()) {
+      if (backRightResult.getBestTarget().getPoseAmbiguity() < 0.3 && backRightResult.getBestTarget().fiducialId != 5
+          && backRightResult.getBestTarget().fiducialId != 4 && backRightResult.getBestTarget().fiducialId != 14
+          && backRightResult.getBestTarget().fiducialId != 15 && backRightResult.getBestTarget().fiducialId != 3
+          && backRightResult.getBestTarget().fiducialId != 16) {
+        Pose3d robotPose = backRightMultiTagResult.get().estimatedPose;
+        Logger.recordOutput("multitag result", robotPose);
+        int numFrontTracks = backRightResult.getTargets().size();
+        Pose3d tagPose = aprilTagFieldLayout.getTagPose(backRightResult.getBestTarget().getFiducialId()).get();
+        double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+        // Logger.recordOutput("Distance to tag", distToTag);
+        if (distToTag < 3.2) {
+          if (systemState.equals(DriveState.REEF) || systemState.equals(DriveState.L3_REEF)
+              || systemState.equals(DriveState.L4_REEF)) {
+            standardDeviation.set(0, 0,
+                0.5
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(1, 0,
+                0.5
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(2, 0, 0.9);
+          } else {
+            standardDeviation.set(0, 0,
+                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(1, 0,
+                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
+            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+            standardDeviation.set(2, 0, 0.9);
+          }
+          // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+          // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+          mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+              backRightResult.getTimestampSeconds());
         }
       }
     }
