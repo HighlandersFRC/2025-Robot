@@ -22,11 +22,11 @@ public final class Constants {
                 // their constants
                 public static final double AUTONOMOUS_LOOKAHEAD_DISTANCE = 0.04; // Lookahead at 1m/s scaled by wanted
                                                                                  // velocity
-                public static final double FULL_SEND_LOOKAHEAD = 0.60;
+                public static final double MAX_LOOKAHEAD_DISTANCE = 0.60;
                 public static final double MIN_LOOKAHEAD_DISTANCE = 0.05; // Lookahead distance at 0m/s
                 public static final int MIN_LOOKAHEAD_STEP = 3;
                 // Path follower will end if within this radius of the final point
-                public static final double AUTONOMOUS_END_ACCURACY = 0.10;
+                public static final double AUTONOMOUS_END_ACCURACY = 0.20;
                 public static final double ACCURATE_FOLLOWER_AUTONOMOUS_END_ACCURACY = 0.05;
                 // When calculating the point distance, will divide x and y by this constant
                 public static final double AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS = 1.0;
@@ -35,6 +35,10 @@ public final class Constants {
                 // Feed Forward Multiplier
                 public static final double FEED_FORWARD_MULTIPLIER = 0.5;
                 public static final double ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER = 1;
+                // A larger value will limit the speed more when going around curves
+                public static final double CURVATURE_LIMITER_MULTIPLIER = 2;
+                // Minimum speed limit during auto
+                public static final double MINIMUM_SPEED_LIMIT = 0.5; // m/s
                 public static final String[] paths = new String[] {
                                 "2AlgaeCenter.polarauto",
                                 "2+1PieceFeeder.polarauto",
@@ -45,8 +49,6 @@ public final class Constants {
                 };
 
                 public static int getSelectedPathIndex() {
-                        if (true)
-                                return 5;
                         if (OI.autoChooserConnected()) {
                                 if (OI.autoChooser.getRawButton(1)) {
                                         return 0;
@@ -3541,9 +3543,9 @@ public final class Constants {
                 public static final double MODULE_OFFSET = inchesToMeters(2.5);
                 public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
                                 ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
-                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(23.8);
+                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(25.2);
                 public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(23.8);
+                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(25.2);
                 public static double INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
                 public static double INTAKE_X_OFFSET_FRONT_ALGAE = inchesToMeters(23.0 + 5.0);

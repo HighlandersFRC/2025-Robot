@@ -3575,6 +3575,21 @@ public class Drive extends SubsystemBase {
     }
   }
 
+  /**
+   * Implements the Pure Pursuit controller to follow a path defined by a series
+   * of
+   * waypoints.
+   * 
+   * @param currentX     The current x-coordinate of the robot.
+   * @param currentY     The current y-coordinate of the robot.
+   * @param currentTheta The current orientation of the robot in radians.
+   * @param currentIndex The index of the current waypoint in the path.
+   * @param pathPoints   The JSON array containing the path points.
+   * @param spline       The spline representing the path.
+   * @param fullSend     Whether to use full send mode for lookahead distance.
+   * @param accurate     Whether to use accurate following mode.
+   * @return An array containing the calculated velocities for x, y, and theta.
+   */
   public Number[] purePursuitController(double currentX, double currentY, double currentTheta, int currentIndex,
       JSONArray pathPoints, Spline spline, boolean fullSend, boolean accurate) {
     Waypoint targetPoint = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(pathPoints.length() - 1));
@@ -3589,7 +3604,21 @@ public class Drive extends SubsystemBase {
       currentY = Constants.Physical.FIELD_WIDTH - currentY;
       currentTheta = -currentTheta;
     }
-    Waypoint currentWaypoint = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(currentIndex));
+    Waypoint currentWaypoint = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(0));
+    double prevDist = Double.MAX_VALUE;
+    double currentDist = 0;
+    for (int i = currentIndex; i >= 0; i--) {
+      Waypoint point = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(i));
+      currentDist = Math.hypot(currentX - point.x,
+          currentY - point.y);
+      if (currentDist < prevDist) {
+        currentWaypoint = point;
+        prevDist = currentDist;
+        currentIndex = i;
+      } else {
+        break;
+      }
+    }
     double currentCurvature = spline.curvature(currentWaypoint.t);
     while (Math.abs(currentWaypoint.theta - currentTheta) > Math.PI) {
       if (currentWaypoint.theta - currentTheta > Math.PI) {
@@ -3598,12 +3627,15 @@ public class Drive extends SubsystemBase {
         currentWaypoint.theta += 2 * Math.PI;
       }
     }
-    double linearVelMag = Math.hypot(currentWaypoint.dy / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
-        currentWaypoint.dx / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS);
-    double targetVelMag = Math.hypot(linearVelMag,
-        currentWaypoint.dtheta / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS);
-    double lookaheadRadius = fullSend ? Constants.Autonomous.FULL_SEND_LOOKAHEAD
-        : (Constants.Autonomous.FULL_SEND_LOOKAHEAD - Constants.Autonomous.MIN_LOOKAHEAD_DISTANCE)
+    // double linearVelMag = Math.hypot(currentWaypoint.dy /
+    // Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
+    // currentWaypoint.dx /
+    // Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS);
+    // double targetVelMag = Math.hypot(linearVelMag,
+    // currentWaypoint.dtheta /
+    // Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS);
+    double lookaheadRadius = fullSend ? Constants.Autonomous.MAX_LOOKAHEAD_DISTANCE
+        : (Constants.Autonomous.MAX_LOOKAHEAD_DISTANCE - Constants.Autonomous.MIN_LOOKAHEAD_DISTANCE)
             / (1 + Math.pow(currentCurvature, 2))
             + Constants.Autonomous.MIN_LOOKAHEAD_DISTANCE;
 
@@ -3649,6 +3681,18 @@ public class Drive extends SubsystemBase {
     double finalX = xVelNoFF + feedForwardX;
     double finalY = yVelNoFF + feedForwardY;
     double finalTheta = thetaVelNoFF + feedForwardTheta;
+    // Clamp to robot max velocity with curvature limiter
+    double finalVelMag = Math.hypot(finalX, finalY);
+    double allowedVel = Math.max(Constants.Physical.TOP_SPEED
+        / (1 + Constants.Autonomous.CURVATURE_LIMITER_MULTIPLIER * Math.abs(currentCurvature)),
+        Constants.Autonomous.MINIMUM_SPEED_LIMIT);
+    if (finalVelMag > allowedVel) {
+      double scaleFactor = allowedVel / finalVelMag;
+      finalX *= scaleFactor;
+      finalY *= scaleFactor;
+      finalTheta *= scaleFactor;
+    }
+
     if (m_fieldSide == "blue") {
       finalX = -finalX;
       finalY = -finalY;
@@ -3663,6 +3707,7 @@ public class Drive extends SubsystemBase {
         finalX,
         -finalY,
         finalTheta,
+        currentIndex,
         targetIndex,
     };
 
@@ -3678,6 +3723,7 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("look-ahead", lookaheadRadius);
     Logger.recordOutput("time", currentWaypoint.t);
     Logger.recordOutput("curvature", currentCurvature);
+    Logger.recordOutput("maximum speed", allowedVel);
     // Logger.recordOutput("Velocity Array",
     // "X: " + finalX + " Y: " + -finalY + " Theta: " + finalTheta + " Index: " +
     // targetIndex);
@@ -3688,6 +3734,7 @@ public class Drive extends SubsystemBase {
     // Logger.recordOutput("deltax", deltaX);
     // Logger.recordOutput("deltay", deltaY);
     // Logger.recordOutput("deltaTheta", deltaTheta);
+    Logger.recordOutput("Error", Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) + Math.pow(deltaTheta, 2)));
     return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) + Math.pow(deltaTheta, 2)) < radius;
   }
 
