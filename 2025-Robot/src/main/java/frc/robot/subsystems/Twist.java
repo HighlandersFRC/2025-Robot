@@ -44,10 +44,10 @@ public class Twist extends SubsystemBase {
     twistConfig.Slot0.kI = 0.0;
     twistConfig.Slot0.kD = 4.6;
     twistConfig.Slot0.kS = 5.0;
-    twistConfig.Slot1.kP = 13.0;
+    twistConfig.Slot1.kP = 33.0;
     twistConfig.Slot1.kI = 0.0;
-    twistConfig.Slot1.kD = 5.0;
-    twistConfig.Slot1.kS = 1.0;
+    twistConfig.Slot1.kD = 6.0;
+    twistConfig.Slot1.kS = 3.0;
     twistConfig.MotionMagic.MotionMagicJerk = this.twistJerk;
     twistConfig.MotionMagic.MotionMagicAcceleration = this.twistAcceleration;
     twistConfig.MotionMagic.MotionMagicCruiseVelocity = this.twistCruiseVelocity;
@@ -78,7 +78,7 @@ public class Twist extends SubsystemBase {
 
   public void twistToPosition(double rotations) {
 
-    if (intakeItem == ArmItem.ALGAE || algaeMode) { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
+    if (intakeItem == ArmItem.ALGAE) { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
       twistMotor.setControl(this.twistTorqueCurrentFOC // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
           .withPosition(rotations)
           .withEnableFOC(true).withSlot(1)); // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE

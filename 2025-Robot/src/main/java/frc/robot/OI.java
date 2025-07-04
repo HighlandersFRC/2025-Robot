@@ -208,8 +208,10 @@ public class OI {
     public static boolean isRedSide() {
         if (autoChooserConnected()) {
             return !autoChooser.getRawButton(8);
-        } else {
+        } else if (DriverStation.isDSAttached()) {
             return DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+        } else {
+            return true;
         }
     }
 

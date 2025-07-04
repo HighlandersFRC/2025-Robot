@@ -43,7 +43,7 @@ public final class Constants {
                                 "2AlgaeCenter.polarauto",
                                 "2+1PieceFeeder.polarauto",
                                 "3PieceFeederSmart.polarauto",
-                                "4PieceFeederGroundFast.polarauto",
+                                "4PieceFeederGroundSmart.polarauto",
                                 "TushPush.polarauto",
                                 "Square.polarauto"
                 };
@@ -225,47 +225,83 @@ public final class Constants {
 
                 // positive is from face of reef towards center of reef
                 // negative means futher from reef
-                public static final double A_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.5);
-                public static final double B_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.875);
-                public static final double C_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
-                public static final double D_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.25);
-                public static final double E_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
-                public static final double F_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
-                public static final double G_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
-                public static final double H_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.125);
-                public static final double I_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(-0.5940);
-                public static final double J_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.375);
-                public static final double K_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(0.7157);
-                public static final double L_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 - inchesToMeters(1.75);
+                public static final double A_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                                inchesToMeters(1.5);
+                public static final double B_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                                inchesToMeters(1.875);
+                public static final double C_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                                inchesToMeters(1.125);
+                public static final double D_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                                inchesToMeters(1.25);
+                public static final double E_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                                inchesToMeters(1.125);
+                public static final double F_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                                inchesToMeters(1.125);
+                public static final double G_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                                inchesToMeters(1.125);
+                public static final double H_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                                inchesToMeters(1.125);
+                public static final double I_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                                inchesToMeters(-0.5940);
+                public static final double J_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                                inchesToMeters(0.375);
+                public static final double K_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                                inchesToMeters(0.7157);
+                public static final double L_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
+                                inchesToMeters(1.75);
 
-                public static final double A_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.0);
-                public static final double B_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.5);
-                public static final double C_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.75);
-                public static final double D_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
-                public static final double E_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double F_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double G_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double H_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double I_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.125);
-                public static final double J_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.5);
-                public static final double K_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(3.0);
-                public static final double L_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(3.0);
+                public static final double A_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.0);
+                public static final double B_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(2.5);
+                public static final double C_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.75);
+                public static final double D_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(2.0);
+                public static final double E_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.625);
+                public static final double F_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.625);
+                public static final double G_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.625);
+                public static final double H_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.625);
+                public static final double I_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.125);
+                public static final double J_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.5);
+                public static final double K_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(3.0);
+                public static final double L_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(3.0);
 
-                public static final double A_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.5);
-                public static final double B_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.5);
-                public static final double C_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.875);
-                public static final double D_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.25);
-                public static final double E_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double F_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double G_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double H_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.625);
-                public static final double I_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.25);
-                public static final double J_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(1.75);
-                public static final double K_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
-                public static final double L_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 - inchesToMeters(2.0);
+                public static final double A_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.5);
+                public static final double B_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(2.5);
+                public static final double C_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.875);
+                public static final double D_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(2.25);
+                public static final double E_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.625);
+                public static final double F_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.625);
+                public static final double G_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.625);
+                public static final double H_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.625);
+                public static final double I_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.25);
+                public static final double J_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(1.75);
+                public static final double K_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(2.0);
+                public static final double L_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
+                                inchesToMeters(2.0);
 
-                // right when facing the reef side is positive
-                // negative makes robot go more to the left
+                // // right when facing the reef side is positive
+                // // negative makes robot go more to the left
                 public static final double A_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double B_BRANCH_OFFSET_SIDE = inchesToMeters(1.5);
                 public static final double C_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
@@ -379,8 +415,8 @@ public final class Constants {
                 // public static final double L_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
                 // inchesToMeters(1.625);
 
-                // // right when facing the reef side is positive
-                // // negative makes robot go more to the left
+                // right when facing the reef side is positive
+                // negative makes robot go more to the left
                 // public static final double A_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 // public static final double B_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 // public static final double C_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
@@ -442,8 +478,8 @@ public final class Constants {
                                                                           // redBranchPositions = new
                                                                           // ArrayList<>(); // Starting at the right
 
-                public static final double RED_LEFT_FEEDER_X = 16.33;
-                public static final double RED_LEFT_FEEDER_Y = 0.9483;
+                public static final double RED_LEFT_FEEDER_X = 16.28;
+                public static final double RED_LEFT_FEEDER_Y = 0.92;
                 public static final double RED_LEFT_FEEDER_THETA = Math.toRadians(126.0);
 
                 public static final double RED_LEFT_FEEDER_X_TELEOP = 16.544;
@@ -765,10 +801,10 @@ public final class Constants {
                                 double adjustX = inchesToMeters(30.738);
                                 double adjustY = inchesToMeters(6.469);
                                 double adjustXL1 = inchesToMeters(30.738);
-                                double adjustYL1 = inchesToMeters(9.0);
+                                double adjustYL1 = inchesToMeters(6.469);
                                 double adjustXMore = inchesToMeters(70.738);
                                 double adjustYMore = inchesToMeters(6.469);
-                                double adjustAlgaeX = inchesToMeters(35.738);
+                                double adjustAlgaeX = inchesToMeters(45.738);
                                 double adjustAlgaeY = inchesToMeters(0.0);
                                 double adjustAlgaeMoreX = inchesToMeters(16.738);
                                 double adjustAlgaeMoreY = inchesToMeters(0.0);
@@ -843,8 +879,8 @@ public final class Constants {
                                                                                 .getX(),
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                -adjustY,
+                                                                                                adjustXL1,
+                                                                                                -adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_FRONT_MORE,
@@ -868,8 +904,8 @@ public final class Constants {
                                                                                 .getX(),
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                -adjustY,
+                                                                                                adjustXL1,
+                                                                                                -adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_BACK_MORE,
@@ -893,8 +929,8 @@ public final class Constants {
                                                                                 .getX(),
                                                                 poseDirection
                                                                                 .transformBy(new Transform2d(
-                                                                                                adjustX,
-                                                                                                adjustY,
+                                                                                                adjustXL1,
+                                                                                                adjustYL1,
                                                                                                 new Rotation2d()))
                                                                                 .transformBy(new Transform2d(
                                                                                                 Physical.L1_INTAKE_X_OFFSET_FRONT,
@@ -1741,7 +1777,7 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        // System.out.println("f branch: " + l4FrontRight);
+                                        // system.out.println("f branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > -1.0
                                                 && poseDirection.getRotation().getDegrees() < 1.0) {
                                         l4FrontRight = new Pose2d(
@@ -3543,34 +3579,34 @@ public final class Constants {
                 public static final double MODULE_OFFSET = inchesToMeters(2.5);
                 public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
                                 ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
-                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(25.2);
+                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(25.8);
                 public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(25.2);
+                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(25.8);
                 public static double INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
-                public static double INTAKE_X_OFFSET_FRONT_ALGAE = inchesToMeters(23.0 + 5.0);
+                public static double INTAKE_X_OFFSET_FRONT_ALGAE = inchesToMeters(28.0);
                 public static double INTAKE_Y_OFFSET_FRONT_ALGAE = inchesToMeters(3.8);
-                public static double INTAKE_X_OFFSET_BACK_ALGAE = inchesToMeters(23.0 + 5.0);
+                public static double INTAKE_X_OFFSET_BACK_ALGAE = inchesToMeters(28.0);
                 public static double INTAKE_Y_OFFSET_BACK_ALGAE = inchesToMeters(-3.8);
 
-                public static double L1_INTAKE_X_OFFSET_FRONT = inchesToMeters(35.0);
-                public static double L1_INTAKE_Y_OFFSET_FRONT = inchesToMeters(1.5);
-                public static double L1_INTAKE_X_OFFSET_BACK = inchesToMeters(35.0);
-                public static double L1_INTAKE_Y_OFFSET_BACK = inchesToMeters(-1.5);
+                public static double L1_INTAKE_X_OFFSET_FRONT = inchesToMeters(35.3);
+                public static double L1_INTAKE_Y_OFFSET_FRONT = inchesToMeters(5.0);
+                public static double L1_INTAKE_X_OFFSET_BACK = inchesToMeters(35.3);
+                public static double L1_INTAKE_Y_OFFSET_BACK = inchesToMeters(-7.0);
 
-                public static double L1_INTAKE_X_OFFSET_FRONT_MORE = inchesToMeters(23.5);
-                public static double L1_INTAKE_Y_OFFSET_FRONT_MORE = inchesToMeters(1.5);
-                public static double L1_INTAKE_X_OFFSET_BACK_MORE = inchesToMeters(23.5);
-                public static double L1_INTAKE_Y_OFFSET_BACK_MORE = inchesToMeters(-1.5);
+                public static double L1_INTAKE_X_OFFSET_FRONT_MORE = inchesToMeters(24.5);
+                public static double L1_INTAKE_Y_OFFSET_FRONT_MORE = inchesToMeters(5.0);
+                public static double L1_INTAKE_X_OFFSET_BACK_MORE = inchesToMeters(24.5);
+                public static double L1_INTAKE_Y_OFFSET_BACK_MORE = inchesToMeters(-9.0);
 
-                public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(23.45);
+                public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(23.25);
                 public static double L2_INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(23.45);
+                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(23.25);
                 public static double L2_INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
-                public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(26.9);
+                public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(27.1);
                 public static double L4_INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(26.9);
+                public static double L4_INTAKE_X_OFFSET_BACK = inchesToMeters(27.1);
                 public static double L4_INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
                 public static final double GRAVITY_ACCEL_MS2 = 9.806;
@@ -3593,7 +3629,7 @@ public final class Constants {
                 public static final double ELEVATOR_BOTTOM_POSITION_M = 0.0;
                 public static final double ELEVATOR_MID_POSITION_M = inchesToMeters(26.0); // L2 after placement
                 public static final double ELEVATOR_TOP_POSITION_M = inchesToMeters(43.0);
-                public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(7.157);
+                public static final double ELEVATOR_L1_POSITION_M = inchesToMeters(6.6);
                 public static final double ELEVATOR_L2_POSITION_M = inchesToMeters(15);
                 public static final double ELEVATOR_AUTO_L2_POSITION_M = inchesToMeters(20);
                 public static final double ELEVATOR_AUTO_L2_POSITION_SCORE_M = inchesToMeters(16);
@@ -3604,13 +3640,13 @@ public final class Constants {
                 public static final double ELEVATOR_L3_POSITION_M = inchesToMeters(28);
                 public static final double ELEVATOR_L4_POSITION_M = inchesToMeters(64.0);
                 public static final double ELEVATOR_ALGAE_POSITION_M = inchesToMeters(8.0);
-                public static final double ELEVATOR_GROUND_CORAL_POSITION_M = inchesToMeters(4.3);
+                public static final double ELEVATOR_GROUND_CORAL_POSITION_M = inchesToMeters(5.4);
                 public static final double ELEVATOR_GROUND_ALGAE_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_FEEDER_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_OVER_POSITION_M = inchesToMeters(20);
                 public static final double ELEVATOR_NET_POSITION_M = inchesToMeters(65);
-                public static final double ELEVATOR_L2_ALGAE_POSITION_M = inchesToMeters(19);
-                public static final double ELEVATOR_L3_ALGAE_POSITION_M = inchesToMeters(35);
+                public static final double ELEVATOR_L2_ALGAE_POSITION_M = inchesToMeters(15.7);
+                public static final double ELEVATOR_L3_ALGAE_POSITION_M = inchesToMeters(33.0);
                 public static final double ELEVATOR_PROCESSOR_POSITION_M = inchesToMeters(6.5);
                 public static final double ELEVATOR_LOLLIPOP_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_PRE_HANDOFF_POSITION_M = inchesToMeters(39.0);
@@ -3669,7 +3705,7 @@ public final class Constants {
                 public static final double PIVOT_L1_POSITION_D = 67.0;
                 public static final double PIVOT_L23_POSITION_D = 52.5;
                 // public static final double PIVOT_AUTO_L23_POSITION_D = 45.0;
-                public static final double PIVOT_AUTO_L2_POSITION_D = 60.0;
+                public static final double PIVOT_AUTO_L2_POSITION_D = 65.0;
                 public static final double PIVOT_AUTO_L3_POSITION_D = 50.0;
                 // public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
                 public static final double PIVOT_AUTO_L4_POSITION_D = 0.0;
