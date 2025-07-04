@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "SplineTest",
+      "request": "launch",
+      "mainClass": "frc.robot.tools.math.SplineTest",
+      "projectName": "2025-Robot"
+    },
+    {
+      "type": "java",
       "name": "Main",
       "request": "launch",
       "mainClass": "frc.robot.Main",

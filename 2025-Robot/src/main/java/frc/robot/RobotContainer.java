@@ -20,9 +20,7 @@ import frc.robot.commands.AutoPlaceL2Follower;
 import frc.robot.commands.AutoPlaceL4Follower;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.FeederPickupFollower;
-import frc.robot.commands.FullSendFollower;
 import frc.robot.commands.PolarAutoFollower;
-import frc.robot.commands.ReefAlgaePickupFollower;
 import frc.robot.commands.SetAlgaeMode;
 import frc.robot.commands.SetClimberPivotTorque;
 import frc.robot.commands.SetRobotState;
@@ -82,7 +80,6 @@ public class RobotContainer {
                         put("Outake", () -> new SetRobotStateSimple(superstructure, SuperState.OUTAKE));
                         put("L1", () -> new SetRobotStateSimple(superstructure, SuperState.AUTO_L1_PLACE));
                         put("Idle", () -> new SetRobotStateSimple(superstructure, SuperState.IDLE));
-                        put("Full Send", () -> new FullSendFollower(drive, null, false));
                         put("IntakeLollipop", () -> new SetRobotState(superstructure, SuperState.LOLLIOP_PICKUP));
                         put("Net", () -> new SetRobotStateSimple(superstructure, SuperState.NET));
                         put("GroundIntake", () -> new SetRobotStateComplicatedContinuous(superstructure,

@@ -39,7 +39,7 @@ public class PolarPathFollower extends ParallelCommandGroup {
 
   public PolarPathFollower(Drive drive, Lights lights, Peripherals peripherals, JSONObject pathJSON,
       HashMap<String, Supplier<Command>> commandMap, HashMap<String, BooleanSupplier> conditionMap) {
-    defaultFollower = new VariableSpeedFollower(drive, pathJSON.getJSONArray("sampled_points"),
+    defaultFollower = new VariableSpeedFollower(drive, pathJSON,
         false);
     startTime = pathJSON.getJSONArray("sampled_points").getJSONObject(0).getDouble("time");
     follower = defaultFollower;
@@ -171,8 +171,8 @@ public class PolarPathFollower extends ParallelCommandGroup {
         public void run() {
           int runFrom = getPointIndexFromTime(command.getDouble("start"));
           int runTo = getPointIndexFromTime(command.getDouble("end"));
-          System.out.println("run from " + runFrom);
-          System.out.println("run to " + runTo);
+          // System.out.println("run from " + runFrom);
+          // System.out.println("run to " + runTo);
           follower.cancel();
           follower = (AutoFollower) runner;
           follower.from(runFrom, pathJSON, runTo);

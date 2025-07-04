@@ -22,10 +22,11 @@ public final class Constants {
                 // their constants
                 public static final double AUTONOMOUS_LOOKAHEAD_DISTANCE = 0.04; // Lookahead at 1m/s scaled by wanted
                                                                                  // velocity
-                public static final double FULL_SEND_LOOKAHEAD = 0.60;
+                public static final double MAX_LOOKAHEAD_DISTANCE = 0.60;
                 public static final double MIN_LOOKAHEAD_DISTANCE = 0.05; // Lookahead distance at 0m/s
+                public static final int MIN_LOOKAHEAD_STEP = 3;
                 // Path follower will end if within this radius of the final point
-                public static final double AUTONOMOUS_END_ACCURACY = 0.40;
+                public static final double AUTONOMOUS_END_ACCURACY = 0.20;
                 public static final double ACCURATE_FOLLOWER_AUTONOMOUS_END_ACCURACY = 0.05;
                 // When calculating the point distance, will divide x and y by this constant
                 public static final double AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS = 1.0;
@@ -34,12 +35,17 @@ public final class Constants {
                 // Feed Forward Multiplier
                 public static final double FEED_FORWARD_MULTIPLIER = 0.5;
                 public static final double ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER = 1;
+                // A larger value will limit the speed more when going around curves
+                public static final double CURVATURE_LIMITER_MULTIPLIER = 2;
+                // Minimum speed limit during auto
+                public static final double MINIMUM_SPEED_LIMIT = 0.5; // m/s
                 public static final String[] paths = new String[] {
                                 "2AlgaeCenter.polarauto",
                                 "2+1PieceFeeder.polarauto",
                                 "3PieceFeederSmart.polarauto",
                                 "4PieceFeederGroundSmart.polarauto",
                                 "TushPush.polarauto",
+                                "Square.polarauto"
                 };
 
                 public static int getSelectedPathIndex() {
@@ -153,35 +159,39 @@ public final class Constants {
                 // new Rotation2d(Constants.Vision.blueSideReefTags[i][3] + Math.PI)));
                 // }
 
-                // System.out.println("blue algae front positions: "
+                // Logger.recordOutput("red side scoring",
+                // Constants.Physical.redCoralScoringPositions.toString());
+                // Logger.recordOutput("blue side scoring",
+                // Constants.Physical.blueCoralScoringPositions.toString());
+                // System.out.println"blue algae front positions: "
                 // + Constants.Reef.algaeBlueFrontPlacingPositions.toString());
-                // System.out.println("red algae front positions: "
+                // System.out.println"red algae front positions: "
                 // + Constants.Reef.algaeRedFrontPlacingPositions.toString());
-                // System.out.println("blue algae back positions: "
+                // System.out.println"blue algae back positions: "
                 // + Constants.Reef.algaeBlueBackPlacingPositions.toString());
-                // System.out.println(
+                // System.out.println
                 // "red algae back positions: " +
                 // Constants.Reef.algaeRedBackPlacingPositions.toString());
 
-                // System.out.println("blue positions: " +
+                // System.out.println"blue positions: " +
                 // Constants.Reef.blueFrontPlacingPositions.toString());
-                // System.out.println("red positions: " +
+                // System.out.println"red positions: " +
                 // Constants.Reef.redFrontPlacingPositions.toString());
-                // System.out.println("blue back positions: " +
+                // System.out.println"blue back positions: " +
                 // Constants.Reef.blueBackPlacingPositions.toString());
-                // System.out.println("red back positions: " +
+                // System.out.printlnln"red back positions: " +
                 // Constants.Reef.redBackPlacingPositions.toString());
 
-                // System.out.println("l4 blue positions: " +
+                // System.out.printlnln"l4 blue positions: " +
                 // Constants.Reef.l4BlueFrontPlacingPositions.toString());
-                // System.out.println("l4 red positions: " +
+                // System.out.println"l4 red positions: " +
                 // Constants.Reef.l4RedFrontPlacingPositions.toString());
-                // System.out.println("l4 blue back positions: " +
+                // System.out.printlnln"l4 blue back positions: " +
                 // Constants.Reef.l4BlueBackPlacingPositions.toString());
-                // System.out.println("l4 red back positions: " +
+                // System.out.printlnlnln"l4 red back positions: " +
                 // Constants.Reef.l4RedBackPlacingPositions.toString());
 
-                // System.out.println("l3 blue positions: " +
+                // // System.out.printlnln"l3 blue positions: " +
                 // Constants.Reef.l3BlueFrontPlacingPositions.toString());
                 // System.out.println("l3 red positions: " +
                 // Constants.Reef.l3RedFrontPlacingPositions.toString());
@@ -687,7 +697,7 @@ public final class Constants {
                 // -120=KL
 
                 public static void calculateReefPoints() {
-                        System.out.println("recalculating points");
+                        // System.out.println("recalculating points");
                         blueL1FrontPlacingPositions.clear();
                         redL1FrontPlacingPositions.clear();
                         blueL1BackPlacingPositions.clear();
@@ -1617,7 +1627,7 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        // system.out.println("d branch: " + l4FrontRight);
+                                        // System.out.println("d branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > 59.0
                                                 && poseDirection.getRotation().getDegrees() < 61.0) {
                                         l4FrontRight = new Pose2d(
@@ -1917,7 +1927,7 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        // system.out.println("h branch: " + l4FrontRight);
+                                        // System.out.println("h branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > -61.0
                                                 && poseDirection.getRotation().getDegrees() < -59.0) {
                                         l4FrontRight = new Pose2d(
@@ -2067,7 +2077,7 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        // system.out.println("j branch: " + l4FrontRight);
+                                        // System.out.println("j branch: " + l4FrontRight);
                                 } else {
                                         l4FrontRight = new Pose2d(
                                                         new Translation2d(
@@ -2216,7 +2226,7 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        // system.out.println("l branch: " + l4FrontRight);
+                                        // System.out.println("l branch: " + l4FrontRight);
                                 }
                                 // l3FrontRight = new Pose2d(
                                 // new Translation2d(
@@ -2503,7 +2513,7 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        // system.out.println("b branch: " + l4FrontRight);
+                                        // System.out.println("b branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > 119.0
                                                 && poseDirection.getRotation().getDegrees() < 121.0) {
                                         l4FrontLeft = new Pose2d(
@@ -2653,7 +2663,7 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        // system.out.println("d branch: " + l4FrontRight);
+                                        // System.out.println("d branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > 59.0
                                                 && poseDirection.getRotation().getDegrees() < 61.0) {
                                         l4FrontLeft = new Pose2d(
@@ -2803,7 +2813,7 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        // system.out.println("f branch: " + l4FrontRight);
+                                        // System.out.println("f branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > -1.0
                                                 && poseDirection.getRotation().getDegrees() < 1.0) {
                                         l4FrontLeft = new Pose2d(
@@ -2953,7 +2963,7 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        // system.out.println("h branch: " + l4FrontRight);
+                                        // System.out.println("h branch: " + l4FrontRight);
                                 } else if (poseDirection.getRotation().getDegrees() > -61.0
                                                 && poseDirection.getRotation().getDegrees() < -59.0) {
                                         l4FrontLeft = new Pose2d(
@@ -3103,7 +3113,7 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        // system.out.println("j branch: " + l4FrontRight);
+                                        // System.out.println("j branch: " + l4FrontRight);
                                 } else {
                                         l4FrontLeft = new Pose2d(
                                                         new Translation2d(
@@ -3252,7 +3262,7 @@ public final class Constants {
                                                                                         .getY()),
                                                         new Rotation2d(
                                                                         poseDirection.getRotation().getRadians()));
-                                        // system.out.println("l branch: " + l4FrontRight);
+                                        // System.out.println("l branch: " + l4FrontRight);
                                 }
                                 // l3FrontLeft = new Pose2d(
                                 // new Translation2d(
