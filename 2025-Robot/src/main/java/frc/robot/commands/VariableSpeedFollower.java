@@ -82,7 +82,6 @@ public class VariableSpeedFollower extends AutoFollower {
 
   @Override
   public void execute() {
-    // System.out.println("Variable Speed");
     drive.updateOdometryFusedArray();
     odometryFusedX = drive.getMT2OdometryX();
     odometryFusedY = drive.getMT2OdometryY();
@@ -163,8 +162,8 @@ public class VariableSpeedFollower extends AutoFollower {
 
         bw.close();
       } catch (Exception e) {
-        System.out.println(e);
-        System.out.println("CSV file error");
+        java.util.logging.Logger.getGlobal().warning(e.getMessage());
+        java.util.logging.Logger.getGlobal().warning("CSV file error");
       }
     }
   }

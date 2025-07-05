@@ -124,9 +124,12 @@ public class RobotContainer {
                                                 .getJSONArray("sampled_points");
                                 autos[i] = new PolarAutoFollower(autoJSONs[i], drive, lights, peripherals, commandMap,
                                                 conditionMap);
-                                System.out.println("Loaded Path: " + Constants.Autonomous.paths[i]);
+                                java.util.logging.Logger.getGlobal()
+                                                .info("Loaded Path: " + Constants.Autonomous.paths[i]);
                         } catch (Exception e) {
-                                System.out.println("ERROR LOADING PATH " + Constants.Autonomous.paths[i] + ":" + e);
+                                java.util.logging.Logger.getGlobal()
+                                                .severe("ERROR LOADING PATH " + Constants.Autonomous.paths[i] + ":"
+                                                                + e);
                         }
                 }
         }
@@ -352,11 +355,12 @@ public class RobotContainer {
                         selectedPath = -1;
                 }
                 if (selectedPath == -1) {
-                        System.out.println("Selected Path: None");
+                        java.util.logging.Logger.getGlobal().info("Selected Path: None");
                         return new DoNothing();
                 } else {
                         this.drive.autoInit(autoPoints[selectedPath]);
-                        System.out.println("Selected Path: " + Constants.Autonomous.paths[selectedPath]);
+                        java.util.logging.Logger.getGlobal()
+                                        .info("Selected Path: " + Constants.Autonomous.paths[selectedPath]);
                         return this.autos[selectedPath];
                 }
         }

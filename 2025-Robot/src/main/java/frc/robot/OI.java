@@ -83,13 +83,13 @@ public class OI {
     public static JoystickButton autoChooserIsBlue = new JoystickButton(autoChooser, 8);
 
     public static void printAutoChooserInputs() {
-        System.out.println("Driver Controller Connected: " + driverController.isConnected());
-        System.out.println("Operator Controller Connected: " + operatorController.isConnected());
-        System.out.println("Auto Chooser Connected: " + autoChooser.isConnected());
-        System.out.println("Auto Chooser Num Buttons: " + autoChooser.getButtonCount());
-        System.out.println("Is Blue: " + autoChooserIsBlue.getAsBoolean());
+        java.util.logging.Logger.getGlobal().info("Driver Controller Connected: " + driverController.isConnected());
+        java.util.logging.Logger.getGlobal().info("Operator Controller Connected: " + operatorController.isConnected());
+        java.util.logging.Logger.getGlobal().info("Auto Chooser Connected: " + autoChooser.isConnected());
+        java.util.logging.Logger.getGlobal().info("Auto Chooser Num Buttons: " + autoChooser.getButtonCount());
+        java.util.logging.Logger.getGlobal().info("Is Blue: " + autoChooserIsBlue.getAsBoolean());
         for (int i = 1; i <= 16; i++) {
-            System.out.println("Auto Chooser Button " + i + " : " + autoChooser.getRawButton(i));
+            java.util.logging.Logger.getGlobal().info("Auto Chooser Button " + i + " : " + autoChooser.getRawButton(i));
         }
     }
 
@@ -170,11 +170,11 @@ public class OI {
     }
 
     public static boolean getDriverRB() {
-        return driverController.getRightBumper();
+        return driverController.getRightBumperButton();
     }
 
     public static boolean getDriverLB() {
-        return driverController.getLeftBumper();
+        return driverController.getLeftBumperButton();
     }
 
     public static double getOperatorRTPercent() {
@@ -186,7 +186,7 @@ public class OI {
     }
 
     public static boolean getOperatorLB() {
-        return operatorController.getLeftBumper();
+        return operatorController.getLeftBumperButton();
     }
 
     public static int getPOV() {

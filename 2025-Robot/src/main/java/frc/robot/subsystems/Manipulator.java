@@ -89,7 +89,7 @@ public class Manipulator extends SubsystemBase {
       }
       if (lastCoralValue != true) {
         switchTime = Timer.getFPGATimestamp();
-        System.out.println("Switch Intake Item: Has Coral");
+        java.util.logging.Logger.getGlobal().finer("Switch Intake Item: Has Coral");
       }
       lastCoralValue = true;
       return true;
@@ -98,7 +98,7 @@ public class Manipulator extends SubsystemBase {
       coralTime = Timer.getFPGATimestamp();
       if (lastCoralValue != false) {
         switchTime = Timer.getFPGATimestamp();
-        System.out.println("Switch Intake Item: Empty");
+        java.util.logging.Logger.getGlobal().finer("Switch Intake Item: Empty");
       }
       lastCoralValue = false;
       return false;

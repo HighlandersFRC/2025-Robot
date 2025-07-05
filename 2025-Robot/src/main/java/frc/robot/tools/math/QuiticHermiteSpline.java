@@ -62,7 +62,7 @@ public class QuiticHermiteSpline {
         int segmentIndex = -1;
         for (int i = 0; i < numSegments; i++) {
             if (time <= derivatives[i + 1].t) {
-                System.out.println(derivatives[i + 1].t);
+                java.util.logging.Logger.getGlobal().finer(derivatives[i + 1].t + "");
                 segmentIndex = i;
                 break;
             }

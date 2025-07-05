@@ -171,8 +171,6 @@ public class PolarPathFollower extends ParallelCommandGroup {
         public void run() {
           int runFrom = getPointIndexFromTime(command.getDouble("start"));
           int runTo = getPointIndexFromTime(command.getDouble("end"));
-          // System.out.println("run from " + runFrom);
-          // System.out.println("run to " + runTo);
           follower.cancel();
           follower = (AutoFollower) runner;
           follower.from(runFrom, pathJSON, runTo);

@@ -34,7 +34,7 @@ public class AutoCoralGroundPickupFollower extends AutoFollower {
   }
 
   public void from(int pointIndex, JSONObject pathJSON, int to) {
-    System.out.println("Running L4 in auto");
+    java.util.logging.Logger.getGlobal().fine("Running L4 in auto");
     this.currentPathPointIndex = pointIndex;
   }
 
@@ -48,7 +48,7 @@ public class AutoCoralGroundPickupFollower extends AutoFollower {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("Running Auto Pickup Follower");
+    java.util.logging.Logger.getGlobal().finer("Running Auto Pickup Follower");
   }
 
   // Called once the command ends or is interrupted.

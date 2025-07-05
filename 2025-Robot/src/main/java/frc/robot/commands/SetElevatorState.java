@@ -38,17 +38,18 @@ public class SetElevatorState extends Command {
   @Override
   public void execute() {
     superstructure.setWantedState(superState);
-    System.out.println("Elevator State Updating: " + superState);
+    java.util.logging.Logger.getGlobal().finer("Elevator State Updating: " + superState);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(auto && Math.abs(Constants.SetPoints.ELEVATOR_L2_POSITION_M - elevator.getElevatorPosition()) < 0.1) {
+    if (auto && Math.abs(Constants.SetPoints.ELEVATOR_L2_POSITION_M - elevator.getElevatorPosition()) < 0.1) {
       return true;
     }
     return false;
