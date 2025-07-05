@@ -186,6 +186,9 @@ public class Drive extends SubsystemBase {
   PhotonPoseEstimator gamePiecePhotonPoseEstimator;
   AprilTagFieldLayout aprilTagFieldLayout;
 
+  // *********************NOTE THE PITCH IS POSITIVE DOWNWARDS
+  // **********************************
+
   Transform3d frontReefRobotToCam = new Transform3d( // top front reef cam
       new Translation3d(Constants.inchesToMeters(2.0), Constants.inchesToMeters(-11.5),
           Constants.inchesToMeters(23.625)),
@@ -204,15 +207,15 @@ public class Drive extends SubsystemBase {
       new Rotation3d(Math.toRadians(1.5), Math.toRadians(25.2), Math.toRadians(165.0)));
 
   Transform3d backLeftReefRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(-12.25), Constants.inchesToMeters(9.375),
-          Constants.inchesToMeters(8.5)),
-      new Rotation3d(Math.toRadians(0.4), Math.toRadians(21.8), Math.toRadians(181.53)));
+      new Translation3d(Constants.inchesToMeters(-12.375), Constants.inchesToMeters(9.375),
+          Constants.inchesToMeters(8.6875)),
+      new Rotation3d(Math.toRadians(0.5), Math.toRadians(-20.7), Math.toRadians(181.53)));
 
   Transform3d backRightReefRobotToCam = new Transform3d(
       new Translation3d(Constants.inchesToMeters(
-          -12.25), Constants.inchesToMeters(-9.25),
-          Constants.inchesToMeters(8.5)),
-      new Rotation3d(Math.toRadians(0.4), Math.toRadians(20.4), Math.toRadians(178.47)));
+          -12.375), Constants.inchesToMeters(-9.25),
+          Constants.inchesToMeters(8.6875)),
+      new Rotation3d(Math.toRadians(0.5), Math.toRadians(-20.6), Math.toRadians(178.47)));
 
   Transform3d gamePieceReefRobotToCam = new Transform3d(
       new Translation3d(Constants.inchesToMeters(2.0), Constants.inchesToMeters(-11.5),
