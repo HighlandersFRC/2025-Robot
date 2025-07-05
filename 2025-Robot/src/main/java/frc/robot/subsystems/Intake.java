@@ -52,8 +52,8 @@ public class Intake extends SubsystemBase {
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    config.CurrentLimits.StatorCurrentLimit = 60;
-    config.CurrentLimits.SupplyCurrentLimit = 60;
+    config.CurrentLimits.StatorCurrentLimit = 70;
+    config.CurrentLimits.SupplyCurrentLimit = 70;
     config.Slot0.kP = 4.068;
     config.Slot0.kI = 0.0;
     config.Slot0.kD = 0;
@@ -131,6 +131,7 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
+    Logger.recordOutput("Intake Position", getPosition() * 360);
     Logger.recordOutput("Intake Motor Current", roller.getStatorCurrent().getValueAsDouble());
     systemState = handleStateTransition();
     if (systemState != IntakeState.HANDOFF) {
@@ -217,14 +218,20 @@ public class Intake extends SubsystemBase {
           setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
               0.5);
         }
-        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 2.0 / 360.0) {
-          pivotWithTorque(-15, 0.2);
-        } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 10.0 / 360.0) {
-          pivotWithTorque(-45, 0.2);
-        } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 20.0 / 360.0) {
-          pivotWithTorque(-50, 0.4);
+        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 10.0 / 360.0) {
+          pivotWithTorque(-5, 0.2);
+          // System.out.println("5");
+        } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 30.0 / 360.0) {
+          pivotWithTorque(-30, 0.1);
+          // System.out.println("30");
+        } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 60.0 / 360.0) {
+          pivotWithTorque(-40, 0.1);
+          // System.out.println("40");
         } else {
-          pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+          // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+          pivotWithTorque(-70, 0.6);
+          // System.out.println("70");
+
         }
         break;
       default:

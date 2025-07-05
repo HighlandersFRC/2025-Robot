@@ -607,6 +607,7 @@ public class Pivot extends SubsystemBase {
             break;
         }
         break;
+
       case AUTO_SCORE_L4:
         switch (systemFlip) {
           case FRONT:
@@ -635,13 +636,13 @@ public class Pivot extends SubsystemBase {
         // break;
         switch (systemFlip) {
           case FRONT:
-            pivotToPositionSlow(Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
+            pivotToPositionSlower(Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
             break;
           case BACK:
-            pivotToPositionSlow(-Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
+            pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
             break;
           default:
-            pivotToPositionSlow(Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
+            pivotToPositionSlower(Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
             break;
         }
         break;

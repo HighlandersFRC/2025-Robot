@@ -3105,6 +3105,10 @@ public class Drive extends SubsystemBase {
     // Math.toDegrees(getMT2OdometryAngle()))
     // + " Hits: "
     // + hitNumber);
+
+    Logger.recordOutput("Error for semi-generous", Math
+        .sqrt(Math.pow((x - getMT2OdometryX()), 2)
+            + Math.pow((y - getMT2OdometryY()), 2)));
     if (Math
         .sqrt(Math.pow((x - getMT2OdometryX()), 2)
             + Math.pow((y - getMT2OdometryY()), 2)) < 0.05
