@@ -34,7 +34,7 @@ public class AutoPlaceL4Follower extends AutoFollower {
   }
 
   public void from(int pointIndex, JSONObject pathJSON, int to) {
-    System.out.println("Running L4 in auto");
+    java.util.logging.Logger.getGlobal().fine("Running L4 in auto");
     this.currentPathPointIndex = pointIndex;
   }
 
@@ -54,7 +54,7 @@ public class AutoPlaceL4Follower extends AutoFollower {
   @Override
   public void end(boolean interrupted) {
     superstructure.setWantedState(SuperState.OUTAKE_IDLE);
-    System.out.println("L4 fOllower END");
+    java.util.logging.Logger.getGlobal().fine("L4 fOllower END");
   }
 
   // Returns true when the command should end.

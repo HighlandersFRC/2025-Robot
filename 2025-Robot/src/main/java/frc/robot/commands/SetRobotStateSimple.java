@@ -25,7 +25,7 @@ public class SetRobotStateSimple extends Command {
   @Override
   public void initialize() {
     superstructure.setWantedState(superState);
-    System.out.println("Robot State Updating: " + superState);
+    java.util.logging.Logger.getGlobal().fine("Robot State Updating: " + superState);
 
   }
 

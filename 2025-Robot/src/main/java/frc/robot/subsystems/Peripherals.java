@@ -62,7 +62,7 @@ public class Peripherals {
       aprilTagFieldLayout = new AprilTagFieldLayout(
           Filesystem.getDeployDirectory().getPath() + "/" + "2025-reefscape.json");
     } catch (Exception e) {
-      System.out.println("error with april tag: " + e.getMessage());
+      java.util.logging.Logger.getGlobal().warning("error with april tag: " + e.getMessage());
     }
     photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);

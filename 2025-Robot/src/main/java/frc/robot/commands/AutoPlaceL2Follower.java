@@ -34,7 +34,7 @@ public class AutoPlaceL2Follower extends AutoFollower {
   }
 
   public void from(int pointIndex, JSONObject pathJSON, int to) {
-    System.out.println("Running L2 in auto");
+    java.util.logging.Logger.getGlobal().fine("Running L2 in auto");
     this.currentPathPointIndex = pointIndex;
   }
 

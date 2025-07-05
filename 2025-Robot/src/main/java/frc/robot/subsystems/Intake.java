@@ -265,14 +265,14 @@ public class Intake extends SubsystemBase {
     ) {
       if (lastCoralValue != true) {
         switchTime = Timer.getFPGATimestamp();
-        System.out.println("Switch Ground Intake Item: Has Coral");
+        java.util.logging.Logger.getGlobal().finer("Switch Ground Intake Item: Has Coral");
       }
       lastCoralValue = true;
       return true;
     } else {
       if (lastCoralValue != false) {
         switchTime = Timer.getFPGATimestamp();
-        System.out.println("Switch Ground Intake Item: Empty");
+        java.util.logging.Logger.getGlobal().finer("Switch Ground Intake Item: Empty");
       }
       lastCoralValue = false;
       return false;

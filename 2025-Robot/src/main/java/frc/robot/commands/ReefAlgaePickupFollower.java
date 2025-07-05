@@ -38,7 +38,7 @@ public class ReefAlgaePickupFollower extends AutoFollower {
   }
 
   public void from(int pointIndex, JSONObject pathJSON, int to) {
-    System.out.println("Running L4 in auto");
+    java.util.logging.Logger.getGlobal().fine("Running L4 in auto");
     this.currentPathPointIndex = pointIndex;
   }
 

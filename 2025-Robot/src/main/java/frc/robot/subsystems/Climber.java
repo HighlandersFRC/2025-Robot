@@ -88,9 +88,6 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // if ((" " + Timer.getFPGATimestamp()).indexOf("0") > 6) {
-    // System.out.println(getClimbSensor());
-    // }
     Logger.recordOutput("Climb Sensor", getClimbSensor());
     Logger.recordOutput("Climber Times Triggered", timesTriggered);
     ClimbState newState = handleStateTransition();
