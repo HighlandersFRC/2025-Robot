@@ -3449,9 +3449,9 @@ public final class Constants {
                 public static double L1_INTAKE_X_OFFSET_BACK_MORE = inchesToMeters(24.5);
                 public static double L1_INTAKE_Y_OFFSET_BACK_MORE = inchesToMeters(-9.0);
 
-                public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(24.5);
+                public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(24.9);
                 public static double L2_INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(24.5);
+                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(24.9);
                 public static double L2_INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
                 public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(27.1);
@@ -3552,11 +3552,11 @@ public final class Constants {
                         }
                 }
 
-                public static final double PIVOT_L1_POSITION_D = 67.0;
+                public static final double PIVOT_L1_POSITION_D = 65.67;
                 public static final double PIVOT_L23_POSITION_D = 52.5;
                 // public static final double PIVOT_AUTO_L23_POSITION_D = 45.0;
-                public static final double PIVOT_AUTO_L2_POSITION_D = 65.0;
-                public static final double PIVOT_AUTO_L3_POSITION_D = 65.0;
+                public static final double PIVOT_AUTO_L2_POSITION_D = 62.0;
+                public static final double PIVOT_AUTO_L3_POSITION_D = 62.0;
                 // public static final double PIVOT_AUTO_L3_POSITION_D = 30.0;
                 public static final double PIVOT_AUTO_L4_POSITION_D = 0.0;
                 public static final double PIVOT_AUTO_L4_SCORE_POSITION_D = 100.0;

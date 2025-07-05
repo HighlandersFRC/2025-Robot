@@ -457,9 +457,6 @@ public class Superstructure extends SubsystemBase {
         // }
         // break;
         if (manipulator.hasCoralSticky()) {
-
-          // System.out.println("Drive: " +
-          // drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI //
           // DO
           // // NOT
           // // COMMENT
@@ -472,11 +469,13 @@ public class Superstructure extends SubsystemBase {
           // // WILL
           // // NOT
           // // WORK
-          // .getDriverA())[0],
-          // drive.getReefClosestSetpoint(drive.getMT2Odometry(),
-          // OI.getDriverA())[1],
-          // drive.getReefClosestSetpoint(drive.getMT2Odometry(),
-          // OI.getDriverA())[2]));
+          // System.out.println("Drive: " +
+          //     drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+          //         .getDriverA())[0],
+          //         drive.getReefClosestSetpoint(drive.getMT2Odometry(),
+          //             OI.getDriverA())[1],
+          //         drive.getReefClosestSetpoint(drive.getMT2Odometry(),
+          //             OI.getDriverA())[2]));
           java.util.logging.Logger.getGlobal().finer(
               "Drive: " + drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
                   drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
