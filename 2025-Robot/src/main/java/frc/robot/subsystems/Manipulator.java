@@ -114,6 +114,15 @@ public class Manipulator extends SubsystemBase {
     return hasCoralSticky;
   }
 
+  public boolean hasCoralSemiSticky() {
+    if (hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.1) {
+      hasCoralSticky = true;
+    } else if (!hasCoral() && Timer.getFPGATimestamp() - switchTime > 0.1) {
+      hasCoralSticky = false;
+    }
+    return hasCoralSticky;
+  }
+
   public boolean hasCoralForTime(double time) {
     // Logger.recordOutput("Has Coral",
     // (intakeMotor.getVelocity().getValueAsDouble() > -10

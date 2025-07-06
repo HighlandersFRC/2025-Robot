@@ -184,19 +184,37 @@ public class Intake extends SubsystemBase {
         // setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
         // Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
         setRollerPercent(-1.0);
-        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 6.7 / 360.0) {
-          pivotWithTorque(-15, 0.1);
-          // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-          // 0.2);
-        } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 20.0 / 360.0) {
-          pivotWithTorque(-20, 0.2);
-          // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-          // 0.2);
+
+        // if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 6.7 / 360.0) {
+        //   pivotWithTorque(-15, 0.1);
+        //   // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
+        //   // 0.2);
+        // } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 20.0 / 360.0) {
+        //   pivotWithTorque(-20, 0.2);
+        //   // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
+        //   // 0.2);
+        // } else {
+        //   pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+        //   // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
+        //   // 0.2);
+        // }
+
+        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 10.0 / 360.0) {
+          pivotWithTorque(-5, 0.2);
+          // System.out.println("5");
+        } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 30.0 / 360.0) {
+          pivotWithTorque(-50, 0.1);
+          // System.out.println("30");
+        } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 60.0 / 360.0) {
+          pivotWithTorque(-60, 0.1);
+          // System.out.println("40");
         } else {
-          pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
-          // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-          // 0.2);
+          // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+          pivotWithTorque(-70, 0.6);
+          // System.out.println("70");
+
         }
+
         // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
         // } else {
         // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
@@ -226,10 +244,10 @@ public class Intake extends SubsystemBase {
           pivotWithTorque(-5, 0.2);
           // System.out.println("5");
         } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 30.0 / 360.0) {
-          pivotWithTorque(-30, 0.1);
+          pivotWithTorque(-50, 0.1);
           // System.out.println("30");
         } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 60.0 / 360.0) {
-          pivotWithTorque(-40, 0.1);
+          pivotWithTorque(-60, 0.1);
           // System.out.println("40");
         } else {
           // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);

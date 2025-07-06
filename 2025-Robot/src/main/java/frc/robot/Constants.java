@@ -114,9 +114,9 @@ public final class Constants {
                                 inchesToMeters(1.75);
 
                 public static final double A_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
-                                inchesToMeters(1.0);
+                                inchesToMeters(1.5);
                 public static final double B_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
-                                inchesToMeters(2.5);
+                                inchesToMeters(2.0);
                 public static final double C_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
                                 inchesToMeters(1.75);
                 public static final double D_BRANCH_OFFSET_L3 = PERFECT_BRANCH_OFFSET_L23 -
@@ -3429,9 +3429,9 @@ public final class Constants {
                 public static final double MODULE_OFFSET = inchesToMeters(2.5);
                 public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
                                 ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
-                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(26.0);
+                public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(25.5);
                 public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(26.0);
+                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(25.5);
                 public static double INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
                 public static double INTAKE_X_OFFSET_FRONT_ALGAE = inchesToMeters(28.0);
@@ -3442,7 +3442,7 @@ public final class Constants {
                 public static double L1_INTAKE_X_OFFSET_FRONT = inchesToMeters(35.3);
                 public static double L1_INTAKE_Y_OFFSET_FRONT = inchesToMeters(5.0);
                 public static double L1_INTAKE_X_OFFSET_BACK = inchesToMeters(35.3);
-                public static double L1_INTAKE_Y_OFFSET_BACK = inchesToMeters(-7.0);
+                public static double L1_INTAKE_Y_OFFSET_BACK = inchesToMeters(-9.0);
 
                 public static double L1_INTAKE_X_OFFSET_FRONT_MORE = inchesToMeters(24.5);
                 public static double L1_INTAKE_Y_OFFSET_FRONT_MORE = inchesToMeters(5.0);

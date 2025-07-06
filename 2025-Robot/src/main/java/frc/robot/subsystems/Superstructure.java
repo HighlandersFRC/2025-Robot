@@ -353,11 +353,9 @@ public class Superstructure extends SubsystemBase {
         if (manipulator.hasCoral())
           if (Math.abs(Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kL1.rotations) < 10.0
               / 360.0
-              && (drive.hitSetPointUltraGenerous(drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(),
-                  OI.getDriverA())[0],
-                  drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(), OI
-                      .getDriverA())[1],
-                  drive.getL1ReefClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2]))) {
+              && (drive.hitSetPointUltraGenerous(drive.getL1ReefClosestSetpoint(drive.getMT2Odometry())[0],
+                  drive.getL1ReefClosestSetpoint(drive.getMT2Odometry())[1],
+                  drive.getL1ReefClosestSetpoint(drive.getMT2Odometry())[2]))) {
             currentSuperState = SuperState.AUTO_L1_PLACE_MORE;
             wantedSuperState = SuperState.AUTO_L1_PLACE_MORE;
           } else {
@@ -370,10 +368,9 @@ public class Superstructure extends SubsystemBase {
           currentSuperState = SuperState.DEFAULT;
         break;
       case AUTO_L1_PLACE_MORE:
-        if ((drive.hitSetPointSemiGenerous(drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(),
-            false)[0],
-            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), false)[1],
-            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry(), false)[2])) || OI.getDriverLB()) {
+        if ((drive.hitSetPoint(drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry())[0],
+            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry())[1],
+            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry())[2])) || OI.getDriverLB()) {
           currentSuperState = SuperState.AUTO_SCORE_L1;
           wantedSuperState = SuperState.AUTO_SCORE_L1;
         } else {
@@ -415,7 +412,7 @@ public class Superstructure extends SubsystemBase {
           // Constants.SetPoints.ElevatorPosition.kAUTOL2.meters));
           java.util.logging.Logger.getGlobal().finer(
               "Elevator: " + (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters));
-          if ((drive.hitSetPointSemiGenerous(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+          if ((drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
               .getDriverA())[0],
               drive.getReefClosestSetpoint(drive.getMT2Odometry(),
                   OI.getDriverA())[1],
@@ -487,7 +484,7 @@ public class Superstructure extends SubsystemBase {
           // Constants.SetPoints.ElevatorPosition.kAUTOL2.meters));
           java.util.logging.Logger.getGlobal().finer(
               "Elevator: " + (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters));
-          if ((drive.hitSetPointSemiGenerous(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
+          if ((drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
               OI.getDriverA())[0],
               drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
                   OI.getDriverA())[1],
@@ -1895,7 +1892,10 @@ public class Superstructure extends SubsystemBase {
       // } else {
       // intake.setWantedState(IntakeState.OFF);
       // }
-      if (manipulator.getArmItem() == ArmItem.NONE && !DriverStation.isAutonomousEnabled()) {
+      if (
+      // manipulator.getArmItem() == ArmItem.NONE
+      !manipulator.hasCoralSemiSticky()
+          && !DriverStation.isAutonomousEnabled()) {
         drive.setWantedState(DriveState.REEF_MORE);
         // elevator.setWantedState(ElevatorState.DEFAULT);
       } else {
