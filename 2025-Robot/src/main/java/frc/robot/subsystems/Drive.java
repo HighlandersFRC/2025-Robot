@@ -195,10 +195,10 @@ public class Drive extends SubsystemBase {
       new Rotation3d(Math.toRadians(0.3), Math.toRadians(25.6), Math.toRadians(15.0)));
 
   Transform3d frontSwerveRobotToCam = new Transform3d( // front reef cam on swerve module
-      new Translation3d(Constants.inchesToMeters(12.0),
-          Constants.inchesToMeters(8.75),
-          Constants.inchesToMeters(10.0)),
-      new Rotation3d(Math.toRadians(1.6), Math.toRadians(15.3),
+      new Translation3d(Constants.inchesToMeters(11.75),
+          Constants.inchesToMeters(-8.5),
+          Constants.inchesToMeters(8.75)),
+      new Rotation3d(Math.toRadians(1.1), Math.toRadians(15.3),
           Math.toRadians(35.0)));
 
   Transform3d backReefRobotToCam = new Transform3d( // top back reef cam
@@ -941,7 +941,9 @@ public class Drive extends SubsystemBase {
 
     var swerveResult = peripherals.getFrontSwerveCamResult();
     Optional<EstimatedRobotPose> swerveMultiTagResult = swervePhotonPoseEstimator.update(swerveResult);
-    if (swerveMultiTagResult.isPresent()) {
+    if (swerveMultiTagResult.isPresent()
+        && ((systemState != DriveState.L4_REEF && systemState != DriveState.L3_REEF && systemState != DriveState.REEF)
+            || getAutoPlacementSideIsFront())) {
       if (swerveResult.getBestTarget().getPoseAmbiguity() < 0.3) {
         Pose3d robotPose = swerveMultiTagResult.get().estimatedPose;
         Logger.recordOutput("multitag result", robotPose);
@@ -1595,39 +1597,48 @@ public class Drive extends SubsystemBase {
             chosenSetpoint[2] = Constants.Reef.redL1BackPlacingPositions.get(i).getRotation().getRadians();
           }
         }
-        //  else if (notClosest) {
-        //   if ((Math.hypot(
-        //       origionalSetpointPose[0] - Constants.Reef.redL1FrontPlacingPositions.get(i)
-        //           .getX(),
-        //       origionalSetpointPose[1] - Constants.Reef.redL1FrontPlacingPositions.get(i)
-        //           .getY()) < 0.9)
-        //       && ((Math
-        //           .abs(origionalSetpointPose[0] - Constants.Reef.redL1FrontPlacingPositions.get(i).getX()) > 0.01
-        //           || Math
-        //               .abs(
-        //                   origionalSetpointPose[1] - Constants.Reef.redL1FrontPlacingPositions.get(i).getY()) > 0.01)
-        //           && (Math
-        //               .abs(origionalSetpointPose[0] - Constants.Reef.redL1BackPlacingPositions.get(i).getX()) > 0.01
-        //               || Math.abs(origionalSetpointPose[1] - Constants.Reef.redL1BackPlacingPositions.get(i)
-        //                   .getY()) > 0.01))
-        //       && (Math.abs(origionalSetpointPose[2] - Constants.Reef.redL1FrontPlacingPositions
-        //           .get(i).getRotation().getRadians()) < 0.01
-        //           || Math.abs(origionalSetpointPose[2] - Constants.Reef.redL1BackPlacingPositions
-        //               .get(i).getRotation().getRadians()) < 0.01)) {
-        //     dist = currentDist;
-        //     if (getAngleDifferenceDegrees(theta,
-        //         Constants.Reef.redL1FrontPlacingPositions.get(i).getRotation().getDegrees()) <= 90) {
-        //       autoPlacingFront = true;
-        //       chosenSetpoint[0] = Constants.Reef.redL1FrontPlacingPositions.get(i).getX();
-        //       chosenSetpoint[1] = Constants.Reef.redL1FrontPlacingPositions.get(i).getY();
-        //       chosenSetpoint[2] = Constants.Reef.redL1FrontPlacingPositions.get(i).getRotation().getRadians();
-        //     } else {
-        //       autoPlacingFront = false;
-        //       chosenSetpoint[0] = Constants.Reef.redL1BackPlacingPositions.get(i).getX();
-        //       chosenSetpoint[1] = Constants.Reef.redL1BackPlacingPositions.get(i).getY();
-        //       chosenSetpoint[2] = Constants.Reef.redL1BackPlacingPositions.get(i).getRotation().getRadians();
-        //     }
-        //   }
+        // else if (notClosest) {
+        // if ((Math.hypot(
+        // origionalSetpointPose[0] - Constants.Reef.redL1FrontPlacingPositions.get(i)
+        // .getX(),
+        // origionalSetpointPose[1] - Constants.Reef.redL1FrontPlacingPositions.get(i)
+        // .getY()) < 0.9)
+        // && ((Math
+        // .abs(origionalSetpointPose[0] -
+        // Constants.Reef.redL1FrontPlacingPositions.get(i).getX()) > 0.01
+        // || Math
+        // .abs(
+        // origionalSetpointPose[1] -
+        // Constants.Reef.redL1FrontPlacingPositions.get(i).getY()) > 0.01)
+        // && (Math
+        // .abs(origionalSetpointPose[0] -
+        // Constants.Reef.redL1BackPlacingPositions.get(i).getX()) > 0.01
+        // || Math.abs(origionalSetpointPose[1] -
+        // Constants.Reef.redL1BackPlacingPositions.get(i)
+        // .getY()) > 0.01))
+        // && (Math.abs(origionalSetpointPose[2] -
+        // Constants.Reef.redL1FrontPlacingPositions
+        // .get(i).getRotation().getRadians()) < 0.01
+        // || Math.abs(origionalSetpointPose[2] -
+        // Constants.Reef.redL1BackPlacingPositions
+        // .get(i).getRotation().getRadians()) < 0.01)) {
+        // dist = currentDist;
+        // if (getAngleDifferenceDegrees(theta,
+        // Constants.Reef.redL1FrontPlacingPositions.get(i).getRotation().getDegrees())
+        // <= 90) {
+        // autoPlacingFront = true;
+        // chosenSetpoint[0] = Constants.Reef.redL1FrontPlacingPositions.get(i).getX();
+        // chosenSetpoint[1] = Constants.Reef.redL1FrontPlacingPositions.get(i).getY();
+        // chosenSetpoint[2] =
+        // Constants.Reef.redL1FrontPlacingPositions.get(i).getRotation().getRadians();
+        // } else {
+        // autoPlacingFront = false;
+        // chosenSetpoint[0] = Constants.Reef.redL1BackPlacingPositions.get(i).getX();
+        // chosenSetpoint[1] = Constants.Reef.redL1BackPlacingPositions.get(i).getY();
+        // chosenSetpoint[2] =
+        // Constants.Reef.redL1BackPlacingPositions.get(i).getRotation().getRadians();
+        // }
+        // }
         // }
       }
     } else {
@@ -1655,39 +1666,47 @@ public class Drive extends SubsystemBase {
             chosenSetpoint[2] = Constants.Reef.blueL1BackPlacingPositions.get(i).getRotation().getRadians();
           }
         }
-        //  else if (notClosest) {
-        //   if ((Math.hypot(
-        //       origionalSetpointPose[0] - Constants.Reef.blueL1FrontPlacingPositions.get(i)
-        //           .getX(),
-        //       origionalSetpointPose[1] - Constants.Reef.blueL1FrontPlacingPositions.get(i)
-        //           .getY()) < 0.9)
-        //       && ((Math
-        //           .abs(origionalSetpointPose[0] - Constants.Reef.blueL1FrontPlacingPositions.get(i).getX()) > 0.01
-        //           || Math
-        //               .abs(origionalSetpointPose[1]
-        //                   - Constants.Reef.blueL1FrontPlacingPositions.get(i).getY()) > 0.01)
-        //           && (Math
-        //               .abs(origionalSetpointPose[0] - Constants.Reef.blueL1BackPlacingPositions.get(i).getX()) > 0.01
-        //               || Math.abs(origionalSetpointPose[1] - Constants.Reef.blueL1BackPlacingPositions.get(i)
-        //                   .getY()) > 0.01))
-        //       && (Math.abs(origionalSetpointPose[2] - Constants.Reef.blueL1FrontPlacingPositions
-        //           .get(i).getRotation().getRadians()) < 0.01
-        //           || Math.abs(origionalSetpointPose[2] - Constants.Reef.blueL1BackPlacingPositions
-        //               .get(i).getRotation().getRadians()) < 0.01)) {
-        //     dist = currentDist;
-        //     if (getAngleDifferenceDegrees(theta,
-        //         Constants.Reef.blueL1FrontPlacingPositions.get(i).getRotation().getDegrees()) <= 90) {
-        //       autoPlacingFront = true;
-        //       chosenSetpoint[0] = Constants.Reef.blueL1FrontPlacingPositions.get(i).getX();
-        //       chosenSetpoint[1] = Constants.Reef.blueL1FrontPlacingPositions.get(i).getY();
-        //       chosenSetpoint[2] = Constants.Reef.blueL1FrontPlacingPositions.get(i).getRotation().getRadians();
-        //     } else {
-        //       autoPlacingFront = false;
-        //       chosenSetpoint[0] = Constants.Reef.blueL1BackPlacingPositions.get(i).getX();
-        //       chosenSetpoint[1] = Constants.Reef.blueL1BackPlacingPositions.get(i).getY();
-        //       chosenSetpoint[2] = Constants.Reef.blueL1BackPlacingPositions.get(i).getRotation().getRadians();
-        //     }
-        //   }
+        // else if (notClosest) {
+        // if ((Math.hypot(
+        // origionalSetpointPose[0] - Constants.Reef.blueL1FrontPlacingPositions.get(i)
+        // .getX(),
+        // origionalSetpointPose[1] - Constants.Reef.blueL1FrontPlacingPositions.get(i)
+        // .getY()) < 0.9)
+        // && ((Math
+        // .abs(origionalSetpointPose[0] -
+        // Constants.Reef.blueL1FrontPlacingPositions.get(i).getX()) > 0.01
+        // || Math
+        // .abs(origionalSetpointPose[1]
+        // - Constants.Reef.blueL1FrontPlacingPositions.get(i).getY()) > 0.01)
+        // && (Math
+        // .abs(origionalSetpointPose[0] -
+        // Constants.Reef.blueL1BackPlacingPositions.get(i).getX()) > 0.01
+        // || Math.abs(origionalSetpointPose[1] -
+        // Constants.Reef.blueL1BackPlacingPositions.get(i)
+        // .getY()) > 0.01))
+        // && (Math.abs(origionalSetpointPose[2] -
+        // Constants.Reef.blueL1FrontPlacingPositions
+        // .get(i).getRotation().getRadians()) < 0.01
+        // || Math.abs(origionalSetpointPose[2] -
+        // Constants.Reef.blueL1BackPlacingPositions
+        // .get(i).getRotation().getRadians()) < 0.01)) {
+        // dist = currentDist;
+        // if (getAngleDifferenceDegrees(theta,
+        // Constants.Reef.blueL1FrontPlacingPositions.get(i).getRotation().getDegrees())
+        // <= 90) {
+        // autoPlacingFront = true;
+        // chosenSetpoint[0] = Constants.Reef.blueL1FrontPlacingPositions.get(i).getX();
+        // chosenSetpoint[1] = Constants.Reef.blueL1FrontPlacingPositions.get(i).getY();
+        // chosenSetpoint[2] =
+        // Constants.Reef.blueL1FrontPlacingPositions.get(i).getRotation().getRadians();
+        // } else {
+        // autoPlacingFront = false;
+        // chosenSetpoint[0] = Constants.Reef.blueL1BackPlacingPositions.get(i).getX();
+        // chosenSetpoint[1] = Constants.Reef.blueL1BackPlacingPositions.get(i).getY();
+        // chosenSetpoint[2] =
+        // Constants.Reef.blueL1BackPlacingPositions.get(i).getRotation().getRadians();
+        // }
+        // }
         // }
       }
     }
@@ -1738,40 +1757,53 @@ public class Drive extends SubsystemBase {
           }
         }
         // else if (notClosest && false) {
-        //   if ((Math.hypot(
-        //       origionalSetpointPose[0] - Constants.Reef.redL1FrontPlacingPositionsMore.get(i)
-        //           .getX(),
-        //       origionalSetpointPose[1] - Constants.Reef.redL1FrontPlacingPositionsMore.get(i)
-        //           .getY()) < 0.9)
-        //       && ((Math
-        //           .abs(origionalSetpointPose[0] - Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getX()) > 0.01
-        //           || Math
-        //               .abs(
-        //                   origionalSetpointPose[1]
-        //                       - Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getY()) > 0.01)
-        //           && (Math
-        //               .abs(origionalSetpointPose[0]
-        //                   - Constants.Reef.redL1BackPlacingPositionsMore.get(i).getX()) > 0.01
-        //               || Math.abs(origionalSetpointPose[1] - Constants.Reef.redL1BackPlacingPositionsMore.get(i)
-        //                   .getY()) > 0.01))
-        //       && (Math.abs(origionalSetpointPose[2] - Constants.Reef.redL1FrontPlacingPositionsMore
-        //           .get(i).getRotation().getRadians()) < 0.01
-        //           || Math.abs(origionalSetpointPose[2] - Constants.Reef.redL1BackPlacingPositionsMore
-        //               .get(i).getRotation().getRadians()) < 0.01)) {
-        //     dist = currentDist;
-        //     if (getAngleDifferenceDegrees(theta,
-        //         Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getRotation().getDegrees()) <= 90) {
-        //       autoPlacingFront = true;
-        //       chosenSetpoint[0] = Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getX();
-        //       chosenSetpoint[1] = Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getY();
-        //       chosenSetpoint[2] = Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getRotation().getRadians();
-        //     } else {
-        //       autoPlacingFront = false;
-        //       chosenSetpoint[0] = Constants.Reef.redL1BackPlacingPositionsMore.get(i).getX();
-        //       chosenSetpoint[1] = Constants.Reef.redL1BackPlacingPositionsMore.get(i).getY();
-        //       chosenSetpoint[2] = Constants.Reef.redL1BackPlacingPositionsMore.get(i).getRotation().getRadians();
-        //     }
-        //   }
+        // if ((Math.hypot(
+        // origionalSetpointPose[0] -
+        // Constants.Reef.redL1FrontPlacingPositionsMore.get(i)
+        // .getX(),
+        // origionalSetpointPose[1] -
+        // Constants.Reef.redL1FrontPlacingPositionsMore.get(i)
+        // .getY()) < 0.9)
+        // && ((Math
+        // .abs(origionalSetpointPose[0] -
+        // Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getX()) > 0.01
+        // || Math
+        // .abs(
+        // origionalSetpointPose[1]
+        // - Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getY()) > 0.01)
+        // && (Math
+        // .abs(origionalSetpointPose[0]
+        // - Constants.Reef.redL1BackPlacingPositionsMore.get(i).getX()) > 0.01
+        // || Math.abs(origionalSetpointPose[1] -
+        // Constants.Reef.redL1BackPlacingPositionsMore.get(i)
+        // .getY()) > 0.01))
+        // && (Math.abs(origionalSetpointPose[2] -
+        // Constants.Reef.redL1FrontPlacingPositionsMore
+        // .get(i).getRotation().getRadians()) < 0.01
+        // || Math.abs(origionalSetpointPose[2] -
+        // Constants.Reef.redL1BackPlacingPositionsMore
+        // .get(i).getRotation().getRadians()) < 0.01)) {
+        // dist = currentDist;
+        // if (getAngleDifferenceDegrees(theta,
+        // Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getRotation().getDegrees())
+        // <= 90) {
+        // autoPlacingFront = true;
+        // chosenSetpoint[0] =
+        // Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getX();
+        // chosenSetpoint[1] =
+        // Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getY();
+        // chosenSetpoint[2] =
+        // Constants.Reef.redL1FrontPlacingPositionsMore.get(i).getRotation().getRadians();
+        // } else {
+        // autoPlacingFront = false;
+        // chosenSetpoint[0] =
+        // Constants.Reef.redL1BackPlacingPositionsMore.get(i).getX();
+        // chosenSetpoint[1] =
+        // Constants.Reef.redL1BackPlacingPositionsMore.get(i).getY();
+        // chosenSetpoint[2] =
+        // Constants.Reef.redL1BackPlacingPositionsMore.get(i).getRotation().getRadians();
+        // }
+        // }
         // }
       }
     } else {
@@ -1802,40 +1834,53 @@ public class Drive extends SubsystemBase {
           }
         }
         // else if (notClosest && false) {
-        //   if ((Math.hypot(
-        //       origionalSetpointPose[0] - Constants.Reef.blueL1FrontPlacingPositionsMore.get(i)
-        //           .getX(),
-        //       origionalSetpointPose[1] - Constants.Reef.blueL1FrontPlacingPositionsMore.get(i)
-        //           .getY()) < 0.9)
-        //       && ((Math
-        //           .abs(
-        //               origionalSetpointPose[0] - Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getX()) > 0.01
-        //           || Math
-        //               .abs(origionalSetpointPose[1]
-        //                   - Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getY()) > 0.01)
-        //           && (Math
-        //               .abs(origionalSetpointPose[0]
-        //                   - Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getX()) > 0.01
-        //               || Math.abs(origionalSetpointPose[1] - Constants.Reef.blueL1BackPlacingPositionsMore.get(i)
-        //                   .getY()) > 0.01))
-        //       && (Math.abs(origionalSetpointPose[2] - Constants.Reef.blueL1FrontPlacingPositionsMore
-        //           .get(i).getRotation().getRadians()) < 0.01
-        //           || Math.abs(origionalSetpointPose[2] - Constants.Reef.blueL1BackPlacingPositionsMore
-        //               .get(i).getRotation().getRadians()) < 0.01)) {
-        //     dist = currentDist;
-        //     if (getAngleDifferenceDegrees(theta,
-        //         Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getRotation().getDegrees()) <= 90) {
-        //       autoPlacingFront = true;
-        //       chosenSetpoint[0] = Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getX();
-        //       chosenSetpoint[1] = Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getY();
-        //       chosenSetpoint[2] = Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getRotation().getRadians();
-        //     } else {
-        //       autoPlacingFront = false;
-        //       chosenSetpoint[0] = Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getX();
-        //       chosenSetpoint[1] = Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getY();
-        //       chosenSetpoint[2] = Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getRotation().getRadians();
-        //     }
-        //   }
+        // if ((Math.hypot(
+        // origionalSetpointPose[0] -
+        // Constants.Reef.blueL1FrontPlacingPositionsMore.get(i)
+        // .getX(),
+        // origionalSetpointPose[1] -
+        // Constants.Reef.blueL1FrontPlacingPositionsMore.get(i)
+        // .getY()) < 0.9)
+        // && ((Math
+        // .abs(
+        // origionalSetpointPose[0] -
+        // Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getX()) > 0.01
+        // || Math
+        // .abs(origionalSetpointPose[1]
+        // - Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getY()) > 0.01)
+        // && (Math
+        // .abs(origionalSetpointPose[0]
+        // - Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getX()) > 0.01
+        // || Math.abs(origionalSetpointPose[1] -
+        // Constants.Reef.blueL1BackPlacingPositionsMore.get(i)
+        // .getY()) > 0.01))
+        // && (Math.abs(origionalSetpointPose[2] -
+        // Constants.Reef.blueL1FrontPlacingPositionsMore
+        // .get(i).getRotation().getRadians()) < 0.01
+        // || Math.abs(origionalSetpointPose[2] -
+        // Constants.Reef.blueL1BackPlacingPositionsMore
+        // .get(i).getRotation().getRadians()) < 0.01)) {
+        // dist = currentDist;
+        // if (getAngleDifferenceDegrees(theta,
+        // Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getRotation().getDegrees())
+        // <= 90) {
+        // autoPlacingFront = true;
+        // chosenSetpoint[0] =
+        // Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getX();
+        // chosenSetpoint[1] =
+        // Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getY();
+        // chosenSetpoint[2] =
+        // Constants.Reef.blueL1FrontPlacingPositionsMore.get(i).getRotation().getRadians();
+        // } else {
+        // autoPlacingFront = false;
+        // chosenSetpoint[0] =
+        // Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getX();
+        // chosenSetpoint[1] =
+        // Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getY();
+        // chosenSetpoint[2] =
+        // Constants.Reef.blueL1BackPlacingPositionsMore.get(i).getRotation().getRadians();
+        // }
+        // }
         // }
       }
     }
