@@ -19,6 +19,7 @@ import frc.robot.commands.AutoCoralGroundPickupFollower;
 import frc.robot.commands.AutoPlaceL2Follower;
 import frc.robot.commands.AutoPlaceL4Follower;
 import frc.robot.commands.DoNothing;
+import frc.robot.commands.FeederPickup;
 import frc.robot.commands.FeederPickupFollower;
 import frc.robot.commands.PolarAutoFollower;
 import frc.robot.commands.SetAlgaeMode;
@@ -76,7 +77,7 @@ public class RobotContainer {
                         put("AutoPlaceL2", () -> new AutoPlaceL2Follower(superstructure, drive, 3.3));
                         put("AutoPlaceL4", () -> new AutoPlaceL4Follower(superstructure, drive, 3.3));
                         put("AutoFeeder", () -> new FeederPickupFollower(superstructure, drive));
-                        put("FeederIntake", () -> new SetRobotState(superstructure, SuperState.FEEDER));
+                        put("FeederIntake", () -> new FeederPickup(superstructure));
                         put("Outake", () -> new SetRobotStateSimple(superstructure, SuperState.OUTAKE));
                         put("L1", () -> new SetRobotStateSimple(superstructure, SuperState.AUTO_L1_PLACE));
                         put("Idle", () -> new SetRobotStateSimple(superstructure, SuperState.IDLE));
