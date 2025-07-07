@@ -265,6 +265,20 @@ public class Drive extends SubsystemBase {
   private double kkThetaI4 = 0.00;
   private double kkThetaD4 = 0.971;
 
+  // l4 auto pids
+  private double scalar = 0.6;
+  private double kkXP4A = 4.30 * scalar;
+  private double kkXI4A = 0.00 * scalar;
+  private double kkXD4A = 1.70 * scalar;
+
+  private double kkYP4A = kkXP4A;
+  private double kkYI4A = kkXI4A;
+  private double kkYD4A = kkXD4A;
+
+  private double kkThetaP4A = 2.056;
+  private double kkThetaI4A = 0.00;
+  private double kkThetaD4A = 0.971;
+
   // l23 pid values
   private double kkXP23 = 4.00;
   private double kkXI23 = 0.00;
@@ -319,6 +333,10 @@ public class Drive extends SubsystemBase {
   private PID xxPID4 = new PID(kkXP4, kkXI4, kkXD4);
   private PID yyPID4 = new PID(kkYP4, kkYI4, kkYD4);
   private PID thetaaPID4 = new PID(kkThetaP4, kkThetaI4, kkThetaD4);
+
+  private PID xxPID4A = new PID(kkXP4A, kkXI4A, kkXD4A);
+  private PID yyPID4A = new PID(kkYP4A, kkYI4A, kkYD4A);
+  private PID thetaaPID4A = new PID(kkThetaP4A, kkThetaI4A, kkThetaD4A);
 
   private PID xxPID23 = new PID(kkXP23, kkXI23, kkXD23);
   private PID yyPID23 = new PID(kkYP23, kkYI23, kkYD23);
@@ -493,6 +511,15 @@ public class Drive extends SubsystemBase {
 
     thetaaPID4.setMinOutput(-2.0);
     thetaaPID4.setMaxOutput(2.0);
+
+    xxPID4A.setMinOutput(-0.254);
+    xxPID4A.setMaxOutput(0.254);
+
+    yyPID4A.setMinOutput(-0.254);
+    yyPID4A.setMaxOutput(0.254);
+
+    thetaaPID4A.setMinOutput(-0.254);
+    thetaaPID4A.setMaxOutput(0.254);
 
     xxPID23.setMinOutput(-4.0);
     xxPID23.setMaxOutput(4.0);
@@ -3292,19 +3319,39 @@ public class Drive extends SubsystemBase {
     double yVelNoFF = 0.0;
     double thetaVelNoFF = 0.0;
 
-    if (DriverStation.isTeleopEnabled() && OI.driverPOVRight.getAsBoolean()) {
+    if (OI.driverPOVRight.getAsBoolean()) {
+      if (DriverStation.isAutonomousEnabled()) {
+        xxPID4A.setSetPoint(x);
+        yyPID4A.setSetPoint(y);
+        thetaaPID4A.setSetPoint(theta);
 
-      xxPID4.setSetPoint(x);
-      yyPID4.setSetPoint(y);
-      thetaaPID4.setSetPoint(theta);
+        xxPID4A.updatePID(getMT2OdometryX());
+        yyPID4A.updatePID(getMT2OdometryY());
+        thetaaPID4A.updatePID(getMT2OdometryAngle());
 
-      xxPID4.updatePID(getMT2OdometryX());
-      yyPID4.updatePID(getMT2OdometryY());
-      thetaaPID4.updatePID(getMT2OdometryAngle());
+        xVelNoFF = xxPID4A.getResult();
+        yVelNoFF = yyPID4A.getResult();
+        double velmag = Math.hypot(xVelNoFF, yVelNoFF);
+        double maxvel = 0.1;
+        if (velmag > maxvel) {
+          xVelNoFF = xVelNoFF * maxvel / velmag;
+          yVelNoFF = yVelNoFF * maxvel / velmag;
+        }
+        thetaVelNoFF = -thetaaPID4A.getResult();
 
-      xVelNoFF = xxPID4.getResult();
-      yVelNoFF = yyPID4.getResult();
-      thetaVelNoFF = -thetaaPID4.getResult();
+      } else {
+        xxPID4.setSetPoint(x);
+        yyPID4.setSetPoint(y);
+        thetaaPID4.setSetPoint(theta);
+
+        xxPID4.updatePID(getMT2OdometryX());
+        yyPID4.updatePID(getMT2OdometryY());
+        thetaaPID4.updatePID(getMT2OdometryAngle());
+
+        xVelNoFF = xxPID4.getResult();
+        yVelNoFF = yyPID4.getResult();
+        thetaVelNoFF = -thetaaPID4.getResult();
+      }
 
     } else if (DriverStation.isTeleopEnabled()
         && (OI.driverPOVLeft.getAsBoolean() || OI.driverPOVDown.getAsBoolean())) {
@@ -3646,21 +3693,21 @@ public class Drive extends SubsystemBase {
       currentY = Constants.Physical.FIELD_WIDTH - currentY;
       currentTheta = -currentTheta;
     }
+
     Waypoint currentWaypoint = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(0));
-    double prevDist = Double.MAX_VALUE;
+    double minDist = Double.MAX_VALUE;
     double currentDist = 0;
-    for (int i = currentIndex; i >= 0; i--) {
+    for (int i = 0; i < pathPoints.length(); i++) {
       Waypoint point = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(i));
       currentDist = Math.hypot(currentX - point.x,
           currentY - point.y);
-      if (currentDist < prevDist) {
+      if (currentDist < minDist) {
         currentWaypoint = point;
-        prevDist = currentDist;
+        minDist = currentDist;
         currentIndex = i;
-      } else {
-        break;
       }
     }
+
     double currentCurvature = spline.curvature(currentWaypoint.t);
     while (Math.abs(currentWaypoint.theta - currentTheta) > Math.PI) {
       if (currentWaypoint.theta - currentTheta > Math.PI) {
@@ -3728,7 +3775,7 @@ public class Drive extends SubsystemBase {
     double allowedVel = Math.max(Constants.Physical.TOP_SPEED
         / (1 + Constants.Autonomous.CURVATURE_LIMITER_MULTIPLIER * Math.abs(currentCurvature)),
         Constants.Autonomous.MINIMUM_SPEED_LIMIT);
-    if (finalVelMag > allowedVel) {
+    if (finalVelMag > allowedVel && targetIndex != 0) {
       double scaleFactor = allowedVel / finalVelMag;
       finalX *= scaleFactor;
       finalY *= scaleFactor;

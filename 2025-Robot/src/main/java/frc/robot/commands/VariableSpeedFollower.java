@@ -121,6 +121,7 @@ public class VariableSpeedFollower extends AutoFollower {
     drive.autoDrive(velocityVector, desiredThetaChange);
     Logger.recordOutput("pursuing?", true);
     Logger.recordOutput("Path Point Index", getPathPointIndex());
+    java.util.logging.Logger.getGlobal().finer("Path Point Index: " + getPathPointIndex());
     // Logger.recordOutput("Path Time", path
     // .getJSONObject(getPathPointIndex()).getDouble("time"));
   }

@@ -341,8 +341,8 @@ public final class Constants {
                                                                           // redBranchPositions = new
                                                                           // ArrayList<>(); // Starting at the right
 
-                public static final double RED_LEFT_FEEDER_X = 16.28;
-                public static final double RED_LEFT_FEEDER_Y = 0.92;
+                public static final double RED_LEFT_FEEDER_X = 16.18;
+                public static final double RED_LEFT_FEEDER_Y = 0.90;
                 public static final double RED_LEFT_FEEDER_THETA = Math.toRadians(126.0);
 
                 public static final double RED_LEFT_FEEDER_X_TELEOP = 16.544;

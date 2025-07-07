@@ -467,12 +467,12 @@ public class Superstructure extends SubsystemBase {
           // // NOT
           // // WORK
           // System.out.println("Drive: " +
-          //     drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
-          //         .getDriverA())[0],
-          //         drive.getReefClosestSetpoint(drive.getMT2Odometry(),
-          //             OI.getDriverA())[1],
-          //         drive.getReefClosestSetpoint(drive.getMT2Odometry(),
-          //             OI.getDriverA())[2]));
+          // drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
+          // .getDriverA())[0],
+          // drive.getReefClosestSetpoint(drive.getMT2Odometry(),
+          // OI.getDriverA())[1],
+          // drive.getReefClosestSetpoint(drive.getMT2Odometry(),
+          // OI.getDriverA())[2]));
           java.util.logging.Logger.getGlobal().finer(
               "Drive: " + drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
                   drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
@@ -1516,7 +1516,11 @@ public class Superstructure extends SubsystemBase {
 
   public void handleFeederState() {
     lights.setWantedState(LightsState.FEEDER);
-    drive.setWantedState(DriveState.DEFAULT);
+    if (DriverStation.isAutonomous()) {
+      drive.setWantedState(DriveState.IDLE);
+    } else {
+      drive.setWantedState(DriveState.DEFAULT);
+    }
     manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     if (Math.abs(pivot.getPivotPosition()) > 10.0 / 360.0) {
       twist.setWantedState(TwistState.UP);

@@ -131,144 +131,160 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    Logger.recordOutput("Intake Position", getPosition() * 360);
-    Logger.recordOutput("Intake Motor Current", roller.getStatorCurrent().getValueAsDouble());
-    systemState = handleStateTransition();
-    if (systemState != IntakeState.HANDOFF) {
-      firstTimeHandOff = true;
-    }
-    // System.out.println("Intake Current: " +
-    // intakeMotor.getStatorCurrent().getValueAsDouble());
-    Logger.recordOutput("Intake State", systemState);
-    Logger.recordOutput("Intake Has coral", hasCoral());
-    // Logger.recordOutput("Has Coral", hasCoral());
-    if (systemState != IntakeState.DEFAULT) {
-      firstTimeDefault = true;
-      defaultTime = Timer.getFPGATimestamp();
-    }
-    switch (systemState) {
-      case INTAKING:
-        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN) < 20 / 360.0) {
-          pivotWithTorque(10, 0.2);
-        } else {
-          pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
-        }
-        setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-            Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
-        break;
-      case DOWN:
-        pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
-        setRollerCurrent(0.0,
-            0.0);
-        break;
-      case ZERO:
-        setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-            Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
-        pivotWithTorque(-40, 0.5);
-        if (getZeroed()) {
-          pivot.setPosition(0.0);
-        }
-        break;
-      case OUTAKING:
-        // setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-        // Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
-        setRollerPercent(-1.0);
-        pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
-        break;
-      case HANDOFF:
-        if (firstTimeHandOff) {
-          firstTimeHandOff = false;
-          handOffTime = Timer.getFPGATimestamp();
-        }
-        // if (Timer.getFPGATimestamp() - handOffTime < 3.0) {
-        // setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-        // Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
-        setRollerPercent(-1.0);
+    // Logger.recordOutput("Intake Position", getPosition() * 360);
+    // Logger.recordOutput("Intake Motor Current",
+    // roller.getStatorCurrent().getValueAsDouble());
+    // systemState = handleStateTransition();
+    // if (systemState != IntakeState.HANDOFF) {
+    // firstTimeHandOff = true;
+    // }
+    // // System.out.println("Intake Current: " +
+    // // intakeMotor.getStatorCurrent().getValueAsDouble());
+    // Logger.recordOutput("Intake State", systemState);
+    // Logger.recordOutput("Intake Has coral", hasCoral());
+    // // Logger.recordOutput("Has Coral", hasCoral());
+    // if (systemState != IntakeState.DEFAULT) {
+    // firstTimeDefault = true;
+    // defaultTime = Timer.getFPGATimestamp();
+    // }
+    // switch (systemState) {
+    // case INTAKING:
+    // if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN)
+    // < 20 / 360.0) {
+    // pivotWithTorque(10, 0.2);
+    // } else {
+    // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
+    // }
+    // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+    // Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+    // break;
+    // case DOWN:
+    // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
+    // setRollerCurrent(0.0,
+    // 0.0);
+    // break;
+    // case ZERO:
+    // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+    // Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
+    // pivotWithTorque(-40, 0.5);
+    // if (getZeroed()) {
+    // pivot.setPosition(0.0);
+    // }
+    // break;
+    // case OUTAKING:
+    // //
+    // setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+    // // Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+    // setRollerPercent(-1.0);
+    // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
+    // break;
+    // case HANDOFF:
+    // if (firstTimeHandOff) {
+    // firstTimeHandOff = false;
+    // handOffTime = Timer.getFPGATimestamp();
+    // }
+    // // if (Timer.getFPGATimestamp() - handOffTime < 3.0) {
+    // //
+    // setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+    // // Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
+    // setRollerPercent(-1.0);
 
-        // if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 6.7 / 360.0) {
-        //   pivotWithTorque(-15, 0.1);
-        //   // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-        //   // 0.2);
-        // } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 20.0 / 360.0) {
-        //   pivotWithTorque(-20, 0.2);
-        //   // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-        //   // 0.2);
-        // } else {
-        //   pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
-        //   // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-        //   // 0.2);
-        // }
+    // // if (Math.abs(getPosition() -
+    // Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 6.7 / 360.0) {
+    // // pivotWithTorque(-15, 0.1);
+    // // //
+    // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
+    // // // 0.2);
+    // // } else if (Math.abs(getPosition() -
+    // Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 20.0 / 360.0) {
+    // // pivotWithTorque(-20, 0.2);
+    // // //
+    // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
+    // // // 0.2);
+    // // } else {
+    // // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+    // // //
+    // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
+    // // // 0.2);
+    // // }
 
-        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 10.0 / 360.0) {
-          pivotWithTorque(-5, 0.2);
-          // System.out.println("5");
-        } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 30.0 / 360.0) {
-          pivotWithTorque(-50, 0.1);
-          // System.out.println("30");
-        } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 60.0 / 360.0) {
-          pivotWithTorque(-60, 0.1);
-          // System.out.println("40");
-        } else {
-          // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
-          pivotWithTorque(-70, 0.6);
-          // System.out.println("70");
+    // if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) <
+    // 10.0 / 360.0) {
+    // pivotWithTorque(-5, 0.2);
+    // // System.out.println("5");
+    // } else if (Math.abs(getPosition() -
+    // Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 30.0 / 360.0) {
+    // pivotWithTorque(-50, 0.1);
+    // // System.out.println("30");
+    // } else if (Math.abs(getPosition() -
+    // Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 60.0 / 360.0) {
+    // pivotWithTorque(-60, 0.1);
+    // // System.out.println("40");
+    // } else {
+    // // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+    // pivotWithTorque(-70, 0.6);
+    // // System.out.println("70");
 
-        }
+    // }
 
-        // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
-        // } else {
-        // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
-        // setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-        // Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
+    // // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+    // // } else {
+    // // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+    // //
+    // setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+    // // Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
 
-        // }
-        break;
-      case IDLE:
-        pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
-        roller.set(0);
-        break;
-      case DEFAULT:
-        if (firstTimeDefault) {
-          firstTimeDefault = false;
-          defaultTime = Timer.getFPGATimestamp();
-        }
+    // // }
+    // break;
+    // case IDLE:
+    // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+    // roller.set(0);
+    // break;
+    // case DEFAULT:
+    // if (firstTimeDefault) {
+    // firstTimeDefault = false;
+    // defaultTime = Timer.getFPGATimestamp();
+    // }
 
-        if (Timer.getFPGATimestamp() - defaultTime > 1.0) {
-          setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
-              0.2);
-        } else {
-          setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-              0.5);
-        }
-        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 10.0 / 360.0) {
-          pivotWithTorque(-5, 0.2);
-          // System.out.println("5");
-        } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 30.0 / 360.0) {
-          pivotWithTorque(-50, 0.1);
-          // System.out.println("30");
-        } else if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 60.0 / 360.0) {
-          pivotWithTorque(-60, 0.1);
-          // System.out.println("40");
-        } else {
-          // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
-          pivotWithTorque(-70, 0.6);
-          // System.out.println("70");
+    // if (Timer.getFPGATimestamp() - defaultTime > 1.0) {
+    // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_HOLDING_TORQUE,
+    // 0.2);
+    // } else {
+    // setRollerCurrent(Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+    // 0.5);
+    // }
+    // if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_UP) <
+    // 10.0 / 360.0) {
+    // pivotWithTorque(-5, 0.2);
+    // // System.out.println("5");
+    // } else if (Math.abs(getPosition() -
+    // Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 30.0 / 360.0) {
+    // pivotWithTorque(-50, 0.1);
+    // // System.out.println("30");
+    // } else if (Math.abs(getPosition() -
+    // Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 60.0 / 360.0) {
+    // pivotWithTorque(-60, 0.1);
+    // // System.out.println("40");
+    // } else {
+    // // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
+    // pivotWithTorque(-70, 0.6);
+    // // System.out.println("70");
 
-        }
-        break;
-      default:
-        if (Math.abs(pivot.getVelocity().getValueAsDouble()) < 0.01 && !isZeroed) {
-          this.setPivotCurrent(-10, 0.1);
-          pivot.setPosition(0);
-        } else if (!isZeroed) {
-          this.setPivotCurrent(-45, 0.3);
-        } else {
-          this.setPivotCurrent(-5, 0.1);
-        }
-        if (Math.abs(pivot.getPosition().getValueAsDouble()) > 2) {
-          isZeroed = false;
-        }
-    }
+    // }
+    // break;
+    // default:
+    // if (Math.abs(pivot.getVelocity().getValueAsDouble()) < 0.01 && !isZeroed) {
+    // this.setPivotCurrent(-10, 0.1);
+    // pivot.setPosition(0);
+    // } else if (!isZeroed) {
+    // this.setPivotCurrent(-45, 0.3);
+    // } else {
+    // this.setPivotCurrent(-5, 0.1);
+    // }
+    // if (Math.abs(pivot.getPosition().getValueAsDouble()) > 2) {
+    // isZeroed = false;
+    // }
+    // }
   }
 
   private void setPivotCurrent(double amps, double maxPercent) {
