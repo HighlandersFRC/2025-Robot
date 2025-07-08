@@ -3772,8 +3772,10 @@ public class Drive extends SubsystemBase {
     double finalTheta = thetaVelNoFF + feedForwardTheta;
     // Clamp to robot max velocity with curvature limiter
     double finalVelMag = Math.hypot(finalX, finalY);
-    double allowedVel = Math.max(Constants.Physical.TOP_SPEED
-        / (1 + Constants.Autonomous.CURVATURE_LIMITER_MULTIPLIER * Math.abs(currentCurvature)),
+    double allowedVel = Math.max(
+        ((((60 - Constants.metersToInches(elevator.getElevatorPosition())) * 0.4 / 50) + 0.6)
+            * Constants.Physical.TOP_SPEED)
+            / (1 + Constants.Autonomous.CURVATURE_LIMITER_MULTIPLIER * Math.abs(currentCurvature)),
         Constants.Autonomous.MINIMUM_SPEED_LIMIT);
     if (finalVelMag > allowedVel && targetIndex != 0) {
       double scaleFactor = allowedVel / finalVelMag;

@@ -85,14 +85,15 @@ public class RobotContainer {
                         put("Net", () -> new SetRobotStateSimple(superstructure, SuperState.NET));
                         put("GroundIntake", () -> new SetRobotStateComplicatedContinuous(superstructure,
                                         SuperState.GROUND_CORAL_PICKUP_FRONT, SuperState.PASSOFF_IDLE));
-                        put("ReefAlgaeL2", () -> new SetRobotState(superstructure, SuperState.L2_ALGAE_PICKUP));
-                        put("ReefAlgaeL3", () -> new SetRobotState(superstructure, SuperState.L3_ALGAE_PICKUP));
+                        put("ReefAlgaeL2", () -> new SetRobotStateSimple(superstructure, SuperState.L2_ALGAE_PICKUP));
+                        put("ReefAlgaeL3", () -> new SetRobotStateSimple(superstructure, SuperState.L3_ALGAE_PICKUP));
                         // put("ReefAlgae", () -> new ReefAlgaePickupFollower(superstructure, drive,
                         // 5.0, m_container));
                         put("AutoIntake", () -> new AutoCoralGroundPickupFollower(superstructure, drive, 4.0));
                         put("PassoffOutakeIdle", () -> new SetRobotStateSimpleOnce(superstructure,
                                         SuperState.PASSOFF_OUTAKE_IDLE));
                         put("ToggleAlgaeMode", () -> new SetAlgaeMode(m_container));
+                        put("Wait", () -> new DoNothing());
                 }
         };
 
