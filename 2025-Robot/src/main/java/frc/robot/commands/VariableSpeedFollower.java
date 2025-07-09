@@ -66,6 +66,8 @@ public class VariableSpeedFollower extends AutoFollower {
   @Override
   public void initialize() {
     pathStartTime = path.getJSONObject(0).getDouble("time");
+    java.util.logging.Logger.getGlobal().fine("Pathing");
+    System.out.println("Pathing");
     initTime = Timer.getFPGATimestamp();
     if (reset) {
       this.endIndex = path.length() - 1;
@@ -83,9 +85,14 @@ public class VariableSpeedFollower extends AutoFollower {
   @Override
   public void execute() {
     drive.updateOdometryFusedArray();
-    odometryFusedX = drive.getMT2OdometryX();
-    odometryFusedY = drive.getMT2OdometryY();
-    odometryFusedTheta = drive.getMT2OdometryAngle();
+    odometryFusedX = 13.646;
+    odometryFusedY = 1.902;
+    odometryFusedTheta = Math.toRadians(270);
+    if (drive.getFieldSide() == "blue") {
+      odometryFusedX = Constants.Physical.FIELD_LENGTH - odometryFusedX;
+      odometryFusedY = Constants.Physical.FIELD_WIDTH - odometryFusedY;
+      odometryFusedTheta = Math.PI + odometryFusedTheta;
+    }
     currentTime = Timer.getFPGATimestamp() - initTime + pathStartTime;
     // call PIDController function
     prevTargetIndex = targetIndex;
@@ -134,11 +141,11 @@ public class VariableSpeedFollower extends AutoFollower {
     double desiredThetaChange = 0.0;
     drive.autoDrive(velocityVector, desiredThetaChange);
 
-    odometryFusedX = drive.getFusedOdometryX();
-    odometryFusedY = drive.getFusedOdometryY();
-    odometryFusedTheta = drive.getFusedOdometryTheta();
     currentTime = Timer.getFPGATimestamp() - initTime;
     Logger.recordOutput("pursuing?", false);
+    java.util.logging.Logger.getGlobal().fine("Stopped Pathing");
+    System.out.println("Stopped Pathing");
+
     if (this.record) {
       recordedOdometry.add(new double[] { currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta });
       try {

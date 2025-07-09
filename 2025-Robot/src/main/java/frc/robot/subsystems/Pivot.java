@@ -10,6 +10,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -352,35 +353,49 @@ public class Pivot extends SubsystemBase {
         pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULTCLIMB.rotations);
         break;
       case REEF_ALGAE:
-        switch (intakeItem) {
-          case ALGAE:
-            switch (systemFlip) {
-              case FRONT:
-                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
-                break;
-              case BACK:
-                pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
-                break;
-              default:
-                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
-                break;
-            }
+        if (DriverStation.isAutonomousEnabled()) {
+          switch (systemFlip) {
+            case FRONT:
+              pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+              break;
+            case BACK:
+              pivotToPosition(-Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+              break;
+            default:
+              pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+              break;
+          }
+        } else {
+          switch (intakeItem) {
+            case ALGAE:
+              switch (systemFlip) {
+                case FRONT:
+                  pivotToPositionSlower(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+                  break;
+                case BACK:
+                  pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+                  break;
+                default:
+                  pivotToPositionSlower(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+                  break;
+              }
 
-            break;
+              break;
 
-          default:
-            switch (systemFlip) {
-              case FRONT:
-                pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
-                break;
-              case BACK:
-                pivotToPosition(-Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
-                break;
-              default:
-                pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
-                break;
-            }
-            break;
+            default:
+              switch (systemFlip) {
+                case FRONT:
+                  pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+                  break;
+                case BACK:
+                  pivotToPosition(-Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+                  break;
+                default:
+                  pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+                  break;
+              }
+              break;
+          }
         }
         break;
       case NET:
@@ -623,15 +638,15 @@ public class Pivot extends SubsystemBase {
         break;
       case AUTO_SCORE_L4_SLOW:
         // switch (systemFlip) {
-        //   case FRONT:
-        //     setPivotPercent(0.1);
-        //     break;
-        //   case BACK:
-        //     setPivotPercent(-0.1);
-        //     break;
-        //   default:
-        //     setPivotPercent(0.1);
-        //     break;
+        // case FRONT:
+        // setPivotPercent(0.1);
+        // break;
+        // case BACK:
+        // setPivotPercent(-0.1);
+        // break;
+        // default:
+        // setPivotPercent(0.1);
+        // break;
         // }
         // break;
         switch (systemFlip) {

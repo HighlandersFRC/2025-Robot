@@ -61,7 +61,7 @@ public class Robot extends LoggedRobot {
     java.util.logging.Logger.getLogger("").setLevel(Level.ALL);
 
     // The level for logs printed to console. CHANGE THIS ONE TO OFF FOR COMP
-    java.util.logging.Logger.getLogger("").getHandlers()[0].setLevel(Level.INFO);
+    java.util.logging.Logger.getLogger("").getHandlers()[0].setLevel(Level.ALL);
 
     java.util.logging.Logger.getLogger("").addHandler(new AdvantageKitMultiLevelLogHandler());
 

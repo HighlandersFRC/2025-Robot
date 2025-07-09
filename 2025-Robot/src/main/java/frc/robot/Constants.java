@@ -41,9 +41,9 @@ public final class Constants {
                 public static final double MINIMUM_SPEED_LIMIT = 0.5; // m/s
                 public static final String[] paths = new String[] {
                                 "2AlgaeCenter.polarauto",
-                                "2+1PieceFeeder.polarauto",
+                                "p.polarauto",
                                 "3PieceFeederSmart.polarauto",
-                                "4PieceFeederGroundSmart.polarauto",
+                                "Processor_3PieceFeederSmart.polarauto",
                                 "TushPush.polarauto",
                                 "Square.polarauto"
                 };
@@ -93,13 +93,13 @@ public final class Constants {
                 public static final double B_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
                                 inchesToMeters(1.875);
                 public static final double C_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
-                                inchesToMeters(1.125);
+                                inchesToMeters(0.7157);
                 public static final double D_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
-                                inchesToMeters(1.25);
+                                inchesToMeters(1.75);
                 public static final double E_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
-                                inchesToMeters(1.125);
+                                inchesToMeters(1.5);
                 public static final double F_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
-                                inchesToMeters(1.125);
+                                inchesToMeters(1.875);
                 public static final double G_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
                                 inchesToMeters(1.125);
                 public static final double H_BRANCH_OFFSET = PERFECT_BRANCH_OFFSET_L4 -
@@ -167,10 +167,10 @@ public final class Constants {
                 // // negative makes robot go more to the left
                 public static final double A_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double B_BRANCH_OFFSET_SIDE = inchesToMeters(1.5);
-                public static final double C_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                public static final double C_BRANCH_OFFSET_SIDE = inchesToMeters(-1.0);
                 public static final double D_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double E_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
-                public static final double F_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
+                public static final double F_BRANCH_OFFSET_SIDE = inchesToMeters(1.5);
                 public static final double G_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double H_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);
                 public static final double I_BRANCH_OFFSET_SIDE = inchesToMeters(0.0);

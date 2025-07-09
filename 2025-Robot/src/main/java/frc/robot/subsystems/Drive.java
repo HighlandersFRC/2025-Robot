@@ -806,59 +806,66 @@ public class Drive extends SubsystemBase {
 
     Matrix<N3, N1> standardDeviation = new Matrix<>(Nat.N3(), Nat.N1());
 
-    var result = peripherals.getFrontReefCamResult();
+    // var result = peripherals.getFrontReefCamResult();
     if (systemState == DriveState.L4_REEF || systemState == DriveState.L3_REEF || systemState == DriveState.REEF) {
       photonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
       backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
       // swervePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
       gamePiecePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     }
-    Optional<EstimatedRobotPose> multiTagResult = photonPoseEstimator.update(result);
-    if (multiTagResult.isPresent()) {
-      if (result.getBestTarget().getPoseAmbiguity() < 0.3 && result.getBestTarget().fiducialId != 5
-          && result.getBestTarget().fiducialId != 4 && result.getBestTarget().fiducialId != 14
-          && result.getBestTarget().fiducialId != 15 && result.getBestTarget().fiducialId != 3
-          && result.getBestTarget().fiducialId != 16) {
-        Pose3d robotPose = multiTagResult.get().estimatedPose;
-        Logger.recordOutput("multitag result", robotPose);
-        int numFrontTracks = result.getTargets().size();
-        Pose3d tagPose = aprilTagFieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get();
-        double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-        // Logger.recordOutput("Distance to tag", distToTag);
-        if (distToTag < 3.2) {
-          if (systemState.equals(DriveState.REEF) || systemState.equals(DriveState.L3_REEF)
-              || systemState.equals(DriveState.L4_REEF)) {
-            standardDeviation.set(0, 0,
-                0.5
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(1, 0,
-                0.5
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 0.9);
-          } else {
-            standardDeviation.set(0, 0,
-                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(1, 0,
-                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 0.9);
-          }
-          // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-          // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-          mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-              result.getTimestampSeconds());
-        }
-      }
-    }
+    // Optional<EstimatedRobotPose> multiTagResult =
+    // photonPoseEstimator.update(result);
+    // if (multiTagResult.isPresent()) {
+    // if (result.getBestTarget().getPoseAmbiguity() < 0.3 &&
+    // result.getBestTarget().fiducialId != 5
+    // && result.getBestTarget().fiducialId != 4 &&
+    // result.getBestTarget().fiducialId != 14
+    // && result.getBestTarget().fiducialId != 15 &&
+    // result.getBestTarget().fiducialId != 3
+    // && result.getBestTarget().fiducialId != 16) {
+    // Pose3d robotPose = multiTagResult.get().estimatedPose;
+    // Logger.recordOutput("multitag result", robotPose);
+    // int numFrontTracks = result.getTargets().size();
+    // Pose3d tagPose =
+    // aprilTagFieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get();
+    // double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+    // // Logger.recordOutput("Distance to tag", distToTag);
+    // if (distToTag < 3.2) {
+    // if (systemState.equals(DriveState.REEF) ||
+    // systemState.equals(DriveState.L3_REEF)
+    // || systemState.equals(DriveState.L4_REEF)) {
+    // standardDeviation.set(0, 0,
+    // 0.5
+    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    // standardDeviation.set(1, 0,
+    // 0.5
+    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    // standardDeviation.set(2, 0, 0.9);
+    // } else {
+    // standardDeviation.set(0, 0,
+    // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    // standardDeviation.set(1, 0,
+    // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    // standardDeviation.set(2, 0, 0.9);
+    // }
+    // // Pose2d poseWithoutAngle = new
+    // Pose2d(robotPose.toPose2d().getTranslation(),
+    // // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+    // mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+    // result.getTimestampSeconds());
+    // }
+    // }
+    // }
 
     // if (DriverStation.isTeleopEnabled()) {
     // ArrayList<Pose2d> results = new ArrayList<Pose2d>();
@@ -3681,6 +3688,7 @@ public class Drive extends SubsystemBase {
    */
   public Number[] purePursuitController(double currentX, double currentY, double currentTheta, int currentIndex,
       JSONArray pathPoints, Spline spline, boolean fullSend, boolean accurate) {
+    int previousTarget = currentIndex;
     Waypoint targetPoint = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(pathPoints.length() - 1));
     int targetIndex = pathPoints.length() - 1;
     if (this.m_fieldSide == "blue") {
@@ -3707,6 +3715,8 @@ public class Drive extends SubsystemBase {
         currentIndex = i;
       }
     }
+    System.out.println("minDist: " + minDist);
+    System.out.println("currentIndex: " + currentIndex);
 
     double currentCurvature = spline.curvature(currentWaypoint.t);
     while (Math.abs(currentWaypoint.theta - currentTheta) > Math.PI) {
@@ -3727,17 +3737,24 @@ public class Drive extends SubsystemBase {
         : (Constants.Autonomous.MAX_LOOKAHEAD_DISTANCE - Constants.Autonomous.MIN_LOOKAHEAD_DISTANCE)
             / (1 + Math.pow(currentCurvature, 2))
             + Constants.Autonomous.MIN_LOOKAHEAD_DISTANCE;
+    if (previousTarget < currentIndex) {
+      previousTarget = currentIndex;
+    }
 
-    for (int i = currentIndex + Constants.Autonomous.MIN_LOOKAHEAD_STEP; i < pathPoints.length(); i++) {
+    for (int i = previousTarget + Constants.Autonomous.MIN_LOOKAHEAD_STEP; i < pathPoints.length(); i++) {
       Waypoint point = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(i)); // If full send mode is enabled, use
                                                                                  // the full send lookahead
       double deltaX = (currentX - point.x), deltaY = (currentY - point.y), deltaTheta = (currentTheta - point.theta);
+      deltaTheta = (((deltaTheta % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2)) - Math.PI; // Normalize deltaTheta
+                                                                                               // to be within [-pi, pi]
+      System.out.println("Delta X: " + deltaX + " Delta Y: " + deltaY + " Delta Theta: " + deltaTheta);
       if (!insideRadius(deltaX / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
           deltaY / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
           deltaTheta / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS,
           lookaheadRadius)) {
         targetIndex = i;
         targetPoint = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(i));
+        Logger.recordOutput("targetPoint", PolarPathing.jsonToPose2d(pathPoints.getJSONObject(i)));
         break;
       }
     }
@@ -3767,6 +3784,10 @@ public class Drive extends SubsystemBase {
     double feedForwardY = targetPoint.dy * f;
     double feedForwardTheta = -targetPoint.dtheta * f;
 
+    Logger.recordOutput("feedForwardX", feedForwardX);
+    Logger.recordOutput("feedForwardY", feedForwardY);
+    Logger.recordOutput("feedForwardTheta", feedForwardTheta);
+
     double finalX = xVelNoFF + feedForwardX;
     double finalY = yVelNoFF + feedForwardY;
     double finalTheta = thetaVelNoFF + feedForwardTheta;
@@ -3777,12 +3798,16 @@ public class Drive extends SubsystemBase {
             * Constants.Physical.TOP_SPEED)
             / (1 + Constants.Autonomous.CURVATURE_LIMITER_MULTIPLIER * Math.abs(currentCurvature)),
         Constants.Autonomous.MINIMUM_SPEED_LIMIT);
+    Logger.recordOutput("finalX-Unlimitied", finalX);
+    Logger.recordOutput("finalY-Unlimitied", finalY);
     if (finalVelMag > allowedVel && targetIndex != 0) {
       double scaleFactor = allowedVel / finalVelMag;
       finalX *= scaleFactor;
       finalY *= scaleFactor;
       finalTheta *= scaleFactor;
     }
+    Logger.recordOutput("finalX", finalX);
+    Logger.recordOutput("finalY", finalY);
 
     if (m_fieldSide == "blue") {
       finalX = -finalX;
@@ -3815,6 +3840,10 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("time", currentWaypoint.t);
     Logger.recordOutput("curvature", currentCurvature);
     Logger.recordOutput("maximum speed", allowedVel);
+    Logger.recordOutput("target idx", targetIndex);
+    System.out.println("currentIndex: " + currentIndex + " targetIndex: " + targetIndex);
+    System.out.println("look-ahead: " + lookaheadRadius + " currentCurvature: " + currentCurvature
+        + " allowedVel: " + allowedVel);
     // Logger.recordOutput("Velocity Array",
     // "X: " + finalX + " Y: " + -finalY + " Theta: " + finalTheta + " Index: " +
     // targetIndex);
