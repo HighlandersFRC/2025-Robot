@@ -38,10 +38,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.tools.controlloops.PID;
-import frc.robot.tools.math.Spline;
 import frc.robot.tools.math.Vector;
-import frc.robot.tools.math.Waypoint;
-import frc.robot.tools.utils.PolarPathing;
 
 // **Zero Wheels with the bolt head showing on the left when the front side(battery) is facing down/away from you**
 
@@ -266,7 +263,7 @@ public class Drive extends SubsystemBase {
   private double kkThetaD4 = 0.971;
 
   // l4 auto pids
-  private double scalar = 0.6;
+  private double scalar = 0.9;
   private double kkXP4A = 4.30 * scalar;
   private double kkXI4A = 0.00 * scalar;
   private double kkXD4A = 1.70 * scalar;
@@ -512,14 +509,14 @@ public class Drive extends SubsystemBase {
     thetaaPID4.setMinOutput(-2.0);
     thetaaPID4.setMaxOutput(2.0);
 
-    xxPID4A.setMinOutput(-0.254);
-    xxPID4A.setMaxOutput(0.254);
+    xxPID4A.setMinOutput(-1.4);
+    xxPID4A.setMaxOutput(1.4);
 
-    yyPID4A.setMinOutput(-0.254);
-    yyPID4A.setMaxOutput(0.254);
+    yyPID4A.setMinOutput(-1.4);
+    yyPID4A.setMaxOutput(1.4);
 
-    thetaaPID4A.setMinOutput(-0.254);
-    thetaaPID4A.setMaxOutput(0.254);
+    thetaaPID4A.setMinOutput(-1.4);
+    thetaaPID4A.setMaxOutput(1.4);
 
     xxPID23.setMinOutput(-4.0);
     xxPID23.setMaxOutput(4.0);
@@ -806,81 +803,89 @@ public class Drive extends SubsystemBase {
 
     Matrix<N3, N1> standardDeviation = new Matrix<>(Nat.N3(), Nat.N1());
 
-    var result = peripherals.getFrontReefCamResult();
+    // var result = peripherals.getFrontReefCamResult();
     if (systemState == DriveState.L4_REEF || systemState == DriveState.L3_REEF || systemState == DriveState.REEF) {
       photonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
       backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
       // swervePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
       gamePiecePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     }
-    Optional<EstimatedRobotPose> multiTagResult = photonPoseEstimator.update(result);
-    if (multiTagResult.isPresent()) {
-      if (result.getBestTarget().getPoseAmbiguity() < 0.3 && result.getBestTarget().fiducialId != 5
-          && result.getBestTarget().fiducialId != 4 && result.getBestTarget().fiducialId != 14
-          && result.getBestTarget().fiducialId != 15 && result.getBestTarget().fiducialId != 3
-          && result.getBestTarget().fiducialId != 16) {
-        Pose3d robotPose = multiTagResult.get().estimatedPose;
-        Logger.recordOutput("multitag result", robotPose);
-        int numFrontTracks = result.getTargets().size();
-        Pose3d tagPose = aprilTagFieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get();
-        double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-        // Logger.recordOutput("Distance to tag", distToTag);
-        if (distToTag < 3.2) {
-          if (systemState.equals(DriveState.REEF) || systemState.equals(DriveState.L3_REEF)
-              || systemState.equals(DriveState.L4_REEF)) {
-            standardDeviation.set(0, 0,
-                0.5
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(1, 0,
-                0.5
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 0.9);
-          } else {
-            standardDeviation.set(0, 0,
-                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(1, 0,
-                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 0.9);
-          }
-          // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-          // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-          mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-              result.getTimestampSeconds());
-        }
-      }
-    }
-
-    // if (DriverStation.isTeleopEnabled()) {
-    // ArrayList<Pose2d> results = new ArrayList<Pose2d>();
-    // var gamePieceResult = peripherals.getFrontGamePieceCamResult();
-    // Optional<EstimatedRobotPose> gamePieceMultiTagResult =
-    // gamePiecePhotonPoseEstimator.update(gamePieceResult);
-    // if (gamePieceMultiTagResult.isPresent()) {
-    // if (gamePieceResult.getBestTarget().getPoseAmbiguity() < 0.3 &&
-    // gamePieceResult.getBestTarget().fiducialId != 5
-    // && gamePieceResult.getBestTarget().fiducialId != 4 &&
-    // gamePieceResult.getBestTarget().fiducialId != 14
-    // && gamePieceResult.getBestTarget().fiducialId != 15 &&
-    // gamePieceResult.getBestTarget().fiducialId != 3
-    // && gamePieceResult.getBestTarget().fiducialId != 16) {
-    // Pose3d robotPose = gamePieceMultiTagResult.get().estimatedPose;
+    // Optional<EstimatedRobotPose> multiTagResult =
+    // photonPoseEstimator.update(result);
+    // if (multiTagResult.isPresent()) {
+    // if (result.getBestTarget().getPoseAmbiguity() < 0.3 &&
+    // result.getBestTarget().fiducialId != 5
+    // && result.getBestTarget().fiducialId != 4 &&
+    // result.getBestTarget().fiducialId != 14
+    // && result.getBestTarget().fiducialId != 15 &&
+    // result.getBestTarget().fiducialId != 3
+    // && result.getBestTarget().fiducialId != 16) {
+    // Pose3d robotPose = multiTagResult.get().estimatedPose;
     // Logger.recordOutput("multitag result", robotPose);
-    // int numFrontTracks = gamePieceResult.getTargets().size();
+    // int numFrontTracks = result.getTargets().size();
     // Pose3d tagPose =
-    // aprilTagFieldLayout.getTagPose(gamePieceResult.getBestTarget().getFiducialId()).get();
+    // aprilTagFieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get();
     // double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
     // // Logger.recordOutput("Distance to tag", distToTag);
     // if (distToTag < 3.2) {
+    // if (systemState.equals(DriveState.REEF) ||
+    // systemState.equals(DriveState.L3_REEF)
+    // || systemState.equals(DriveState.L4_REEF)) {
+    // standardDeviation.set(0, 0,
+    // 0.5
+    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    // standardDeviation.set(1, 0,
+    // 0.5
+    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    // standardDeviation.set(2, 0, 0.9);
+    // } else {
+    // standardDeviation.set(0, 0,
+    // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    // standardDeviation.set(1, 0,
+    // Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+    // * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    // // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    // // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    // standardDeviation.set(2, 0, 0.9);
+    // }
+    // // Pose2d poseWithoutAngle = new
+    // Pose2d(robotPose.toPose2d().getTranslation(),
+    // // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+    // mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+    // result.getTimestampSeconds());
+    // }
+    // }
+    // }
+
+    // // if (DriverStation.isTeleopEnabled()) {
+    // // ArrayList<Pose2d> results = new ArrayList<Pose2d>();
+    // // var gamePieceResult = peripherals.getFrontGamePieceCamResult();
+    // // Optional<EstimatedRobotPose> gamePieceMultiTagResult =
+    // // gamePiecePhotonPoseEstimator.update(gamePieceResult);
+    // // if (gamePieceMultiTagResult.isPresent()) {
+    // // if (gamePieceResult.getBestTarget().getPoseAmbiguity() < 0.3 &&
+    // // gamePieceResult.getBestTarget().fiducialId != 5
+    // // && gamePieceResult.getBestTarget().fiducialId != 4 &&
+    // // gamePieceResult.getBestTarget().fiducialId != 14
+    // // && gamePieceResult.getBestTarget().fiducialId != 15 &&
+    // // gamePieceResult.getBestTarget().fiducialId != 3
+    // // && gamePieceResult.getBestTarget().fiducialId != 16) {
+    // // Pose3d robotPose = gamePieceMultiTagResult.get().estimatedPose;
+    // // Logger.recordOutput("multitag result", robotPose);
+    // // int numFrontTracks = gamePieceResult.getTargets().size();
+    // // Pose3d tagPose =
+    // //
+    // aprilTagFieldLayout.getTagPose(gamePieceResult.getBestTarget().getFiducialId()).get();
+    // // double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+    // // // Logger.recordOutput("Distance to tag", distToTag);
+    // // if (distToTag < 3.2) {
     // if (systemState.equals(DriveState.REEF) ||
     // systemState.equals(DriveState.L3_REEF)
     // || systemState.equals(DriveState.L4_REEF)) {
@@ -3319,39 +3324,36 @@ public class Drive extends SubsystemBase {
     double yVelNoFF = 0.0;
     double thetaVelNoFF = 0.0;
 
-    if (OI.driverPOVRight.getAsBoolean()) {
-      if (DriverStation.isAutonomousEnabled()) {
-        xxPID4A.setSetPoint(x);
-        yyPID4A.setSetPoint(y);
-        thetaaPID4A.setSetPoint(theta);
+    if (DriverStation.isAutonomousEnabled() && systemState.equals(DriveState.L4_REEF)) {
+      xxPID4A.setSetPoint(x);
+      yyPID4A.setSetPoint(y);
+      thetaaPID4A.setSetPoint(theta);
 
-        xxPID4A.updatePID(getMT2OdometryX());
-        yyPID4A.updatePID(getMT2OdometryY());
-        thetaaPID4A.updatePID(getMT2OdometryAngle());
+      xxPID4A.updatePID(getMT2OdometryX());
+      yyPID4A.updatePID(getMT2OdometryY());
+      thetaaPID4A.updatePID(getMT2OdometryAngle());
 
-        xVelNoFF = xxPID4A.getResult();
-        yVelNoFF = yyPID4A.getResult();
-        double velmag = Math.hypot(xVelNoFF, yVelNoFF);
-        double maxvel = 0.1;
-        if (velmag > maxvel) {
-          xVelNoFF = xVelNoFF * maxvel / velmag;
-          yVelNoFF = yVelNoFF * maxvel / velmag;
-        }
-        thetaVelNoFF = -thetaaPID4A.getResult();
+      xVelNoFF = xxPID4A.getResult();
+      yVelNoFF = yyPID4A.getResult();
+      // double velmag = Math.hypot(xVelNoFF, yVelNoFF);
+      // double maxvel = 0.1;
+      // if (velmag > maxvel) {
+      // xVelNoFF = xVelNoFF * maxvel / velmag;
+      // yVelNoFF = yVelNoFF * maxvel / velmag;
+      // }
+      thetaVelNoFF = -thetaaPID4A.getResult();
+    } else if (OI.driverPOVRight.getAsBoolean()) {
+      xxPID4.setSetPoint(x);
+      yyPID4.setSetPoint(y);
+      thetaaPID4.setSetPoint(theta);
 
-      } else {
-        xxPID4.setSetPoint(x);
-        yyPID4.setSetPoint(y);
-        thetaaPID4.setSetPoint(theta);
+      xxPID4.updatePID(getMT2OdometryX());
+      yyPID4.updatePID(getMT2OdometryY());
+      thetaaPID4.updatePID(getMT2OdometryAngle());
 
-        xxPID4.updatePID(getMT2OdometryX());
-        yyPID4.updatePID(getMT2OdometryY());
-        thetaaPID4.updatePID(getMT2OdometryAngle());
-
-        xVelNoFF = xxPID4.getResult();
-        yVelNoFF = yyPID4.getResult();
-        thetaVelNoFF = -thetaaPID4.getResult();
-      }
+      xVelNoFF = xxPID4.getResult();
+      yVelNoFF = yyPID4.getResult();
+      thetaVelNoFF = -thetaaPID4.getResult();
 
     } else if (DriverStation.isTeleopEnabled()
         && (OI.driverPOVLeft.getAsBoolean() || OI.driverPOVDown.getAsBoolean())) {
@@ -3664,24 +3666,9 @@ public class Drive extends SubsystemBase {
     }
   }
 
-  /**
-   * Implements the Pure Pursuit controller to follow a path defined by a series
-   * of
-   * waypoints.
-   * 
-   * @param currentX     The current x-coordinate of the robot.
-   * @param currentY     The current y-coordinate of the robot.
-   * @param currentTheta The current orientation of the robot in radians.
-   * @param currentIndex The index of the current waypoint in the path.
-   * @param pathPoints   The JSON array containing the path points.
-   * @param spline       The spline representing the path.
-   * @param fullSend     Whether to use full send mode for lookahead distance.
-   * @param accurate     Whether to use accurate following mode.
-   * @return An array containing the calculated velocities for x, y, and theta.
-   */
   public Number[] purePursuitController(double currentX, double currentY, double currentTheta, int currentIndex,
-      JSONArray pathPoints, Spline spline, boolean fullSend, boolean accurate) {
-    Waypoint targetPoint = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(pathPoints.length() - 1));
+      JSONArray pathPoints, boolean fullSend, boolean accurate) {
+    JSONObject targetPoint = pathPoints.getJSONObject(pathPoints.length() - 1);
     int targetIndex = pathPoints.length() - 1;
     if (this.m_fieldSide == "blue") {
       currentX = Constants.Physical.FIELD_LENGTH - currentX;
@@ -3694,65 +3681,48 @@ public class Drive extends SubsystemBase {
       currentTheta = -currentTheta;
     }
 
-    Waypoint currentWaypoint = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(0));
-    double minDist = Double.MAX_VALUE;
-    double currentDist = 0;
-    for (int i = 0; i < pathPoints.length(); i++) {
-      Waypoint point = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(i));
-      currentDist = Math.hypot(currentX - point.x,
-          currentY - point.y);
-      if (currentDist < minDist) {
-        currentWaypoint = point;
-        minDist = currentDist;
-        currentIndex = i;
+    for (int i = currentIndex; i < pathPoints.length(); i++) {
+      JSONObject point = pathPoints.getJSONObject(i);
+      double targetX = point.getDouble("x"), targetY = point.getDouble("y"),
+          targetTheta = point.getDouble("angle"), targetXvel = point.getDouble("x_velocity"),
+          targetYvel = point.getDouble("y_velocity"), targetThetavel = point.getDouble("angular_velocity");
+      while (Math.abs(targetTheta - currentTheta) > Math.PI) {
+        if (targetTheta - currentTheta > Math.PI) {
+          targetTheta -= 2 * Math.PI;
+        } else if (targetTheta - currentTheta < -Math.PI) {
+          targetTheta += 2 * Math.PI;
+        }
       }
-    }
-
-    double currentCurvature = spline.curvature(currentWaypoint.t);
-    while (Math.abs(currentWaypoint.theta - currentTheta) > Math.PI) {
-      if (currentWaypoint.theta - currentTheta > Math.PI) {
-        currentWaypoint.theta -= 2 * Math.PI;
-      } else if (currentWaypoint.theta - currentTheta < -Math.PI) {
-        currentWaypoint.theta += 2 * Math.PI;
-      }
-    }
-    // double linearVelMag = Math.hypot(currentWaypoint.dy /
-    // Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
-    // currentWaypoint.dx /
-    // Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS);
-    // double targetVelMag = Math.hypot(linearVelMag,
-    // currentWaypoint.dtheta /
-    // Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS);
-    double lookaheadRadius = fullSend ? Constants.Autonomous.MAX_LOOKAHEAD_DISTANCE
-        : (Constants.Autonomous.MAX_LOOKAHEAD_DISTANCE - Constants.Autonomous.MIN_LOOKAHEAD_DISTANCE)
-            / (1 + Math.pow(currentCurvature, 2))
-            + Constants.Autonomous.MIN_LOOKAHEAD_DISTANCE;
-
-    for (int i = currentIndex + Constants.Autonomous.MIN_LOOKAHEAD_STEP; i < pathPoints.length(); i++) {
-      Waypoint point = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(i)); // If full send mode is enabled, use
-                                                                                 // the full send lookahead
-      double deltaX = (currentX - point.x), deltaY = (currentY - point.y), deltaTheta = (currentTheta - point.theta);
+      double linearVelMag = Math.hypot(targetYvel / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
+          targetXvel / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS);
+      double targetVelMag = Math.hypot(linearVelMag,
+          targetThetavel / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS);
+      double lookaheadRadius = fullSend ? Constants.Autonomous.FULL_SEND_LOOKAHEAD
+          : Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_DISTANCE * targetVelMag
+              + Constants.Autonomous.MIN_LOOKAHEAD_DISTANCE;// If full send mode is enabled, use the full send lookahead
+      double deltaX = (currentX - targetX), deltaY = (currentY - targetY), deltaTheta = (currentTheta - targetTheta);
       if (!insideRadius(deltaX / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
           deltaY / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
           deltaTheta / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS,
           lookaheadRadius)) {
         targetIndex = i;
-        targetPoint = PolarPathing.jsonToWaypoint(pathPoints.getJSONObject(i));
+        targetPoint = pathPoints.getJSONObject(i);
         break;
       }
     }
-    ;
+    double targetX = targetPoint.getDouble("x"), targetY = targetPoint.getDouble("y"),
+        targetTheta = targetPoint.getDouble("angle");
 
-    while (Math.abs(targetPoint.theta - currentTheta) > Math.PI) {
-      if (targetPoint.theta - currentTheta > Math.PI) {
-        targetPoint.theta -= 2 * Math.PI;
-      } else if (targetPoint.theta - currentTheta < -Math.PI) {
-        targetPoint.theta += 2 * Math.PI;
+    while (Math.abs(targetTheta - currentTheta) > Math.PI) {
+      if (targetTheta - currentTheta > Math.PI) {
+        targetTheta -= 2 * Math.PI;
+      } else if (targetTheta - currentTheta < -Math.PI) {
+        targetTheta += 2 * Math.PI;
       }
     }
-    xPID.setSetPoint(targetPoint.x);
-    yPID.setSetPoint(targetPoint.y);
-    thetaPID.setSetPoint(targetPoint.theta);
+    xPID.setSetPoint(targetX);
+    yPID.setSetPoint(targetY);
+    thetaPID.setSetPoint(targetTheta);
 
     xPID.updatePID(currentX);
     yPID.updatePID(currentY);
@@ -3761,29 +3731,15 @@ public class Drive extends SubsystemBase {
     double xVelNoFF = xPID.getResult();
     double yVelNoFF = yPID.getResult();
     double thetaVelNoFF = -thetaPID.getResult();
-    double f = (accurate ? Constants.Autonomous.ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER
+    double f = (accurate ? Constants.Autonomous.ACCURATE_FOLLOWER_AUTONOMOUS_END_ACCURACY
         : Constants.Autonomous.FEED_FORWARD_MULTIPLIER);
-    double feedForwardX = targetPoint.dx * f;
-    double feedForwardY = targetPoint.dy * f;
-    double feedForwardTheta = -targetPoint.dtheta * f;
+    double feedForwardX = targetPoint.getDouble("x_velocity") * f;
+    double feedForwardY = targetPoint.getDouble("y_velocity") * f;
+    double feedForwardTheta = -targetPoint.getDouble("angular_velocity") * f;
 
     double finalX = xVelNoFF + feedForwardX;
     double finalY = yVelNoFF + feedForwardY;
     double finalTheta = thetaVelNoFF + feedForwardTheta;
-    // Clamp to robot max velocity with curvature limiter
-    double finalVelMag = Math.hypot(finalX, finalY);
-    double allowedVel = Math.max(
-        ((((60 - Constants.metersToInches(elevator.getElevatorPosition())) * 0.4 / 50) + 0.6)
-            * Constants.Physical.TOP_SPEED)
-            / (1 + Constants.Autonomous.CURVATURE_LIMITER_MULTIPLIER * Math.abs(currentCurvature)),
-        Constants.Autonomous.MINIMUM_SPEED_LIMIT);
-    if (finalVelMag > allowedVel && targetIndex != 0) {
-      double scaleFactor = allowedVel / finalVelMag;
-      finalX *= scaleFactor;
-      finalY *= scaleFactor;
-      finalTheta *= scaleFactor;
-    }
-
     if (m_fieldSide == "blue") {
       finalX = -finalX;
       finalY = -finalY;
@@ -3798,7 +3754,6 @@ public class Drive extends SubsystemBase {
         finalX,
         -finalY,
         finalTheta,
-        currentIndex,
         targetIndex,
     };
 
@@ -3809,12 +3764,10 @@ public class Drive extends SubsystemBase {
     // targetPoint.getDouble("angular_velocity"));
     // Logger.recordOutput("pid-theta-vel", thetaVelNoFF);
     // Logger.recordOutput("FF-theta-vel", feedForwardTheta);
-    Logger.recordOutput("current point idx", currentIndex);
-    Logger.recordOutput("point idx", velocityArray[3].intValue());
-    Logger.recordOutput("look-ahead", lookaheadRadius);
-    Logger.recordOutput("time", currentWaypoint.t);
-    Logger.recordOutput("curvature", currentCurvature);
-    Logger.recordOutput("maximum speed", allowedVel);
+    // Logger.recordOutput("current point idx", currentIndex);
+    // Logger.recordOutput("point idx", velocityArray[3].intValue());
+    // Logger.recordOutput("look-ahead",
+    // Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_DISTANCE * velocityMag + 0.01);
     // Logger.recordOutput("Velocity Array",
     // "X: " + finalX + " Y: " + -finalY + " Theta: " + finalTheta + " Index: " +
     // targetIndex);

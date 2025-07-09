@@ -230,7 +230,7 @@ public class Intake extends SubsystemBase {
         // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
         //
         setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
-            Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_HOLDING_SPEED);
+            Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
 
         // }
         break;

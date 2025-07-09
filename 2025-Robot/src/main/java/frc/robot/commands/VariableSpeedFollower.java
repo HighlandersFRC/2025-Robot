@@ -9,12 +9,9 @@ import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.tools.math.Spline;
 import frc.robot.tools.math.Vector;
-import frc.robot.tools.utils.PolarPathing;
 import frc.robot.tools.wrappers.AutoFollower;
 import frc.robot.Constants;
 import frc.robot.OI;
@@ -24,7 +21,6 @@ public class VariableSpeedFollower extends AutoFollower {
   private Drive drive;
 
   private JSONArray path;
-  private Spline spline;
 
   private double initTime;
   private double currentTime;
@@ -41,25 +37,23 @@ public class VariableSpeedFollower extends AutoFollower {
   private ArrayList<double[]> recordedOdometry = new ArrayList<double[]>();
   public double pathStartTime;
 
-  private int prevTargetIndex = 0;
-  private int closestIndex = 0;
-  private int targetIndex = 0;
+  private int currentPathPointIndex = 0;
+  private int returnPathPointIndex = 0;
   private int timesStagnated = 0;
   private final int STAGNATE_THRESHOLD = 3;
   private boolean reset = true;
   private int endIndex = 0;
 
   public int getPathPointIndex() {
-    return closestIndex;
+    return currentPathPointIndex;
   }
 
-  public VariableSpeedFollower(Drive drive, JSONObject path,
+  public VariableSpeedFollower(Drive drive, JSONArray pathPoints,
       boolean record) {
     this.drive = drive;
-    this.path = path.getJSONArray("sampled_points");
-    this.spline = PolarPathing.pathJsonToSpline(path);
+    this.path = pathPoints;
     this.record = record;
-    pathStartTime = this.path.getJSONObject(0).getDouble("time");
+    pathStartTime = pathPoints.getJSONObject(0).getDouble("time");
     addRequirements(drive);
   }
 
@@ -69,35 +63,35 @@ public class VariableSpeedFollower extends AutoFollower {
     initTime = Timer.getFPGATimestamp();
     if (reset) {
       this.endIndex = path.length() - 1;
-      prevTargetIndex = 0;
+      currentPathPointIndex = 0;
     } else {
       reset = true;
     }
     if (endIndex > path.length() - 1) {
       endIndex = path.length() - 1;
     }
-    targetIndex = prevTargetIndex;
+    returnPathPointIndex = currentPathPointIndex;
     timesStagnated = 0;
   }
 
   @Override
   public void execute() {
+    // System.out.println("Variable Speed");
     drive.updateOdometryFusedArray();
     odometryFusedX = drive.getMT2OdometryX();
     odometryFusedY = drive.getMT2OdometryY();
     odometryFusedTheta = drive.getMT2OdometryAngle();
     currentTime = Timer.getFPGATimestamp() - initTime + pathStartTime;
     // call PIDController function
-    prevTargetIndex = targetIndex;
+    currentPathPointIndex = returnPathPointIndex;
     desiredVelocityArray = drive.purePursuitController(odometryFusedX, odometryFusedY, odometryFusedTheta,
-        prevTargetIndex, path, spline, false, false);
+        currentPathPointIndex, path, false, false);
 
-    closestIndex = desiredVelocityArray[3].intValue();
-    targetIndex = desiredVelocityArray[4].intValue();
-    if (targetIndex == prevTargetIndex && targetIndex != path.length() - 1) {
+    returnPathPointIndex = desiredVelocityArray[3].intValue();
+    if (returnPathPointIndex == currentPathPointIndex && returnPathPointIndex != path.length() - 1) {
       timesStagnated++;
       if (timesStagnated > STAGNATE_THRESHOLD) {
-        targetIndex++;
+        returnPathPointIndex++;
         timesStagnated = 0;
       }
     } else {
@@ -106,7 +100,7 @@ public class VariableSpeedFollower extends AutoFollower {
 
     Vector velocityVector = new Vector();
 
-    if (prevTargetIndex == path.length() - 1) {
+    if (currentPathPointIndex == path.length() - 1) {
       velocityVector.setI(desiredVelocityArray[0].doubleValue() * 2);
       velocityVector.setJ(desiredVelocityArray[1].doubleValue() * 2);
       desiredThetaChange = desiredVelocityArray[2].doubleValue() * 2;
@@ -119,9 +113,7 @@ public class VariableSpeedFollower extends AutoFollower {
     // create velocity vector and set desired theta change
 
     drive.autoDrive(velocityVector, desiredThetaChange);
-    Logger.recordOutput("pursuing?", true);
-    Logger.recordOutput("Path Point Index", getPathPointIndex());
-    java.util.logging.Logger.getGlobal().finer("Path Point Index: " + getPathPointIndex());
+    // Logger.recordOutput("pursuing?", true);
     // Logger.recordOutput("Path Time", path
     // .getJSONObject(getPathPointIndex()).getDouble("time"));
   }
@@ -138,7 +130,7 @@ public class VariableSpeedFollower extends AutoFollower {
     odometryFusedY = drive.getFusedOdometryY();
     odometryFusedTheta = drive.getFusedOdometryTheta();
     currentTime = Timer.getFPGATimestamp() - initTime;
-    Logger.recordOutput("pursuing?", false);
+    // Logger.recordOutput("pursuing?", false);
     if (this.record) {
       recordedOdometry.add(new double[] { currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta });
       try {
@@ -163,26 +155,22 @@ public class VariableSpeedFollower extends AutoFollower {
 
         bw.close();
       } catch (Exception e) {
-        java.util.logging.Logger.getGlobal().warning(e.getMessage());
-        java.util.logging.Logger.getGlobal().warning("CSV file error");
+        System.out.println(e);
+        System.out.println("CSV file error");
       }
     }
   }
 
   public void from(int pointIndex, JSONObject pathJSON, int to) {
-    this.prevTargetIndex = pointIndex;
-    this.closestIndex = pointIndex;
+    this.currentPathPointIndex = pointIndex;
     path = pathJSON.getJSONArray("sampled_points");
-    spline = PolarPathing.pathJsonToSpline(pathJSON);
     endIndex = to;
     reset = false;
   }
 
   @Override
   public boolean isFinished() {
-    boolean ready = readyToEnd(path.getJSONObject(targetIndex));
-    Logger.recordOutput("Ready to end", ready);
-    if (targetIndex >= path.length() - 1 && ready) {
+    if (returnPathPointIndex >= path.length() - 1 && readyToEnd(path.getJSONObject(returnPathPointIndex))) {
       return true;
     } else {
       return false;

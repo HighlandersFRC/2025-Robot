@@ -19,8 +19,8 @@ import frc.robot.commands.AutoCoralGroundPickupFollower;
 import frc.robot.commands.AutoPlaceL2Follower;
 import frc.robot.commands.AutoPlaceL4Follower;
 import frc.robot.commands.DoNothing;
-import frc.robot.commands.FeederPickup;
 import frc.robot.commands.FeederPickupFollower;
+import frc.robot.commands.FullSendFollower;
 import frc.robot.commands.PolarAutoFollower;
 import frc.robot.commands.SetAlgaeMode;
 import frc.robot.commands.SetClimberPivotTorque;
@@ -77,23 +77,23 @@ public class RobotContainer {
                         put("AutoPlaceL2", () -> new AutoPlaceL2Follower(superstructure, drive, 3.3));
                         put("AutoPlaceL4", () -> new AutoPlaceL4Follower(superstructure, drive, 3.3));
                         put("AutoFeeder", () -> new FeederPickupFollower(superstructure, drive));
-                        put("FeederIntake", () -> new FeederPickup(superstructure));
+                        put("FeederIntake", () -> new SetRobotState(superstructure, SuperState.FEEDER));
                         put("Outake", () -> new SetRobotStateSimple(superstructure, SuperState.OUTAKE));
                         put("L1", () -> new SetRobotStateSimple(superstructure, SuperState.AUTO_L1_PLACE));
                         put("Idle", () -> new SetRobotStateSimple(superstructure, SuperState.IDLE));
+                        put("Full Send", () -> new FullSendFollower(drive, null, false));
                         put("IntakeLollipop", () -> new SetRobotState(superstructure, SuperState.LOLLIOP_PICKUP));
                         put("Net", () -> new SetRobotStateSimple(superstructure, SuperState.NET));
                         put("GroundIntake", () -> new SetRobotStateComplicatedContinuous(superstructure,
                                         SuperState.GROUND_CORAL_PICKUP_FRONT, SuperState.PASSOFF_IDLE));
-                        put("ReefAlgaeL2", () -> new SetRobotStateSimple(superstructure, SuperState.L2_ALGAE_PICKUP));
-                        put("ReefAlgaeL3", () -> new SetRobotStateSimple(superstructure, SuperState.L3_ALGAE_PICKUP));
+                        put("ReefAlgaeL2", () -> new SetRobotState(superstructure, SuperState.L2_ALGAE_PICKUP));
+                        put("ReefAlgaeL3", () -> new SetRobotState(superstructure, SuperState.L3_ALGAE_PICKUP));
                         // put("ReefAlgae", () -> new ReefAlgaePickupFollower(superstructure, drive,
                         // 5.0, m_container));
                         put("AutoIntake", () -> new AutoCoralGroundPickupFollower(superstructure, drive, 4.0));
                         put("PassoffOutakeIdle", () -> new SetRobotStateSimpleOnce(superstructure,
                                         SuperState.PASSOFF_OUTAKE_IDLE));
                         put("ToggleAlgaeMode", () -> new SetAlgaeMode(m_container));
-                        put("Wait", () -> new DoNothing());
                 }
         };
 

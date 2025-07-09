@@ -63,12 +63,14 @@ public class PolarAutoFollower extends SequentialCommandGroup {
         BooleanSupplier condition = conditionMap.get(scheduleEntry.get("condition"));
         Runnable onTrueRunnable = new Runnable() {
           public void run() {
-            java.util.logging.Logger.getGlobal().info("True Path Starting");
+            System.out.println("True Path Starting");
+            System.out.println(condition.getAsBoolean());
           }
         };
         Runnable onFalseRunnable = new Runnable() {
           public void run() {
-            java.util.logging.Logger.getGlobal().info("False Path Starting");
+            System.out.println("False Path Starting");
+            System.out.println(condition.getAsBoolean());
           }
         };
         addCommands(

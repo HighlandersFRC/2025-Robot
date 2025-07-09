@@ -22,11 +22,10 @@ public final class Constants {
                 // their constants
                 public static final double AUTONOMOUS_LOOKAHEAD_DISTANCE = 0.04; // Lookahead at 1m/s scaled by wanted
                                                                                  // velocity
-                public static final double MAX_LOOKAHEAD_DISTANCE = 0.40;
+                public static final double FULL_SEND_LOOKAHEAD = 0.60;
                 public static final double MIN_LOOKAHEAD_DISTANCE = 0.05; // Lookahead distance at 0m/s
-                public static final int MIN_LOOKAHEAD_STEP = 3;
                 // Path follower will end if within this radius of the final point
-                public static final double AUTONOMOUS_END_ACCURACY = 0.20;
+                public static final double AUTONOMOUS_END_ACCURACY = 0.40;
                 public static final double ACCURATE_FOLLOWER_AUTONOMOUS_END_ACCURACY = 0.05;
                 // When calculating the point distance, will divide x and y by this constant
                 public static final double AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS = 1.0;
@@ -35,17 +34,12 @@ public final class Constants {
                 // Feed Forward Multiplier
                 public static final double FEED_FORWARD_MULTIPLIER = 0.5;
                 public static final double ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER = 1;
-                // A larger value will limit the speed more when going around curves
-                public static final double CURVATURE_LIMITER_MULTIPLIER = 2;
-                // Minimum speed limit during auto
-                public static final double MINIMUM_SPEED_LIMIT = 0.5; // m/s
                 public static final String[] paths = new String[] {
                                 "2AlgaeCenter.polarauto",
                                 "2+1PieceFeeder.polarauto",
                                 "3PieceFeederSmart.polarauto",
                                 "4PieceFeederGroundSmart.polarauto",
                                 "TushPush.polarauto",
-                                "Square.polarauto"
                 };
 
                 public static int getSelectedPathIndex() {
@@ -80,6 +74,126 @@ public final class Constants {
                 } else {
                         Logger.recordOutput("Selected Auto", Autonomous.paths[index]);
                 }
+        }
+
+        public static void init() {
+
+                // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint1);
+                // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint2);
+                // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint3);
+                // ///////
+                // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint4);
+                // // Only have these 4 now
+                // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint5);
+                // // The rest are 0, 0
+                // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint6);
+                // ///////
+                // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint7);
+                // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint8);
+                // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint9);
+                // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint10);
+                // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint11);
+                // Constants.Physical.redCoralScoringPositions.add(Constants.Physical.redSetpoint12);
+
+                // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint1);
+                // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint2);
+                // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint3);
+                // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint4);
+                // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint5);
+                // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint6);
+                // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint7);
+                // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint8);
+                // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint9);
+                // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint10);
+                // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint11);
+                // Constants.Physical.blueCoralScoringPositions.add(Constants.Physical.blueSetpoint12);
+
+                // for (int i = 0; i < Constants.Vision.redSideReefTags.length; i++) {
+                // Vector tagVector = new Vector(Constants.Vision.redSideReefTags[i][0],
+                // Constants.Vision.redSideReefTags[i][1]);
+                // Vector offsetXVector = new Vector(
+                // Constants.Physical.CORAL_PLACEMENT_X *
+                // Math.cos(Constants.Vision.redSideReefTags[i][3]),
+                // Constants.Physical.CORAL_PLACEMENT_X *
+                // Math.sin(Constants.Vision.redSideReefTags[i][3]));
+                // Vector offsetYVector = new Vector(
+                // Constants.Physical.CORAL_PLACEMENT_Y *
+                // Math.sin(Constants.Vision.redSideReefTags[i][3]),
+                // Constants.Physical.CORAL_PLACEMENT_Y *
+                // Math.cos(Constants.Vision.redSideReefTags[i][3]));
+                // Vector leftVector = tagVector.add(offsetXVector.add(offsetYVector));
+                // Vector rightVector = tagVector.add(offsetXVector.subtract(offsetYVector));
+                // Constants.Physical.redCoralScoringPositions
+                // .add(new Pose2d(new Translation2d(leftVector.getI(), leftVector.getJ()),
+                // new Rotation2d(Constants.Vision.redSideReefTags[i][3] + Math.PI)));
+                // Constants.Physical.redCoralScoringPositions
+                // .add(new Pose2d(new Translation2d(rightVector.getI(), rightVector.getJ()),
+                // new Rotation2d(Constants.Vision.redSideReefTags[i][3] + Math.PI)));
+                // }
+                // for (int i = 0; i < Constants.Vision.blueSideReefTags.length; i++) {
+                // Vector tagVector = new Vector(Constants.Vision.blueSideReefTags[i][0],
+                // Constants.Vision.blueSideReefTags[i][1]);
+                // Vector offsetXVector = new Vector(
+                // Constants.Physical.CORAL_PLACEMENT_X *
+                // Math.cos(Constants.Vision.blueSideReefTags[i][3]),
+                // Constants.Physical.CORAL_PLACEMENT_X *
+                // Math.sin(Constants.Vision.blueSideReefTags[i][3]));
+                // Vector offsetYVector = new Vector(
+                // Constants.Physical.CORAL_PLACEMENT_Y *
+                // Math.sin(Constants.Vision.blueSideReefTags[i][3]),
+                // Constants.Physical.CORAL_PLACEMENT_Y *
+                // Math.cos(Constants.Vision.blueSideReefTags[i][3]));
+                // Vector leftVector = tagVector.add(offsetXVector.add(offsetYVector));
+                // Vector rightVector = tagVector.add(offsetXVector.subtract(offsetYVector));
+                // Constants.Physical.blueCoralScoringPositions
+                // .add(new Pose2d(new Translation2d(leftVector.getI(), leftVector.getJ()),
+                // new Rotation2d(Constants.Vision.blueSideReefTags[i][3] + Math.PI)));
+                // Constants.Physical.blueCoralScoringPositions
+                // .add(new Pose2d(new Translation2d(rightVector.getI(), rightVector.getJ()),
+                // new Rotation2d(Constants.Vision.blueSideReefTags[i][3] + Math.PI)));
+                // }
+
+                // Logger.recordOutput("red side scoring",
+                // Constants.Physical.redCoralScoringPositions.toString());
+                // Logger.recordOutput("blue side scoring",
+                // Constants.Physical.blueCoralScoringPositions.toString());
+                System.out.println("blue algae front positions: "
+                                + Constants.Reef.algaeBlueFrontPlacingPositions.toString());
+                System.out.println("red algae front positions: "
+                                + Constants.Reef.algaeRedFrontPlacingPositions.toString());
+                System.out.println("blue algae back positions: "
+                                + Constants.Reef.algaeBlueBackPlacingPositions.toString());
+                System.out.println(
+                                "red algae back positions: " + Constants.Reef.algaeRedBackPlacingPositions.toString());
+
+                System.out.println("blue positions: " + Constants.Reef.blueFrontPlacingPositions.toString());
+                System.out.println("red positions: " + Constants.Reef.redFrontPlacingPositions.toString());
+                System.out.println("blue back positions: " + Constants.Reef.blueBackPlacingPositions.toString());
+                System.out.println("red back positions: " + Constants.Reef.redBackPlacingPositions.toString());
+
+                System.out.println("l4 blue positions: " + Constants.Reef.l4BlueFrontPlacingPositions.toString());
+                System.out.println("l4 red positions: " + Constants.Reef.l4RedFrontPlacingPositions.toString());
+                System.out.println("l4 blue back positions: " + Constants.Reef.l4BlueBackPlacingPositions.toString());
+                System.out.println("l4 red back positions: " + Constants.Reef.l4RedBackPlacingPositions.toString());
+
+                System.out.println("l3 blue positions: " + Constants.Reef.l3BlueFrontPlacingPositions.toString());
+                System.out.println("l3 red positions: " + Constants.Reef.l3RedFrontPlacingPositions.toString());
+                System.out.println("l3 blue back positions: " + Constants.Reef.l3BlueBackPlacingPositions.toString());
+                System.out.println("l3 red back positions: " + Constants.Reef.l3RedBackPlacingPositions.toString());
+
+                System.out.println("L1 Blue Corners: " + Constants.Reef.l1BlueCornerPoints.toString());
+                System.out.println("L1 Red Corners: " + Constants.Reef.l1RedCornerPoints.toString());
+
+                System.out.println("L1 Blue Drive: " + Constants.Reef.l1BlueDrivePoints.toString());
+                System.out.println("L1 Red Drive: " + Constants.Reef.l1RedDrivePoints.toString());
+
+                for (int i = 0; i < Constants.Reef.l1BlueDrivePoints.size(); i++) {
+                        Logger.recordOutput("L1 Blue Corners " + i + " ", Constants.Reef.l1BlueDrivePoints.get(i));
+                }
+
+                Logger.recordOutput("feeder Positions", new Pose2d[] { Constants.Reef.RED_LEFT_FEEDER_LEFT,
+                                Constants.Reef.RED_RIGHT_FEEDER_RIGHT, Constants.Reef.RED_RIGHT_FEEDER_LEFT,
+                                Constants.Reef.RED_LEFT_FEEDER_RIGHT, });
         }
 
         public static class Reef {
@@ -341,8 +455,8 @@ public final class Constants {
                                                                           // redBranchPositions = new
                                                                           // ArrayList<>(); // Starting at the right
 
-                public static final double RED_LEFT_FEEDER_X = 16.18;
-                public static final double RED_LEFT_FEEDER_Y = 0.90;
+                public static final double RED_LEFT_FEEDER_X = 16.28;
+                public static final double RED_LEFT_FEEDER_Y = 0.92;
                 public static final double RED_LEFT_FEEDER_THETA = Math.toRadians(126.0);
 
                 public static final double RED_LEFT_FEEDER_X_TELEOP = 16.544;
