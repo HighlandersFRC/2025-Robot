@@ -206,13 +206,13 @@ public class Drive extends SubsystemBase {
   Transform3d backLeftReefRobotToCam = new Transform3d(
       new Translation3d(Constants.inchesToMeters(-12.375), Constants.inchesToMeters(9.375),
           Constants.inchesToMeters(8.6875)),
-      new Rotation3d(Math.toRadians(0.5), Math.toRadians(-20.7), Math.toRadians(181.53)));
+      new Rotation3d(Math.toRadians(0.5), Math.toRadians(-20.7), Math.toRadians(181.53))); // 0.4, -20.5
 
   Transform3d backRightReefRobotToCam = new Transform3d(
       new Translation3d(Constants.inchesToMeters(
           -12.375), Constants.inchesToMeters(-9.25),
           Constants.inchesToMeters(8.6875)),
-      new Rotation3d(Math.toRadians(0.5), Math.toRadians(-20.6), Math.toRadians(178.47)));
+      new Rotation3d(Math.toRadians(1.3), Math.toRadians(-22.0), Math.toRadians(178.47)));
 
   Transform3d gamePieceReefRobotToCam = new Transform3d(
       new Translation3d(Constants.inchesToMeters(2.0), Constants.inchesToMeters(-11.5),

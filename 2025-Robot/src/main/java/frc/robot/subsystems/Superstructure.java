@@ -616,7 +616,7 @@ public class Superstructure extends SubsystemBase {
       case AUTO_NET:
         if (drive.hitSetPointUltraGenerous(drive.getNetXSetpoint(), drive.getMT2OdometryY(),
             drive.getNetThetaSetpoint())
-            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kNET.meters - 10.0 / 39.37) {
+            && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kNET.meters - 5.0 / 39.37) {
           wantedSuperState = SuperState.AUTO_NET_MORE;
           currentSuperState = SuperState.AUTO_NET_MORE;
         } else {
@@ -1291,8 +1291,8 @@ public class Superstructure extends SubsystemBase {
           || drive
               .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
                   180.0) < 15.0)
-          && (Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.5 || Math
-              .abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.5)) {
+          && (Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.6 || Math
+              .abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.6)) {
         elevator.setWantedState(ElevatorState.NET);
       }
     } else {
@@ -1301,8 +1301,8 @@ public class Superstructure extends SubsystemBase {
           || drive
               .getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
                   180.0) < 15.0)
-          && (Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.5 || Math
-              .abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.5)) {
+          && (Math.abs(drive.getMT2OdometryX() - Constants.Reef.netBlueXM) < 1.6 || Math
+              .abs(drive.getMT2OdometryX() - Constants.Reef.netRedXM) < 1.6)) {
         elevator.setWantedState(ElevatorState.NET);
       }
     }
@@ -1759,9 +1759,9 @@ public class Superstructure extends SubsystemBase {
     manipulator.setWantedState(ManipulatorState.ALGAE_INTAKE);
     pivot.setWantedFlip(PivotFlip.BACK);
     pivot.setWantedState(PivotState.GROUND_ALGAE);
-    if (Math.abs(pivot.getPivotPosition()) < 10.0 / 360.0) {
-      twist.setWantedState(TwistState.DOWN);
-    }
+    // if (Math.abs(pivot.getPivotPosition()) < 10.0 / 360.0) {
+    twist.setWantedState(TwistState.DOWN);
+    // }
   }
 
   public void handleL2AlgaePickupState() {

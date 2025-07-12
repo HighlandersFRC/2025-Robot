@@ -149,8 +149,8 @@ public class Intake extends SubsystemBase {
     }
     switch (systemState) {
       case INTAKING:
-        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN) < 20 / 360.0) {
-          pivotWithTorque(10, 0.2);
+        if (Math.abs(getPosition() - Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN) < 25 / 360.0) {
+          pivotWithTorque(20, 0.3);
         } else {
           pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
         }
@@ -172,7 +172,7 @@ public class Intake extends SubsystemBase {
         break;
       case OUTAKING:
         //
-        setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+        setRollerCurrent(-80,
             Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
         setRollerPercent(-1.0);
         pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_DOWN);
@@ -229,7 +229,7 @@ public class Intake extends SubsystemBase {
         // } else {
         // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
         //
-        setRollerCurrent(-Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_TORQUE,
+        setRollerCurrent(-80,
             Constants.SetPoints.IntakeSetpoints.INTAKE_ROLLER_MAX_SPEED);
 
         // }

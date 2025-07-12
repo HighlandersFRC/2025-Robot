@@ -43,7 +43,7 @@ public class Manipulator extends SubsystemBase {
     manipulatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     manipulatorConfig.CurrentLimits.StatorCurrentLimit = 80;
     manipulatorConfig.CurrentLimits.SupplyCurrentLimit = 80;
-    manipulatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    manipulatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     manipulatorMotor.getConfigurator().apply(manipulatorConfig);
     manipulatorMotor.setNeutralMode(NeutralModeValue.Brake);
   }
@@ -295,7 +295,7 @@ public class Manipulator extends SubsystemBase {
               } else if (OI.driverPOVDown.getAsBoolean()) {
                 setIntakePercent(-0.4);
               } else if (OI.driverPOVUp.getAsBoolean()) {
-                setIntakePercent(-0.4);
+                setIntakePercent(-0.25);
               } else {
                 setIntakePercent(-1.0);
 
