@@ -380,7 +380,7 @@ public final class Constants {
                 public static final double F_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
                                 inchesToMeters(1.625);
                 public static final double G_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
-                                inchesToMeters(1.625);
+                                inchesToMeters(1.225);
                 public static final double H_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
                                 inchesToMeters(1.625);
                 public static final double I_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
@@ -3545,7 +3545,7 @@ public final class Constants {
                                 ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
                 public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(23.5);
                 public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(24.3);
+                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(24.9);
                 public static double INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
                 public static double INTAKE_X_OFFSET_FRONT_ALGAE = inchesToMeters(26.0);
@@ -3565,7 +3565,7 @@ public final class Constants {
 
                 public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(22.9);
                 public static double L2_INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(24.1);
+                public static double L2_INTAKE_X_OFFSET_BACK = inchesToMeters(24.6);
                 public static double L2_INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
                 public static double L4_INTAKE_X_OFFSET_FRONT = inchesToMeters(25.1);

@@ -2028,7 +2028,7 @@ public class Superstructure extends SubsystemBase {
       manipulator.setWantedState(ManipulatorState.OUTAKE);
     } else {
       if (Math.abs(pivot.getPivotPosition()) > Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations
-          - 20.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
+          - 25.0 / 360.0 && !DriverStation.isAutonomousEnabled()) {
         manipulator.setWantedState(ManipulatorState.OUTAKE);
       } else {
         manipulator.setWantedState(ManipulatorState.OFF);
