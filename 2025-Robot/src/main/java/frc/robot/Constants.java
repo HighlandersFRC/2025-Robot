@@ -380,7 +380,7 @@ public final class Constants {
                 // public static final double F_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
                 // inchesToMeters(1.625);
                 // public static final double G_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
-                // inchesToMeters(1.225);
+                // inchesToMeters(1.625);
                 // public static final double H_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
                 // inchesToMeters(1.625);
                 // public static final double I_BRANCH_OFFSET_L2 = PERFECT_BRANCH_OFFSET_L23 -
