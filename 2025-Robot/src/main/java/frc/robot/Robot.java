@@ -26,9 +26,11 @@ public class Robot extends LoggedRobot {
   boolean yPressed = false;
   boolean xPressed = false;
   boolean autoChooserCenterSwitch = false;
+  private final Timer timer4Hz = new Timer();
 
   @Override
   public void robotInit() {
+    timer4Hz.start();
     /*
      * The Logging Framework built into Java has 5 levels of logging:
      * 
@@ -110,6 +112,11 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+    if (timer4Hz.hasElapsed(0.25)) {
+      timer4Hz.reset();
+      run4Hz();
+    }
 
     try {
       Logger.recordOutput("Localization Odometry", m_robotContainer.drive.getLocalizationOdometry());
@@ -218,6 +225,10 @@ public class Robot extends LoggedRobot {
     Constants.periodic();
     m_robotContainer.lights.periodic();
     m_robotContainer.peripherals.periodic();
+  }
+
+  private void run4Hz() {
+    m_robotContainer.drive.run4Hz();
   }
 
   @Override

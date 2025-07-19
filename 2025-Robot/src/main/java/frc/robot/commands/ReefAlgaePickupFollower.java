@@ -64,9 +64,7 @@ public class ReefAlgaePickupFollower extends AutoFollower {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if ((drive.hitSetPointUltraGenerous(drive.getAlgaeMoreMoreClosestSetpoint(drive.getMT2Odometry())[0],
-        drive.getAlgaeMoreMoreClosestSetpoint(drive.getMT2Odometry())[1],
-        drive.getAlgaeMoreMoreClosestSetpoint(drive.getMT2Odometry())[1]) && superstructure.hasCoral())
+    if ((drive.hitSetPointUltraGenerous(drive.getAlgaeMoreMoreClosestSetpoint) && superstructure.hasCoral())
         || Timer.getFPGATimestamp() - initTime > timeout) {
       return true;
     } else {
