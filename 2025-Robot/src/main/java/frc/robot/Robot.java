@@ -20,7 +20,7 @@ import frc.robot.tools.logging.AdvantageKitMultiLevelLogHandler;
 public class Robot extends LoggedRobot {
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
-
+  private AdvantageKitMultiLevelLogHandler m_logHandler = new AdvantageKitMultiLevelLogHandler();
   String m_fieldSide = "blue";
   boolean bPressed = false;
   boolean yPressed = false;
@@ -63,7 +63,7 @@ public class Robot extends LoggedRobot {
     // The level for logs printed to console. CHANGE THIS ONE TO OFF FOR COMP
     java.util.logging.Logger.getLogger("").getHandlers()[0].setLevel(Level.INFO);
 
-    java.util.logging.Logger.getLogger("").addHandler(new AdvantageKitMultiLevelLogHandler());
+    java.util.logging.Logger.getLogger("").addHandler(m_logHandler);
 
     java.util.logging.Logger.getGlobal().info("Robot Init");
 
@@ -218,6 +218,7 @@ public class Robot extends LoggedRobot {
     Constants.periodic();
     m_robotContainer.lights.periodic();
     m_robotContainer.peripherals.periodic();
+    m_logHandler.write();
   }
 
   @Override

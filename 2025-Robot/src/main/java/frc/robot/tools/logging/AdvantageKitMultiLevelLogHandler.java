@@ -8,6 +8,7 @@ import java.util.logging.*;
 
 public class AdvantageKitMultiLevelLogHandler extends Handler {
     private final Map<Level, String> levelLogEntries = new HashMap<>();
+    private final Map<String, String> logEntries = new HashMap<>();
 
     public AdvantageKitMultiLevelLogHandler() {
         // Start the log manager if not already started
@@ -31,22 +32,28 @@ public class AdvantageKitMultiLevelLogHandler extends Handler {
             return;
 
         String message = getFormatter().format(record);
-        org.littletonrobotics.junction.Logger.recordOutput("Logs/ALL", message);
+        addToLog("Logs/ALL", message);
 
         if (record.getLevel().intValue() < Level.INFO.intValue()) {
             // Log to the "Debug" level
-            org.littletonrobotics.junction.Logger.recordOutput("Logs/DEBUG", message);
+            addToLog("Logs/DEBUG", message);
         } else {
-            org.littletonrobotics.junction.Logger.recordOutput("Logs/IMPORTANT", message);
+            // Log to the "Important" level
+            addToLog("Logs/IMPORTANT", message);
         }
         // Level-specific
         String entry = levelLogEntries.get(record.getLevel());
         if (entry != null) {
-            org.littletonrobotics.junction.Logger.recordOutput(entry, message);
+            addToLog(entry, message);
         } else {
             // Optional: handle unknown levels
-            org.littletonrobotics.junction.Logger.recordOutput("/Logs/OTHER", message);
+            addToLog("Logs/OTHER", message);
         }
+    }
+
+    private void addToLog(String key, String message) {
+        logEntries.putIfAbsent(key, "");
+        logEntries.replace(key, logEntries.get(key) + message);
     }
 
     @Override
@@ -57,5 +64,12 @@ public class AdvantageKitMultiLevelLogHandler extends Handler {
     @Override
     public void close() {
         // Nothing to close
+    }
+
+    public void write() {
+        logEntries.forEach((key, value) -> {
+            org.littletonrobotics.junction.Logger.recordOutput(key, value);
+            logEntries.replace(key, "");
+        });
     }
 }
