@@ -165,6 +165,19 @@ public class OI {
         return driverController.getLeftTriggerAxis();
     }
 
+    /**
+     * This is for using the backup controller, the LT is 1.0 when it should be at zero
+     * Set the trigger depth on the controller to T2 (middle) for LT when using this code
+     */
+    // public static double getDriverLTPercent() {
+    //     double raw = driverController.getLeftTriggerAxis();
+    //     if(raw > 0.9) {
+    //         raw = 0.0;
+    //     }
+    //     double refined = raw * (4.0/3.0);
+    //     return refined;
+    // }
+
     public static boolean getDriverA() {
         return driverController.getAButton();
     }
