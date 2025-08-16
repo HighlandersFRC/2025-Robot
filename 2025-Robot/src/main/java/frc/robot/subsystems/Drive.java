@@ -772,6 +772,30 @@ public class Drive extends SubsystemBase {
     }
   }
 
+  private int getClosestTagId(Pose2d pose) {
+    int closestTag = 0;
+    double closestDistance = Double.MAX_VALUE;
+
+    for (int i = 1; i <= aprilTagFieldLayout.getTags().size(); i++) {
+      Optional<Pose3d> tagPose = aprilTagFieldLayout.getTagPose(i);
+      if (tagPose.isPresent()) {
+        double distance = Constants.Vision.distBetweenPose2d(pose, tagPose.get().toPose2d());
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestTag = i;
+        }
+      }
+    }
+    return closestTag;
+  }
+
+  private boolean inReefInteractionState() {
+    return systemState == DriveState.L4_REEF || systemState == DriveState.L3_REEF ||
+        systemState == DriveState.REEF || systemState == DriveState.AUTO_L1 ||
+        systemState == DriveState.AUTO_L1_MORE || systemState == DriveState.ALGAE ||
+        systemState == DriveState.ALGAE_MORE || systemState == DriveState.ALGAE_MORE_MORE;
+  }
+
   /**
    * Updates the fused odometry array with current robot position and orientation
    * information.
@@ -803,13 +827,36 @@ public class Drive extends SubsystemBase {
 
     Matrix<N3, N1> standardDeviation = new Matrix<>(Nat.N3(), Nat.N1());
 
-    // var result = peripherals.getFrontReefCamResult();
-    if (systemState == DriveState.L4_REEF || systemState == DriveState.L3_REEF || systemState == DriveState.REEF) {
-      photonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-      backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-      // swervePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-      gamePiecePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    if (inReefInteractionState()) {
+      photonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
+      backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
+      backLeftPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
+      backRightPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
+      swervePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
+      gamePiecePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
+
+      Rotation2d robotRotation = new Rotation2d(navxOffset);
+      double time = Timer.getFPGATimestamp();
+      photonPoseEstimator.addHeadingData(time, robotRotation);
+      backPhotonPoseEstimator.addHeadingData(time, robotRotation);
+      backLeftPhotonPoseEstimator.addHeadingData(time, robotRotation);
+      backRightPhotonPoseEstimator.addHeadingData(time, robotRotation);
+      swervePhotonPoseEstimator.addHeadingData(time, robotRotation);
+      gamePiecePhotonPoseEstimator.addHeadingData(time, robotRotation);
+    } else {
+      photonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
+      backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
+      backLeftPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
+      backRightPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
+      swervePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
+      gamePiecePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
     }
+    Logger.recordOutput("Back Strategy: ",
+        backPhotonPoseEstimator.getPrimaryStrategy().toString());
+    Logger.recordOutput("Back left strat: ", backLeftPhotonPoseEstimator.getPrimaryStrategy().toString());
+    Logger.recordOutput("Back right strat: ",
+        backRightPhotonPoseEstimator.getPrimaryStrategy().toString());
+    // var result = peripherals.getFrontReefCamResult();
     // Optional<EstimatedRobotPose> multiTagResult =
     // photonPoseEstimator.update(result);
     // if (multiTagResult.isPresent()) {
@@ -937,8 +984,7 @@ public class Drive extends SubsystemBase {
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
         // Logger.recordOutput("Distance to tag", distToTag);
         if (distToTag < 3.2) {
-          if (systemState.equals(DriveState.REEF) || systemState.equals(DriveState.L3_REEF)
-              || systemState.equals(DriveState.L4_REEF)) {
+          if (inReefInteractionState()) {
             standardDeviation.set(0, 0,
                 0.5
                     * Constants.Vision.getTagDistStdDevScalar(distToTag));
@@ -950,6 +996,11 @@ public class Drive extends SubsystemBase {
             // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
             // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
             standardDeviation.set(2, 0, 0.9);
+
+            if (backResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+              mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+                  backResult.getTimestampSeconds());
+            }
           } else {
             standardDeviation.set(0, 0,
                 Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
@@ -962,11 +1013,12 @@ public class Drive extends SubsystemBase {
             // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
             // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
             standardDeviation.set(2, 0, 0.9);
+
+            mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+                backResult.getTimestampSeconds());
           }
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-          mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-              backResult.getTimestampSeconds());
         }
       }
     }
@@ -974,19 +1026,16 @@ public class Drive extends SubsystemBase {
     var swerveResult = peripherals.getFrontSwerveCamResult();
     Optional<EstimatedRobotPose> swerveMultiTagResult = swervePhotonPoseEstimator.update(swerveResult);
     if (swerveMultiTagResult.isPresent()
-        && ((systemState != DriveState.L4_REEF && systemState != DriveState.L3_REEF && systemState != DriveState.REEF)
+        && (!inReefInteractionState()
             || getAutoPlacementSideIsFront())) {
       if (swerveResult.getBestTarget().getPoseAmbiguity() < 0.3) {
         Pose3d robotPose = swerveMultiTagResult.get().estimatedPose;
-        Logger.recordOutput("multitag result", robotPose);
         int numFrontTracks = swerveResult.getTargets().size();
         Pose3d tagPose = aprilTagFieldLayout.getTagPose(swerveResult.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
         // Logger.recordOutput("Distance to tag", distToTag);
         if (distToTag < 3.2) {
-          if (systemState.equals(DriveState.REEF) ||
-              systemState.equals(DriveState.L3_REEF)
-              || systemState.equals(DriveState.L4_REEF)) {
+          if (inReefInteractionState()) {
             standardDeviation.set(0, 0,
                 0.5
                     * Constants.Vision.getTagDistStdDevScalar(distToTag));
@@ -998,6 +1047,11 @@ public class Drive extends SubsystemBase {
             // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
             // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
             standardDeviation.set(2, 0, 0.9);
+
+            if (swerveResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+              mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+                  swerveResult.getTimestampSeconds());
+            }
           } else {
             standardDeviation.set(0, 0,
                 Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
@@ -1010,11 +1064,12 @@ public class Drive extends SubsystemBase {
             // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
             // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
             standardDeviation.set(2, 0, 0.9);
+
+            mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+                swerveResult.getTimestampSeconds());
           }
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-          mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-              swerveResult.getTimestampSeconds());
         }
       }
     }
@@ -1027,14 +1082,11 @@ public class Drive extends SubsystemBase {
           && backLeftResult.getBestTarget().fiducialId != 15 && backLeftResult.getBestTarget().fiducialId != 3
           && backLeftResult.getBestTarget().fiducialId != 16) {
         Pose3d robotPose = backLeftMultiTagResult.get().estimatedPose;
-        Logger.recordOutput("multitag result", robotPose);
         int numFrontTracks = backLeftResult.getTargets().size();
         Pose3d tagPose = aprilTagFieldLayout.getTagPose(backLeftResult.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-        // Logger.recordOutput("Distance to tag", distToTag);
         if (distToTag < 3.2) {
-          if (systemState.equals(DriveState.REEF) || systemState.equals(DriveState.L3_REEF)
-              || systemState.equals(DriveState.L4_REEF)) {
+          if (inReefInteractionState()) {
             standardDeviation.set(0, 0,
                 0.5
                     * Constants.Vision.getTagDistStdDevScalar(distToTag));
@@ -1046,6 +1098,11 @@ public class Drive extends SubsystemBase {
             // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
             // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
             standardDeviation.set(2, 0, 0.9);
+
+            if (backLeftResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+              mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+                  backLeftResult.getTimestampSeconds());
+            }
           } else {
             standardDeviation.set(0, 0,
                 Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
@@ -1058,11 +1115,12 @@ public class Drive extends SubsystemBase {
             // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
             // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
             standardDeviation.set(2, 0, 0.9);
+
+            mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+                backLeftResult.getTimestampSeconds());
           }
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-          mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-              backLeftResult.getTimestampSeconds());
         }
       }
     }
@@ -1075,14 +1133,12 @@ public class Drive extends SubsystemBase {
           && backRightResult.getBestTarget().fiducialId != 15 && backRightResult.getBestTarget().fiducialId != 3
           && backRightResult.getBestTarget().fiducialId != 16) {
         Pose3d robotPose = backRightMultiTagResult.get().estimatedPose;
-        Logger.recordOutput("multitag result", robotPose);
         int numFrontTracks = backRightResult.getTargets().size();
         Pose3d tagPose = aprilTagFieldLayout.getTagPose(backRightResult.getBestTarget().getFiducialId()).get();
         double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
         // Logger.recordOutput("Distance to tag", distToTag);
         if (distToTag < 3.2) {
-          if (systemState.equals(DriveState.REEF) || systemState.equals(DriveState.L3_REEF)
-              || systemState.equals(DriveState.L4_REEF)) {
+          if (inReefInteractionState()) {
             standardDeviation.set(0, 0,
                 0.5
                     * Constants.Vision.getTagDistStdDevScalar(distToTag));
@@ -1094,6 +1150,11 @@ public class Drive extends SubsystemBase {
             // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
             // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
             standardDeviation.set(2, 0, 0.9);
+
+            if (backRightResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+              mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+                  backRightResult.getTimestampSeconds());
+            }
           } else {
             standardDeviation.set(0, 0,
                 Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
@@ -1106,11 +1167,12 @@ public class Drive extends SubsystemBase {
             // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
             // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
             standardDeviation.set(2, 0, 0.9);
+
+            mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+                backRightResult.getTimestampSeconds());
           }
           // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
           // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-          mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-              backRightResult.getTimestampSeconds());
         }
       }
     }
@@ -2734,6 +2796,10 @@ public class Drive extends SubsystemBase {
       autoRobotCentricDrive(new Vector(1.75, 0), r);
 
     }
+  }
+
+  public Pose2d getMt2Pose2d() {
+    return mt2Odometry.getEstimatedPosition();
   }
 
   /**
