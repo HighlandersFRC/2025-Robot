@@ -361,6 +361,8 @@ public class Drive extends SubsystemBase {
 
   private Pose2d targetPointPickup = new Pose2d();
 
+  public boolean algaeMode = false;
+
   public enum DriveState {
     DEFAULT,
     IDLE,
@@ -796,6 +798,14 @@ public class Drive extends SubsystemBase {
         systemState == DriveState.ALGAE_MORE || systemState == DriveState.ALGAE_MORE_MORE;
   }
 
+  private boolean closeToReef() {
+    if (distanceFromCenterOfReef() < 2.7) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /**
    * Updates the fused odometry array with current robot position and orientation
    * information.
@@ -826,8 +836,10 @@ public class Drive extends SubsystemBase {
     m_currentTheta = navxOffset;
 
     Matrix<N3, N1> standardDeviation = new Matrix<>(Nat.N3(), Nat.N1());
+    Logger.recordOutput("Closde to reef", closeToReef());
 
-    if (inReefInteractionState()) {
+    if (((!algaeMode && DriverStation.isTeleop()) || (DriverStation.isAutonomousEnabled() && closeToReef()))
+        || (inReefInteractionState())) {
       photonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
       backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
       backLeftPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);

@@ -3548,7 +3548,7 @@ public final class Constants {
                                 ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
                 public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(23.5);
                 public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(24.9);
+                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(25.8);
                 public static double INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
                 public static double INTAKE_X_OFFSET_FRONT_ALGAE = inchesToMeters(26.0);
