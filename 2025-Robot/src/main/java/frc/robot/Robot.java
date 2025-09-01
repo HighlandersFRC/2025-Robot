@@ -205,6 +205,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.manipulator.updateAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateManualMode(m_robotContainer.manualMode);
+    m_robotContainer.drive.algaeMode = m_robotContainer.algaeMode;
     if (DriverStation.isAutonomousEnabled()) {
       m_robotContainer.twist.algaeMode = m_robotContainer.algaeMode;
     } else {

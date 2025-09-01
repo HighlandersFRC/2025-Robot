@@ -3548,7 +3548,7 @@ public final class Constants {
                                 ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
                 public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(23.5);
                 public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
-                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(24.9);
+                public static double INTAKE_X_OFFSET_BACK = inchesToMeters(25.8);
                 public static double INTAKE_Y_OFFSET_BACK = inchesToMeters(-0.7);
 
                 public static double INTAKE_X_OFFSET_FRONT_ALGAE = inchesToMeters(26.0);
@@ -3940,6 +3940,11 @@ public final class Constants {
                 }
 
                 public static double distBetweenPose(Pose3d pose1, Pose3d pose2) {
+                        return (Math.sqrt(Math.pow(pose1.getX() - pose2.getX(), 2)
+                                        + Math.pow(pose1.getY() - pose2.getY(), 2)));
+                }
+
+                public static double distBetweenPose2d(Pose2d pose1, Pose2d pose2) {
                         return (Math.sqrt(Math.pow(pose1.getX() - pose2.getX(), 2)
                                         + Math.pow(pose1.getY() - pose2.getY(), 2)));
                 }
