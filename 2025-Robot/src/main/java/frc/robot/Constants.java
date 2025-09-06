@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class Constants {
         public static final class Autonomous {
+                public static final int STAGNATE_BOOST = 35;
+                public static final int STAGNATE_THRESHOLD = 8; // Number of cycles of stagnation before ending path
                 // lookahead distance is a function:
                 // LOOKAHEAD = AUTONOMOUS_LOOKAHEAD_DISTANCE * velocity + MIN_LOOKAHEAD_DISTANCE
                 // their constants
@@ -30,9 +32,9 @@ public final class Constants {
                 // When calculating the point distance, will divide x and y by this constant
                 public static final double AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS = 1.0;
                 // When calculating the point distance, will divide theta by this constant
-                public static final double AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS = Math.PI;
+                public static final double AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS = 4 * Math.PI;
                 // Feed Forward Multiplier
-                public static final double FEED_FORWARD_MULTIPLIER = 0.5;
+                public static final double FEED_FORWARD_MULTIPLIER = 0.8044;
                 public static final double ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER = 1;
                 public static final String[] paths = new String[] {
                                 "2AlgaeCenter.polarauto",

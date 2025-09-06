@@ -39,7 +39,7 @@ public class FullSendFollower extends AutoFollower {
     private int currentPathPointIndex = 0;
     private int returnPathPointIndex = 0;
     private int timesStagnated = 0;
-    private final int STAGNATE_THRESHOLD = 3;
+    private final int STAGNATE_THRESHOLD = Constants.Autonomous.STAGNATE_THRESHOLD;
     private boolean reset = true;
     private int endIndex = 0;
 
@@ -91,7 +91,10 @@ public class FullSendFollower extends AutoFollower {
         if (returnPathPointIndex == currentPathPointIndex && returnPathPointIndex != path.length() - 1) {
             timesStagnated++;
             if (timesStagnated > STAGNATE_THRESHOLD) {
-                returnPathPointIndex++;
+                returnPathPointIndex += Constants.Autonomous.STAGNATE_BOOST;
+                if (returnPathPointIndex > endIndex) {
+                    returnPathPointIndex = endIndex;
+                }
                 timesStagnated = 0;
             }
         } else {

@@ -2789,24 +2789,23 @@ public class Drive extends SubsystemBase {
 
     if (result.hasTargets() && !coralTargets.isEmpty()) {
       PhotonTrackedTarget bestTrack = coralTargets.get(0);
-      for (PhotonTrackedTarget track : coralTargets) {
-        if (track.getPitch() < bestTrack.getPitch()) {
-          bestTrack = track;
-        }
-      }
       yaw = bestTrack.getYaw();
       pitch = bestTrack.getPitch();
     }
 
     if (yaw != 0.0 && pitch != 0.0) {
-      double currentAngle = yaw + 3.64;
+      double currentAngle = -yaw;
       java.util.logging.Logger.getGlobal().finer("currentAngle: " + currentAngle);
-      rotatePID.setSetPoint(0.0);
+      double wantedAngleInFrame = 14.7;
+      double cameraToRobotAngleOffset = 35.0;
+      rotatePID.setSetPoint(wantedAngleInFrame);
       rotatePID.updatePID(currentAngle);
       double r = -rotatePID.getResult();
-
-      autoRobotCentricDrive(new Vector(1.75, 0), r);
-
+      double driveAngleDeg = wantedAngleInFrame + cameraToRobotAngleOffset;
+      double wantedSpeedMPS = 1.0;
+      Vector v = new Vector(Math.cos(Math.toRadians(driveAngleDeg)), Math.sin(Math.toRadians(driveAngleDeg)))
+          .scaled(wantedSpeedMPS);
+      autoRobotCentricDrive(v, r);
     }
   }
 
@@ -3831,19 +3830,19 @@ public class Drive extends SubsystemBase {
     xPID.updatePID(currentX);
     yPID.updatePID(currentY);
     thetaPID.updatePID(currentTheta);
-
-    double xVelNoFF = xPID.getResult();
-    double yVelNoFF = yPID.getResult();
+    double pidScaler = 1;
+    double xVelNoFF = xPID.getResult() * pidScaler;
+    double yVelNoFF = yPID.getResult() * pidScaler;
     double thetaVelNoFF = -thetaPID.getResult();
     double f = (accurate ? Constants.Autonomous.ACCURATE_FOLLOWER_AUTONOMOUS_END_ACCURACY
         : Constants.Autonomous.FEED_FORWARD_MULTIPLIER);
     double feedForwardX = targetPoint.getDouble("x_velocity") * f;
     double feedForwardY = targetPoint.getDouble("y_velocity") * f;
-    double feedForwardTheta = -targetPoint.getDouble("angular_velocity") * f;
+    double feedForwardTheta = -targetPoint.getDouble("angular_velocity") * f * 0.1;
 
     double finalX = xVelNoFF + feedForwardX;
     double finalY = yVelNoFF + feedForwardY;
-    double finalTheta = thetaVelNoFF + feedForwardTheta;
+    double finalTheta = (thetaVelNoFF + feedForwardTheta) * 1.25;
     if (m_fieldSide == "blue") {
       finalX = -finalX;
       finalY = -finalY;
@@ -3860,21 +3859,32 @@ public class Drive extends SubsystemBase {
         finalTheta,
         targetIndex,
     };
+    double linearVelMag = Math.hypot(
+        targetPoint.getDouble("x_velocity") / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
+        targetPoint.getDouble("y_velocity") / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS);
+    double targetVelMag = Math.hypot(linearVelMag,
+        targetPoint.getDouble("angular_velocity") / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS);
+    double lookaheadRadius = fullSend ? Constants.Autonomous.FULL_SEND_LOOKAHEAD
+        : Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_DISTANCE * targetVelMag
+            + Constants.Autonomous.MIN_LOOKAHEAD_DISTANCE;
 
-    // Logger.recordOutput("x-vel", velocityArray[0].doubleValue());
-    // Logger.recordOutput("y-vel", velocityArray[1].doubleValue());
-    // Logger.recordOutput("theta-vel", velocityArray[2].doubleValue());
-    // Logger.recordOutput("wanted-theta-vel",
-    // targetPoint.getDouble("angular_velocity"));
-    // Logger.recordOutput("pid-theta-vel", thetaVelNoFF);
-    // Logger.recordOutput("FF-theta-vel", feedForwardTheta);
-    // Logger.recordOutput("current point idx", currentIndex);
-    // Logger.recordOutput("point idx", velocityArray[3].intValue());
-    // Logger.recordOutput("look-ahead",
-    // Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_DISTANCE * velocityMag + 0.01);
-    // Logger.recordOutput("Velocity Array",
-    // "X: " + finalX + " Y: " + -finalY + " Theta: " + finalTheta + " Index: " +
-    // targetIndex);
+    Logger.recordOutput("x-vel", xVelNoFF);
+    Logger.recordOutput("y-vel", yVelNoFF);
+    Logger.recordOutput("theta-vel", thetaVelNoFF);
+    Logger.recordOutput("wanted-theta-vel",
+        targetPoint.getDouble("angular_velocity"));
+    Logger.recordOutput("FF-theta-vel", feedForwardTheta);
+    Logger.recordOutput("FF-x-vel", feedForwardX);
+    Logger.recordOutput("FF-y-vel", feedForwardY);
+    Logger.recordOutput("current point idx", currentIndex);
+    Logger.recordOutput("point idx", velocityArray[3].intValue());
+    Logger.recordOutput("look-ahead", lookaheadRadius);
+    Logger.recordOutput("target-point", new Pose2d(targetX, targetY, new Rotation2d(targetTheta)));
+    Logger.recordOutput("Velocity Array",
+        new double[] { finalX, -finalY, finalTheta });
+    Logger.recordOutput("dx", targetX - currentX);
+    Logger.recordOutput("dy", targetY - currentY);
+    Logger.recordOutput("dtheta", targetTheta - currentTheta);
     return velocityArray;
   }
 

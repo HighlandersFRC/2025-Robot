@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.tools.math.Vector;
@@ -40,7 +41,7 @@ public class VariableSpeedFollower extends AutoFollower {
   private int currentPathPointIndex = 0;
   private int returnPathPointIndex = 0;
   private int timesStagnated = 0;
-  private final int STAGNATE_THRESHOLD = 3;
+  private final int STAGNATE_THRESHOLD = Constants.Autonomous.STAGNATE_THRESHOLD;
   private boolean reset = true;
   private int endIndex = 0;
 
@@ -91,7 +92,10 @@ public class VariableSpeedFollower extends AutoFollower {
     if (returnPathPointIndex == currentPathPointIndex && returnPathPointIndex != path.length() - 1) {
       timesStagnated++;
       if (timesStagnated > STAGNATE_THRESHOLD) {
-        returnPathPointIndex++;
+        returnPathPointIndex += Constants.Autonomous.STAGNATE_BOOST;
+        if (returnPathPointIndex > endIndex) {
+          returnPathPointIndex = endIndex;
+        }
         timesStagnated = 0;
       }
     } else {
@@ -113,9 +117,9 @@ public class VariableSpeedFollower extends AutoFollower {
     // create velocity vector and set desired theta change
 
     drive.autoDrive(velocityVector, desiredThetaChange);
-    // Logger.recordOutput("pursuing?", true);
-    // Logger.recordOutput("Path Time", path
-    // .getJSONObject(getPathPointIndex()).getDouble("time"));
+    Logger.recordOutput("pursuing?", true);
+    Logger.recordOutput("Path Time", path
+        .getJSONObject(getPathPointIndex()).getDouble("time"));
   }
 
   @Override
