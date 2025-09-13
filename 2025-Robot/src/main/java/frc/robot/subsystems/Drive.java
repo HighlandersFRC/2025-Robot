@@ -982,209 +982,211 @@ public class Drive extends SubsystemBase {
     // }
     // }
 
-    var backResult = peripherals.getBackReefCamResult();
-    Optional<EstimatedRobotPose> backMultiTagResult = backPhotonPoseEstimator.update(backResult);
-    if (backMultiTagResult.isPresent()) {
-      if (backResult.getBestTarget().getPoseAmbiguity() < 0.3 && backResult.getBestTarget().fiducialId != 5
-          && backResult.getBestTarget().fiducialId != 4 && backResult.getBestTarget().fiducialId != 14
-          && backResult.getBestTarget().fiducialId != 15 && backResult.getBestTarget().fiducialId != 3
-          && backResult.getBestTarget().fiducialId != 16) {
-        Pose3d robotPose = backMultiTagResult.get().estimatedPose;
-        Logger.recordOutput("multitag result", robotPose);
-        int numFrontTracks = backResult.getTargets().size();
-        Pose3d tagPose = aprilTagFieldLayout.getTagPose(backResult.getBestTarget().getFiducialId()).get();
-        double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-        // Logger.recordOutput("Distance to tag", distToTag);
-        if (distToTag < 3.2) {
-          if (inReefInteractionState()) {
-            standardDeviation.set(0, 0,
-                0.5
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(1, 0,
-                0.5
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 0.9);
+    if (getRobotSpeed() < 2.4) {
+      var backResult = peripherals.getBackReefCamResult();
+      Optional<EstimatedRobotPose> backMultiTagResult = backPhotonPoseEstimator.update(backResult);
+      if (backMultiTagResult.isPresent()) {
+        if (backResult.getBestTarget().getPoseAmbiguity() < 0.3 && backResult.getBestTarget().fiducialId != 5
+            && backResult.getBestTarget().fiducialId != 4 && backResult.getBestTarget().fiducialId != 14
+            && backResult.getBestTarget().fiducialId != 15 && backResult.getBestTarget().fiducialId != 3
+            && backResult.getBestTarget().fiducialId != 16) {
+          Pose3d robotPose = backMultiTagResult.get().estimatedPose;
+          Logger.recordOutput("multitag result", robotPose);
+          int numFrontTracks = backResult.getTargets().size();
+          Pose3d tagPose = aprilTagFieldLayout.getTagPose(backResult.getBestTarget().getFiducialId()).get();
+          double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+          // Logger.recordOutput("Distance to tag", distToTag);
+          if (distToTag < 3.2) {
+            if (inReefInteractionState()) {
+              standardDeviation.set(0, 0,
+                  0.5
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(1, 0,
+                  0.5
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(2, 0, 0.9);
 
-            if (backResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+              if (backResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+                mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+                    backResult.getTimestampSeconds());
+              }
+            } else {
+              standardDeviation.set(0, 0,
+                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(1, 0,
+                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(2, 0, 0.9);
+
               mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
                   backResult.getTimestampSeconds());
             }
-          } else {
-            standardDeviation.set(0, 0,
-                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(1, 0,
-                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 0.9);
-
-            mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                backResult.getTimestampSeconds());
+            // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+            // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
           }
-          // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-          // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
         }
       }
-    }
 
-    var swerveResult = peripherals.getFrontSwerveCamResult();
-    Optional<EstimatedRobotPose> swerveMultiTagResult = swervePhotonPoseEstimator.update(swerveResult);
-    if (swerveMultiTagResult.isPresent()
-        && (!inReefInteractionState()
-            || getAutoPlacementSideIsFront())) {
-      if (swerveResult.getBestTarget().getPoseAmbiguity() < 0.3) {
-        Pose3d robotPose = swerveMultiTagResult.get().estimatedPose;
-        int numFrontTracks = swerveResult.getTargets().size();
-        Pose3d tagPose = aprilTagFieldLayout.getTagPose(swerveResult.getBestTarget().getFiducialId()).get();
-        double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-        // Logger.recordOutput("Distance to tag", distToTag);
-        if (distToTag < 3.2) {
-          if (inReefInteractionState()) {
-            standardDeviation.set(0, 0,
-                0.5
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(1, 0,
-                0.5
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 0.9);
+      var swerveResult = peripherals.getFrontSwerveCamResult();
+      Optional<EstimatedRobotPose> swerveMultiTagResult = swervePhotonPoseEstimator.update(swerveResult);
+      if (swerveMultiTagResult.isPresent()
+          && (!inReefInteractionState()
+              || getAutoPlacementSideIsFront())) {
+        if (swerveResult.getBestTarget().getPoseAmbiguity() < 0.3) {
+          Pose3d robotPose = swerveMultiTagResult.get().estimatedPose;
+          int numFrontTracks = swerveResult.getTargets().size();
+          Pose3d tagPose = aprilTagFieldLayout.getTagPose(swerveResult.getBestTarget().getFiducialId()).get();
+          double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+          // Logger.recordOutput("Distance to tag", distToTag);
+          if (distToTag < 3.2) {
+            if (inReefInteractionState()) {
+              standardDeviation.set(0, 0,
+                  0.5
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(1, 0,
+                  0.5
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(2, 0, 0.9);
 
-            if (swerveResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+              if (swerveResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+                mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+                    swerveResult.getTimestampSeconds());
+              }
+            } else {
+              standardDeviation.set(0, 0,
+                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(1, 0,
+                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(2, 0, 0.9);
+
               mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
                   swerveResult.getTimestampSeconds());
             }
-          } else {
-            standardDeviation.set(0, 0,
-                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(1, 0,
-                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 0.9);
-
-            mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                swerveResult.getTimestampSeconds());
+            // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+            // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
           }
-          // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-          // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
         }
       }
-    }
 
-    var backLeftResult = peripherals.getBackLeftReefCamResult();
-    Optional<EstimatedRobotPose> backLeftMultiTagResult = backLeftPhotonPoseEstimator.update(backLeftResult);
-    if (backLeftMultiTagResult.isPresent()) {
-      if (backLeftResult.getBestTarget().getPoseAmbiguity() < 0.3 && backLeftResult.getBestTarget().fiducialId != 5
-          && backLeftResult.getBestTarget().fiducialId != 4 && backLeftResult.getBestTarget().fiducialId != 14
-          && backLeftResult.getBestTarget().fiducialId != 15 && backLeftResult.getBestTarget().fiducialId != 3
-          && backLeftResult.getBestTarget().fiducialId != 16) {
-        Pose3d robotPose = backLeftMultiTagResult.get().estimatedPose;
-        int numFrontTracks = backLeftResult.getTargets().size();
-        Pose3d tagPose = aprilTagFieldLayout.getTagPose(backLeftResult.getBestTarget().getFiducialId()).get();
-        double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-        if (distToTag < 3.2) {
-          if (inReefInteractionState()) {
-            standardDeviation.set(0, 0,
-                0.5
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(1, 0,
-                0.5
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 0.9);
+      var backLeftResult = peripherals.getBackLeftReefCamResult();
+      Optional<EstimatedRobotPose> backLeftMultiTagResult = backLeftPhotonPoseEstimator.update(backLeftResult);
+      if (backLeftMultiTagResult.isPresent()) {
+        if (backLeftResult.getBestTarget().getPoseAmbiguity() < 0.3 && backLeftResult.getBestTarget().fiducialId != 5
+            && backLeftResult.getBestTarget().fiducialId != 4 && backLeftResult.getBestTarget().fiducialId != 14
+            && backLeftResult.getBestTarget().fiducialId != 15 && backLeftResult.getBestTarget().fiducialId != 3
+            && backLeftResult.getBestTarget().fiducialId != 16) {
+          Pose3d robotPose = backLeftMultiTagResult.get().estimatedPose;
+          int numFrontTracks = backLeftResult.getTargets().size();
+          Pose3d tagPose = aprilTagFieldLayout.getTagPose(backLeftResult.getBestTarget().getFiducialId()).get();
+          double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+          if (distToTag < 3.2) {
+            if (inReefInteractionState()) {
+              standardDeviation.set(0, 0,
+                  0.5
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(1, 0,
+                  0.5
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(2, 0, 0.9);
 
-            if (backLeftResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+              if (backLeftResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+                mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+                    backLeftResult.getTimestampSeconds());
+              }
+            } else {
+              standardDeviation.set(0, 0,
+                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(1, 0,
+                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(2, 0, 0.9);
+
               mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
                   backLeftResult.getTimestampSeconds());
             }
-          } else {
-            standardDeviation.set(0, 0,
-                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(1, 0,
-                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 0.9);
-
-            mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                backLeftResult.getTimestampSeconds());
+            // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+            // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
           }
-          // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-          // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
         }
       }
-    }
 
-    var backRightResult = peripherals.getBackRightReefCamResult();
-    Optional<EstimatedRobotPose> backRightMultiTagResult = backRightPhotonPoseEstimator.update(backRightResult);
-    if (backRightMultiTagResult.isPresent()) {
-      if (backRightResult.getBestTarget().getPoseAmbiguity() < 0.3 && backRightResult.getBestTarget().fiducialId != 5
-          && backRightResult.getBestTarget().fiducialId != 4 && backRightResult.getBestTarget().fiducialId != 14
-          && backRightResult.getBestTarget().fiducialId != 15 && backRightResult.getBestTarget().fiducialId != 3
-          && backRightResult.getBestTarget().fiducialId != 16) {
-        Pose3d robotPose = backRightMultiTagResult.get().estimatedPose;
-        int numFrontTracks = backRightResult.getTargets().size();
-        Pose3d tagPose = aprilTagFieldLayout.getTagPose(backRightResult.getBestTarget().getFiducialId()).get();
-        double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-        // Logger.recordOutput("Distance to tag", distToTag);
-        if (distToTag < 3.2) {
-          if (inReefInteractionState()) {
-            standardDeviation.set(0, 0,
-                0.5
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(1, 0,
-                0.5
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 0.9);
+      var backRightResult = peripherals.getBackRightReefCamResult();
+      Optional<EstimatedRobotPose> backRightMultiTagResult = backRightPhotonPoseEstimator.update(backRightResult);
+      if (backRightMultiTagResult.isPresent()) {
+        if (backRightResult.getBestTarget().getPoseAmbiguity() < 0.3 && backRightResult.getBestTarget().fiducialId != 5
+            && backRightResult.getBestTarget().fiducialId != 4 && backRightResult.getBestTarget().fiducialId != 14
+            && backRightResult.getBestTarget().fiducialId != 15 && backRightResult.getBestTarget().fiducialId != 3
+            && backRightResult.getBestTarget().fiducialId != 16) {
+          Pose3d robotPose = backRightMultiTagResult.get().estimatedPose;
+          int numFrontTracks = backRightResult.getTargets().size();
+          Pose3d tagPose = aprilTagFieldLayout.getTagPose(backRightResult.getBestTarget().getFiducialId()).get();
+          double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+          // Logger.recordOutput("Distance to tag", distToTag);
+          if (distToTag < 3.2) {
+            if (inReefInteractionState()) {
+              standardDeviation.set(0, 0,
+                  0.5
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(1, 0,
+                  0.5
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(2, 0, 0.9);
 
-            if (backRightResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+              if (backRightResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+                mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+                    backRightResult.getTimestampSeconds());
+              }
+            } else {
+              standardDeviation.set(0, 0,
+                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(1, 0,
+                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
+              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+              standardDeviation.set(2, 0, 0.9);
+
               mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
                   backRightResult.getTimestampSeconds());
             }
-          } else {
-            standardDeviation.set(0, 0,
-                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(1, 0,
-                Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                    * Constants.Vision.getTagDistStdDevScalar(distToTag));
-            // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-            // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-            standardDeviation.set(2, 0, 0.9);
-
-            mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                backRightResult.getTimestampSeconds());
+            // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+            // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
           }
-          // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-          // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
         }
       }
     }
@@ -1251,6 +1253,12 @@ public class Drive extends SubsystemBase {
         backRight.getAngleMotorSetpoint() * 360, backRight.getDriveMotorSetpoint(),
     };
     return setpoints;
+  }
+
+  public double getRobotSpeed() {
+    return (Math.abs(frontLeft.getGroundSpeed()) + Math.abs(frontRight.getGroundSpeed())
+        + Math.abs(backLeft.getGroundSpeed())
+        + Math.abs(backRight.getGroundSpeed())) / 4.0;
   }
 
   /**
@@ -4378,6 +4386,7 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
+    Logger.recordOutput("Robot Velocity", getRobotSpeed());
     // Pose2d target = getGamePiecePosition();
     // System.out.println(Math.toDegrees(getThetaToCenterReef()));
     // Translation2d t1 = new Translation2d(getMT2OdometryX(), getMT2OdometryY());
