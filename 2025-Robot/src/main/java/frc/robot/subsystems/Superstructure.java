@@ -525,23 +525,19 @@ public class Superstructure extends SubsystemBase {
           // OI.getDriverA())[1],
           // drive.getReefClosestSetpoint(drive.getMT2Odometry(),
           // OI.getDriverA())[2]));
+          double[] closest = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA());
           java.util.logging.Logger.getGlobal().finer(
-              "Drive: " + drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
-                  drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
-                      OI.getDriverA())[1],
-                  drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
-                      OI.getDriverA())[2]));
+              "Drive: " + drive.hitSetPoint(closest[0],
+                  closest[1],
+                  closest[2]));
           // System.out.println(
           // "Elevator: " + (elevator.getElevatorPosition() >
           // Constants.SetPoints.ElevatorPosition.kAUTOL2.meters));
           java.util.logging.Logger.getGlobal().finer(
               "Elevator: " + (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters));
-          if ((drive.hitSetPoint(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
-              OI.getDriverA())[0],
-              drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
-                  OI.getDriverA())[1],
-              drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
-                  OI.getDriverA())[2])
+          if (((drive.hitSetPoint(closest[0],
+              closest[1],
+              closest[2]))
               && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 3.0 / 39.37
               && (Math.abs(peripherals.getPigeonPitch()) < 2.0 || true)) || OI.getDriverLB()) {
             currentSuperState = SuperState.AUTO_SCORE_L4;
@@ -792,21 +788,22 @@ public class Superstructure extends SubsystemBase {
     // Pivot has abs to account for placing backwards
     // double[] setpoint = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
     // false);
+    double[] setpoint = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false);
     java.util.logging.Logger.getGlobal().fine((Math
         .abs(Math.abs(pivot.getPivotPosition())
             - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (10.0 / 360.0)
         && drive.hitSetPointGenerous(
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[0],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[1],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[2]))
+            setpoint[0],
+            setpoint[1],
+            setpoint[2]))
         + "");
     return (Math
         .abs(Math.abs(pivot.getPivotPosition())
             - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (10.0 / 360.0)
         && drive.hitSetPointGenerous(
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[0],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[1],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[2]));
+            setpoint[0],
+            setpoint[1],
+            setpoint[2]));
   }
 
   public boolean placedCoralL2() {
@@ -1048,6 +1045,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleAutoL2PlaceState() {
+
     lights.setWantedState(LightsState.PLACING);
     if (Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) > 0.05 || Math.hypot(OI.getDriverLeftX(),
         OI.getDriverLeftY()) > 0.05) {
@@ -1061,11 +1059,12 @@ public class Superstructure extends SubsystemBase {
     } else {
       manipulator.setWantedState(ManipulatorState.DEFAULT);
     }
+    double[] closest = drive.getReefClosestSetpoint(drive.getMT2Odometry(), false);
     if (Math.hypot(
-        drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[0],
-        drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[1]) < 1.5
+        drive.getMT2OdometryX() - closest[0],
+        drive.getMT2OdometryY() - closest[1]) < 1.5
         && drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-            Math.toDegrees(drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[2])) < 50.0) {
+            Math.toDegrees(closest[2])) < 50.0) {
       elevator.setWantedState(ElevatorState.AUTO_L2);
       if (drive.getAutoPlacementSideIsFront()) {
         pivot.setWantedFlip(PivotFlip.FRONT);
@@ -1073,9 +1072,10 @@ public class Superstructure extends SubsystemBase {
         pivot.setWantedFlip(PivotFlip.BACK);
       }
       if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 10 / 39.37) {
-        if (drive.hitSetPointSemiGenerous(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[1],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2])) {
+        closest = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA());
+        if (drive.hitSetPointSemiGenerous(closest[0],
+            closest[1],
+            closest[2])) {
           pivot.setWantedState(PivotState.AUTO_SCORE_L4_SLOW);
         } else {
           pivot.setWantedState(PivotState.AUTO_L2);
@@ -1110,9 +1110,10 @@ public class Superstructure extends SubsystemBase {
         pivot.setWantedFlip(PivotFlip.BACK);
       }
       if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 10 / 39.37) {
-        if (drive.hitSetPointSemiGenerous(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[1],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2])) {
+        double[] closest = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA());
+        if (drive.hitSetPointSemiGenerous(closest[0],
+            closest[1],
+            closest[2])) {
           pivot.setWantedState(PivotState.AUTO_SCORE_L4_SLOW);
         } else {
           pivot.setWantedState(PivotState.AUTO_L3);
@@ -1139,11 +1140,12 @@ public class Superstructure extends SubsystemBase {
       drive.setWantedState(DriveState.L4_REEF);
     }
     manipulator.setWantedState(ManipulatorState.DEFAULT);
+    double[] closest = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false);
     if (Math.hypot(
-        drive.getMT2OdometryX() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[0],
-        drive.getMT2OdometryY() - drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[1]) < 0.8
+        drive.getMT2OdometryX() - closest[0],
+        drive.getMT2OdometryY() - closest[1]) < 0.8
         && drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-            Math.toDegrees(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[2])) < 50.0) {
+            Math.toDegrees(closest[2])) < 50.0) {
       elevator.setWantedState(ElevatorState.AUTO_L4);
       if (drive.getAutoPlacementSideIsFront()) {
         pivot.setWantedFlip(PivotFlip.FRONT);
@@ -1151,9 +1153,10 @@ public class Superstructure extends SubsystemBase {
         pivot.setWantedFlip(PivotFlip.BACK);
       }
       if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 25.0 / 39.37) {
-        if (drive.hitSetPointGenerous(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[1],
-            drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[2])) {
+        closest = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA());
+        if (drive.hitSetPointGenerous(closest[0],
+            closest[1],
+            closest[2])) {
           pivot.setWantedState(PivotState.AUTO_SCORE_L4_SLOW);
         } else {
           pivot.setWantedState(PivotState.AUTO_L4);
@@ -1173,7 +1176,7 @@ public class Superstructure extends SubsystemBase {
     manipulator.setWantedState(ManipulatorState.DEFAULT);
     pivot.setWantedState(PivotState.L1);
     if (Math.abs(pivot.getPivotPosition()) > 30.0 / 360.0) {
-      twist.setWantedState(TwistState.UP);
+      twist.setWantedState(TwistState.DOWN);
     }
   }
 
@@ -2071,9 +2074,10 @@ public class Superstructure extends SubsystemBase {
     if (OI.operatorLT.getAsBoolean() && OI.operatorRT.getAsBoolean()) {
       drive.setWantedState(DriveState.DEFAULT);
     } else {
+      double[] closest = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false);
       if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 20.0 / 39.37 || drive
-          .hitSetPointUltraGenerous(drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[0],
-              drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false)[1], drive.getMT2OdometryAngle())) {
+          .hitSetPointUltraGenerous(closest[0],
+              closest[1], drive.getMT2OdometryAngle())) {
         pivot.setWantedState(PivotState.AUTO_SCORE_L4);
       } else {
         pivot.setWantedState(PivotState.DEFAULT);
