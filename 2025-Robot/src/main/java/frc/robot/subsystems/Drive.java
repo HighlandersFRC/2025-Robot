@@ -839,7 +839,7 @@ public class Drive extends SubsystemBase {
     Matrix<N3, N1> standardDeviation = new Matrix<>(Nat.N3(), Nat.N1());
     Logger.recordOutput("Closde to reef", closeToReef());
 
-    if (closeToReef()) {
+    if ((closeToReef() && DriverStation.isAutonomousEnabled()) || inReefInteractionState()) {
       photonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
       backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
       backLeftPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
