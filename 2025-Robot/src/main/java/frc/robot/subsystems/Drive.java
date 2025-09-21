@@ -1309,13 +1309,8 @@ public class Drive extends SubsystemBase {
   }
 
   public double getAngleDifferenceDegrees(double angle1, double angle2) {
-    while (angle1 - angle2 > 180) {
-      angle2 += 360;
-    }
-    while (angle2 - angle1 > 180) {
-      angle2 -= 360;
-    }
-    return Math.abs(angle1 - angle2);
+    double difference = Math.abs(angle1 - angle2) % 360;
+    return difference > 180 ? 360 - difference : difference;
   }
 
   public boolean isGoingForL3Algae() {

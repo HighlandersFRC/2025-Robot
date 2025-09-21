@@ -350,27 +350,28 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.DEFAULT_DRIVE;
         break;
       case AUTO_L1_PLACE:
-        if (manipulator.hasCoral())
+        if (manipulator.hasCoral()) {
+          double[] closest = drive.getL1ReefClosestSetpoint(drive.getMT2Odometry());
           if (Math.abs(Math.abs(pivot.getPivotPosition()) - Constants.SetPoints.PivotPosition.kL1.rotations) < 10.0
               / 360.0
-              && (drive.hitSetPointUltraGenerous(drive.getL1ReefClosestSetpoint(drive.getMT2Odometry())[0],
-                  drive.getL1ReefClosestSetpoint(drive.getMT2Odometry())[1],
-                  drive.getL1ReefClosestSetpoint(drive.getMT2Odometry())[2]))) {
+              && (drive.hitSetPointUltraGenerous(closest[0],
+                  closest[1],
+                  closest[2]))) {
             currentSuperState = SuperState.AUTO_L1_PLACE_MORE;
             wantedSuperState = SuperState.AUTO_L1_PLACE_MORE;
           } else {
             currentSuperState = SuperState.AUTO_L1_PLACE;
           }
-
-        else if (DriverStation.isAutonomous())
+        } else if (DriverStation.isAutonomous())
           currentSuperState = SuperState.IDLE;
         else
           currentSuperState = SuperState.DEFAULT;
         break;
       case AUTO_L1_PLACE_MORE:
-        if ((drive.hitSetPoint(drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry())[0],
-            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry())[1],
-            drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry())[2])) || OI.getDriverLB()) {
+        double[] closestMore = drive.getL1ReefClosestSetpointMore(drive.getMT2Odometry());
+        if ((drive.hitSetPoint(closestMore[0],
+            closestMore[1],
+            closestMore[2])) || OI.getDriverLB()) {
           currentSuperState = SuperState.AUTO_SCORE_L1;
           wantedSuperState = SuperState.AUTO_SCORE_L1;
         } else {
@@ -401,23 +402,19 @@ public class Superstructure extends SubsystemBase {
           // OI.getDriverA())[1],
           // drive.getReefClosestSetpoint(drive.getMT2Odometry(),
           // OI.getDriverA())[2]));
+          double[] closest = drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA());
           java.util.logging.Logger.getGlobal().finer(
-              "Drive: " + drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
-                  drive.getReefClosestSetpoint(drive.getMT2Odometry(),
-                      OI.getDriverA())[1],
-                  drive.getReefClosestSetpoint(drive.getMT2Odometry(),
-                      OI.getDriverA())[2]));
+              "Drive: " + drive.hitSetPoint(closest[0],
+                  closest[1],
+                  closest[2]));
           // System.out.println(
           // "Elevator: " + (elevator.getElevatorPosition() >
           // Constants.SetPoints.ElevatorPosition.kAUTOL2.meters));
           java.util.logging.Logger.getGlobal().finer(
               "Elevator: " + (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters));
-          if ((drive.hitSetPoint(drive.getReefClosestSetpoint(drive.getMT2Odometry(), OI
-              .getDriverA())[0],
-              drive.getReefClosestSetpoint(drive.getMT2Odometry(),
-                  OI.getDriverA())[1],
-              drive.getReefClosestSetpoint(drive.getMT2Odometry(),
-                  OI.getDriverA())[2])
+          if ((drive.hitSetPoint(closest[0],
+              closest[1],
+              closest[2])
               && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL2.meters - 3.0 / 39.37)
               || OI.getDriverLB()) {
             currentSuperState = SuperState.AUTO_SCORE_L2;
@@ -473,23 +470,19 @@ public class Superstructure extends SubsystemBase {
           // OI.getDriverA())[1],
           // drive.getReefClosestSetpoint(drive.getMT2Odometry(),
           // OI.getDriverA())[2]));
+          double[] closest = drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA());
           java.util.logging.Logger.getGlobal().finer(
-              "Drive: " + drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA())[0],
-                  drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
-                      OI.getDriverA())[1],
-                  drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
-                      OI.getDriverA())[2]));
+              "Drive: " + drive.hitSetPoint(closest[0],
+                  closest[1],
+                  closest[2]));
           // System.out.println(
           // "Elevator: " + (elevator.getElevatorPosition() >
           // Constants.SetPoints.ElevatorPosition.kAUTOL2.meters));
           java.util.logging.Logger.getGlobal().finer(
               "Elevator: " + (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters));
-          if ((drive.hitSetPoint(drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
-              OI.getDriverA())[0],
-              drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
-                  OI.getDriverA())[1],
-              drive.getReefL3ClosestSetpoint(drive.getMT2Odometry(),
-                  OI.getDriverA())[2])
+          if ((drive.hitSetPoint(closest[0],
+              closest[1],
+              closest[2])
               && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 3.0 / 39.37)
               || OI.getDriverLB()) {
             currentSuperState = SuperState.AUTO_SCORE_L3;
@@ -667,9 +660,10 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.L3_ALGAE_PICKUP;
         break;
       case AUTO_ALGAE_PICKUP:
-        if (drive.hitSetPointGenerous(drive.getAlgaeClosestSetpoint(drive.getMT2Odometry())[0],
-            drive.getAlgaeClosestSetpoint(drive.getMT2Odometry())[1],
-            drive.getAlgaeClosestSetpoint(drive.getMT2Odometry())[2])
+        double[] algaeSetpoint = drive.getAlgaeClosestSetpoint(drive.getMT2Odometry());
+        if (drive.hitSetPointGenerous(algaeSetpoint[0],
+            algaeSetpoint[1],
+            algaeSetpoint[2])
             && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kL2ALGAE.meters - 5.0 / 39.37
             && Math.abs(pivot.getPivotPosition())
                 - Math.abs(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations) < 0.06) {
@@ -1098,11 +1092,12 @@ public class Superstructure extends SubsystemBase {
     } else {
       manipulator.setWantedState(ManipulatorState.DEFAULT);
     }
+    double[] closest = drive.getReefClosestSetpoint(drive.getMT2Odometry(), false);
     if (Math.hypot(
-        drive.getMT2OdometryX() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[0],
-        drive.getMT2OdometryY() - drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[1]) < 1.5
+        drive.getMT2OdometryX() - closest[0],
+        drive.getMT2OdometryY() - closest[1]) < 1.5
         && drive.getAngleDifferenceDegrees(Math.toDegrees(drive.getMT2OdometryAngle()),
-            Math.toDegrees(drive.getReefClosestSetpoint(drive.getMT2Odometry(), false)[2])) < 50.0) {
+            Math.toDegrees(closest[2])) < 50.0) {
       elevator.setWantedState(ElevatorState.AUTO_L3);
       if (drive.getAutoPlacementSideIsFront()) {
         pivot.setWantedFlip(PivotFlip.FRONT);
@@ -1110,7 +1105,7 @@ public class Superstructure extends SubsystemBase {
         pivot.setWantedFlip(PivotFlip.BACK);
       }
       if (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL3.meters - 10 / 39.37) {
-        double[] closest = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA());
+        closest = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), OI.getDriverA());
         if (drive.hitSetPointSemiGenerous(closest[0],
             closest[1],
             closest[2])) {
@@ -1831,11 +1826,10 @@ public class Superstructure extends SubsystemBase {
 
   public void handleAutoAlgaePickupMoreMoreState() {
     lights.setWantedState(LightsState.INTAKING);
-    if (!drive.hitSetPointGenerous(drive.getAlgaeMoreMoreClosestSetpoint(drive.getMT2Odometry())[0],
-        drive.getAlgaeMoreMoreClosestSetpoint(drive
-            .getMT2Odometry())[1],
-        drive.getAlgaeMoreMoreClosestSetpoint(drive
-            .getMT2Odometry())[2])
+    double[] closest = drive.getAlgaeMoreMoreClosestSetpoint(drive.getMT2Odometry());
+    if (!drive.hitSetPointGenerous(closest[0],
+        closest[1],
+        closest[2])
         && Math.hypot(OI.getDriverLeftX(), OI.getDriverLeftY()) < 0.1 && Math
             .hypot(OI.getDriverRightX(), OI.getDriverRightY()) < 0.1) {
       drive.setWantedState(DriveState.ALGAE_MORE_MORE);
@@ -2090,10 +2084,10 @@ public class Superstructure extends SubsystemBase {
       // } else {
       // intake.setWantedState(IntakeState.OFF);
       // }
-
-      if (drive.hitSetPointGenerous(drive.getReefMoreClosestSetpoint(drive.getMT2Odometry())[0],
-          drive.getReefMoreClosestSetpoint(drive.getMT2Odometry())[1],
-          drive.getReefMoreClosestSetpoint(drive.getMT2Odometry())[2])) {
+      closest = drive.getReefMoreClosestSetpoint(drive.getMT2Odometry());
+      if (drive.hitSetPointGenerous(closest[0],
+          closest[1],
+          closest[2])) {
         if (DriverStation.isTeleopEnabled()) {
           setWantedState(SuperState.DEFAULT);
         }
