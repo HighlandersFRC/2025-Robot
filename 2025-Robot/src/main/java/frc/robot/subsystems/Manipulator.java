@@ -43,7 +43,7 @@ public class Manipulator extends SubsystemBase {
     manipulatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     manipulatorConfig.CurrentLimits.StatorCurrentLimit = 80;
     manipulatorConfig.CurrentLimits.SupplyCurrentLimit = 80;
-    manipulatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    manipulatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     manipulatorMotor.getConfigurator().apply(manipulatorConfig);
     manipulatorMotor.setNeutralMode(NeutralModeValue.Brake);
   }
