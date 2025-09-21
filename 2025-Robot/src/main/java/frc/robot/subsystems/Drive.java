@@ -799,7 +799,8 @@ public class Drive extends SubsystemBase {
   }
 
   private boolean closeToReef() {
-    if (distanceFromCenterOfReef() < 2.7) {
+    double dist = DriverStation.isAutonomousEnabled() ? 2.7 : 2.3;
+    if (distanceFromCenterOfReef() < dist) {
       return true;
     } else {
       return false;
@@ -838,8 +839,7 @@ public class Drive extends SubsystemBase {
     Matrix<N3, N1> standardDeviation = new Matrix<>(Nat.N3(), Nat.N1());
     Logger.recordOutput("Closde to reef", closeToReef());
 
-    if (((!algaeMode && DriverStation.isTeleop()) || (DriverStation.isAutonomousEnabled() && closeToReef()))
-        || (inReefInteractionState())) {
+    if (closeToReef()) {
       photonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
       backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
       backLeftPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
