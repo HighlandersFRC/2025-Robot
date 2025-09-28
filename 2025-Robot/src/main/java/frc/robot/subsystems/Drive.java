@@ -201,7 +201,7 @@ public class Drive extends SubsystemBase {
   Transform3d backReefRobotToCam = new Transform3d( // top back reef cam
       new Translation3d(Constants.inchesToMeters(-2.0), Constants.inchesToMeters(-11.5),
           Constants.inchesToMeters(23.625)),
-      new Rotation3d(Math.toRadians(1.5), Math.toRadians(26.0), Math.toRadians(165.0)));
+      new Rotation3d(Math.toRadians(2.8), Math.toRadians(25.9), Math.toRadians(165.0)));
 
   Transform3d backLeftReefRobotToCam = new Transform3d(
       new Translation3d(Constants.inchesToMeters(-12.375), Constants.inchesToMeters(9.375),
@@ -460,7 +460,7 @@ public class Drive extends SubsystemBase {
 
     try {
       aprilTagFieldLayout = new AprilTagFieldLayout(
-          Filesystem.getDeployDirectory().getPath() + "/" + "2025-reefscape-andymark.json");
+          Filesystem.getDeployDirectory().getPath() + "/" + "2025-reefscape-welded.json");
     } catch (Exception e) {
       java.util.logging.Logger.getGlobal().warning("error with april tag: " + e.getMessage());
     }
@@ -839,7 +839,8 @@ public class Drive extends SubsystemBase {
     Matrix<N3, N1> standardDeviation = new Matrix<>(Nat.N3(), Nat.N1());
     Logger.recordOutput("Closde to reef", closeToReef());
 
-    if ((closeToReef() && DriverStation.isAutonomousEnabled()) || inReefInteractionState()) {
+    if (((closeToReef()) || inReefInteractionState())
+        && systemState != DriveState.REEF_MORE) {
       photonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
       backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
       backLeftPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
@@ -4381,6 +4382,7 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
+    Logger.recordOutput("Extra Pigeon Angle", peripherals.getPigeonExtraAngle());
     Logger.recordOutput("Robot Velocity", getRobotSpeed());
     // Pose2d target = getGamePiecePosition();
     // System.out.println(Math.toDegrees(getThetaToCenterReef()));
@@ -4671,6 +4673,8 @@ public class Drive extends SubsystemBase {
         break;
       case NET_MORE:
         if (OI.getDriverA()) {
+          teleopDrive();
+        } else if (Math.abs(OI.getDriverLeftY()) > 0.2) {
           teleopDrive();
         } else {
           setpoint = getNetMoreXTheta();

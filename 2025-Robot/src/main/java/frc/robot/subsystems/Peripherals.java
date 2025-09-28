@@ -34,7 +34,10 @@ public class Peripherals {
   AprilTagFieldLayout aprilTagFieldLayout;
 
   private Pigeon2 pigeon = new Pigeon2(0, "Canivore");
+  private Pigeon2 pigeonExtra = new Pigeon2(1, "Canivore");
+
   private Pigeon2Configuration pigeonConfig = new Pigeon2Configuration();
+  private Pigeon2Configuration pigeonExtraConfig = new Pigeon2Configuration();
   Transform3d robotToCam = new Transform3d(
       new Translation3d(Constants.inchesToMeters(1.75), Constants.inchesToMeters(11.625),
           Constants.inchesToMeters(33.5)),
@@ -71,8 +74,13 @@ public class Peripherals {
     pigeonConfig.MountPose.MountPoseRoll = -0.10366992652416229;
     pigeonConfig.MountPose.MountPoseYaw = -0.24523599445819855;
 
+    pigeonExtraConfig.MountPose.MountPosePitch = 2.9378318786621094;
+    pigeonExtraConfig.MountPose.MountPoseRoll = -1.7237101793289185;
+    pigeonExtraConfig.MountPose.MountPoseYaw = -1.0769075155258179;
+
     // Apply the IMU configuration
     pigeon.getConfigurator().apply(pigeonConfig);
+    pigeonExtra.getConfigurator().apply(pigeonExtraConfig);
 
     // Zero the IMU angle
     zeroPigeon();
@@ -388,6 +396,7 @@ public class Peripherals {
    */
   public void setPigeonAngle(double degrees) {
     pigeon.setYaw(degrees);
+    pigeonExtra.setYaw(degrees);
   }
 
   /**
@@ -397,6 +406,10 @@ public class Peripherals {
    */
   public double getPigeonAngle() {
     return pigeon.getYaw().getValueAsDouble();
+  }
+
+  public double getPigeonExtraAngle() {
+    return pigeonExtra.getYaw().getValueAsDouble();
   }
 
   /**

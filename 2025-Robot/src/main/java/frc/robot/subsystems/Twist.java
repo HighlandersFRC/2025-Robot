@@ -77,6 +77,7 @@ public class Twist extends SubsystemBase {
   }
 
   public void twistToPosition(double rotations) {
+    Logger.recordOutput("Twist Target Pos", Constants.rotationsToDegrees(rotations));
 
     if (intakeItem == ArmItem.ALGAE) { // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
       twistMotor.setControl(this.twistTorqueCurrentFOC // TODO: UNCOMMENT IF YOUR WANT THE TWIST TO MOVE
@@ -143,6 +144,8 @@ public class Twist extends SubsystemBase {
     // twistMotor.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput("Twist State: ", systemState);
     Logger.recordOutput("Twist Position", getTwistPosition());
+    Logger.recordOutput("Twist Desired Pos",
+        Constants.rotationsToDegrees(twistMotor.getClosedLoopReference().getValueAsDouble()));
     // System.out.println("Twist Position: " + getTwistPosition());
     // System.out.println("Twist State: " + systemState);
     // Logger.recordOutput("Twist Error",
