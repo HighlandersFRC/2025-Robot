@@ -212,15 +212,15 @@ public class Intake extends SubsystemBase {
           // System.out.println("5");
         } else if (Math.abs(getPosition() -
             Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 30.0 / 360.0) {
-          pivotWithTorque(-50, 0.1);
+          pivotWithTorque(-30, 0.1);
           // System.out.println("30");
         } else if (Math.abs(getPosition() -
             Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 60.0 / 360.0) {
-          pivotWithTorque(-60, 0.1);
+          pivotWithTorque(-40, 0.1);
           // System.out.println("40");
         } else {
           // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
-          pivotWithTorque(-70, 0.6);
+          pivotWithTorque(-60, 0.6);
           // System.out.println("70");
 
         }
@@ -256,15 +256,15 @@ public class Intake extends SubsystemBase {
           // System.out.println("5");
         } else if (Math.abs(getPosition() -
             Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 30.0 / 360.0) {
-          pivotWithTorque(-50, 0.1);
+          pivotWithTorque(-30, 0.1);
           // System.out.println("30");
         } else if (Math.abs(getPosition() -
             Constants.SetPoints.IntakeSetpoints.INTAKE_UP) < 60.0 / 360.0) {
-          pivotWithTorque(-60, 0.1);
+          pivotWithTorque(-40, 0.1);
           // System.out.println("40");
         } else {
           // pivotToPosition(Constants.SetPoints.IntakeSetpoints.INTAKE_UP);
-          pivotWithTorque(-70, 0.6);
+          pivotWithTorque(-60, 0.6);
           // System.out.println("70");
 
         }
@@ -274,7 +274,7 @@ public class Intake extends SubsystemBase {
           this.setPivotCurrent(-10, 0.1);
           pivot.setPosition(0);
         } else if (!isZeroed) {
-          this.setPivotCurrent(-45, 0.3);
+          this.setPivotCurrent(-40, 0.3);
         } else {
           this.setPivotCurrent(-5, 0.1);
         }

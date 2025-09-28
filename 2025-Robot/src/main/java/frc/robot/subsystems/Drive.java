@@ -212,7 +212,7 @@ public class Drive extends SubsystemBase {
       new Translation3d(Constants.inchesToMeters(
           -12.375), Constants.inchesToMeters(-9.25),
           Constants.inchesToMeters(8.6875)),
-      new Rotation3d(Math.toRadians(1.3), Math.toRadians(-20.5), Math.toRadians(178.47)));
+      new Rotation3d(Math.toRadians(1.5), Math.toRadians(-19.7), Math.toRadians(178.47)));
 
   Transform3d gamePieceReefRobotToCam = new Transform3d(
       new Translation3d(Constants.inchesToMeters(2.0), Constants.inchesToMeters(-11.5),

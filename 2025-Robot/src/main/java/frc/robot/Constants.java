@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public final class Constants {
         public static final class Autonomous {
                 public static final int STAGNATE_BOOST = 35;
-                public static final int STAGNATE_THRESHOLD = 5; // Number of cycles of stagnation before ending path
+                public static final int STAGNATE_THRESHOLD = 7; // Number of cycles of stagnation before ending path
                 // lookahead distance is a function:
                 // LOOKAHEAD = AUTONOMOUS_LOOKAHEAD_DISTANCE * velocity + MIN_LOOKAHEAD_DISTANCE
                 // their constants
@@ -3565,7 +3565,7 @@ public final class Constants {
 
                 public static double L1_INTAKE_X_OFFSET_FRONT_MORE = inchesToMeters(22.5);
                 public static double L1_INTAKE_Y_OFFSET_FRONT_MORE = inchesToMeters(7.6);
-                public static double L1_INTAKE_X_OFFSET_BACK_MORE = inchesToMeters(24.5);
+                public static double L1_INTAKE_X_OFFSET_BACK_MORE = inchesToMeters(24.0);
                 public static double L1_INTAKE_Y_OFFSET_BACK_MORE = inchesToMeters(-7.6);
 
                 public static double L2_INTAKE_X_OFFSET_FRONT = inchesToMeters(22.9);
