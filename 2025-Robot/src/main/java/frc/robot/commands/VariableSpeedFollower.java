@@ -195,13 +195,7 @@ public class VariableSpeedFollower extends AutoFollower {
       odometryFusedY = Constants.Physical.FIELD_WIDTH - odometryFusedY;
       odometryFusedTheta = -odometryFusedTheta;
     }
-    while (Math.abs(odometryFusedTheta - point.getDouble("angle")) > Math.PI) {
-      if (odometryFusedTheta - point.getDouble("angle") > Math.PI) {
-        odometryFusedTheta -= 2 * Math.PI;
-      } else if (odometryFusedTheta - point.getDouble("angle") < -Math.PI) {
-        odometryFusedTheta += 2 * Math.PI;
-      }
-    }
+    odometryFusedTheta = Constants.standardizeAngleToOther(odometryFusedTheta, point.getDouble("angle"));
     return drive.insideRadius(
         (point.getDouble("x") - odometryFusedX) / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
         (point.getDouble("y") - odometryFusedY) / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,

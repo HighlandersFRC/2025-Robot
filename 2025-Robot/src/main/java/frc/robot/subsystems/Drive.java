@@ -3091,20 +3091,6 @@ public class Drive extends SubsystemBase {
       turn = 0.0;
     }
 
-    // if (turn == 0.0 && Timer.getFPGATimestamp() - teleopInitTime > 2.0) {
-    // turningPID.setSetPoint(angleSetpoint);
-    // double yaw = peripherals.getPigeonAngle();
-    // while (Math.abs(angleSetpoint - yaw) > 180) {
-    // if (angleSetpoint - yaw > 180) {
-    // yaw += 360;
-    // } else {
-    // yaw -= 360;
-    // }
-    // }
-    // double result = -1 * turningPID.updatePID(yaw);
-    // Logger.recordOutput("result", result);
-    // driveAutoAligned(result);
-    // } else {
     angleSetpoint = peripherals.getPigeonAngle();
     double compensation = peripherals.getPigeonAngularVelocityW() * 0.050;
     angleSetpoint += compensation;
@@ -3158,13 +3144,8 @@ public class Drive extends SubsystemBase {
     if (turn == 0.0) {
       turningPID.setSetPoint(angleSetpoint);
       double yaw = peripherals.getPigeonAngle();
-      while (Math.abs(angleSetpoint - yaw) > 180) {
-        if (angleSetpoint - yaw > 180) {
-          yaw += 360;
-        } else {
-          yaw -= 360;
-        }
-      }
+
+      yaw = Constants.standardizeAngleToOtherDegrees(yaw, angleSetpoint);
       double result = -2 * turningPID.updatePID(yaw);
       // Logger.recordOutput("result", result);
       updateOdometryFusedArray();
@@ -3392,14 +3373,7 @@ public class Drive extends SubsystemBase {
     // Math.pow(y - getMT2OdometryY(), 2))));
     // Logger.recordOutput("Theta Error Degrees", Math.toDegrees(theta -
     // getMT2OdometryAngle()));
-
-    while (Math.abs(theta - getMT2OdometryAngle()) > Math.PI) {
-      if (theta - getMT2OdometryAngle() > Math.PI) {
-        theta -= 2 * Math.PI;
-      } else {
-        theta += 2 * Math.PI;
-      }
-    }
+    theta = Constants.standardizeAngleToOther(theta, getMT2OdometryAngle());
 
     double xVelNoFF = 0.0;
     double yVelNoFF = 0.0;
@@ -3553,13 +3527,7 @@ public class Drive extends SubsystemBase {
   public void driveToXTheta(double x, double theta) {
     java.util.logging.Logger.getGlobal().finer(theta + "");
     // theta = Math.toRadians(theta);
-    while (Math.abs(theta - getMT2OdometryAngle()) > Math.PI) {
-      if (theta - getMT2OdometryAngle() > Math.PI) {
-        theta -= 2 * Math.PI;
-      } else {
-        theta += 2 * Math.PI;
-      }
-    }
+    theta = Constants.standardizeAngleToOther(theta, getMT2OdometryAngle());
     xxPID.setSetPoint(x);
     thetaaPID.setSetPoint(theta);
 
@@ -3620,13 +3588,7 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("closestPointOnLine", new Pose2d(closestPointOnLine, new Rotation2d(angrad)));
     xxPID.setSetPoint(closestPointOnLine.getX());
     yyPID.setSetPoint(closestPointOnLine.getY());
-    while (Math.abs(angrad - getMT2OdometryAngle()) > Math.PI) {
-      if (angrad - getMT2OdometryAngle() > Math.PI) {
-        angrad -= 2 * Math.PI;
-      } else {
-        angrad += 2 * Math.PI;
-      }
-    }
+    angrad = Constants.standardizeAngleToOther(angrad, getMT2OdometryAngle());
     thetaaPID.setSetPoint(angrad);
     double toPointXVel = xxPID.updatePID(getMT2OdometryX());
     double toPointYVel = -yyPID.updatePID(getMT2OdometryY());
@@ -3643,13 +3605,7 @@ public class Drive extends SubsystemBase {
   }
 
   public void driveToTheta(double theta) {
-    while ((Math.toDegrees(getMT2OdometryAngle()) - theta) > 180) {
-      theta += 360;
-    }
-
-    while ((theta - Math.toDegrees(getMT2OdometryAngle())) > 180) {
-      theta -= 360;
-    }
+    theta = Constants.standardizeAngleToOtherDegrees(theta, getMT2OdometryAngle());
 
     // Logger.recordOutput("Drive Angle Setpoint", theta);
     turningPID.setSetPoint(theta);
@@ -3793,13 +3749,7 @@ public class Drive extends SubsystemBase {
       double targetX = point.getDouble("x"), targetY = point.getDouble("y"),
           targetTheta = point.getDouble("angle"), targetXvel = point.getDouble("x_velocity"),
           targetYvel = point.getDouble("y_velocity"), targetThetavel = point.getDouble("angular_velocity");
-      while (Math.abs(targetTheta - currentTheta) > Math.PI) {
-        if (targetTheta - currentTheta > Math.PI) {
-          targetTheta -= 2 * Math.PI;
-        } else if (targetTheta - currentTheta < -Math.PI) {
-          targetTheta += 2 * Math.PI;
-        }
-      }
+      targetTheta = Constants.standardizeAngleToOther(targetTheta, currentTheta);
       double linearVelMag = Math.hypot(targetYvel / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
           targetXvel / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS);
       double targetVelMag = Math.hypot(linearVelMag,
@@ -3820,13 +3770,8 @@ public class Drive extends SubsystemBase {
     double targetX = targetPoint.getDouble("x"), targetY = targetPoint.getDouble("y"),
         targetTheta = targetPoint.getDouble("angle");
 
-    while (Math.abs(targetTheta - currentTheta) > Math.PI) {
-      if (targetTheta - currentTheta > Math.PI) {
-        targetTheta -= 2 * Math.PI;
-      } else if (targetTheta - currentTheta < -Math.PI) {
-        targetTheta += 2 * Math.PI;
-      }
-    }
+    targetTheta = Constants.standardizeAngleToOther(targetTheta, currentTheta);
+
     xPID.setSetPoint(targetX);
     yPID.setSetPoint(targetY);
     thetaPID.setSetPoint(targetTheta);

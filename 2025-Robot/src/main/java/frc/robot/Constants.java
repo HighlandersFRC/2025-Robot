@@ -4250,4 +4250,36 @@ public final class Constants {
         public static double RPSToRPM(double RPS) {
                 return RPS * 60;
         }
+
+        /**
+         * Standardizes an angle to be within the range [otherAngle - pi, otherAngle +
+         * pi) radians.
+         *
+         * @param angle      The input angle in radians.
+         * @param otherAngle The reference angle in radians.
+         * @return The standardized angle within the range [otherAngle - pi, otherAngle
+         *         +
+         *         pi) radians.
+         */
+        public static double standardizeAngleToOther(double angle, double otherAngle) {
+                double delta = angle - otherAngle;
+
+                delta = ((delta + Math.PI) % (Math.PI * 2)) - Math.PI; // Standardize to [-pi, pi)
+                double standardizedAngle = otherAngle + delta;
+                return standardizedAngle;
+        }
+
+        /**
+         * Standardizes an angle to be within the range [otherAngle - 180, otherAngle +
+         * 180) degrees.
+         *
+         * @param angle      The input angle in degrees.
+         * @param otherAngle The reference angle in degrees.
+         * @return The standardized angle within the range [otherAngle - 180, otherAngle
+         *         +
+         *         180) degrees.
+         */
+        public static double standardizeAngleToOtherDegrees(double angle, double otherAngle) {
+                return Math.toDegrees(standardizeAngleToOther(degreesToRadians(angle), degreesToRadians(otherAngle)));
+        }
 }

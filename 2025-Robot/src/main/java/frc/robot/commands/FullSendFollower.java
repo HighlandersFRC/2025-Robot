@@ -134,34 +134,6 @@ public class FullSendFollower extends AutoFollower {
         odometryFusedTheta = drive.getFusedOdometryTheta();
         currentTime = Timer.getFPGATimestamp() - initTime;
         // Logger.recordOutput("pursuing?", false);
-        if (this.record) {
-            recordedOdometry.add(new double[] { currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta });
-            try {
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-hh-mm-ss");
-                LocalDateTime now = LocalDateTime.now();
-                String filename = "/home/lvuser/deploy/recordings/" + dtf.format(now) + ".csv";
-                File file = new File(filename);
-                if (!file.exists()) {
-                    file.createNewFile();
-                }
-                FileWriter fw = new FileWriter(file);
-                BufferedWriter bw = new BufferedWriter(fw);
-                for (int i = 0; i < recordedOdometry.size(); i++) {
-                    String line = "";
-                    for (double val : recordedOdometry.get(i)) {
-                        line += val + ",";
-                    }
-                    line = line.substring(0, line.length() - 1);
-                    line += "\n";
-                    bw.write(line);
-                }
-
-                bw.close();
-            } catch (Exception e) {
-                System.out.println(e);
-                System.out.println("CSV file error");
-            }
-        }
     }
 
     public void from(int pointIndex, JSONObject pathJSON, int to) {
@@ -194,13 +166,7 @@ public class FullSendFollower extends AutoFollower {
             odometryFusedY = Constants.Physical.FIELD_WIDTH - odometryFusedY;
             odometryFusedTheta = -odometryFusedTheta;
         }
-        while (Math.abs(odometryFusedTheta - point.getDouble("angle")) > Math.PI) {
-            if (odometryFusedTheta - point.getDouble("angle") > Math.PI) {
-                odometryFusedTheta -= 2 * Math.PI;
-            } else if (odometryFusedTheta - point.getDouble("angle") < -Math.PI) {
-                odometryFusedTheta += 2 * Math.PI;
-            }
-        }
+        odometryFusedTheta = Constants.standardizeAngleToOther(odometryFusedTheta, point.getDouble("angle"));
         return drive.insideRadius(
                 (point.getDouble("x") - odometryFusedX) / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
                 (point.getDouble("y") - odometryFusedY) / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
