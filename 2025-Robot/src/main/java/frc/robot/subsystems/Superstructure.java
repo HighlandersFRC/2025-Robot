@@ -56,6 +56,7 @@ public class Superstructure extends SubsystemBase {
     NET,
     AUTO_NET,
     AUTO_NET_MORE,
+    AUTO_NET_MORE_MORE,
     FEEDER_ALIGN,
     FEEDER_AUTO, // TODO: do the side to side motion
     FEEDER,
@@ -201,6 +202,9 @@ public class Superstructure extends SubsystemBase {
         break;
       case AUTO_NET_MORE:
         handleAutoNetStateMore();
+        break;
+      case AUTO_NET_MORE_MORE:
+        handleAutoNetState();
         break;
       case FEEDER_ALIGN:
         handleFeederAlignState();
@@ -595,7 +599,15 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case AUTO_NET_MORE:
-        currentSuperState = SuperState.AUTO_NET_MORE;
+        if (netHit && Timer.getFPGATimestamp() - netHitTime > 0.75) { // TODO: you can change this number to change the wait time for net (0.5 is when it outakes btw)
+          wantedSuperState = SuperState.AUTO_NET_MORE_MORE;
+          currentSuperState = SuperState.AUTO_NET_MORE_MORE;
+        } else {
+          currentSuperState = SuperState.AUTO_NET_MORE;
+        }
+        break;
+      case AUTO_NET_MORE_MORE:
+        currentSuperState = SuperState.AUTO_NET_MORE_MORE;
         break;
       case FEEDER_ALIGN:
         currentSuperState = SuperState.FEEDER_ALIGN;
@@ -914,7 +926,8 @@ public class Superstructure extends SubsystemBase {
               || lastState == SuperState.AUTO_ALGAE_PICKUP_MORE_MORE || lastState == SuperState.AUTO_FEEDER
               || lastState == SuperState.AUTO_GROUND_CORAL_PICKUP_BACK
               || lastState == SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT || lastState == SuperState.AUTO_NET
-              || lastState == SuperState.AUTO_NET_MORE || lastState == SuperState.AUTO_PROCESSOR
+              || lastState == SuperState.AUTO_NET_MORE || lastState == SuperState.AUTO_NET_MORE_MORE
+              || lastState == SuperState.AUTO_PROCESSOR
               || lastState == SuperState.AUTO_PROCESSOR_MORE || lastState == SuperState.FEEDER
               || lastState == SuperState.FEEDER_ALIGN || lastState == SuperState.FEEDER_AUTO
               || lastState == SuperState.GROUND_ALGAE_PICKUP_BACK || lastState == SuperState.GROUND_ALGAE_PICKUP_FRONT
