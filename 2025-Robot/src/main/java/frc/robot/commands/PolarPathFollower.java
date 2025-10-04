@@ -35,13 +35,15 @@ public class PolarPathFollower extends ParallelCommandGroup {
   double endTime = 0, startTime = 0;
   boolean timerStarted = false;
   JSONObject pathJSON;
+  JSONArray pathPoints;
   TriggerCommand followerCommand;
 
   public PolarPathFollower(Drive drive, Lights lights, Peripherals peripherals, JSONObject pathJSON,
       HashMap<String, Supplier<Command>> commandMap, HashMap<String, BooleanSupplier> conditionMap) {
-    defaultFollower = new VariableSpeedFollower(drive, pathJSON.getJSONArray("sampled_points"),
+    this.pathPoints = pathJSON.getJSONArray("sampled_points");
+    defaultFollower = new VariableSpeedFollower(drive, pathPoints,
         false);
-    startTime = pathJSON.getJSONArray("sampled_points").getJSONObject(0).getDouble("time");
+    startTime = pathPoints.getJSONObject(0).getDouble("time");
     follower = defaultFollower;
     followerCommand = new TriggerCommand(
         () -> startTime <= getPathTime(),
@@ -80,11 +82,14 @@ public class PolarPathFollower extends ParallelCommandGroup {
     if (command.has("command")) {
       return singleCommandFromJSON(command, commandMap);
     } else if (command.has("branched_command")) {
-      BooleanSupplier startSupplier = () -> command.getDouble("start") < getPathTime();
-      BooleanSupplier endSupplier = () -> command.getDouble("end") <= getPathTime();
-      JSONObject onTrue = command.getJSONObject("branched_command").getJSONObject("on_true");
-      JSONObject onFalse = command.getJSONObject("branched_command").getJSONObject("on_true");
-      BooleanSupplier condition = conditionMap.get(command.getJSONObject("branched_command").getString("condition"));
+      double start = command.getDouble("start");
+      double end = command.getDouble("end");
+      BooleanSupplier startSupplier = () -> start < getPathTime();
+      BooleanSupplier endSupplier = () -> end <= getPathTime();
+      JSONObject branchedCommand = command.getJSONObject("branched_command");
+      JSONObject onTrue = branchedCommand.getJSONObject("on_true");
+      JSONObject onFalse = branchedCommand.getJSONObject("on_false");
+      BooleanSupplier condition = conditionMap.get(branchedCommand.getString("condition"));
       return new TriggerCommand(
           startSupplier,
           new ConditionalCommand(
@@ -163,16 +168,16 @@ public class PolarPathFollower extends ParallelCommandGroup {
    */
   private Command singleCommandFromJSON(JSONObject command, HashMap<String, Supplier<Command>> commandMap) {
     Command runner = commandMap.get(command.getJSONObject("command").getString("name")).get();
-    BooleanSupplier startSupplier = () -> command.getDouble("start") < getPathTime();
-    BooleanSupplier endSupplier = () -> command.getDouble("end") <= getPathTime();
+    double start = command.getDouble("start");
+    double end = command.getDouble("end");
+    BooleanSupplier startSupplier = () -> start < getPathTime();
+    BooleanSupplier endSupplier = () -> end <= getPathTime();
 
     if (runner instanceof AutoFollower) {
       Runnable cancelPathFollower = new Runnable() {
         public void run() {
-          int runFrom = getPointIndexFromTime(command.getDouble("start"));
-          int runTo = getPointIndexFromTime(command.getDouble("end"));
-          System.out.println("run from " + runFrom);
-          System.out.println("run to " + runTo);
+          int runFrom = getPointIndexFromTime(start);
+          int runTo = getPointIndexFromTime(end);
           follower.cancel();
           follower = (AutoFollower) runner;
           follower.from(runFrom, pathJSON, runTo);
@@ -180,8 +185,8 @@ public class PolarPathFollower extends ParallelCommandGroup {
       };
       Runnable cancelRunner = new Runnable() {
         public void run() {
-          int runFrom = getPointIndexFromTime(command.getDouble("end"));
-          int runTo = pathJSON.getJSONArray("sampled_points").length() - 1;
+          int runFrom = getPointIndexFromTime(end);
+          int runTo = pathPoints.length() - 1;
           follower = defaultFollower;
           follower.from(runFrom, pathJSON, runTo);
         }
@@ -218,25 +223,22 @@ public class PolarPathFollower extends ParallelCommandGroup {
    * @return The current time along the path in seconds.
    */
   double getPathTime() {
-    double retval;
     if (follower.isFinished() || !follower.isScheduled()) {
       if (!timerStarted) {
         endTime = Timer.getFPGATimestamp();
         timerStarted = true;
       }
-      retval = Timer.getFPGATimestamp() - endTime;
+      double elapsedTime = Timer.getFPGATimestamp() - endTime;
       if (follower.isFinished()) {
-        retval += pathJSON.getJSONArray("sampled_points")
-            .getJSONObject(pathJSON.getJSONArray("sampled_points").length() - 1).getDouble("time");
+        elapsedTime += pathPoints
+            .getJSONObject(pathPoints.length() - 1).getDouble("time");
       }
+      return elapsedTime;
     } else {
       timerStarted = false;
-      retval = pathJSON.getJSONArray("sampled_points")
+      return pathPoints
           .getJSONObject(follower.getPathPointIndex()).getDouble("time");
     }
-    // Logger.recordOutput("Path Time", retval);
-    // Logger.recordOutput("Path Start Time", defaultFollower.pathStartTime);
-    return retval;
   }
 
   /**
@@ -254,7 +256,7 @@ public class PolarPathFollower extends ParallelCommandGroup {
    * @return The index of the path point that corresponds to the given time.
    */
   private int getPointIndexFromTime(double time) {
-    JSONArray points = pathJSON.getJSONArray("sampled_points");
+    JSONArray points = pathPoints;
     for (int i = 0; i < points.length(); i++) {
       JSONObject point = points.getJSONObject(i);
       if (time <= point.getDouble("time")) {

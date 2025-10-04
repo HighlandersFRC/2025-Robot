@@ -35,8 +35,9 @@ public class PolarAutoFollower extends SequentialCommandGroup {
             new PolarPathFollower(drive, lights, peripherals, paths.getJSONObject(scheduleEntry.getInt("path")),
                 commandMap, conditionMap));
       } else {
-        JSONArray onTrueSchedule = scheduleEntry.getJSONObject("branched_path").getJSONArray("on_true");
-        JSONArray onFalseSchedule = scheduleEntry.getJSONObject("branched_path").getJSONArray("on_false");
+        JSONObject branchedObject = scheduleEntry.getJSONObject("branched_path");
+        JSONArray onTrueSchedule = branchedObject.getJSONArray("on_true");
+        JSONArray onFalseSchedule = branchedObject.getJSONArray("on_false");
         JSONObject onTrueJSON = new JSONObject();
         JSONObject onFalseJSON = new JSONObject();
         onTrueJSON.append("paths", new JSONArray());
@@ -61,24 +62,10 @@ public class PolarAutoFollower extends SequentialCommandGroup {
         onTrueJSON.getJSONArray("schedule").remove(0);
         onFalseJSON.getJSONArray("schedule").remove(0);
         BooleanSupplier condition = conditionMap.get(scheduleEntry.get("condition"));
-        Runnable onTrueRunnable = new Runnable() {
-          public void run() {
-            System.out.println("True Path Starting");
-            System.out.println(condition.getAsBoolean());
-          }
-        };
-        Runnable onFalseRunnable = new Runnable() {
-          public void run() {
-            System.out.println("False Path Starting");
-            System.out.println(condition.getAsBoolean());
-          }
-        };
         addCommands(
             new ConditionalCommand(
-                new PolarAutoFollower(onTrueJSON, drive, lights, peripherals, commandMap, conditionMap)
-                    .beforeStarting(onTrueRunnable),
-                new PolarAutoFollower(onFalseJSON, drive, lights, peripherals, commandMap, conditionMap)
-                    .beforeStarting(onFalseRunnable),
+                new PolarAutoFollower(onTrueJSON, drive, lights, peripherals, commandMap, conditionMap),
+                new PolarAutoFollower(onFalseJSON, drive, lights, peripherals, commandMap, conditionMap),
                 condition));
       }
     }

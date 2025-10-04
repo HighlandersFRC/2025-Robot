@@ -1,15 +1,7 @@
 package frc.robot.commands;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-import edu.wpi.first.wpilibj.Timer;
 import frc.robot.tools.math.Vector;
 import frc.robot.tools.wrappers.AutoFollower;
 import frc.robot.Constants;
@@ -20,9 +12,6 @@ public class AccurateFollower extends AutoFollower {
 
     private JSONArray path;
 
-    private double initTime;
-    private double currentTime;
-
     private double odometryFusedX = 0;
     private double odometryFusedY = 0;
     private double odometryFusedTheta = 0;
@@ -30,9 +19,6 @@ public class AccurateFollower extends AutoFollower {
     private Number[] desiredVelocityArray = new Number[4];
     private double desiredThetaChange = 0;
 
-    private boolean record;
-
-    private ArrayList<double[]> recordedOdometry = new ArrayList<double[]>();
     public double pathStartTime;
 
     private int currentPathPointIndex = 0;
@@ -46,17 +32,14 @@ public class AccurateFollower extends AutoFollower {
         return currentPathPointIndex;
     }
 
-    public AccurateFollower(Drive drive,
-            boolean record) {
+    public AccurateFollower(Drive drive) {
         this.drive = drive;
-        this.record = record;
         addRequirements(drive);
     }
 
     @Override
     public void initialize() {
         pathStartTime = path.getJSONObject(0).getDouble("time");
-        initTime = Timer.getFPGATimestamp();
         if (reset) {
             this.endIndex = path.length() - 1;
             currentPathPointIndex = 0;
@@ -77,7 +60,6 @@ public class AccurateFollower extends AutoFollower {
         odometryFusedX = drive.getMT2OdometryX();
         odometryFusedY = drive.getMT2OdometryY();
         odometryFusedTheta = drive.getMT2OdometryAngle();
-        currentTime = Timer.getFPGATimestamp() - initTime + pathStartTime;
         // call PIDController function
         currentPathPointIndex = returnPathPointIndex;
         desiredVelocityArray = drive.purePursuitController(odometryFusedX, odometryFusedY, odometryFusedTheta,
@@ -118,12 +100,6 @@ public class AccurateFollower extends AutoFollower {
         velocityVector.setJ(0);
         double desiredThetaChange = 0.0;
         drive.autoDrive(velocityVector, desiredThetaChange);
-
-        odometryFusedX = drive.getFusedOdometryX();
-        odometryFusedY = drive.getFusedOdometryY();
-        odometryFusedTheta = drive.getFusedOdometryTheta();
-        currentTime = Timer.getFPGATimestamp() - initTime;
-        // Logger.recordOutput("pursuing?", false);
     }
 
     public void from(int pointIndex, JSONObject pathJSON, int to) {

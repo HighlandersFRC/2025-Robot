@@ -16,7 +16,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.tools.BeamBreak;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
@@ -24,14 +23,12 @@ public class Intake extends SubsystemBase {
       Constants.CANInfo.CANBUS_NAME);
   private final TalonFX pivot = new TalonFX(Constants.CANInfo.INTAKE_PIVOT_MOTOR_ID,
       Constants.CANInfo.CANBUS_NAME);
-  private final BeamBreak beamBreak = new BeamBreak(Constants.CANInfo.INTAKE_BEAM_BREAK_PORT);
   private final TorqueCurrentFOC m_torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
   private final PositionTorqueCurrentFOC m_positionTorqueCurrentFOCRequest = new PositionTorqueCurrentFOC(0.0);
   private IntakeState wantedState = IntakeState.DEFAULT;
   private IntakeState systemState = IntakeState.DEFAULT;
   private boolean isZeroed = false;
   private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
-  private double handOffTime = Timer.getFPGATimestamp();
   private boolean firstTimeHandOff = true;
 
   public enum IntakeState {
@@ -180,7 +177,6 @@ public class Intake extends SubsystemBase {
       case HANDOFF:
         if (firstTimeHandOff) {
           firstTimeHandOff = false;
-          handOffTime = Timer.getFPGATimestamp();
         }
         // if (Timer.getFPGATimestamp() - handOffTime < 3.0) {
         //

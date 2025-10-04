@@ -1,17 +1,9 @@
 package frc.robot.commands;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.Timer;
 import frc.robot.tools.math.Vector;
 import frc.robot.tools.wrappers.AutoFollower;
 import frc.robot.Constants;
@@ -23,9 +15,6 @@ public class VariableSpeedFollower extends AutoFollower {
 
   private JSONArray path;
 
-  private double initTime;
-  private double currentTime;
-
   private double odometryFusedX = 0;
   private double odometryFusedY = 0;
   private double odometryFusedTheta = 0;
@@ -33,9 +22,6 @@ public class VariableSpeedFollower extends AutoFollower {
   private Number[] desiredVelocityArray = new Number[4];
   private double desiredThetaChange = 0;
 
-  private boolean record;
-
-  private ArrayList<double[]> recordedOdometry = new ArrayList<double[]>();
   public double pathStartTime;
 
   private int currentPathPointIndex = 0;
@@ -53,7 +39,6 @@ public class VariableSpeedFollower extends AutoFollower {
       boolean record) {
     this.drive = drive;
     this.path = pathPoints;
-    this.record = record;
     pathStartTime = pathPoints.getJSONObject(0).getDouble("time");
     addRequirements(drive);
   }
@@ -61,7 +46,6 @@ public class VariableSpeedFollower extends AutoFollower {
   @Override
   public void initialize() {
     pathStartTime = path.getJSONObject(0).getDouble("time");
-    initTime = Timer.getFPGATimestamp();
     if (reset) {
       this.endIndex = path.length() - 1;
       currentPathPointIndex = 0;
@@ -82,7 +66,6 @@ public class VariableSpeedFollower extends AutoFollower {
     odometryFusedX = drive.getMT2OdometryX();
     odometryFusedY = drive.getMT2OdometryY();
     odometryFusedTheta = drive.getMT2OdometryAngle();
-    currentTime = Timer.getFPGATimestamp() - initTime + pathStartTime;
     // call PIDController function
     currentPathPointIndex = returnPathPointIndex;
     desiredVelocityArray = drive.purePursuitController(odometryFusedX, odometryFusedY, odometryFusedTheta,
@@ -129,40 +112,6 @@ public class VariableSpeedFollower extends AutoFollower {
     velocityVector.setJ(0);
     double desiredThetaChange = 0.0;
     drive.autoDrive(velocityVector, desiredThetaChange);
-
-    odometryFusedX = drive.getFusedOdometryX();
-    odometryFusedY = drive.getFusedOdometryY();
-    odometryFusedTheta = drive.getFusedOdometryTheta();
-    currentTime = Timer.getFPGATimestamp() - initTime;
-    // Logger.recordOutput("pursuing?", false);
-    if (this.record) {
-      recordedOdometry.add(new double[] { currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta });
-      try {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-hh-mm-ss");
-        LocalDateTime now = LocalDateTime.now();
-        String filename = "/home/lvuser/deploy/recordings/" + dtf.format(now) + ".csv";
-        File file = new File(filename);
-        if (!file.exists()) {
-          file.createNewFile();
-        }
-        FileWriter fw = new FileWriter(file);
-        BufferedWriter bw = new BufferedWriter(fw);
-        for (int i = 0; i < recordedOdometry.size(); i++) {
-          String line = "";
-          for (double val : recordedOdometry.get(i)) {
-            line += val + ",";
-          }
-          line = line.substring(0, line.length() - 1);
-          line += "\n";
-          bw.write(line);
-        }
-
-        bw.close();
-      } catch (Exception e) {
-        System.out.println(e);
-        System.out.println("CSV file error");
-      }
-    }
   }
 
   public void from(int pointIndex, JSONObject pathJSON, int to) {

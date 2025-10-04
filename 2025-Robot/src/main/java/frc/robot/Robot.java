@@ -8,7 +8,6 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.net.PortForwarder;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -91,18 +90,6 @@ public class Robot extends LoggedRobot {
     PortForwarder.add(5801, "10.44.99.34", 5801);
 
     m_robotContainer.lights.clearAnimations();
-    SmartDashboard.putNumber("L2/3 Front X", Constants.metersToInches(Constants.Physical.INTAKE_X_OFFSET_FRONT));
-    SmartDashboard.putNumber("L2/3 Front Y", Constants.metersToInches(Constants.Physical.INTAKE_Y_OFFSET_FRONT));
-    SmartDashboard.putNumber("L2/3 Back X", Constants.metersToInches(Constants.Physical.INTAKE_X_OFFSET_BACK));
-    SmartDashboard.putNumber("L2/3 Back Y", Constants.metersToInches(Constants.Physical.INTAKE_Y_OFFSET_BACK));
-    SmartDashboard.putNumber("L4 Front X", Constants.metersToInches(Constants.Physical.L4_INTAKE_X_OFFSET_FRONT));
-    SmartDashboard.putNumber("L4 Front Y", Constants.metersToInches(Constants.Physical.L4_INTAKE_Y_OFFSET_FRONT));
-    SmartDashboard.putNumber("L4 Back X", Constants.metersToInches(Constants.Physical.L4_INTAKE_X_OFFSET_BACK));
-    SmartDashboard.putNumber("L4 Back Y", Constants.metersToInches(Constants.Physical.L4_INTAKE_Y_OFFSET_BACK));
-    SmartDashboard.putNumber("Algae Front X", Constants.metersToInches(Constants.Physical.INTAKE_X_OFFSET_FRONT_ALGAE));
-    SmartDashboard.putNumber("Algae Front Y", Constants.metersToInches(Constants.Physical.INTAKE_Y_OFFSET_FRONT_ALGAE));
-    SmartDashboard.putNumber("Algae Back X", Constants.metersToInches(Constants.Physical.INTAKE_X_OFFSET_BACK_ALGAE));
-    SmartDashboard.putNumber("Algae Back Y", Constants.metersToInches(Constants.Physical.INTAKE_Y_OFFSET_BACK_ALGAE));
 
     // m_robotContainer.lights.setFlashYellow();
   }
@@ -110,111 +97,15 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-
-    try {
-      Logger.recordOutput("Localization Odometry", m_robotContainer.drive.getLocalizationOdometry());
-    } catch (Exception e) {
-      java.util.logging.Logger.getGlobal().severe("Problem with logging");
-    }
-
-    try {
-      Logger.recordOutput("Wheel Odometry", m_robotContainer.drive.getOdometry());
-    } catch (Exception e) {
-      java.util.logging.Logger.getGlobal().severe("Problem with logging");
-    }
-
-    try {
-      Logger.recordOutput("MT2 Odometry", m_robotContainer.drive.getMT2Odometry());
-    } catch (Exception e) {
-      java.util.logging.Logger.getGlobal().severe("Problem with logging");
-    }
-
-    // if (OI.isManualMode()) {
-    // m_robotContainer.manualMode = true;
-    // } else {
-    // m_robotContainer.manualMode = false;
-    // }
-
-    if (OI.driverB.getAsBoolean()) {
-      if (bPressed) {
-        m_robotContainer.algaeMode = !m_robotContainer.algaeMode;
-        bPressed = false;
-      }
-    } else {
-      bPressed = true;
-    }
-
-    if (OI.driverX.getAsBoolean()) {
-      if (xPressed) {
-        m_robotContainer.manualMode = !m_robotContainer.manualMode;
-        xPressed = false;
-      }
-    } else {
-      xPressed = true;
-    }
-
-    if (OI.driverY.getAsBoolean()) {
-      if (yPressed) {
-        m_robotContainer.yPressed = !m_robotContainer.yPressed;
-        yPressed = false;
-      }
-    } else {
-      yPressed = true;
-    }
-
-    if (OI.isRecalculateMode()) {
-      if (autoChooserCenterSwitch) {
-        Constants.Reef.calculateReefPoints();
-        autoChooserCenterSwitch = false;
-      }
-    } else {
-      autoChooserCenterSwitch = true;
-    }
-
-    Constants.Physical.INTAKE_X_OFFSET_FRONT = Constants.inchesToMeters(SmartDashboard.getNumber("L2/3 Front X",
-        Constants.metersToInches(Constants.Physical.INTAKE_X_OFFSET_FRONT)));
-
-    Constants.Physical.INTAKE_X_OFFSET_FRONT = Constants.inchesToMeters(SmartDashboard.getNumber("L2/3 Front X",
-        Constants.metersToInches(Constants.Physical.INTAKE_X_OFFSET_FRONT)));
-    Constants.Physical.INTAKE_Y_OFFSET_FRONT = Constants.inchesToMeters(SmartDashboard.getNumber("L2/3 Front Y",
-        Constants.metersToInches(Constants.Physical.INTAKE_Y_OFFSET_FRONT)));
-    Constants.Physical.INTAKE_X_OFFSET_BACK = Constants.inchesToMeters(SmartDashboard.getNumber("L2/3 Back X",
-        Constants.metersToInches(Constants.Physical.INTAKE_X_OFFSET_BACK)));
-    Constants.Physical.INTAKE_Y_OFFSET_BACK = Constants.inchesToMeters(SmartDashboard.getNumber("L2/3 Back Y",
-        Constants.metersToInches(Constants.Physical.INTAKE_Y_OFFSET_BACK)));
-    Constants.Physical.L4_INTAKE_X_OFFSET_FRONT = Constants.inchesToMeters(SmartDashboard.getNumber("L4 Front X",
-        Constants.metersToInches(Constants.Physical.L4_INTAKE_X_OFFSET_FRONT)));
-    Constants.Physical.L4_INTAKE_Y_OFFSET_FRONT = Constants.inchesToMeters(SmartDashboard.getNumber("L4 Front Y",
-        Constants.metersToInches(Constants.Physical.L4_INTAKE_Y_OFFSET_FRONT)));
-    Constants.Physical.L4_INTAKE_X_OFFSET_BACK = Constants.inchesToMeters(SmartDashboard.getNumber("L4 Back X",
-        Constants.metersToInches(Constants.Physical.L4_INTAKE_X_OFFSET_BACK)));
-    Constants.Physical.L4_INTAKE_Y_OFFSET_BACK = Constants.inchesToMeters(SmartDashboard.getNumber("L4 Back Y",
-        Constants.metersToInches(Constants.Physical.L4_INTAKE_Y_OFFSET_BACK)));
-    Constants.Physical.INTAKE_X_OFFSET_FRONT_ALGAE = Constants.inchesToMeters(SmartDashboard.getNumber("Algae Front X",
-        Constants.metersToInches(Constants.Physical.INTAKE_X_OFFSET_FRONT_ALGAE)));
-    Constants.Physical.INTAKE_Y_OFFSET_FRONT_ALGAE = Constants.inchesToMeters(SmartDashboard.getNumber("Algae Front Y",
-        Constants.metersToInches(Constants.Physical.INTAKE_Y_OFFSET_FRONT_ALGAE)));
-    Constants.Physical.INTAKE_X_OFFSET_BACK_ALGAE = Constants.inchesToMeters(SmartDashboard.getNumber("Algae Back X",
-        Constants.metersToInches(Constants.Physical.INTAKE_X_OFFSET_BACK_ALGAE)));
-    Constants.Physical.INTAKE_Y_OFFSET_BACK_ALGAE = Constants.inchesToMeters(SmartDashboard.getNumber("Algae Back Y",
-        Constants.metersToInches(Constants.Physical.INTAKE_Y_OFFSET_BACK_ALGAE)));
-    // m_robotContainer.twist.setAlgaeMode(m_robotContainer.algaeMode);
-    // m_robotContainer.pivot.setAlgaeMode(m_robotContainer.algaeMode);
+    Logger.recordOutput("MT2 Odometry", m_robotContainer.drive.getMT2Odometry());
     m_robotContainer.superstructure.algaeMode = m_robotContainer.algaeMode;
     m_robotContainer.lights.updateIntakeItem(m_robotContainer.manipulator.getArmItem());
     m_robotContainer.manipulator.updateAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateManualMode(m_robotContainer.manualMode);
     m_robotContainer.drive.algaeMode = m_robotContainer.algaeMode;
-    if (DriverStation.isAutonomousEnabled()) {
-      m_robotContainer.twist.algaeMode = m_robotContainer.algaeMode;
-    } else {
-      m_robotContainer.twist.algaeMode = false;
-    }
     Logger.recordOutput("Algae Mode", m_robotContainer.algaeMode);
     Logger.recordOutput("Manual Mode", m_robotContainer.manualMode);
-    Logger.recordOutput("Swerve Module States", m_robotContainer.drive.getModuleStates());
-    Logger.recordOutput("Swerve Module Setpoints", m_robotContainer.drive.getModuleSetpoints());
     Logger.recordOutput("IMU", m_robotContainer.peripherals.getPigeonAngle());
     Constants.periodic();
     m_robotContainer.lights.periodic();
@@ -254,10 +145,12 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    m_robotContainer.twist.algaeMode = m_robotContainer.algaeMode;
   }
 
   @Override
   public void teleopInit() {
+    m_robotContainer.twist.algaeMode = false;
     m_robotContainer.elevator.teleopInit();
     m_robotContainer.twist.teleopInit();
     m_robotContainer.lights.clearAnimations();
@@ -285,6 +178,41 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopPeriodic() {
     this.m_robotContainer.drive.teleopPeriodic();
+    if (OI.driverB.getAsBoolean()) {
+      if (bPressed) {
+        m_robotContainer.algaeMode = !m_robotContainer.algaeMode;
+        bPressed = false;
+      }
+    } else {
+      bPressed = true;
+    }
+
+    if (OI.driverX.getAsBoolean()) {
+      if (xPressed) {
+        m_robotContainer.manualMode = !m_robotContainer.manualMode;
+        xPressed = false;
+      }
+    } else {
+      xPressed = true;
+    }
+
+    if (OI.driverY.getAsBoolean()) {
+      if (yPressed) {
+        m_robotContainer.yPressed = !m_robotContainer.yPressed;
+        yPressed = false;
+      }
+    } else {
+      yPressed = true;
+    }
+
+    if (OI.isRecalculateMode()) {
+      if (autoChooserCenterSwitch) {
+        Constants.Reef.calculateReefPoints();
+        autoChooserCenterSwitch = false;
+      }
+    } else {
+      autoChooserCenterSwitch = true;
+    }
   }
 
   @Override
