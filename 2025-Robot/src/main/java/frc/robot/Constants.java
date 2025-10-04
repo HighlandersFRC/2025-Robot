@@ -465,11 +465,11 @@ public final class Constants {
                 public static final double RED_LEFT_FEEDER_Y_TELEOP = 0.890;
                 public static final double RED_LEFT_FEEDER_THETA_TELEOP = Math.toRadians(126.0);
 
-                public static final double RED_LEFT_FEEDER_LEFT_X = 16.853;
-                public static final double RED_LEFT_FEEDER_LEFT_Y = 1.309;
+                public static final double RED_LEFT_FEEDER_LEFT_X = 16.873;
+                public static final double RED_LEFT_FEEDER_LEFT_Y = 1.259;
                 public static final double RED_LEFT_FEEDER_LEFT_THETA = Math.toRadians(126.0);
-                public static final double RED_LEFT_FEEDER_RIGHT_X = 15.932;
-                public static final double RED_LEFT_FEEDER_RIGHT_Y = 0.664;
+                public static final double RED_LEFT_FEEDER_RIGHT_X = 15.952;
+                public static final double RED_LEFT_FEEDER_RIGHT_Y = 0.614;
                 public static final double RED_LEFT_FEEDER_RIGHT_THETA = Math.toRadians(126.0);
 
                 public static final Pose2d RED_LEFT_FEEDER_LEFT = new Pose2d(RED_LEFT_FEEDER_LEFT_X,
