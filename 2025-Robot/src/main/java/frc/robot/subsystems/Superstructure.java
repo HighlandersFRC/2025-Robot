@@ -52,10 +52,12 @@ public class Superstructure extends SubsystemBase {
     PROCESSOR,
     AUTO_PROCESSOR,
     AUTO_PROCESSOR_MORE,
+    AUTO_PROCESSOR_MORE_MORE,
     OUTAKE_DRIVE,
     NET,
     AUTO_NET,
     AUTO_NET_MORE,
+    AUTO_NET_MORE_MORE,
     FEEDER_ALIGN,
     FEEDER_AUTO, // TODO: do the side to side motion
     FEEDER,
@@ -196,11 +198,17 @@ public class Superstructure extends SubsystemBase {
       case AUTO_PROCESSOR_MORE:
         handleAutoProcessorMoreState();
         break;
+      case AUTO_PROCESSOR_MORE_MORE:
+        handleAutoProcessorState();
+        break;
       case AUTO_NET:
         handleAutoNetState();
         break;
       case AUTO_NET_MORE:
         handleAutoNetStateMore();
+        break;
+      case AUTO_NET_MORE_MORE:
+        handleAutoNetState();
         break;
       case FEEDER_ALIGN:
         handleFeederAlignState();
@@ -546,7 +554,15 @@ public class Superstructure extends SubsystemBase {
         currentSuperState = SuperState.PROCESSOR;
         break;
       case AUTO_PROCESSOR_MORE:
-        currentSuperState = SuperState.AUTO_PROCESSOR_MORE;
+        if (netHitProcessor && Timer.getFPGATimestamp() - netHitTimeProcessor > 1.0) {
+          wantedSuperState = SuperState.AUTO_PROCESSOR_MORE_MORE;
+          currentSuperState = SuperState.AUTO_PROCESSOR_MORE_MORE;
+        } else {
+          currentSuperState = SuperState.AUTO_PROCESSOR_MORE;
+        }
+        break;
+      case AUTO_PROCESSOR_MORE_MORE:
+        currentSuperState = SuperState.AUTO_PROCESSOR_MORE_MORE;
         break;
       case NET:
         currentSuperState = SuperState.NET;
@@ -595,7 +611,15 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case AUTO_NET_MORE:
-        currentSuperState = SuperState.AUTO_NET_MORE;
+        if (netHitNet && Timer.getFPGATimestamp() - netHitTimeNet > 0.75) { // TODO: you can change this number to change the wait time for net (0.5 is when it outakes btw)
+          wantedSuperState = SuperState.AUTO_NET_MORE_MORE;
+          currentSuperState = SuperState.AUTO_NET_MORE_MORE;
+        } else {
+          currentSuperState = SuperState.AUTO_NET_MORE;
+        }
+        break;
+      case AUTO_NET_MORE_MORE:
+        currentSuperState = SuperState.AUTO_NET_MORE_MORE;
         break;
       case FEEDER_ALIGN:
         currentSuperState = SuperState.FEEDER_ALIGN;
@@ -915,7 +939,8 @@ public class Superstructure extends SubsystemBase {
               || lastState == SuperState.AUTO_ALGAE_PICKUP_MORE_MORE || lastState == SuperState.AUTO_FEEDER
               || lastState == SuperState.AUTO_GROUND_CORAL_PICKUP_BACK
               || lastState == SuperState.AUTO_GROUND_CORAL_PICKUP_FRONT || lastState == SuperState.AUTO_NET
-              || lastState == SuperState.AUTO_NET_MORE || lastState == SuperState.AUTO_PROCESSOR
+              || lastState == SuperState.AUTO_NET_MORE || lastState == SuperState.AUTO_NET_MORE_MORE
+              || lastState == SuperState.AUTO_PROCESSOR
               || lastState == SuperState.AUTO_PROCESSOR_MORE || lastState == SuperState.FEEDER
               || lastState == SuperState.FEEDER_ALIGN || lastState == SuperState.FEEDER_AUTO
               || lastState == SuperState.GROUND_ALGAE_PICKUP_BACK || lastState == SuperState.GROUND_ALGAE_PICKUP_FRONT
@@ -1246,6 +1271,12 @@ public class Superstructure extends SubsystemBase {
       twist.setWantedState(TwistState.DOWN);
     }
     pivot.setWantedState(PivotState.PROCESSOR);
+    if (OI.getDriverLTPercent() > 0.1) {
+      if (netHitProcessor == false) {
+        netHitTimeProcessor = Timer.getFPGATimestamp();
+        netHitProcessor = true;
+      }
+    }
   }
 
   public void handleOutakeDriveState() {
@@ -1293,8 +1324,11 @@ public class Superstructure extends SubsystemBase {
     pivot.setWantedState(PivotState.NET);
   }
 
-  private double netHitTime = Timer.getFPGATimestamp();
-  private boolean netHit = false;
+  private double netHitTimeNet = Timer.getFPGATimestamp();
+  private boolean netHitNet = false;
+
+  private double netHitTimeProcessor = Timer.getFPGATimestamp();
+  private boolean netHitProcessor = false;
 
   public void handleAutoNetStateMore() {
     lights.setWantedState(LightsState.PLACING);
@@ -1325,11 +1359,11 @@ public class Superstructure extends SubsystemBase {
     }
     if (Math.abs(drive.getMT2OdometryX() - Constants.Physical.FIELD_LENGTH / 2) < Constants.Reef.NET_X_OFFSET_MORE
         + 2.0) {
-      if (netHit == false) {
-        netHitTime = Timer.getFPGATimestamp();
-        netHit = true;
+      if (netHitNet == false) {
+        netHitTimeNet = Timer.getFPGATimestamp();
+        netHitNet = true;
       }
-      if (netHit && Timer.getFPGATimestamp() - netHitTime > 0.5) {
+      if (netHitNet && Timer.getFPGATimestamp() - netHitTimeNet > 0.5) {
         manipulator.setWantedState(ManipulatorState.OUTAKE);
       } else {
 
@@ -2677,7 +2711,11 @@ public class Superstructure extends SubsystemBase {
     currentSuperState = handleStateTransitions();
 
     if (currentSuperState != SuperState.AUTO_NET_MORE) {
-      netHit = false;
+      netHitNet = false;
+    }
+
+    if (currentSuperState != SuperState.AUTO_PROCESSOR_MORE) {
+      netHitProcessor = false;
     }
 
     if (currentSuperState != tempLastState) {
