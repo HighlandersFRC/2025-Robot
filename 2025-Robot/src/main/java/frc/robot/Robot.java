@@ -111,6 +111,8 @@ public class Robot extends LoggedRobot {
     m_robotContainer.lights.periodic();
     m_robotContainer.peripherals.periodic();
     m_logHandler.write();
+    Logger.recordOutput("finished", m_robotContainer.superstructure.placedCoralL4());
+
   }
 
   @Override

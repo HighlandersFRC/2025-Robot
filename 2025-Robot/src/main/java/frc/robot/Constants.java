@@ -17,8 +17,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class Constants {
         public static final class Autonomous {
-                public static final int STAGNATE_BOOST = 35;
-                public static final int STAGNATE_THRESHOLD = 7; // Number of cycles of stagnation before ending path
+                public static final int STAGNATE_BOOST = 25;
+                public static final int STAGNATE_THRESHOLD = 8; // Number of cycles of stagnation before ending path
                 // lookahead distance is a function:
                 // LOOKAHEAD = AUTONOMOUS_LOOKAHEAD_DISTANCE * velocity + MIN_LOOKAHEAD_DISTANCE
                 // their constants
@@ -466,10 +466,10 @@ public final class Constants {
                 public static final double RED_LEFT_FEEDER_THETA_TELEOP = Math.toRadians(126.0);
 
                 public static final double RED_LEFT_FEEDER_LEFT_X = 16.873;
-                public static final double RED_LEFT_FEEDER_LEFT_Y = 1.259;
+                public static final double RED_LEFT_FEEDER_LEFT_Y = 1.209;
                 public static final double RED_LEFT_FEEDER_LEFT_THETA = Math.toRadians(126.0);
                 public static final double RED_LEFT_FEEDER_RIGHT_X = 15.952;
-                public static final double RED_LEFT_FEEDER_RIGHT_Y = 0.614;
+                public static final double RED_LEFT_FEEDER_RIGHT_Y = 0.564;
                 public static final double RED_LEFT_FEEDER_RIGHT_THETA = Math.toRadians(126.0);
 
                 public static final Pose2d RED_LEFT_FEEDER_LEFT = new Pose2d(RED_LEFT_FEEDER_LEFT_X,
@@ -3859,9 +3859,9 @@ public final class Constants {
                         // -0.000277778 * Math.pow(dist, 3) + 0.00988095 * Math.pow(dist, 2) +
                         // 0.00444444 * dist + 0.0371429);
                         // return Math.max(1, a * Math.pow(dist, 2) + b);
-                        return -0.00045928 * Math.pow(dist, 4) + 0.0069476 * Math.pow(dist, 3)
-                                        - 0.0216241 * Math.pow(dist, 2)
-                                        + 0.063534 * dist + 0.0317614;
+                        return 0.0000520833 * Math.pow(dist, 4) + 0.000394571 * Math.pow(dist, 3)
+                                        + 0.000440341 * Math.pow(dist, 2)
+                                        + 0.0554117 * dist + 0.0298674;
                 }
 
                 /**

@@ -2318,7 +2318,6 @@ public class Drive extends SubsystemBase {
    *                             orientation to align with.
    */
   public void driveAutoAligned(double degreesFromPlacement) {
-    updateOdometryFusedArray();
 
     double turn = degreesFromPlacement;
 
@@ -2361,7 +2360,6 @@ public class Drive extends SubsystemBase {
     frontRight.drive(new Vector(0, 0), turn, 0.0);
     backLeft.drive(new Vector(0, 0), turn, 0.0);
     backRight.drive(new Vector(0, 0), turn, 0.0);
-    updateOdometryFusedArray();
   }
 
   /**
@@ -2374,7 +2372,6 @@ public class Drive extends SubsystemBase {
    *                          per second.
    */
   public void autoRobotCentricDrive(Vector velocityVector, double turnRadiansPerSec) {
-    updateOdometryFusedArray();
     frontLeft.drive(velocityVector, turnRadiansPerSec, 0);
     frontRight.drive(velocityVector, turnRadiansPerSec, 0);
     backLeft.drive(velocityVector, turnRadiansPerSec, 0);
@@ -2406,7 +2403,6 @@ public class Drive extends SubsystemBase {
       oiRY = oiRY * speedMultiplier;
       oiLY = oiLY * speedMultiplier;
     }
-    updateOdometryFusedArray();
     double turnLimit = 0.17;
 
     if (OI.driverController.getRightTriggerAxis() > 0.2 || OI.getDriverRB()) {
@@ -2468,7 +2464,6 @@ public class Drive extends SubsystemBase {
     // Logger.recordOutput("Adjusted Right Y", oiRY);
     // Logger.recordOutput("Adjusted Left Y", oiLY);
 
-    updateOdometryFusedArray();
     double turnLimit = 0.17;
     // 0.35 before
 
@@ -2530,7 +2525,6 @@ public class Drive extends SubsystemBase {
   }
 
   public void teleopDriveToPiece(double yToPiece) {
-    updateOdometryFusedArray();
     double turnLimit = 0.17;
     double kP = 0.8;
     // 0.35 before
@@ -2563,7 +2557,6 @@ public class Drive extends SubsystemBase {
       yaw = Constants.standardizeAngleToOtherDegrees(yaw, angleSetpoint);
       double result = -2 * turningPID.updatePID(yaw);
       // Logger.recordOutput("result", result);
-      updateOdometryFusedArray();
 
       double x = -(Math.copySign(OI.getDriverLeftY() * OI.getDriverLeftY(), OI.getDriverLeftY()));
       double y = yToPiece * kP;
@@ -3050,7 +3043,6 @@ public class Drive extends SubsystemBase {
    *                          per second.
    */
   public void autoDrive(Vector vector, double turnRadiansPerSec) {
-    updateOdometryFusedArray();
 
     double pigeonAngle = Math.toRadians(peripherals.getPigeonAngle());
 

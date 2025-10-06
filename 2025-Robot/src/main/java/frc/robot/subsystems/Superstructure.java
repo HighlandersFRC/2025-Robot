@@ -764,6 +764,7 @@ public class Superstructure extends SubsystemBase {
     // double[] setpoint = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(),
     // false);
     Pose2d setpoint = drive.getReefL4ClosestSetpoint(drive.getMT2Odometry(), false);
+    Logger.recordOutput("auto l4 setpoint", setpoint);
     java.util.logging.Logger.getGlobal().fine((Math
         .abs(Math.abs(pivot.getPivotPosition())
             - Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations) < (10.0 / 360.0)

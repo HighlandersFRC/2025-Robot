@@ -61,7 +61,6 @@ public class FullSendFollower extends AutoFollower {
     @Override
     public void execute() {
         // System.out.println("Variable Speed");
-        drive.updateOdometryFusedArray();
         odometryFusedX = drive.getMT2OdometryX();
         odometryFusedY = drive.getMT2OdometryY();
         odometryFusedTheta = drive.getMT2OdometryAngle();

@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.tools.math.Vector;
 import frc.robot.tools.wrappers.AutoFollower;
 import frc.robot.Constants;
@@ -62,7 +64,6 @@ public class VariableSpeedFollower extends AutoFollower {
   @Override
   public void execute() {
     // System.out.println("Variable Speed");
-    drive.updateOdometryFusedArray();
     odometryFusedX = drive.getMT2OdometryX();
     odometryFusedY = drive.getMT2OdometryY();
     odometryFusedTheta = drive.getMT2OdometryAngle();
@@ -123,7 +124,9 @@ public class VariableSpeedFollower extends AutoFollower {
 
   @Override
   public boolean isFinished() {
-    if (returnPathPointIndex >= path.length() - 1 && readyToEnd(path.getJSONObject(returnPathPointIndex))) {
+    boolean readyToEnd = readyToEnd(path.getJSONObject(returnPathPointIndex));
+    Logger.recordOutput("readyToEnd", readyToEnd);
+    if (returnPathPointIndex >= path.length() - 1 && readyToEnd) {
       return true;
     } else {
       return false;
@@ -144,11 +147,11 @@ public class VariableSpeedFollower extends AutoFollower {
       odometryFusedY = Constants.Physical.FIELD_WIDTH - odometryFusedY;
       odometryFusedTheta = -odometryFusedTheta;
     }
-    odometryFusedTheta = Constants.standardizeAngleToOther(odometryFusedTheta, point.getDouble("angle"));
     return drive.insideRadius(
         (point.getDouble("x") - odometryFusedX) / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
         (point.getDouble("y") - odometryFusedY) / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS,
-        (point.getDouble("angle") - odometryFusedTheta) / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS,
+        (new Rotation2d(point.getDouble("angle")).minus(new Rotation2d(odometryFusedTheta)).getRadians())
+            / Constants.Autonomous.AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS,
         Constants.Autonomous.AUTONOMOUS_END_ACCURACY);
   }
 }
