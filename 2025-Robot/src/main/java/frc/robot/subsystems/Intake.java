@@ -131,6 +131,8 @@ public class Intake extends SubsystemBase {
     Logger.recordOutput("Intake Position", getPosition() * 360);
     Logger.recordOutput("Intake Motor Current",
         roller.getStatorCurrent().getValueAsDouble());
+    Logger.recordOutput("Intake Speed", roller.getVelocity().getValueAsDouble());
+    Logger.recordOutput("Intake Current", roller.getTorqueCurrent().getValueAsDouble());
     systemState = handleStateTransition();
     if (systemState != IntakeState.HANDOFF) {
       firstTimeHandOff = true;

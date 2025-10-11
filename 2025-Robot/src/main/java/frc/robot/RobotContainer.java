@@ -225,7 +225,7 @@ public class RobotContainer {
                                 new ConditionalCommand(
                                                 new SetRobotStateSimpleOnce(superstructure, SuperState.AUTO_CLIMB),
                                                 new SetRobotStateSimpleOnce(superstructure, SuperState.CLIMB),
-                                                () -> (!yPressed)),
+                                                () -> (yPressed)),
                                 new SetClimberPivotTorque(climber, -80, 1.0), () -> (!manualMode)));
                 // OI.driverY.whileTrue(new SetClimberPivotTorque(climber, 60, 0.2));
                 // OI.driverA.whileTrue(new SetClimberPivotTorque(climber, -60, 0.2));
