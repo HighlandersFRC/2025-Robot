@@ -174,41 +174,41 @@ public class Pivot extends SubsystemBase {
   // }
 
   public enum PivotState {
-    PREP,
-    AUTO_L1,
-    AUTO_L2,
-    AUTO_L3,
-    AUTO_L4,
-    L1,
-    L23,
-    L4,
-    PROCESSOR,
-    NET,
+    // PREP,
+    // AUTO_L1,
+    // AUTO_L2,
+    // AUTO_L3,
+    // AUTO_L4,
+    // L1,
+    // L23,
+    // L4,
+    // PROCESSOR,
+    // NET,
     // FEEDER_FRONT,
     // FEEDER_BACK,
-    FEEDER,
-    GROUND_CORAL_FRONT,
-    GROUND_CORAL_PREP_BACK,
-    GROUND_CORAL_BACK,
-    GROUND_ALGAE,
-    REEF_ALGAE,
+    // FEEDER,
+    // GROUND_CORAL_FRONT,
+    // GROUND_CORAL_PREP_BACK,
+    // GROUND_CORAL_BACK,
+    // GROUND_ALGAE,
+    // REEF_ALGAE,
     DEFAULT,
-    DEFAULT_CLIMB,
-    SCORE_L1,
-    SCORE_L23,
-    SCORE_L4,
-    AUTO_SCORE_L1,
-    AUTO_SCORE_L2,
-    AUTO_SCORE_L3,
-    AUTO_SCORE_L4,
-    AUTO_SCORE_L4_SLOW,
-    CLIMB,
-    UP,
-    MANUAL_PLACE,
-    MANUAL_RESET,
+    // DEFAULT_CLIMB,
+    // SCORE_L1,
+    // SCORE_L23,
+    // SCORE_L4,
+    // AUTO_SCORE_L1,
+    // AUTO_SCORE_L2,
+    // AUTO_SCORE_L3,
+    // AUTO_SCORE_L4,
+    // AUTO_SCORE_L4_SLOW,
+    // CLIMB,
+    // UP,
+    // MANUAL_PLACE,
+    // MANUAL_RESET,
     IDLE,
-    LOLLIPOP,
-    HANDOFF
+    // LOLLIPOP,
+    // HANDOFF
   }
 
   private PivotState wantedState = PivotState.DEFAULT;
@@ -240,74 +240,74 @@ public class Pivot extends SubsystemBase {
     switch (wantedState) {
       case DEFAULT:
         return PivotState.DEFAULT;
-      case DEFAULT_CLIMB:
-        return PivotState.DEFAULT_CLIMB;
-      case UP:
-        return PivotState.UP;
-      case L1:
-        return PivotState.L1;
-      case L23:
-        return PivotState.L23;
-      case L4:
-        return PivotState.L4;
-      case AUTO_L1:
-        return PivotState.AUTO_L1;
-      case AUTO_L2:
-        return PivotState.AUTO_L2;
-      case AUTO_L3:
-        return PivotState.AUTO_L3;
-      case AUTO_L4:
-        return PivotState.AUTO_L4;
-      // case FEEDER_FRONT:
-      // return PivotState.FEEDER_FRONT;
-      // case FEEDER_BACK:
-      // return PivotState.FEEDER_BACK;
-      case FEEDER:
-        return PivotState.FEEDER;
-      case REEF_ALGAE:
-        return PivotState.REEF_ALGAE;
-      case GROUND_CORAL_FRONT:
-        return PivotState.GROUND_CORAL_FRONT;
-      case GROUND_CORAL_BACK:
-        return PivotState.GROUND_CORAL_BACK;
-      case GROUND_CORAL_PREP_BACK:
-        return PivotState.GROUND_CORAL_PREP_BACK;
-      case GROUND_ALGAE:
-        return PivotState.GROUND_ALGAE;
-      case PROCESSOR:
-        return PivotState.PROCESSOR;
-      case NET:
-        return PivotState.NET;
-      case SCORE_L1:
-        return PivotState.SCORE_L1;
-      case SCORE_L23:
-        return PivotState.SCORE_L23;
-      case SCORE_L4:
-        return PivotState.SCORE_L4;
-      case AUTO_SCORE_L4_SLOW:
-        return PivotState.AUTO_SCORE_L4_SLOW;
-      case AUTO_SCORE_L1:
-        return PivotState.AUTO_SCORE_L1;
-      case AUTO_SCORE_L2:
-        return PivotState.AUTO_SCORE_L2;
-      case AUTO_SCORE_L3:
-        return PivotState.AUTO_SCORE_L3;
-      case AUTO_SCORE_L4:
-        return PivotState.AUTO_SCORE_L4;
-      case CLIMB:
-        return PivotState.CLIMB;
-      case PREP:
-        return PivotState.PREP;
-      case MANUAL_PLACE:
-        return PivotState.MANUAL_PLACE;
-      case MANUAL_RESET:
-        return PivotState.MANUAL_RESET;
+      // case DEFAULT_CLIMB:
+      //   return PivotState.DEFAULT_CLIMB;
+      // case UP:
+      //   return PivotState.UP;
+      // case L1:
+      //   return PivotState.L1;
+      // case L23:
+      //   return PivotState.L23;
+      // case L4:
+      //   return PivotState.L4;
+      // case AUTO_L1:
+      //   return PivotState.AUTO_L1;
+      // case AUTO_L2:
+      //   return PivotState.AUTO_L2;
+      // case AUTO_L3:
+      //   return PivotState.AUTO_L3;
+      // case AUTO_L4:
+      //   return PivotState.AUTO_L4;
+      // // case FEEDER_FRONT:
+      // // return PivotState.FEEDER_FRONT;
+      // // case FEEDER_BACK:
+      // // return PivotState.FEEDER_BACK;
+      // case FEEDER:
+      //   return PivotState.FEEDER;
+      // case REEF_ALGAE:
+      //   return PivotState.REEF_ALGAE;
+      // case GROUND_CORAL_FRONT:
+      //   return PivotState.GROUND_CORAL_FRONT;
+      // case GROUND_CORAL_BACK:
+      //   return PivotState.GROUND_CORAL_BACK;
+      // case GROUND_CORAL_PREP_BACK:
+      //   return PivotState.GROUND_CORAL_PREP_BACK;
+      // case GROUND_ALGAE:
+      //   return PivotState.GROUND_ALGAE;
+      // case PROCESSOR:
+      //   return PivotState.PROCESSOR;
+      // case NET:
+      //   return PivotState.NET;
+      // case SCORE_L1:
+      //   return PivotState.SCORE_L1;
+      // case SCORE_L23:
+      //   return PivotState.SCORE_L23;
+      // case SCORE_L4:
+      //   return PivotState.SCORE_L4;
+      // case AUTO_SCORE_L4_SLOW:
+      //   return PivotState.AUTO_SCORE_L4_SLOW;
+      // case AUTO_SCORE_L1:
+      //   return PivotState.AUTO_SCORE_L1;
+      // case AUTO_SCORE_L2:
+      //   return PivotState.AUTO_SCORE_L2;
+      // case AUTO_SCORE_L3:
+      //   return PivotState.AUTO_SCORE_L3;
+      // case AUTO_SCORE_L4:
+      //   return PivotState.AUTO_SCORE_L4;
+      // case CLIMB:
+      //   return PivotState.CLIMB;
+      // case PREP:
+      //   return PivotState.PREP;
+      // case MANUAL_PLACE:
+      //   return PivotState.MANUAL_PLACE;
+      // case MANUAL_RESET:
+      //   return PivotState.MANUAL_RESET;
       case IDLE:
         return PivotState.IDLE;
-      case LOLLIPOP:
-        return PivotState.LOLLIPOP;
-      case HANDOFF:
-        return PivotState.HANDOFF;
+      // case LOLLIPOP:
+      //   return PivotState.LOLLIPOP;
+      // case HANDOFF:
+      //   return PivotState.HANDOFF;
       default:
         return PivotState.DEFAULT;
     }
@@ -319,10 +319,10 @@ public class Pivot extends SubsystemBase {
     // pivotMotor.getStatorCurrent().getValueAsDouble());
     // System.out.println("Pivot Position: " + (getPivotPosition() * 360.0));
     Logger.recordOutput("Pivot Position", getPivotPosition());
-    if (systemState != PivotState.L23 && systemState != PivotState.L4 && systemState != PivotState.MANUAL_PLACE
-        && systemState != PivotState.MANUAL_RESET) {
-      runManualDownOrUp = false;
-    }
+    // if (systemState != PivotState.L23 && systemState != PivotState.L4 && systemState != PivotState.MANUAL_PLACE
+    //     && systemState != PivotState.MANUAL_RESET) {
+    //   runManualDownOrUp = false;
+    // }
     if (intakeItem != ArmItem.ALGAE && nonAlgaeTime == 0.0) {
       nonAlgaeTime = Timer.getFPGATimestamp();
     } else if (intakeItem == ArmItem.ALGAE) {
@@ -348,386 +348,386 @@ public class Pivot extends SubsystemBase {
             break;
         }
         break;
-      case DEFAULT_CLIMB:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULTCLIMB.rotations);
-        break;
-      case REEF_ALGAE:
-        switch (intakeItem) {
-          case ALGAE:
-            switch (systemFlip) {
-              case FRONT:
-                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
-                break;
-              case BACK:
-                pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
-                break;
-              default:
-                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
-                break;
-            }
+      // case DEFAULT_CLIMB:
+      //   pivotToPosition(Constants.SetPoints.PivotPosition.kDEFAULTCLIMB.rotations);
+      //   break;
+      // case REEF_ALGAE:
+      //   switch (intakeItem) {
+      //     case ALGAE:
+      //       switch (systemFlip) {
+      //         case FRONT:
+      //           pivotToPositionSlower(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+      //           break;
+      //         case BACK:
+      //           pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+      //           break;
+      //         default:
+      //           pivotToPositionSlower(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+      //           break;
+      //       }
 
-            break;
+      //       break;
 
-          default:
-            switch (systemFlip) {
-              case FRONT:
-                pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
-                break;
-              case BACK:
-                pivotToPosition(-Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
-                break;
-              default:
-                pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
-                break;
-            }
-            break;
-        }
-        break;
-      case NET:
-        switch (intakeItem) {
-          case ALGAE:
-            switch (systemFlip) {
-              case FRONT:
-                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kNET.rotations);
-                break;
-              case BACK:
-                pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kNET.rotations);
-                break;
-              default:
-                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kNET.rotations);
-                break;
-            }
+      //     default:
+      //       switch (systemFlip) {
+      //         case FRONT:
+      //           pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+      //           break;
+      //         case BACK:
+      //           pivotToPosition(-Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+      //           break;
+      //         default:
+      //           pivotToPosition(Constants.SetPoints.PivotPosition.kREEFALGAE.rotations);
+      //           break;
+      //       }
+      //       break;
+      //   }
+      //   break;
+      // case NET:
+      //   switch (intakeItem) {
+      //     case ALGAE:
+      //       switch (systemFlip) {
+      //         case FRONT:
+      //           pivotToPositionSlower(Constants.SetPoints.PivotPosition.kNET.rotations);
+      //           break;
+      //         case BACK:
+      //           pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kNET.rotations);
+      //           break;
+      //         default:
+      //           pivotToPositionSlower(Constants.SetPoints.PivotPosition.kNET.rotations);
+      //           break;
+      //       }
 
-            break;
+      //       break;
 
-          default:
-            switch (systemFlip) {
-              case FRONT:
-                pivotToPosition(Constants.SetPoints.PivotPosition.kNET.rotations);
-                break;
-              case BACK:
-                pivotToPosition(-Constants.SetPoints.PivotPosition.kNET.rotations);
-                break;
-              default:
-                pivotToPosition(Constants.SetPoints.PivotPosition.kNET.rotations);
-                break;
-            }
-            break;
-        }
-        break;
-      case PROCESSOR:
-        switch (intakeItem) {
-          case ALGAE:
-            switch (systemFlip) {
-              case FRONT:
-                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
-                break;
-              case BACK:
-                pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
-                break;
-              default:
-                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
-                break;
-            }
+      //     default:
+      //       switch (systemFlip) {
+      //         case FRONT:
+      //           pivotToPosition(Constants.SetPoints.PivotPosition.kNET.rotations);
+      //           break;
+      //         case BACK:
+      //           pivotToPosition(-Constants.SetPoints.PivotPosition.kNET.rotations);
+      //           break;
+      //         default:
+      //           pivotToPosition(Constants.SetPoints.PivotPosition.kNET.rotations);
+      //           break;
+      //       }
+      //       break;
+      //   }
+      //   break;
+      // case PROCESSOR:
+      //   switch (intakeItem) {
+      //     case ALGAE:
+      //       switch (systemFlip) {
+      //         case FRONT:
+      //           pivotToPositionSlower(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+      //           break;
+      //         case BACK:
+      //           pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+      //           break;
+      //         default:
+      //           pivotToPositionSlower(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+      //           break;
+      //       }
 
-            break;
+      //       break;
 
-          default:
-            switch (systemFlip) {
-              case FRONT:
-                pivotToPosition(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
-                break;
-              case BACK:
-                pivotToPosition(-Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
-                break;
-              default:
-                pivotToPosition(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
-                break;
-            }
-            break;
-        }
-        break;
-      case PREP:
-        switch (intakeItem) {
-          case ALGAE:
-            if (getPivotPosition() > 0) {
-              pivotToPositionSlower(Constants.SetPoints.PivotPosition.kPREP.rotations);
-            } else {
-              pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kPREP.rotations);
-            }
+      //     default:
+      //       switch (systemFlip) {
+      //         case FRONT:
+      //           pivotToPosition(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+      //           break;
+      //         case BACK:
+      //           pivotToPosition(-Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+      //           break;
+      //         default:
+      //           pivotToPosition(Constants.SetPoints.PivotPosition.kPROCESSOR.rotations);
+      //           break;
+      //       }
+      //       break;
+      //   }
+      //   break;
+      // case PREP:
+      //   switch (intakeItem) {
+      //     case ALGAE:
+      //       if (getPivotPosition() > 0) {
+      //         pivotToPositionSlower(Constants.SetPoints.PivotPosition.kPREP.rotations);
+      //       } else {
+      //         pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kPREP.rotations);
+      //       }
 
-            break;
+      //       break;
 
-          default:
-            if (getPivotPosition() > 0) {
-              pivotToPosition(Constants.SetPoints.PivotPosition.kPREP.rotations);
-            } else {
-              pivotToPosition(-Constants.SetPoints.PivotPosition.kPREP.rotations);
-            }
-            break;
-        }
-        break;
-      case GROUND_ALGAE:
-        switch (intakeItem) {
-          case ALGAE:
-            switch (systemFlip) {
-              case FRONT:
-                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
-                break;
-              case BACK:
-                pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
-                break;
-              default:
-                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
-                break;
-            }
+      //     default:
+      //       if (getPivotPosition() > 0) {
+      //         pivotToPosition(Constants.SetPoints.PivotPosition.kPREP.rotations);
+      //       } else {
+      //         pivotToPosition(-Constants.SetPoints.PivotPosition.kPREP.rotations);
+      //       }
+      //       break;
+      //   }
+      //   break;
+      // case GROUND_ALGAE:
+      //   switch (intakeItem) {
+      //     case ALGAE:
+      //       switch (systemFlip) {
+      //         case FRONT:
+      //           pivotToPositionSlower(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+      //           break;
+      //         case BACK:
+      //           pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+      //           break;
+      //         default:
+      //           pivotToPositionSlower(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+      //           break;
+      //       }
 
-            break;
+      //       break;
 
-          default:
-            switch (systemFlip) {
-              case FRONT:
-                pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
-                break;
-              case BACK:
-                pivotToPosition(-Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
-                break;
-              default:
-                pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
-                break;
-            }
-            break;
-        }
-        break;
-      case UP:
-        switch (intakeItem) {
-          case ALGAE:
-            switch (systemFlip) {
-              case FRONT:
-                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kUP.rotations);
-                break;
-              case BACK:
-                pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kUP.rotations);
-                break;
-              default:
-                pivotToPositionSlower(Constants.SetPoints.PivotPosition.kUP.rotations);
-                break;
-            }
+      //     default:
+      //       switch (systemFlip) {
+      //         case FRONT:
+      //           pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+      //           break;
+      //         case BACK:
+      //           pivotToPosition(-Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+      //           break;
+      //         default:
+      //           pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDALGAE.rotations);
+      //           break;
+      //       }
+      //       break;
+      //   }
+      //   break;
+      // case UP:
+      //   switch (intakeItem) {
+      //     case ALGAE:
+      //       switch (systemFlip) {
+      //         case FRONT:
+      //           pivotToPositionSlower(Constants.SetPoints.PivotPosition.kUP.rotations);
+      //           break;
+      //         case BACK:
+      //           pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kUP.rotations);
+      //           break;
+      //         default:
+      //           pivotToPositionSlower(Constants.SetPoints.PivotPosition.kUP.rotations);
+      //           break;
+      //       }
 
-            break;
+      //       break;
 
-          default:
-            switch (systemFlip) {
-              case FRONT:
-                pivotToPosition(Constants.SetPoints.PivotPosition.kUP.rotations);
-                break;
-              case BACK:
-                pivotToPosition(-Constants.SetPoints.PivotPosition.kUP.rotations);
-                break;
-              default:
-                pivotToPosition(Constants.SetPoints.PivotPosition.kUP.rotations);
-                break;
-            }
-            break;
-        }
-        break;
-      case GROUND_CORAL_FRONT:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALFRONT.rotations);
-        break;
-      case LOLLIPOP:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kLOLLIPOP.rotations);
-        break;
-      case GROUND_CORAL_BACK:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALBACK.rotations);
-        break;
-      case GROUND_CORAL_PREP_BACK:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALPREPBACK.rotations);
-        break;
-      case L1:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
-            break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kL1.rotations);
-            break;
-          default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
-            break;
-        }
-        break;
-      case CLIMB:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kCLIMB.rotations);
-        break;
-      case SCORE_L1:
-        break;
-      case L23:
-        if (runManualDownOrUp) {
-          pivotToPosition(getPivotPosition());
-        } else {
-          pivotToPosition(Constants.SetPoints.PivotPosition.kL23.rotations);
-        }
-        break;
-      case SCORE_L23:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations);
-        break;
-      case L4:
-        if (runManualDownOrUp) {
-          pivotToPosition(getPivotPosition());
-        } else {
-          pivotToPosition(Constants.SetPoints.PivotPosition.kL4.rotations);
-        }
-        break;
-      case SCORE_L4:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
-        break;
-      case AUTO_SCORE_L2:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations);
-            break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations);
-            break;
-          default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations);
-            break;
-        }
-        break;
-      case AUTO_SCORE_L3:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations);
-            break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations);
-            break;
-          default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations);
-            break;
-        }
-        break;
+      //     default:
+      //       switch (systemFlip) {
+      //         case FRONT:
+      //           pivotToPosition(Constants.SetPoints.PivotPosition.kUP.rotations);
+      //           break;
+      //         case BACK:
+      //           pivotToPosition(-Constants.SetPoints.PivotPosition.kUP.rotations);
+      //           break;
+      //         default:
+      //           pivotToPosition(Constants.SetPoints.PivotPosition.kUP.rotations);
+      //           break;
+      //       }
+      //       break;
+      //   }
+      //   break;
+      // case GROUND_CORAL_FRONT:
+      //   pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALFRONT.rotations);
+      //   break;
+      // case LOLLIPOP:
+      //   pivotToPosition(Constants.SetPoints.PivotPosition.kLOLLIPOP.rotations);
+      //   break;
+      // case GROUND_CORAL_BACK:
+      //   pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALBACK.rotations);
+      //   break;
+      // case GROUND_CORAL_PREP_BACK:
+      //   pivotToPosition(Constants.SetPoints.PivotPosition.kGROUNDCORALPREPBACK.rotations);
+      //   break;
+      // case L1:
+      //   switch (systemFlip) {
+      //     case FRONT:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
+      //       break;
+      //     case BACK:
+      //       pivotToPosition(-Constants.SetPoints.PivotPosition.kL1.rotations);
+      //       break;
+      //     default:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
+      //       break;
+      //   }
+      //   break;
+      // case CLIMB:
+      //   pivotToPosition(Constants.SetPoints.PivotPosition.kCLIMB.rotations);
+      //   break;
+      // case SCORE_L1:
+      //   break;
+      // case L23:
+      //   if (runManualDownOrUp) {
+      //     pivotToPosition(getPivotPosition());
+      //   } else {
+      //     pivotToPosition(Constants.SetPoints.PivotPosition.kL23.rotations);
+      //   }
+      //   break;
+      // case SCORE_L23:
+      //   pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations);
+      //   break;
+      // case L4:
+      //   if (runManualDownOrUp) {
+      //     pivotToPosition(getPivotPosition());
+      //   } else {
+      //     pivotToPosition(Constants.SetPoints.PivotPosition.kL4.rotations);
+      //   }
+      //   break;
+      // case SCORE_L4:
+      //   pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+      //   break;
+      // case AUTO_SCORE_L2:
+      //   switch (systemFlip) {
+      //     case FRONT:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations);
+      //       break;
+      //     case BACK:
+      //       pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations);
+      //       break;
+      //     default:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2SCORE.rotations);
+      //       break;
+      //   }
+      //   break;
+      // case AUTO_SCORE_L3:
+      //   switch (systemFlip) {
+      //     case FRONT:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations);
+      //       break;
+      //     case BACK:
+      //       pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations);
+      //       break;
+      //     default:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL3SCORE.rotations);
+      //       break;
+      //   }
+      //   break;
 
-      case AUTO_SCORE_L4:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
-            break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
-            break;
-          default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
-            break;
-        }
-        break;
-      case AUTO_SCORE_L4_SLOW:
-        // switch (systemFlip) {
-        //   case FRONT:
-        //     setPivotPercent(0.1);
-        //     break;
-        //   case BACK:
-        //     setPivotPercent(-0.1);
-        //     break;
-        //   default:
-        //     setPivotPercent(0.1);
-        //     break;
-        // }
-        // break;
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPositionSlower(Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
-            break;
-          case BACK:
-            pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
-            break;
-          default:
-            pivotToPositionSlower(Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
-            break;
-        }
-        break;
-      // case FEEDER_FRONT:
-      // pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-      // break;
-      // case FEEDER_BACK:
-      // pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-      // break;
-      case FEEDER:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-            break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-            break;
-          default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-            break;
-        }
-        break;
-      case AUTO_L1:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
-            break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kL1.rotations);
-            break;
-          default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
-            break;
-        }
-        break;
-      case AUTO_L2:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2.rotations);
-            break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL2.rotations);
-            break;
-          default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2.rotations);
-            break;
-        }
-        break;
-      case AUTO_L3:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL3.rotations);
-            break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL3.rotations);
-            break;
-          default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL3.rotations);
-            break;
-        }
-        break;
-      case AUTO_L4:
-        switch (systemFlip) {
-          case FRONT:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
-            break;
-          case BACK:
-            pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
-            break;
-          default:
-            pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
-            break;
-        }
-        break;
-      case MANUAL_PLACE:
-        runManualDownOrUp = true;
-        setPivotPercent(0.2);
-        break;
-      case MANUAL_RESET:
-        runManualDownOrUp = true;
-        setPivotPercent(-0.2);
-        break;
-      case HANDOFF:
-        pivotToPosition(Constants.SetPoints.PivotPosition.kHANDOFF.rotations);
-        break;
+      // case AUTO_SCORE_L4:
+      //   switch (systemFlip) {
+      //     case FRONT:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+      //       break;
+      //     case BACK:
+      //       pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+      //       break;
+      //     default:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4SCORE.rotations);
+      //       break;
+      //   }
+      //   break;
+      // case AUTO_SCORE_L4_SLOW:
+      //   // switch (systemFlip) {
+      //   //   case FRONT:
+      //   //     setPivotPercent(0.1);
+      //   //     break;
+      //   //   case BACK:
+      //   //     setPivotPercent(-0.1);
+      //   //     break;
+      //   //   default:
+      //   //     setPivotPercent(0.1);
+      //   //     break;
+      //   // }
+      //   // break;
+      //   switch (systemFlip) {
+      //     case FRONT:
+      //       pivotToPositionSlower(Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
+      //       break;
+      //     case BACK:
+      //       pivotToPositionSlower(-Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
+      //       break;
+      //     default:
+      //       pivotToPositionSlower(Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
+      //       break;
+      //   }
+      //   break;
+      // // case FEEDER_FRONT:
+      // // pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+      // // break;
+      // // case FEEDER_BACK:
+      // // pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+      // // break;
+      // case FEEDER:
+      //   switch (systemFlip) {
+      //     case FRONT:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+      //       break;
+      //     case BACK:
+      //       pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+      //       break;
+      //     default:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
+      //       break;
+      //   }
+      //   break;
+      // case AUTO_L1:
+      //   switch (systemFlip) {
+      //     case FRONT:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
+      //       break;
+      //     case BACK:
+      //       pivotToPosition(-Constants.SetPoints.PivotPosition.kL1.rotations);
+      //       break;
+      //     default:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kL1.rotations);
+      //       break;
+      //   }
+      //   break;
+      // case AUTO_L2:
+      //   switch (systemFlip) {
+      //     case FRONT:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2.rotations);
+      //       break;
+      //     case BACK:
+      //       pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL2.rotations);
+      //       break;
+      //     default:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL2.rotations);
+      //       break;
+      //   }
+      //   break;
+      // case AUTO_L3:
+      //   switch (systemFlip) {
+      //     case FRONT:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL3.rotations);
+      //       break;
+      //     case BACK:
+      //       pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL3.rotations);
+      //       break;
+      //     default:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL3.rotations);
+      //       break;
+      //   }
+      //   break;
+      // case AUTO_L4:
+      //   switch (systemFlip) {
+      //     case FRONT:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
+      //       break;
+      //     case BACK:
+      //       pivotToPosition(-Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
+      //       break;
+      //     default:
+      //       pivotToPosition(Constants.SetPoints.PivotPosition.kAUTOL4.rotations);
+      //       break;
+      //   }
+      //   break;
+      // case MANUAL_PLACE:
+      //   runManualDownOrUp = true;
+      //   setPivotPercent(0.2);
+      //   break;
+      // case MANUAL_RESET:
+      //   runManualDownOrUp = true;
+      //   setPivotPercent(-0.2);
+      //   break;
+      // case HANDOFF:
+      //   pivotToPosition(Constants.SetPoints.PivotPosition.kHANDOFF.rotations);
+      //   break;
       case IDLE:
         setPivotPercent(0.0);
         break;

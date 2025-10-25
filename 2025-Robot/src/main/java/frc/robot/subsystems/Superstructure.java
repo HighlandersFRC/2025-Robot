@@ -185,18 +185,12 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleIdleState() {
-    intake.setWantedState(IntakeState.DEFAULT);
-    if (Math.abs(twist.getTwistPosition()) < 30.0 || Math.abs(pivot.getPivotPosition()) > 60.0 / 360.0) {
-      pivot.setWantedState(PivotState.DEFAULT);
-      firstTimeDefault = false;
-    } else if (firstTimeDefault) {
-      pivot.setWantedState(PivotState.PREP);
-    }
+    intake.setWantedState(IntakeState.IDLE);
+    pivot.setWantedState(PivotState.IDLE);
     twist.setWantedState(TwistState.SIDE);
     elevator.setWantedState(ElevatorState.DEFAULT);
     drive.setWantedState(DriveState.IDLE);
     lights.setWantedState(LightsState.DEFAULT);
-    manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);
     climber.setWantedState(ClimbState.IDLE);
   }
 
