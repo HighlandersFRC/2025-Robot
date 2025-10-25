@@ -1,6 +1,6 @@
 package frc.robot;
 
-import java.util.logging.Level;
+// import java.util.logging.Level;
 
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -57,10 +57,10 @@ public class Robot extends LoggedRobot {
     Logger.start();
 
     // The level for logs going to advantage scope. LEAVE THIS AT "ALL"
-    java.util.logging.Logger.getLogger("").setLevel(Level.ALL);
+    // java.util.logging.Logger.getLogger("").setLevel(Level.ALL);
 
     // The level for logs printed to console. CHANGE THIS ONE TO OFF FOR COMP
-    java.util.logging.Logger.getLogger("").getHandlers()[0].setLevel(Level.INFO);
+    // java.util.logging.Logger.getLogger("").getHandlers()[0].setLevel(Level.INFO);
 
     java.util.logging.Logger.getLogger("").addHandler(m_logHandler);
 
@@ -99,7 +99,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
     Logger.recordOutput("MT2 Odometry", m_robotContainer.drive.getMT2Odometry());
     m_robotContainer.superstructure.algaeMode = m_robotContainer.algaeMode;
-    m_robotContainer.lights.updateIntakeItem(m_robotContainer.manipulator.getArmItem());
+    // m_robotContainer.lights.updateIntakeItem(m_robotContainer.manipulator.getArmItem());
     m_robotContainer.manipulator.updateAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateAlgaeMode(m_robotContainer.algaeMode);
     m_robotContainer.lights.updateManualMode(m_robotContainer.manualMode);
@@ -111,7 +111,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.lights.periodic();
     m_robotContainer.peripherals.periodic();
     m_logHandler.write();
-    Logger.recordOutput("finished", m_robotContainer.superstructure.placedCoralL4());
+    // Logger.recordOutput("finished", m_robotContainer.superstructure.placedCoralL4());
 
   }
 
@@ -156,7 +156,7 @@ public class Robot extends LoggedRobot {
     m_robotContainer.elevator.teleopInit();
     m_robotContainer.twist.teleopInit();
     m_robotContainer.lights.clearAnimations();
-    m_robotContainer.superstructure.setWantedState(SuperState.ZERO);
+    // m_robotContainer.superstructure.setWantedState(SuperState.ZERO);
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

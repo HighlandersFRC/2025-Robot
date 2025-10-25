@@ -41,7 +41,7 @@ public class AutoPlaceL2Follower extends AutoFollower {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    superstructure.setWantedState(SuperState.AUTO_L2_PLACE);
+    // superstructure.setWantedState(SuperState.AUTO_L2_PLACE);
     initTime = Timer.getFPGATimestamp();
   }
 
@@ -53,13 +53,13 @@ public class AutoPlaceL2Follower extends AutoFollower {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    superstructure.setWantedState(SuperState.OUTAKE_IDLE);
+    // superstructure.setWantedState(SuperState.OUTAKE_IDLE);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (superstructure.placedCoralL2() || Timer.getFPGATimestamp() - initTime > timeout) {
+    if (Timer.getFPGATimestamp() - initTime > timeout) {
       return true;
     } else {
       return false;

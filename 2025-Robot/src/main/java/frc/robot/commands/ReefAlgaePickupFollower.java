@@ -46,7 +46,7 @@ public class ReefAlgaePickupFollower extends AutoFollower {
   @Override
   public void initialize() {
     robotContainer.algaeMode = true;
-    superstructure.setWantedState(SuperState.AUTO_ALGAE_PICKUP);
+    // superstructure.setWantedState(SuperState.AUTO_ALGAE_PICKUP);
     initTime = Timer.getFPGATimestamp();
   }
 
@@ -64,8 +64,7 @@ public class ReefAlgaePickupFollower extends AutoFollower {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if ((drive.hitSetPointUltraGenerous(drive.getAlgaeMoreMoreClosestSetpoint(drive.getMT2Odometry()))
-        && superstructure.hasCoral())
+    if ((drive.hitSetPointUltraGenerous(drive.getAlgaeMoreMoreClosestSetpoint(drive.getMT2Odometry())))
         || Timer.getFPGATimestamp() - initTime > timeout) {
       return true;
     } else {

@@ -37,7 +37,7 @@ public class FeederPickupFollower extends AutoFollower {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    superstructure.setWantedState(SuperState.AUTO_FEEDER);
+    // superstructure.setWantedState(SuperState.AUTO_FEEDER);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -54,10 +54,10 @@ public class FeederPickupFollower extends AutoFollower {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (superstructure.hasCoralSticky()) {
-      return true;
-    } else {
-      return false;
-    }
+    // if (superstructure.hasCoralSticky()) {
+    return true;
+    // } else {
+    //   return false;
+    // }
   }
 }

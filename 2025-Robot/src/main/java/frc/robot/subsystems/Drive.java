@@ -7,10 +7,10 @@ import java.util.Optional;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.EstimatedRobotPose;
-import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonTrackedTarget;
+// import org.photonvision.EstimatedRobotPose;
+// import org.photonvision.PhotonPoseEstimator;
+// import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+// import org.photonvision.targeting.PhotonTrackedTarget;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -156,15 +156,15 @@ public class Drive extends SubsystemBase {
   SwerveDrivePoseEstimator mt2Odometry;
   Pose2d mt2Pose;
 
-  PhotonPoseEstimator photonPoseEstimator;
-  PhotonPoseEstimator backPhotonPoseEstimator;
-  PhotonPoseEstimator backLeftPhotonPoseEstimator;
-  PhotonPoseEstimator backRightPhotonPoseEstimator;
+  // PhotonPoseEstimator photonPoseEstimator;
+  // PhotonPoseEstimator backPhotonPoseEstimator;
+  // PhotonPoseEstimator backLeftPhotonPoseEstimator;
+  // PhotonPoseEstimator backRightPhotonPoseEstimator;
 
-  // PhotonPoseEstimator rightPhotonPoseEstimator;
-  // PhotonPoseEstimator leftPhotonPoseEstimator;
-  PhotonPoseEstimator swervePhotonPoseEstimator;
-  PhotonPoseEstimator gamePiecePhotonPoseEstimator;
+  // // PhotonPoseEstimator rightPhotonPoseEstimator;
+  // // PhotonPoseEstimator leftPhotonPoseEstimator;
+  // PhotonPoseEstimator swervePhotonPoseEstimator;
+  // PhotonPoseEstimator gamePiecePhotonPoseEstimator;
   AprilTagFieldLayout aprilTagFieldLayout;
 
   // *********************NOTE THE PITCH IS POSITIVE DOWNWARDS
@@ -348,28 +348,28 @@ public class Drive extends SubsystemBase {
   public enum DriveState {
     DEFAULT,
     IDLE,
-    STOP,
-    REEF,
-    REEF_MORE,
-    BACK,
-    L3_REEF,
-    L4_REEF,
-    ALGAE,
-    ALGAE_MORE,
-    ALGAE_MORE_MORE,
-    PROCESSOR,
-    PROCESSOR_MORE,
-    NET,
-    NET_MORE,
-    FEEDER,
-    SCORE_L23,
-    FEEDER_ALIGN,
-    AUTO_FEEDER,
-    AUTO_L1,
-    AUTO_L1_MORE,
-    FEEDER_AUTO,
-    PIECE_PICKUP,
-    AUTO_CLIMB
+    // STOP,
+    // REEF,
+    // REEF_MORE,
+    // BACK,
+    // L3_REEF,
+    // L4_REEF,
+    // ALGAE,
+    // ALGAE_MORE,
+    // ALGAE_MORE_MORE,
+    // PROCESSOR,
+    // PROCESSOR_MORE,
+    // NET,
+    // NET_MORE,
+    // FEEDER,
+    // SCORE_L23,
+    // FEEDER_ALIGN,
+    // AUTO_FEEDER,
+    // AUTO_L1,
+    // AUTO_L1_MORE,
+    // FEEDER_AUTO,
+    // PIECE_PICKUP,
+    // AUTO_CLIMB
   }
 
   private DriveState wantedState = DriveState.IDLE;
@@ -441,20 +441,20 @@ public class Drive extends SubsystemBase {
     } catch (Exception e) {
       java.util.logging.Logger.getGlobal().warning("error with april tag: " + e.getMessage());
     }
-    photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontReefRobotToCam);
+    // photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+    //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontReefRobotToCam);
 
-    backPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backReefRobotToCam);
+    // backPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+    //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backReefRobotToCam);
 
-    backLeftPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backLeftReefRobotToCam);
+    // backLeftPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+    //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backLeftReefRobotToCam);
 
-    backRightPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backRightReefRobotToCam);
+    // backRightPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+    //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backRightReefRobotToCam);
 
-    swervePhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontSwerveRobotToCam);
+    // swervePhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+    //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontSwerveRobotToCam);
 
     // rightPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
     // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontBargeRobotToCam);
@@ -462,8 +462,8 @@ public class Drive extends SubsystemBase {
     // leftPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
     // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backBargeRobotToCam);
 
-    gamePiecePhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, gamePieceReefRobotToCam);
+    // gamePiecePhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+    //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, gamePieceReefRobotToCam);
 
     frontRight.init();
     frontLeft.init();
@@ -748,12 +748,12 @@ public class Drive extends SubsystemBase {
     return closestTag;
   }
 
-  private boolean inReefInteractionState() {
-    return systemState == DriveState.L4_REEF || systemState == DriveState.L3_REEF ||
-        systemState == DriveState.REEF || systemState == DriveState.AUTO_L1 ||
-        systemState == DriveState.AUTO_L1_MORE || systemState == DriveState.ALGAE ||
-        systemState == DriveState.ALGAE_MORE || systemState == DriveState.ALGAE_MORE_MORE;
-  }
+  // private boolean inReefInteractionState() {
+  //   return systemState == DriveState.L4_REEF || systemState == DriveState.L3_REEF ||
+  //       systemState == DriveState.REEF || systemState == DriveState.AUTO_L1 ||
+  //       systemState == DriveState.AUTO_L1_MORE || systemState == DriveState.ALGAE ||
+  //       systemState == DriveState.ALGAE_MORE || systemState == DriveState.ALGAE_MORE_MORE;
+  // }
 
   private boolean closeToReef() {
     double dist = DriverStation.isAutonomousEnabled() ? 2.7 : 2.3;
@@ -789,245 +789,245 @@ public class Drive extends SubsystemBase {
     Matrix<N3, N1> standardDeviation = new Matrix<>(Nat.N3(), Nat.N1());
     Logger.recordOutput("Closde to reef", closeToReef());
 
-    if (((closeToReef()) || inReefInteractionState())
-        && systemState != DriveState.REEF_MORE) {
-      photonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
-      backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
-      backLeftPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
-      backRightPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
-      swervePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
-      gamePiecePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
+    // if (((closeToReef()) || inReefInteractionState())
+    //     && systemState != DriveState.REEF_MORE) {
+    //   // photonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
+    //   // backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
+    //   // backLeftPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
+    //   // backRightPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
+    //   // swervePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
+    //   // gamePiecePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
 
-      Rotation2d robotRotation = new Rotation2d(navxOffset);
-      double time = Timer.getFPGATimestamp();
-      photonPoseEstimator.addHeadingData(time, robotRotation);
-      backPhotonPoseEstimator.addHeadingData(time, robotRotation);
-      backLeftPhotonPoseEstimator.addHeadingData(time, robotRotation);
-      backRightPhotonPoseEstimator.addHeadingData(time, robotRotation);
-      swervePhotonPoseEstimator.addHeadingData(time, robotRotation);
-      gamePiecePhotonPoseEstimator.addHeadingData(time, robotRotation);
-    } else {
-      photonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
-      backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
-      backLeftPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
-      backRightPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
-      swervePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
-      gamePiecePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
-    }
-    Logger.recordOutput("Back Strategy: ",
-        backPhotonPoseEstimator.getPrimaryStrategy().toString());
-    Logger.recordOutput("Back left strat: ", backLeftPhotonPoseEstimator.getPrimaryStrategy().toString());
-    Logger.recordOutput("Back right strat: ",
-        backRightPhotonPoseEstimator.getPrimaryStrategy().toString());
+    //   Rotation2d robotRotation = new Rotation2d(navxOffset);
+    //   double time = Timer.getFPGATimestamp();
+    //   // photonPoseEstimator.addHeadingData(time, robotRotation);
+    //   // backPhotonPoseEstimator.addHeadingData(time, robotRotation);
+    //   // backLeftPhotonPoseEstimator.addHeadingData(time, robotRotation);
+    //   // backRightPhotonPoseEstimator.addHeadingData(time, robotRotation);
+    //   // swervePhotonPoseEstimator.addHeadingData(time, robotRotation);
+    //   // gamePiecePhotonPoseEstimator.addHeadingData(time, robotRotation);
+    // } else {
+    //   // photonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
+    //   // backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
+    //   // backLeftPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
+    //   // backRightPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
+    //   // swervePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
+    //   // gamePiecePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
+    // }
+    // Logger.recordOutput("Back Strategy: ",
+    //     backPhotonPoseEstimator.getPrimaryStrategy().toString());
+    // Logger.recordOutput("Back left strat: ", backLeftPhotonPoseEstimator.getPrimaryStrategy().toString());
+    // Logger.recordOutput("Back right strat: ",
+    //     backRightPhotonPoseEstimator.getPrimaryStrategy().toString());
 
-    if (getRobotSpeed() < 2.4) {
-      var backResult = peripherals.getBackReefCamResult();
-      Optional<EstimatedRobotPose> backMultiTagResult = backPhotonPoseEstimator.update(backResult);
-      if (backMultiTagResult.isPresent()) {
-        if (backResult.getBestTarget().getPoseAmbiguity() < 0.3 && backResult.getBestTarget().fiducialId != 5
-            && backResult.getBestTarget().fiducialId != 4 && backResult.getBestTarget().fiducialId != 14
-            && backResult.getBestTarget().fiducialId != 15 && backResult.getBestTarget().fiducialId != 3
-            && backResult.getBestTarget().fiducialId != 16) {
-          Pose3d robotPose = backMultiTagResult.get().estimatedPose;
-          Logger.recordOutput("multitag result", robotPose);
-          int numFrontTracks = backResult.getTargets().size();
-          Pose3d tagPose = aprilTagFieldLayout.getTagPose(backResult.getBestTarget().getFiducialId()).get();
-          double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-          // Logger.recordOutput("Distance to tag", distToTag);
-          if (distToTag < 3.2) {
-            if (inReefInteractionState()) {
-              standardDeviation.set(0, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
+    // if (getRobotSpeed() < 2.4) {
+    //   var backResult = peripherals.getBackReefCamResult();
+    //   Optional<EstimatedRobotPose> backMultiTagResult = backPhotonPoseEstimator.update(backResult);
+    //   if (backMultiTagResult.isPresent()) {
+    //     if (backResult.getBestTarget().getPoseAmbiguity() < 0.3 && backResult.getBestTarget().fiducialId != 5
+    //         && backResult.getBestTarget().fiducialId != 4 && backResult.getBestTarget().fiducialId != 14
+    //         && backResult.getBestTarget().fiducialId != 15 && backResult.getBestTarget().fiducialId != 3
+    //         && backResult.getBestTarget().fiducialId != 16) {
+    //       Pose3d robotPose = backMultiTagResult.get().estimatedPose;
+    //       Logger.recordOutput("multitag result", robotPose);
+    //       int numFrontTracks = backResult.getTargets().size();
+    //       Pose3d tagPose = aprilTagFieldLayout.getTagPose(backResult.getBestTarget().getFiducialId()).get();
+    //       double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+    //       // Logger.recordOutput("Distance to tag", distToTag);
+    //       if (distToTag < 3.2) {
+    //         if (inReefInteractionState()) {
+    //           standardDeviation.set(0, 0,
+    //               0.5
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(1, 0,
+    //               0.5
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(2, 0, 0.9);
 
-              if (backResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
-                mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                    backResult.getTimestampSeconds());
-              }
-            } else {
-              standardDeviation.set(0, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
+    //           if (backResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+    //             mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+    //                 backResult.getTimestampSeconds());
+    //           }
+    //         } else {
+    //           standardDeviation.set(0, 0,
+    //               Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(1, 0,
+    //               Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(2, 0, 0.9);
 
-              mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                  backResult.getTimestampSeconds());
-            }
-            // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-            // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-          }
-        }
-      }
+    //           mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+    //               backResult.getTimestampSeconds());
+    //         }
+    //         // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+    //         // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+    //       }
+    //     }
+    //   }
 
-      var swerveResult = peripherals.getFrontSwerveCamResult();
-      Optional<EstimatedRobotPose> swerveMultiTagResult = swervePhotonPoseEstimator.update(swerveResult);
-      if (swerveMultiTagResult.isPresent()
-          && (!inReefInteractionState()
-              || getAutoPlacementSideIsFront())) {
-        if (swerveResult.getBestTarget().getPoseAmbiguity() < 0.3) {
-          Pose3d robotPose = swerveMultiTagResult.get().estimatedPose;
-          int numFrontTracks = swerveResult.getTargets().size();
-          Pose3d tagPose = aprilTagFieldLayout.getTagPose(swerveResult.getBestTarget().getFiducialId()).get();
-          double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-          // Logger.recordOutput("Distance to tag", distToTag);
-          if (distToTag < 3.2) {
-            if (inReefInteractionState()) {
-              standardDeviation.set(0, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
+    //   var swerveResult = peripherals.getFrontSwerveCamResult();
+    //   Optional<EstimatedRobotPose> swerveMultiTagResult = swervePhotonPoseEstimator.update(swerveResult);
+    //   if (swerveMultiTagResult.isPresent()
+    //       && (!inReefInteractionState()
+    //           || getAutoPlacementSideIsFront())) {
+    //     if (swerveResult.getBestTarget().getPoseAmbiguity() < 0.3) {
+    //       Pose3d robotPose = swerveMultiTagResult.get().estimatedPose;
+    //       int numFrontTracks = swerveResult.getTargets().size();
+    //       Pose3d tagPose = aprilTagFieldLayout.getTagPose(swerveResult.getBestTarget().getFiducialId()).get();
+    //       double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+    //       // Logger.recordOutput("Distance to tag", distToTag);
+    //       if (distToTag < 3.2) {
+    //         if (inReefInteractionState()) {
+    //           standardDeviation.set(0, 0,
+    //               0.5
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(1, 0,
+    //               0.5
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(2, 0, 0.9);
 
-              if (swerveResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
-                mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                    swerveResult.getTimestampSeconds());
-              }
-            } else {
-              standardDeviation.set(0, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
+    //           if (swerveResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+    //             mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+    //                 swerveResult.getTimestampSeconds());
+    //           }
+    //         } else {
+    //           standardDeviation.set(0, 0,
+    //               Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(1, 0,
+    //               Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(2, 0, 0.9);
 
-              mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                  swerveResult.getTimestampSeconds());
-            }
-            // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-            // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-          }
-        }
-      }
+    //           mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+    //               swerveResult.getTimestampSeconds());
+    //         }
+    //         // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+    //         // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+    //       }
+    //     }
+    //   }
 
-      var backLeftResult = peripherals.getBackLeftReefCamResult();
-      Optional<EstimatedRobotPose> backLeftMultiTagResult = backLeftPhotonPoseEstimator.update(backLeftResult);
-      if (backLeftMultiTagResult.isPresent()) {
-        if (backLeftResult.getBestTarget().getPoseAmbiguity() < 0.3 && backLeftResult.getBestTarget().fiducialId != 5
-            && backLeftResult.getBestTarget().fiducialId != 4 && backLeftResult.getBestTarget().fiducialId != 14
-            && backLeftResult.getBestTarget().fiducialId != 15 && backLeftResult.getBestTarget().fiducialId != 3
-            && backLeftResult.getBestTarget().fiducialId != 16) {
-          Pose3d robotPose = backLeftMultiTagResult.get().estimatedPose;
-          int numFrontTracks = backLeftResult.getTargets().size();
-          Pose3d tagPose = aprilTagFieldLayout.getTagPose(backLeftResult.getBestTarget().getFiducialId()).get();
-          double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-          if (distToTag < 3.2) {
-            if (inReefInteractionState()) {
-              standardDeviation.set(0, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
+    //   var backLeftResult = peripherals.getBackLeftReefCamResult();
+    //   Optional<EstimatedRobotPose> backLeftMultiTagResult = backLeftPhotonPoseEstimator.update(backLeftResult);
+    //   if (backLeftMultiTagResult.isPresent()) {
+    //     if (backLeftResult.getBestTarget().getPoseAmbiguity() < 0.3 && backLeftResult.getBestTarget().fiducialId != 5
+    //         && backLeftResult.getBestTarget().fiducialId != 4 && backLeftResult.getBestTarget().fiducialId != 14
+    //         && backLeftResult.getBestTarget().fiducialId != 15 && backLeftResult.getBestTarget().fiducialId != 3
+    //         && backLeftResult.getBestTarget().fiducialId != 16) {
+    //       Pose3d robotPose = backLeftMultiTagResult.get().estimatedPose;
+    //       int numFrontTracks = backLeftResult.getTargets().size();
+    //       Pose3d tagPose = aprilTagFieldLayout.getTagPose(backLeftResult.getBestTarget().getFiducialId()).get();
+    //       double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+    //       if (distToTag < 3.2) {
+    //         if (inReefInteractionState()) {
+    //           standardDeviation.set(0, 0,
+    //               0.5
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(1, 0,
+    //               0.5
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(2, 0, 0.9);
 
-              if (backLeftResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
-                mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                    backLeftResult.getTimestampSeconds());
-              }
-            } else {
-              standardDeviation.set(0, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
+    //           if (backLeftResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+    //             mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+    //                 backLeftResult.getTimestampSeconds());
+    //           }
+    //         } else {
+    //           standardDeviation.set(0, 0,
+    //               Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(1, 0,
+    //               Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(2, 0, 0.9);
 
-              mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                  backLeftResult.getTimestampSeconds());
-            }
-            // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-            // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-          }
-        }
-      }
+    //           mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+    //               backLeftResult.getTimestampSeconds());
+    //         }
+    //         // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+    //         // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+    //       }
+    //     }
+    //   }
 
-      var backRightResult = peripherals.getBackRightReefCamResult();
-      Optional<EstimatedRobotPose> backRightMultiTagResult = backRightPhotonPoseEstimator.update(backRightResult);
-      if (backRightMultiTagResult.isPresent()) {
-        if (backRightResult.getBestTarget().getPoseAmbiguity() < 0.3 && backRightResult.getBestTarget().fiducialId != 5
-            && backRightResult.getBestTarget().fiducialId != 4 && backRightResult.getBestTarget().fiducialId != 14
-            && backRightResult.getBestTarget().fiducialId != 15 && backRightResult.getBestTarget().fiducialId != 3
-            && backRightResult.getBestTarget().fiducialId != 16) {
-          Pose3d robotPose = backRightMultiTagResult.get().estimatedPose;
-          int numFrontTracks = backRightResult.getTargets().size();
-          Pose3d tagPose = aprilTagFieldLayout.getTagPose(backRightResult.getBestTarget().getFiducialId()).get();
-          double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-          // Logger.recordOutput("Distance to tag", distToTag);
-          if (distToTag < 3.2) {
-            if (inReefInteractionState()) {
-              standardDeviation.set(0, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
+    //   var backRightResult = peripherals.getBackRightReefCamResult();
+    //   Optional<EstimatedRobotPose> backRightMultiTagResult = backRightPhotonPoseEstimator.update(backRightResult);
+    //   if (backRightMultiTagResult.isPresent()) {
+    //     if (backRightResult.getBestTarget().getPoseAmbiguity() < 0.3 && backRightResult.getBestTarget().fiducialId != 5
+    //         && backRightResult.getBestTarget().fiducialId != 4 && backRightResult.getBestTarget().fiducialId != 14
+    //         && backRightResult.getBestTarget().fiducialId != 15 && backRightResult.getBestTarget().fiducialId != 3
+    //         && backRightResult.getBestTarget().fiducialId != 16) {
+    //       Pose3d robotPose = backRightMultiTagResult.get().estimatedPose;
+    //       int numFrontTracks = backRightResult.getTargets().size();
+    //       Pose3d tagPose = aprilTagFieldLayout.getTagPose(backRightResult.getBestTarget().getFiducialId()).get();
+    //       double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
+    //       // Logger.recordOutput("Distance to tag", distToTag);
+    //       if (distToTag < 3.2) {
+    //         if (inReefInteractionState()) {
+    //           standardDeviation.set(0, 0,
+    //               0.5
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(1, 0,
+    //               0.5
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(2, 0, 0.9);
 
-              if (backRightResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
-                mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                    backRightResult.getTimestampSeconds());
-              }
-            } else {
-              standardDeviation.set(0, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
+    //           if (backRightResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
+    //             mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+    //                 backRightResult.getTimestampSeconds());
+    //           }
+    //         } else {
+    //           standardDeviation.set(0, 0,
+    //               Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(1, 0,
+    //               Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
+    //                   * Constants.Vision.getTagDistStdDevScalar(distToTag));
+    //           // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
+    //           // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
+    //           standardDeviation.set(2, 0, 0.9);
 
-              mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                  backRightResult.getTimestampSeconds());
-            }
-            // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-            // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-          }
-        }
-      }
-    }
+    //           mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
+    //               backRightResult.getTimestampSeconds());
+    //         }
+    //         // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
+    //         // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
+    //       }
+    //   }
+    // }
+    // }
     m_currentTime = Timer.getFPGATimestamp() - m_initTime;
   }
 
@@ -2087,197 +2087,197 @@ public class Drive extends SubsystemBase {
   Pose2d c1 = new Pose2d();
   Pose2d c2 = new Pose2d();
 
-  public Pose2d getGamePiecePosition() {
-    if (!firstTimeAutoPickup) {
-      firstTimePickupAngle = getMT2OdometryAngle();
-      firstTimeAutoPickup = true;
-    }
+  // public Pose2d getGamePiecePosition() {
+  //   if (!firstTimeAutoPickup) {
+  //     firstTimePickupAngle = getMT2OdometryAngle();
+  //     firstTimeAutoPickup = true;
+  //   }
 
-    double yaw = 0.0;
-    double pitch = 0.0;
-    var result = peripherals.getFrontGamePieceCamResult();
-    if (result.hasTargets()) {
-      List<PhotonTrackedTarget> tracks = result.getTargets();
-      for (int i = 0; i < tracks.size(); i++) {
-        int id = tracks.get(i).getDetectedObjectClassID();
-        if (id == 0) {
-          tracks.remove(i);
-          i--;
-        }
-      }
-      if (tracks.isEmpty()) {
-        return new Pose2d();
-      } else {
-        double minPitch = tracks.get(0).getPitch();
-        int index = 0;
-        for (int i = 1; i < tracks.size(); i++) {
-          int id = tracks.get(0).getDetectedObjectClassID();
-          java.util.logging.Logger.getGlobal().finer("id: " + id);
-          if (tracks.get(i).getPitch() < minPitch) {
-            minPitch = tracks.get(i).getPitch();
-            index = i;
-          }
-        }
-        pitch = minPitch;
-        yaw = tracks.get(index).getYaw();
-      }
-    }
-    // double yFromIntake = 0.0;
+  //   double yaw = 0.0;
+  //   double pitch = 0.0;
+  //   var result = peripherals.getFrontGamePieceCamResult();
+  //   if (result.hasTargets()) {
+  //     List<PhotonTrackedTarget> tracks = result.getTargets();
+  //     for (int i = 0; i < tracks.size(); i++) {
+  //       int id = tracks.get(i).getDetectedObjectClassID();
+  //       if (id == 0) {
+  //         tracks.remove(i);
+  //         i--;
+  //       }
+  //     }
+  //     if (tracks.isEmpty()) {
+  //       return new Pose2d();
+  //     } else {
+  //       double minPitch = tracks.get(0).getPitch();
+  //       int index = 0;
+  //       for (int i = 1; i < tracks.size(); i++) {
+  //         int id = tracks.get(0).getDetectedObjectClassID();
+  //         java.util.logging.Logger.getGlobal().finer("id: " + id);
+  //         if (tracks.get(i).getPitch() < minPitch) {
+  //           minPitch = tracks.get(i).getPitch();
+  //           index = i;
+  //         }
+  //       }
+  //       pitch = minPitch;
+  //       yaw = tracks.get(index).getYaw();
+  //     }
+  //   }
+  //   // double yFromIntake = 0.0;
 
-    if (yaw != 0.0 && pitch != 0.0) {
-      java.util.logging.Logger.getGlobal().finer("calculating%");
-      double cameraYaw = 15.0;
-      double limelightXOffset = Constants.inchesToMeters(2.25);
-      double limelightYOffset = Constants.inchesToMeters(-11.5);
-      double intakeXOffset = Constants.inchesToMeters(20.5);
-      double intakeYOffset = Constants.inchesToMeters(3.0); // 4.0
+  //   if (yaw != 0.0 && pitch != 0.0) {
+  //     java.util.logging.Logger.getGlobal().finer("calculating%");
+  //     double cameraYaw = 15.0;
+  //     double limelightXOffset = Constants.inchesToMeters(2.25);
+  //     double limelightYOffset = Constants.inchesToMeters(-11.5);
+  //     double intakeXOffset = Constants.inchesToMeters(20.5);
+  //     double intakeYOffset = Constants.inchesToMeters(3.0); // 4.0
 
-      double robotX = getMT2OdometryX();
-      double robotY = getMT2OdometryY();
-      // double robotAngle = getMT2OdometryAngle();
-      double robotAngle = firstTimePickupAngle;
-      Pose2d robotPose = new Pose2d(robotX, robotY, new Rotation2d(robotAngle));
+  //     double robotX = getMT2OdometryX();
+  //     double robotY = getMT2OdometryY();
+  //     // double robotAngle = getMT2OdometryAngle();
+  //     double robotAngle = firstTimePickupAngle;
+  //     Pose2d robotPose = new Pose2d(robotX, robotY, new Rotation2d(robotAngle));
 
-      // double targetDistance = Math
-      // .abs((limelightHeight - gamePieceHeight) /
-      // Math.tan(Math.toRadians(-limelightAngle + pitch)));
-      double targetDistance = Constants.inchesToMeters(Constants.Vision.getCoralDistanceFromPitch(pitch));
-      Logger.recordOutput("Distance to Coral", targetDistance);
-      double noteY = -(targetDistance * Math.sin(Math.toRadians(-cameraYaw + yaw)));
-      double noteX = ((targetDistance * Math.cos(Math.toRadians(cameraYaw - yaw))));
-      Logger.recordOutput("coral x", noteX);
-      Logger.recordOutput("coral y", noteY);
-      double xFromRobot = noteX + limelightXOffset;
-      double yFromRobot = noteY + limelightYOffset;
-      Pose2d coralPose = robotPose.transformBy(new Transform2d(xFromRobot, yFromRobot, new Rotation2d()));
+  //     // double targetDistance = Math
+  //     // .abs((limelightHeight - gamePieceHeight) /
+  //     // Math.tan(Math.toRadians(-limelightAngle + pitch)));
+  //     double targetDistance = Constants.inchesToMeters(Constants.Vision.getCoralDistanceFromPitch(pitch));
+  //     Logger.recordOutput("Distance to Coral", targetDistance);
+  //     double noteY = -(targetDistance * Math.sin(Math.toRadians(-cameraYaw + yaw)));
+  //     double noteX = ((targetDistance * Math.cos(Math.toRadians(cameraYaw - yaw))));
+  //     Logger.recordOutput("coral x", noteX);
+  //     Logger.recordOutput("coral y", noteY);
+  //     double xFromRobot = noteX + limelightXOffset;
+  //     double yFromRobot = noteY + limelightYOffset;
+  //     Pose2d coralPose = robotPose.transformBy(new Transform2d(xFromRobot, yFromRobot, new Rotation2d()));
 
-      Logger.recordOutput("coral rc x", xFromRobot);
-      Logger.recordOutput("coral rc y", yFromRobot);
-      Logger.recordOutput("coral pose", coralPose);
+  //     Logger.recordOutput("coral rc x", xFromRobot);
+  //     Logger.recordOutput("coral rc y", yFromRobot);
+  //     Logger.recordOutput("coral pose", coralPose);
 
-      double xFromIntake = xFromRobot - intakeXOffset;
-      double yFromIntake = yFromRobot - intakeYOffset;
-      if (!firstTimeCalculated) {
-        hasTrack = true;
-        targetPose = robotPose.transformBy(new Transform2d(xFromIntake,
-            yFromIntake, new Rotation2d()));
-        Logger.recordOutput("coral intake x", xFromIntake);
-        Logger.recordOutput("coral intake y", yFromIntake);
-        double projectedTx = Math.atan2(Math.tan(Math.toRadians(yaw)), Math.cos(Math.toRadians(pitch)));
-        java.util.logging.Logger.getGlobal().finer("Projected: " + Math.toDegrees(projectedTx));
-        java.util.logging.Logger.getGlobal().finer("actual: " + yaw);
-        Pose2d intakeFieldPose = robotPose.transformBy(new Transform2d(intakeXOffset, intakeYOffset, new Rotation2d()));
-        double angleToPiece = Constants.standardizeAngleDegrees(Math.toDegrees(Math.atan2(
-            intakeFieldPose.getY() - coralPose.getY(), intakeFieldPose.getX() - coralPose.getX()) - Math.PI));
-        Logger.recordOutput("Angle to Piece", (angleToPiece));
-        Logger.recordOutput("Intake field pose", intakeFieldPose);
+  //     double xFromIntake = xFromRobot - intakeXOffset;
+  //     double yFromIntake = yFromRobot - intakeYOffset;
+  //     if (!firstTimeCalculated) {
+  //       hasTrack = true;
+  //       targetPose = robotPose.transformBy(new Transform2d(xFromIntake,
+  //           yFromIntake, new Rotation2d()));
+  //       Logger.recordOutput("coral intake x", xFromIntake);
+  //       Logger.recordOutput("coral intake y", yFromIntake);
+  //       double projectedTx = Math.atan2(Math.tan(Math.toRadians(yaw)), Math.cos(Math.toRadians(pitch)));
+  //       java.util.logging.Logger.getGlobal().finer("Projected: " + Math.toDegrees(projectedTx));
+  //       java.util.logging.Logger.getGlobal().finer("actual: " + yaw);
+  //       Pose2d intakeFieldPose = robotPose.transformBy(new Transform2d(intakeXOffset, intakeYOffset, new Rotation2d()));
+  //       double angleToPiece = Constants.standardizeAngleDegrees(Math.toDegrees(Math.atan2(
+  //           intakeFieldPose.getY() - coralPose.getY(), intakeFieldPose.getX() - coralPose.getX()) - Math.PI));
+  //       Logger.recordOutput("Angle to Piece", (angleToPiece));
+  //       Logger.recordOutput("Intake field pose", intakeFieldPose);
 
-        double deltaX = coralPose.getX() - intakeFieldPose.getX();
-        double deltaY = coralPose.getY() - intakeFieldPose.getY();
-        double targetAngle = Math.atan2(deltaY, deltaX);
-        Pose2d poseFromRobotFront = new Pose2d(Constants.metersToInches(xFromRobot - Constants.inchesToMeters(16.5)),
-            Constants.metersToInches(yFromRobot), new Rotation2d());
-        Logger.recordOutput("Pose from robot front", poseFromRobotFront);
+  //       double deltaX = coralPose.getX() - intakeFieldPose.getX();
+  //       double deltaY = coralPose.getY() - intakeFieldPose.getY();
+  //       double targetAngle = Math.atan2(deltaY, deltaX);
+  //       Pose2d poseFromRobotFront = new Pose2d(Constants.metersToInches(xFromRobot - Constants.inchesToMeters(16.5)),
+  //           Constants.metersToInches(yFromRobot), new Rotation2d());
+  //       Logger.recordOutput("Pose from robot front", poseFromRobotFront);
 
-        // Adjust for the robot's current heading and camera yaw
-        double requiredTurn = targetAngle - Math.toRadians(cameraYaw);
+  //       // Adjust for the robot's current heading and camera yaw
+  //       double requiredTurn = targetAngle - Math.toRadians(cameraYaw);
 
-        // Normalize to range [-π, π] for minimal turning
-        requiredTurn = (requiredTurn + (2 * Math.PI)) % (2 * Math.PI);
-        // driveToPoint(targetPose.getX(), targetPose.getY(),
-        Logger.recordOutput("new angle", Math.toDegrees(requiredTurn));
-        // Pose2d targetPose = robotPose
-        // .transformBy(new Transform2d(xFromIntake, yFromIntake, new
-        // Rotation2d(requiredTurn)));
-        Logger.recordOutput("target pickup", targetPose);
+  //       // Normalize to range [-π, π] for minimal turning
+  //       requiredTurn = (requiredTurn + (2 * Math.PI)) % (2 * Math.PI);
+  //       // driveToPoint(targetPose.getX(), targetPose.getY(),
+  //       Logger.recordOutput("new angle", Math.toDegrees(requiredTurn));
+  //       // Pose2d targetPose = robotPose
+  //       // .transformBy(new Transform2d(xFromIntake, yFromIntake, new
+  //       // Rotation2d(requiredTurn)));
+  //       Logger.recordOutput("target pickup", targetPose);
 
-        double mx = (robotX + targetPose.getX()) / 2;
-        double my = (robotY + targetPose.getY()) / 2;
+  //       double mx = (robotX + targetPose.getX()) / 2;
+  //       double my = (robotY + targetPose.getY()) / 2;
 
-        // Compute the length of AB (hypotenuse)
-        double abLength = Math.sqrt(Math.pow(robotX - targetPose.getX(), 2) + Math.pow(robotY - targetPose.getY(), 2));
+  //       // Compute the length of AB (hypotenuse)
+  //       double abLength = Math.sqrt(Math.pow(robotX - targetPose.getX(), 2) + Math.pow(robotY - targetPose.getY(), 2));
 
-        // The expected right triangle height from midpoint to C
-        double d = Math.sqrt(xFromIntake * xFromIntake + yFromIntake * yFromIntake - (abLength * abLength) / 2);
+  //       // The expected right triangle height from midpoint to C
+  //       double d = Math.sqrt(xFromIntake * xFromIntake + yFromIntake * yFromIntake - (abLength * abLength) / 2);
 
-        // Compute the perpendicular direction (normalized)
-        double perpX = -(robotY - targetPose.getY()) / abLength;
-        double perpY = (robotX - targetPose.getX()) / abLength;
+  //       // Compute the perpendicular direction (normalized)
+  //       double perpX = -(robotY - targetPose.getY()) / abLength;
+  //       double perpY = (robotX - targetPose.getX()) / abLength;
 
-        // Compute the two possible C points
-        double c1X = mx + d * perpX;
-        double c1Y = my + d * perpY;
+  //       // Compute the two possible C points
+  //       double c1X = mx + d * perpX;
+  //       double c1Y = my + d * perpY;
 
-        double c2X = mx - d * perpX;
-        double c2Y = my - d * perpY;
-        c1 = new Pose2d(c1X, c1Y, new Rotation2d(robotAngle));
-        c2 = new Pose2d(c2X, c2Y, new Rotation2d(robotAngle));
-        Logger.recordOutput("c1x", c1);
-        Logger.recordOutput("c1y", c2);
-        firstTimeCalculated = true;
-        java.util.logging.Logger.getGlobal().finer("Running once");
-      }
-      // targetPose.getRotation().getRadians());
-      // if (){
+  //       double c2X = mx - d * perpX;
+  //       double c2Y = my - d * perpY;
+  //       c1 = new Pose2d(c1X, c1Y, new Rotation2d(robotAngle));
+  //       c2 = new Pose2d(c2X, c2Y, new Rotation2d(robotAngle));
+  //       Logger.recordOutput("c1x", c1);
+  //       Logger.recordOutput("c1y", c2);
+  //       firstTimeCalculated = true;
+  //       java.util.logging.Logger.getGlobal().finer("Running once");
+  //     }
+  //     // targetPose.getRotation().getRadians());
+  //     // if (){
 
-      // } else
-      // if (Math.abs(yFromIntake) < 0.2) {
-      java.util.logging.Logger.getGlobal().finer("going in");
-      // if (!firstTimeGoingInCalculated) {
-      // firstTimeCalculated = false;
-      // }
-      firstTimeGoingIn = true;
-      return targetPose;
-      // } else if (yFromIntake < 0.0 && !firstTimeGoingIn) {
-      // System.out.println("to the left");
-      // return c1;
-      // } else {
-      // System.out.println("to the right");
-      // return c2;
-      // }
-      // double pieceXFromIntake = noteX - intakeXOffset;
-      // double pieceYFromIntake = noteY - intakeYOffset;
-    } else
+  //     // } else
+  //     // if (Math.abs(yFromIntake) < 0.2) {
+  //     java.util.logging.Logger.getGlobal().finer("going in");
+  //     // if (!firstTimeGoingInCalculated) {
+  //     // firstTimeCalculated = false;
+  //     // }
+  //     firstTimeGoingIn = true;
+  //     return targetPose;
+  //     // } else if (yFromIntake < 0.0 && !firstTimeGoingIn) {
+  //     // System.out.println("to the left");
+  //     // return c1;
+  //     // } else {
+  //     // System.out.println("to the right");
+  //     // return c2;
+  //     // }
+  //     // double pieceXFromIntake = noteX - intakeXOffset;
+  //     // double pieceYFromIntake = noteY - intakeYOffset;
+  //   } else
 
-    {
-      // System.out.println("default game piece");
-      return new Pose2d();
-    }
-  }
+  //   {
+  //     // System.out.println("default game piece");
+  //     return new Pose2d();
+  //   }
+  // }
 
-  public void goToCoral() {
-    double yaw = 0.0;
-    double pitch = 0.0;
-    var result = peripherals.getFrontGamePieceCamResult();
-    List<PhotonTrackedTarget> tracks = new ArrayList<>(result.getTargets());
-    List<PhotonTrackedTarget> coralTargets = new ArrayList<>();
-    for (PhotonTrackedTarget track : tracks) {
-      if (track.objDetectId == 1) {
-        coralTargets.add(track);
-      }
-    }
+  // public void goToCoral() {
+  //   double yaw = 0.0;
+  //   double pitch = 0.0;
+  //   var result = peripherals.getFrontGamePieceCamResult();
+  //   List<PhotonTrackedTarget> tracks = new ArrayList<>(result.getTargets());
+  //   List<PhotonTrackedTarget> coralTargets = new ArrayList<>();
+  //   for (PhotonTrackedTarget track : tracks) {
+  //     if (track.objDetectId == 1) {
+  //       coralTargets.add(track);
+  //     }
+  //   }
 
-    if (result.hasTargets() && !coralTargets.isEmpty()) {
-      PhotonTrackedTarget bestTrack = coralTargets.get(0);
-      yaw = bestTrack.getYaw();
-      pitch = bestTrack.getPitch();
-    }
+  //   if (result.hasTargets() && !coralTargets.isEmpty()) {
+  //     PhotonTrackedTarget bestTrack = coralTargets.get(0);
+  //     yaw = bestTrack.getYaw();
+  //     pitch = bestTrack.getPitch();
+  //   }
 
-    if (yaw != 0.0 && pitch != 0.0) {
-      double currentAngle = -yaw;
-      java.util.logging.Logger.getGlobal().finer("currentAngle: " + currentAngle);
-      double wantedAngleInFrame = 14.7;
-      double cameraToRobotAngleOffset = 35.0;
-      rotatePID.setSetPoint(wantedAngleInFrame);
-      rotatePID.updatePID(currentAngle);
-      double r = -rotatePID.getResult();
-      double driveAngleDeg = wantedAngleInFrame + cameraToRobotAngleOffset;
-      double wantedSpeedMPS = 1.0;
-      Vector v = new Vector(Math.cos(Math.toRadians(driveAngleDeg)), Math.sin(Math.toRadians(driveAngleDeg)))
-          .scaled(wantedSpeedMPS);
-      autoRobotCentricDrive(v, r);
-    }
-  }
+  //   if (yaw != 0.0 && pitch != 0.0) {
+  //     double currentAngle = -yaw;
+  //     java.util.logging.Logger.getGlobal().finer("currentAngle: " + currentAngle);
+  //     double wantedAngleInFrame = 14.7;
+  //     double cameraToRobotAngleOffset = 35.0;
+  //     rotatePID.setSetPoint(wantedAngleInFrame);
+  //     rotatePID.updatePID(currentAngle);
+  //     double r = -rotatePID.getResult();
+  //     double driveAngleDeg = wantedAngleInFrame + cameraToRobotAngleOffset;
+  //     double wantedSpeedMPS = 1.0;
+  //     Vector v = new Vector(Math.cos(Math.toRadians(driveAngleDeg)), Math.sin(Math.toRadians(driveAngleDeg)))
+  //         .scaled(wantedSpeedMPS);
+  //     autoRobotCentricDrive(v, r);
+  //   }
+  // }
 
   public Pose2d getMt2Pose2d() {
     return mt2Odometry.getEstimatedPosition();
@@ -2780,140 +2780,140 @@ public class Drive extends SubsystemBase {
     }
   }
 
-  public void driveToPoint(Pose2d targetPoint) {
-    Logger.recordOutput("Goal X, Y, Theta", targetPoint);
-    // Logger.recordOutput("Magnitude Error Inches",
-    // Constants.metersToInches(Math.sqrt(Math.pow(x - getMT2OdometryX(), 2) +
-    // Math.pow(y - getMT2OdometryY(), 2))));
-    // Logger.recordOutput("Theta Error Degrees", Math.toDegrees(theta -
-    // getMT2OdometryAngle()));
-    double x = targetPoint.getX();
-    double y = targetPoint.getY();
-    double theta = targetPoint.getRotation().getRadians();
-    theta = Constants.standardizeAngleToOther(theta, getMT2OdometryAngle());
+  // public void driveToPoint(Pose2d targetPoint) {
+  //   Logger.recordOutput("Goal X, Y, Theta", targetPoint);
+  //   // Logger.recordOutput("Magnitude Error Inches",
+  //   // Constants.metersToInches(Math.sqrt(Math.pow(x - getMT2OdometryX(), 2) +
+  //   // Math.pow(y - getMT2OdometryY(), 2))));
+  //   // Logger.recordOutput("Theta Error Degrees", Math.toDegrees(theta -
+  //   // getMT2OdometryAngle()));
+  //   double x = targetPoint.getX();
+  //   double y = targetPoint.getY();
+  //   double theta = targetPoint.getRotation().getRadians();
+  //   theta = Constants.standardizeAngleToOther(theta, getMT2OdometryAngle());
 
-    double xVelNoFF = 0.0;
-    double yVelNoFF = 0.0;
-    double thetaVelNoFF = 0.0;
+  //   double xVelNoFF = 0.0;
+  //   double yVelNoFF = 0.0;
+  //   double thetaVelNoFF = 0.0;
 
-    if (DriverStation.isAutonomousEnabled() && systemState.equals(DriveState.L4_REEF)) {
-      xxPID4A.setSetPoint(x);
-      yyPID4A.setSetPoint(y);
-      thetaaPID4A.setSetPoint(theta);
+  //   if (DriverStation.isAutonomousEnabled() && systemState.equals(DriveState.L4_REEF)) {
+  //     xxPID4A.setSetPoint(x);
+  //     yyPID4A.setSetPoint(y);
+  //     thetaaPID4A.setSetPoint(theta);
 
-      xxPID4A.updatePID(getMT2OdometryX());
-      yyPID4A.updatePID(getMT2OdometryY());
-      thetaaPID4A.updatePID(getMT2OdometryAngle());
+  //     xxPID4A.updatePID(getMT2OdometryX());
+  //     yyPID4A.updatePID(getMT2OdometryY());
+  //     thetaaPID4A.updatePID(getMT2OdometryAngle());
 
-      xVelNoFF = xxPID4A.getResult();
-      yVelNoFF = yyPID4A.getResult();
-      // double velmag = Math.hypot(xVelNoFF, yVelNoFF);
-      // double maxvel = 0.1;
-      // if (velmag > maxvel) {
-      // xVelNoFF = xVelNoFF * maxvel / velmag;
-      // yVelNoFF = yVelNoFF * maxvel / velmag;
-      // }
-      thetaVelNoFF = -thetaaPID4A.getResult();
-    } else if (OI.driverPOVRight.getAsBoolean()) {
-      xxPID4.setSetPoint(x);
-      yyPID4.setSetPoint(y);
-      thetaaPID4.setSetPoint(theta);
+  //     xVelNoFF = xxPID4A.getResult();
+  //     yVelNoFF = yyPID4A.getResult();
+  //     // double velmag = Math.hypot(xVelNoFF, yVelNoFF);
+  //     // double maxvel = 0.1;
+  //     // if (velmag > maxvel) {
+  //     // xVelNoFF = xVelNoFF * maxvel / velmag;
+  //     // yVelNoFF = yVelNoFF * maxvel / velmag;
+  //     // }
+  //     thetaVelNoFF = -thetaaPID4A.getResult();
+  //   } else if (OI.driverPOVRight.getAsBoolean()) {
+  //     xxPID4.setSetPoint(x);
+  //     yyPID4.setSetPoint(y);
+  //     thetaaPID4.setSetPoint(theta);
 
-      xxPID4.updatePID(getMT2OdometryX());
-      yyPID4.updatePID(getMT2OdometryY());
-      thetaaPID4.updatePID(getMT2OdometryAngle());
+  //     xxPID4.updatePID(getMT2OdometryX());
+  //     yyPID4.updatePID(getMT2OdometryY());
+  //     thetaaPID4.updatePID(getMT2OdometryAngle());
 
-      xVelNoFF = xxPID4.getResult();
-      yVelNoFF = yyPID4.getResult();
-      thetaVelNoFF = -thetaaPID4.getResult();
+  //     xVelNoFF = xxPID4.getResult();
+  //     yVelNoFF = yyPID4.getResult();
+  //     thetaVelNoFF = -thetaaPID4.getResult();
 
-    } else if (DriverStation.isTeleopEnabled()
-        && (OI.driverPOVLeft.getAsBoolean() || OI.driverPOVDown.getAsBoolean())) {
+  //   } else if (DriverStation.isTeleopEnabled()
+  //       && (OI.driverPOVLeft.getAsBoolean() || OI.driverPOVDown.getAsBoolean())) {
 
-      xxPID23.setSetPoint(x);
-      yyPID23.setSetPoint(y);
-      thetaaPID23.setSetPoint(theta);
+  //     xxPID23.setSetPoint(x);
+  //     yyPID23.setSetPoint(y);
+  //     thetaaPID23.setSetPoint(theta);
 
-      xxPID23.updatePID(getMT2OdometryX());
-      yyPID23.updatePID(getMT2OdometryY());
-      thetaaPID23.updatePID(getMT2OdometryAngle());
+  //     xxPID23.updatePID(getMT2OdometryX());
+  //     yyPID23.updatePID(getMT2OdometryY());
+  //     thetaaPID23.updatePID(getMT2OdometryAngle());
 
-      xVelNoFF = xxPID23.getResult();
-      yVelNoFF = yyPID23.getResult();
-      thetaVelNoFF = -thetaaPID23.getResult();
+  //     xVelNoFF = xxPID23.getResult();
+  //     yVelNoFF = yyPID23.getResult();
+  //     thetaVelNoFF = -thetaaPID23.getResult();
 
-    } else if (DriverStation.isTeleopEnabled() && OI.driverPOVUp.getAsBoolean()) {
+  //   } else if (DriverStation.isTeleopEnabled() && OI.driverPOVUp.getAsBoolean()) {
 
-      xxPID1.setSetPoint(x);
-      yyPID1.setSetPoint(y);
-      thetaaPID1.setSetPoint(theta);
+  //     xxPID1.setSetPoint(x);
+  //     yyPID1.setSetPoint(y);
+  //     thetaaPID1.setSetPoint(theta);
 
-      xxPID1.updatePID(getMT2OdometryX());
-      yyPID1.updatePID(getMT2OdometryY());
-      thetaaPID1.updatePID(getMT2OdometryAngle());
+  //     xxPID1.updatePID(getMT2OdometryX());
+  //     yyPID1.updatePID(getMT2OdometryY());
+  //     thetaaPID1.updatePID(getMT2OdometryAngle());
 
-      xVelNoFF = xxPID1.getResult();
-      yVelNoFF = yyPID1.getResult();
-      thetaVelNoFF = -thetaaPID1.getResult();
+  //     xVelNoFF = xxPID1.getResult();
+  //     yVelNoFF = yyPID1.getResult();
+  //     thetaVelNoFF = -thetaaPID1.getResult();
 
-    } else if (systemState.equals(DriveState.PIECE_PICKUP)) {
+  //   } else if (systemState.equals(DriveState.PIECE_PICKUP)) {
 
-      xxPIDPickup.setSetPoint(x);
-      yyPIDPickup.setSetPoint(y);
-      thetaaPIDPickup.setSetPoint(theta);
+  //     xxPIDPickup.setSetPoint(x);
+  //     yyPIDPickup.setSetPoint(y);
+  //     thetaaPIDPickup.setSetPoint(theta);
 
-      xxPIDPickup.updatePID(getMT2OdometryX());
-      yyPIDPickup.updatePID(getMT2OdometryY());
-      thetaaPIDPickup.updatePID(getMT2OdometryAngle());
+  //     xxPIDPickup.updatePID(getMT2OdometryX());
+  //     yyPIDPickup.updatePID(getMT2OdometryY());
+  //     thetaaPIDPickup.updatePID(getMT2OdometryAngle());
 
-      xVelNoFF = xxPIDPickup.getResult();
-      yVelNoFF = yyPIDPickup.getResult();
-      thetaVelNoFF = -thetaaPIDPickup.getResult();
+  //     xVelNoFF = xxPIDPickup.getResult();
+  //     yVelNoFF = yyPIDPickup.getResult();
+  //     thetaVelNoFF = -thetaaPIDPickup.getResult();
 
-    } else {
+  //   } else {
 
-      xxPID.setSetPoint(x);
-      yyPID.setSetPoint(y);
-      thetaaPID.setSetPoint(theta);
+  //     xxPID.setSetPoint(x);
+  //     yyPID.setSetPoint(y);
+  //     thetaaPID.setSetPoint(theta);
 
-      xxPID.updatePID(getMT2OdometryX());
-      yyPID.updatePID(getMT2OdometryY());
-      thetaaPID.updatePID(getMT2OdometryAngle());
+  //     xxPID.updatePID(getMT2OdometryX());
+  //     yyPID.updatePID(getMT2OdometryY());
+  //     thetaaPID.updatePID(getMT2OdometryAngle());
 
-      xVelNoFF = xxPID.getResult();
-      yVelNoFF = yyPID.getResult();
-      thetaVelNoFF = -thetaaPID.getResult();
-    }
+  //     xVelNoFF = xxPID.getResult();
+  //     yVelNoFF = yyPID.getResult();
+  //     thetaVelNoFF = -thetaaPID.getResult();
+  //   }
 
-    // double feedForwardX = targetPoint.getDouble("x_velocity") *
-    // Constants.Autonomous.FEED_FORWARD_MULTIPLIER;
-    // double feedForwardY = targetPoint.getDouble("y_velocity") *
-    // Constants.Autonomous.FEED_FORWARD_MULTIPLIER;
-    // double feedForwardTheta = -targetPoint.getDouble("angular_velocity") *
-    // Constants.Autonomous.FEED_FORWARD_MULTIPLIER;
+  //   // double feedForwardX = targetPoint.getDouble("x_velocity") *
+  //   // Constants.Autonomous.FEED_FORWARD_MULTIPLIER;
+  //   // double feedForwardY = targetPoint.getDouble("y_velocity") *
+  //   // Constants.Autonomous.FEED_FORWARD_MULTIPLIER;
+  //   // double feedForwardTheta = -targetPoint.getDouble("angular_velocity") *
+  //   // Constants.Autonomous.FEED_FORWARD_MULTIPLIER;
 
-    double finalX = xVelNoFF;
-    double finalY = yVelNoFF;
-    double finalTheta = thetaVelNoFF;
-    // if (m_fieldSide == "blue") {
-    // finalX = -finalX;
-    // finalTheta = -finalTheta;
-    // }
-    Number[] velocityArray = new Number[] {
-        finalX,
-        -finalY,
-        finalTheta,
-    };
+  //   double finalX = xVelNoFF;
+  //   double finalY = yVelNoFF;
+  //   double finalTheta = thetaVelNoFF;
+  //   // if (m_fieldSide == "blue") {
+  //   // finalX = -finalX;
+  //   // finalTheta = -finalTheta;
+  //   // }
+  //   Number[] velocityArray = new Number[] {
+  //       finalX,
+  //       -finalY,
+  //       finalTheta,
+  //   };
 
-    Vector velocityVector = new Vector();
-    double desiredThetaChange = 0;
-    velocityVector.setI(velocityArray[0].doubleValue());
-    velocityVector.setJ(velocityArray[1].doubleValue());
-    desiredThetaChange = velocityArray[2].doubleValue();
+  //   Vector velocityVector = new Vector();
+  //   double desiredThetaChange = 0;
+  //   velocityVector.setI(velocityArray[0].doubleValue());
+  //   velocityVector.setJ(velocityArray[1].doubleValue());
+  //   desiredThetaChange = velocityArray[2].doubleValue();
 
-    autoDrive(velocityVector, desiredThetaChange);
+  //   autoDrive(velocityVector, desiredThetaChange);
 
-  }
+  // }
 
   public void orbitDrive(Pose2d end, Pose2d pre, Pose2d current) {
     // end: C, pre: B, current: A
@@ -3280,50 +3280,50 @@ public class Drive extends SubsystemBase {
         return DriveState.DEFAULT;
       case IDLE:
         return DriveState.IDLE;
-      case REEF:
-        return DriveState.REEF;
-      case REEF_MORE:
-        return DriveState.REEF_MORE;
-      case BACK:
-        return DriveState.BACK;
-      case L3_REEF:
-        return DriveState.L3_REEF;
-      case L4_REEF:
-        return DriveState.L4_REEF;
-      case ALGAE:
-        return DriveState.ALGAE;
-      case ALGAE_MORE:
-        return DriveState.ALGAE_MORE;
-      case ALGAE_MORE_MORE:
-        return DriveState.ALGAE_MORE_MORE;
-      case PROCESSOR:
-        return DriveState.PROCESSOR;
-      case PROCESSOR_MORE:
-        return DriveState.PROCESSOR_MORE;
-      case NET:
-        return DriveState.NET;
-      case NET_MORE:
-        return DriveState.NET_MORE;
-      case FEEDER:
-        return DriveState.FEEDER;
-      case SCORE_L23:
-        return DriveState.SCORE_L23;
-      case AUTO_FEEDER:
-        return DriveState.AUTO_FEEDER;
-      case FEEDER_ALIGN:
-        return DriveState.FEEDER_ALIGN;
-      case AUTO_L1:
-        return DriveState.AUTO_L1;
-      case AUTO_L1_MORE:
-        return DriveState.AUTO_L1_MORE;
-      case FEEDER_AUTO:
-        return DriveState.FEEDER_AUTO;
-      case PIECE_PICKUP:
-        return DriveState.PIECE_PICKUP;
-      case AUTO_CLIMB:
-        return DriveState.AUTO_CLIMB;
-      case STOP:
-        return DriveState.STOP;
+      // case REEF:
+      //   return DriveState.REEF;
+      // case REEF_MORE:
+      //   return DriveState.REEF_MORE;
+      // case BACK:
+      //   return DriveState.BACK;
+      // case L3_REEF:
+      //   return DriveState.L3_REEF;
+      // case L4_REEF:
+      //   return DriveState.L4_REEF;
+      // case ALGAE:
+      //   return DriveState.ALGAE;
+      // case ALGAE_MORE:
+      //   return DriveState.ALGAE_MORE;
+      // case ALGAE_MORE_MORE:
+      //   return DriveState.ALGAE_MORE_MORE;
+      // case PROCESSOR:
+      //   return DriveState.PROCESSOR;
+      // case PROCESSOR_MORE:
+      //   return DriveState.PROCESSOR_MORE;
+      // case NET:
+      //   return DriveState.NET;
+      // case NET_MORE:
+      //   return DriveState.NET_MORE;
+      // case FEEDER:
+      //   return DriveState.FEEDER;
+      // case SCORE_L23:
+      //   return DriveState.SCORE_L23;
+      // case AUTO_FEEDER:
+      //   return DriveState.AUTO_FEEDER;
+      // case FEEDER_ALIGN:
+      //   return DriveState.FEEDER_ALIGN;
+      // case AUTO_L1:
+      //   return DriveState.AUTO_L1;
+      // case AUTO_L1_MORE:
+      //   return DriveState.AUTO_L1_MORE;
+      // case FEEDER_AUTO:
+      //   return DriveState.FEEDER_AUTO;
+      // case PIECE_PICKUP:
+      //   return DriveState.PIECE_PICKUP;
+      // case AUTO_CLIMB:
+      //   return DriveState.AUTO_CLIMB;
+      // case STOP:
+      //   return DriveState.STOP;
       default:
         return DriveState.IDLE;
     }
@@ -3759,19 +3759,19 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Drive State", systemState);
     // Stop moving when disabled
     if (DriverStation.isDisabled()) {
-      systemState = DriveState.DEFAULT;
+      systemState = DriveState.IDLE;
     }
 
-    if (!systemState.equals(DriveState.AUTO_CLIMB)) {
-      firstClimb = false;
-    }
-    if (!systemState.equals(DriveState.PIECE_PICKUP)) {
-      firstTimeAutoPickup = false;
-      firstTimeCalculated = false;
-      firstTimeGoingInCalculated = false;
-      firstTimeGoingIn = false;
-      hasTrack = false;
-    }
+    // if (!systemState.equals(DriveState.AUTO_CLIMB)) {
+    //   firstClimb = false;
+    // }
+    // if (!systemState.equals(DriveState.PIECE_PICKUP)) {
+    //   firstTimeAutoPickup = false;
+    //   firstTimeCalculated = false;
+    //   firstTimeGoingInCalculated = false;
+    //   firstTimeGoingIn = false;
+    //   hasTrack = false;
+    // }
     if (!OI.getDriverA()) {
       firstTimeReef = true;
     }
@@ -3792,626 +3792,635 @@ public class Drive extends SubsystemBase {
     // getClosestL1PointXY()[1],
     // new Rotation2d(getThetaToPoint(getClosestL1PointXY()[0],
     // getClosestL1PointXY()[1])));
-
+    if (OI.getDriverRTPercent() > 0.5 && OI.getDriverLTPercent() > 0.5) {
+      systemState = DriveState.DEFAULT;
+    } else {
+      systemState = DriveState.IDLE;
+    }
     switch (systemState) {
       case DEFAULT:
-        if (OI.driverA.getAsBoolean() && !(OI.driverPOVDown.getAsBoolean() || OI.driverPOVLeft.getAsBoolean()
-            || OI.driverPOVUp.getAsBoolean() || OI.driverPOVRight.getAsBoolean())) {
-          robotCentricDrive(195.0);
-        } else {
-          teleopDrive();
-        }
+        // if (OI.driverA.getAsBoolean() && !(OI.driverPOVDown.getAsBoolean() || OI.driverPOVLeft.getAsBoolean()
+        //     || OI.driverPOVUp.getAsBoolean() || OI.driverPOVRight.getAsBoolean())) {
+        //   robotCentricDrive(195.0);
+        // } else {
+        teleopDrive();
+        // }
         break;
       case IDLE:
-        break;
-      case STOP:
         Vector velocityVector = new Vector();
         velocityVector.setI(0);
         velocityVector.setJ(0);
         double desiredThetaChange = 0.0;
         autoDrive(velocityVector, desiredThetaChange);
         break;
-      case AUTO_L1:
-        // driveToTheta(Math.toDegrees(getThetaToCenterReef()));
-        // driveToTheta(Math.toDegrees(getThetaToPoint(getClosestL1PointXY()[0],
-        // getClosestL1PointXY()[1])));
-        // driveOnLine(new Vector(getClosestL1Points().get(0)[0] -
-        // getClosestL1Points().get(
-        // 1)[0], getClosestL1Points().get(0)[1]
-        // - getClosestL1Points().get(
-        // 1)[1]),
-        // new Translation2d(getClosestL1Points().get(0)[0], getClosestL1Points().get(
-        // 0)[1]),
-        // getThetaToPoint(getClosestL1CornerPointXY()[0],
-        // getClosestL1CornerPointXY()[1]));
-        // System.out.println(Math.toDegrees(getThetaToCenterReef()));
-        if (firstTimeReef) {
-          firstTimeReef = false;
-          origionalSetpointPose = getL1ReefClosestSetpoint(getMT2Odometry());
-        }
-        setpoint = getL1ReefClosestSetpoint(getMT2Odometry());
-        driveToPoint(setpoint);
-        break;
-      case AUTO_L1_MORE:
-        // driveToTheta(Math.toDegrees(getThetaToCenterReef()));
-        // driveToTheta(Math.toDegrees(getThetaToPoint(getClosestL1PointXY()[0],
-        // getClosestL1PointXY()[1])));
-        // driveOnLine(new Vector(getClosestL1Points().get(0)[0] -
-        // getClosestL1Points().get(
-        // 1)[0], getClosestL1Points().get(0)[1]
-        // - getClosestL1Points().get(
-        // 1)[1]),
-        // new Translation2d(getClosestL1Points().get(0)[0], getClosestL1Points().get(
-        // 0)[1]),
-        // getThetaToPoint(getClosestL1CornerPointXY()[0],
-        // getClosestL1CornerPointXY()[1]));
-        // System.out.println(Math.toDegrees(getThetaToCenterReef()));
-        // if (firstTimeReef) {
-        // firstTimeReef = false;
-        // origionalSetpointPose = getL1ReefClosestSetpoint(getMT2Odometry(), false);
-        // }
-        setpoint = getL1ReefClosestSetpointMore(getMT2Odometry());
-        driveToPoint(setpoint);
-        break;
-      case REEF:
-        if (firstTimeReef) {
-          firstTimeReef = false;
-          origionalSetpointPose = getReefClosestSetpoint(getMT2Odometry(), false);
-        }
-        setpoint = getReefClosestSetpoint(getMT2Odometry(), OI.getDriverA());
-        driveToPoint(setpoint);
-        break;
-      case REEF_MORE:
-        setpoint = getReefMoreClosestSetpoint(getMT2Odometry());
-        driveToPoint(setpoint);
-        break;
-      case BACK:
-        if (autoPlacingFront) {
-          autoRobotCentricDrive(backupVector, 0.0);
-        } else {
-          autoRobotCentricDrive(otherBackupVector, 0.0);
-        }
-        break;
-      case L4_REEF:
-        if (firstTimeReef) {
-          firstTimeReef = false;
-          origionalSetpointPose = getReefL4ClosestSetpoint(getMT2Odometry(), false);
-        }
-        // System.out.println(origionalSetpointPose);
-        // Logger.recordOutput("Targeted L4 Point",
-        // getReefL4ClosestSetpoint(getMT2Odometry(), OI.getDriverA()));
-        // TODO: make this work
-        setpoint = getReefL4ClosestSetpoint(getMT2Odometry(), OI.getDriverA());
-        driveToPoint(setpoint);
-        break;
-      case L3_REEF:
-        if (firstTimeReef) {
-          firstTimeReef = false;
-          origionalSetpointPose = getReefL3ClosestSetpoint(getMT2Odometry(), false);
-        }
-        setpoint = getReefL3ClosestSetpoint(getMT2Odometry(), OI.getDriverA());
-        driveToPoint(setpoint);
-        break;
-      case PIECE_PICKUP:
-        // Pose2d target = getGamePiecePosition();
-        // if (!target.equals(new Pose2d())) {
-        // targetPointPickup = target;
-        // }
-        // if (hasTrack) {
-        goToCoral();
-        java.util.logging.Logger.getGlobal().finer("Driving to point");
-        // } else {
-        // System.out.println("forward");
-        // Vector v = new Vector();
-        // v.setI(0.4);
-        // v.setJ(0);
-        // double d = 0.0;
-        // autoRobotCentricDrive(v, d);
-        // }
-        break;
-      case ALGAE:
-        setpoint = getAlgaeClosestSetpoint(getMT2Odometry());
-        driveToPoint(setpoint);
-        break;
-      case ALGAE_MORE:
-        // if
-        // (getAngleDifferenceDegrees(Math.toDegrees(getAlgaeClosestSetpoint(getMT2Odometry())[2]),
-        // Math.toDegrees(getMT2OdometryAngle())) <= 90) {
-        // autoRobotCentricDrive(scoreL23Vector, 0);
-        // } else {
-        // autoRobotCentricDrive(scoreL23Vector, 0);
-        // }
-        setpoint = getAlgaeMoreClosestSetpoint(getMT2Odometry());
-        driveToPoint(setpoint);
-        break;
-      case ALGAE_MORE_MORE:
-        setpoint = getAlgaeMoreMoreClosestSetpoint(getMT2Odometry());
-        driveToPoint(setpoint);
-        break;
-      case PROCESSOR:
-        if (isOnBlueSide()) {
-          if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
-              Constants.Reef.processorBlueFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
-            autoPlacingFront = true;
-            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
-              teleopDrive();
-            } else {
-              driveToPoint(Constants.Reef.processorBlueFrontPlacingPosition);
-            }
-            // driveToTheta((Constants.Reef.processorBlueFrontPlacingPosition.getRotation().getDegrees()));
-          } else {
-            autoPlacingFront = false;
-            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
-              teleopDrive();
-            } else {
-              // driveToTheta((Constants.Reef.processorBlueBackPlacingPosition.getRotation().getDegrees()));
-              driveToPoint(Constants.Reef.processorBlueBackPlacingPosition);
-            }
-          }
-        } else {
-          if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
-              Constants.Reef.processorRedFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
-            autoPlacingFront = true;
-            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
-              teleopDrive();
-            } else {
-              driveToPoint(Constants.Reef.processorRedFrontPlacingPosition);
-            }
-            // driveToTheta((Constants.Reef.processorRedFrontPlacingPosition.getRotation().getDegrees()));
-          } else {
-            autoPlacingFront = false;
-            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
-              teleopDrive();
-            } else {
-              driveToPoint(Constants.Reef.processorRedBackPlacingPosition);
-            }
-            // driveToTheta((Constants.Reef.processorRedBackPlacingPosition.getRotation().getDegrees()));
-          }
-        }
-        break;
-      case PROCESSOR_MORE:
-        if (isOnBlueSide()) {
-          if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
-              Constants.Reef.processorMoreBlueFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
-            autoPlacingFront = true;
-            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
-              teleopDrive();
-            } else {
-              driveToPoint(Constants.Reef.processorMoreBlueFrontPlacingPosition);
-            }
-            // driveToTheta((Constants.Reef.processorMoreBlueFrontPlacingPosition.getRotation().getDegrees()));
-          } else {
-            autoPlacingFront = false;
-            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
-              teleopDrive();
-            } else {
-              // driveToTheta((Constants.Reef.processorMoreBlueBackPlacingPosition.getRotation().getDegrees()));
-              driveToPoint(Constants.Reef.processorMoreBlueBackPlacingPosition);
-            }
-          }
-        } else {
-          if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
-              Constants.Reef.processorMoreRedFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
-            autoPlacingFront = true;
-            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
-              teleopDrive();
-            } else {
-              driveToPoint(Constants.Reef.processorMoreRedFrontPlacingPosition);
-              // driveToTheta((Constants.Reef.processorMoreRedFrontPlacingPosition.getRotation().getDegrees()));
-            }
-          } else {
-            autoPlacingFront = false;
-            if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
-              teleopDrive();
-            } else {
-              driveToPoint(Constants.Reef.processorMoreRedBackPlacingPosition);
-            }
-            // driveToTheta((Constants.Reef.processorMoreRedBackPlacingPosition.getRotation().getDegrees()));
-          }
-        }
-        break;
-      case NET_MORE:
-        if (OI.getDriverA()) {
-          teleopDrive();
-        } else if (Math.abs(OI.getDriverLeftY()) > 0.2) {
-          teleopDrive();
-        } else {
-          double[] setpointA = getNetMoreXTheta();
-          driveToXTheta(setpointA[0], setpointA[1]);
-        }
+      // case STOP:
+      //   Vector velocityVector = new Vector();
+      //   velocityVector.setI(0);
+      //   velocityVector.setJ(0);
+      //   double desiredThetaChange = 0.0;
+      //   autoDrive(velocityVector, desiredThetaChange);
+      //   break;
+      // case AUTO_L1:
+      //   // driveToTheta(Math.toDegrees(getThetaToCenterReef()));
+      //   // driveToTheta(Math.toDegrees(getThetaToPoint(getClosestL1PointXY()[0],
+      //   // getClosestL1PointXY()[1])));
+      //   // driveOnLine(new Vector(getClosestL1Points().get(0)[0] -
+      //   // getClosestL1Points().get(
+      //   // 1)[0], getClosestL1Points().get(0)[1]
+      //   // - getClosestL1Points().get(
+      //   // 1)[1]),
+      //   // new Translation2d(getClosestL1Points().get(0)[0], getClosestL1Points().get(
+      //   // 0)[1]),
+      //   // getThetaToPoint(getClosestL1CornerPointXY()[0],
+      //   // getClosestL1CornerPointXY()[1]));
+      //   // System.out.println(Math.toDegrees(getThetaToCenterReef()));
+      //   if (firstTimeReef) {
+      //     firstTimeReef = false;
+      //     origionalSetpointPose = getL1ReefClosestSetpoint(getMT2Odometry());
+      //   }
+      //   setpoint = getL1ReefClosestSetpoint(getMT2Odometry());
+      //   driveToPoint(setpoint);
+      //   break;
+      // case AUTO_L1_MORE:
+      //   // driveToTheta(Math.toDegrees(getThetaToCenterReef()));
+      //   // driveToTheta(Math.toDegrees(getThetaToPoint(getClosestL1PointXY()[0],
+      //   // getClosestL1PointXY()[1])));
+      //   // driveOnLine(new Vector(getClosestL1Points().get(0)[0] -
+      //   // getClosestL1Points().get(
+      //   // 1)[0], getClosestL1Points().get(0)[1]
+      //   // - getClosestL1Points().get(
+      //   // 1)[1]),
+      //   // new Translation2d(getClosestL1Points().get(0)[0], getClosestL1Points().get(
+      //   // 0)[1]),
+      //   // getThetaToPoint(getClosestL1CornerPointXY()[0],
+      //   // getClosestL1CornerPointXY()[1]));
+      //   // System.out.println(Math.toDegrees(getThetaToCenterReef()));
+      //   // if (firstTimeReef) {
+      //   // firstTimeReef = false;
+      //   // origionalSetpointPose = getL1ReefClosestSetpoint(getMT2Odometry(), false);
+      //   // }
+      //   setpoint = getL1ReefClosestSetpointMore(getMT2Odometry());
+      //   driveToPoint(setpoint);
+      //   break;
+      // case REEF:
+      //   if (firstTimeReef) {
+      //     firstTimeReef = false;
+      //     origionalSetpointPose = getReefClosestSetpoint(getMT2Odometry(), false);
+      //   }
+      //   setpoint = getReefClosestSetpoint(getMT2Odometry(), OI.getDriverA());
+      //   driveToPoint(setpoint);
+      //   break;
+      // case REEF_MORE:
+      //   setpoint = getReefMoreClosestSetpoint(getMT2Odometry());
+      //   driveToPoint(setpoint);
+      //   break;
+      // case BACK:
+      //   if (autoPlacingFront) {
+      //     autoRobotCentricDrive(backupVector, 0.0);
+      //   } else {
+      //     autoRobotCentricDrive(otherBackupVector, 0.0);
+      //   }
+      //   break;
+      // case L4_REEF:
+      //   if (firstTimeReef) {
+      //     firstTimeReef = false;
+      //     origionalSetpointPose = getReefL4ClosestSetpoint(getMT2Odometry(), false);
+      //   }
+      //   // System.out.println(origionalSetpointPose);
+      //   // Logger.recordOutput("Targeted L4 Point",
+      //   // getReefL4ClosestSetpoint(getMT2Odometry(), OI.getDriverA()));
+      //   // TODO: make this work
+      //   setpoint = getReefL4ClosestSetpoint(getMT2Odometry(), OI.getDriverA());
+      //   driveToPoint(setpoint);
+      //   break;
+      // case L3_REEF:
+      //   if (firstTimeReef) {
+      //     firstTimeReef = false;
+      //     origionalSetpointPose = getReefL3ClosestSetpoint(getMT2Odometry(), false);
+      //   }
+      //   setpoint = getReefL3ClosestSetpoint(getMT2Odometry(), OI.getDriverA());
+      //   driveToPoint(setpoint);
+      //   break;
+      // case PIECE_PICKUP:
+      //   // Pose2d target = getGamePiecePosition();
+      //   // if (!target.equals(new Pose2d())) {
+      //   // targetPointPickup = target;
+      //   // }
+      //   // if (hasTrack) {
+      //   // goToCoral();
+      //   java.util.logging.Logger.getGlobal().finer("Driving to point");
+      //   // } else {
+      //   // System.out.println("forward");
+      //   // Vector v = new Vector();
+      //   // v.setI(0.4);
+      //   // v.setJ(0);
+      //   // double d = 0.0;
+      //   // autoRobotCentricDrive(v, d);
+      //   // }
+      //   break;
+      // case ALGAE:
+      //   setpoint = getAlgaeClosestSetpoint(getMT2Odometry());
+      //   driveToPoint(setpoint);
+      //   break;
+      // case ALGAE_MORE:
+      //   // if
+      //   // (getAngleDifferenceDegrees(Math.toDegrees(getAlgaeClosestSetpoint(getMT2Odometry())[2]),
+      //   // Math.toDegrees(getMT2OdometryAngle())) <= 90) {
+      //   // autoRobotCentricDrive(scoreL23Vector, 0);
+      //   // } else {
+      //   // autoRobotCentricDrive(scoreL23Vector, 0);
+      //   // }
+      //   setpoint = getAlgaeMoreClosestSetpoint(getMT2Odometry());
+      //   driveToPoint(setpoint);
+      //   break;
+      // case ALGAE_MORE_MORE:
+      //   setpoint = getAlgaeMoreMoreClosestSetpoint(getMT2Odometry());
+      //   driveToPoint(setpoint);
+      //   break;
+      // case PROCESSOR:
+      //   if (isOnBlueSide()) {
+      //     if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+      //         Constants.Reef.processorBlueFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
+      //       autoPlacingFront = true;
+      //       if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
+      //         teleopDrive();
+      //       } else {
+      //         driveToPoint(Constants.Reef.processorBlueFrontPlacingPosition);
+      //       }
+      //       // driveToTheta((Constants.Reef.processorBlueFrontPlacingPosition.getRotation().getDegrees()));
+      //     } else {
+      //       autoPlacingFront = false;
+      //       if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
+      //         teleopDrive();
+      //       } else {
+      //         // driveToTheta((Constants.Reef.processorBlueBackPlacingPosition.getRotation().getDegrees()));
+      //         driveToPoint(Constants.Reef.processorBlueBackPlacingPosition);
+      //       }
+      //     }
+      //   } else {
+      //     if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+      //         Constants.Reef.processorRedFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
+      //       autoPlacingFront = true;
+      //       if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
+      //         teleopDrive();
+      //       } else {
+      //         driveToPoint(Constants.Reef.processorRedFrontPlacingPosition);
+      //       }
+      //       // driveToTheta((Constants.Reef.processorRedFrontPlacingPosition.getRotation().getDegrees()));
+      //     } else {
+      //       autoPlacingFront = false;
+      //       if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
+      //         teleopDrive();
+      //       } else {
+      //         driveToPoint(Constants.Reef.processorRedBackPlacingPosition);
+      //       }
+      //       // driveToTheta((Constants.Reef.processorRedBackPlacingPosition.getRotation().getDegrees()));
+      //     }
+      //   }
+      //   break;
+      // case PROCESSOR_MORE:
+      //   if (isOnBlueSide()) {
+      //     if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+      //         Constants.Reef.processorMoreBlueFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
+      //       autoPlacingFront = true;
+      //       if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
+      //         teleopDrive();
+      //       } else {
+      //         driveToPoint(Constants.Reef.processorMoreBlueFrontPlacingPosition);
+      //       }
+      //       // driveToTheta((Constants.Reef.processorMoreBlueFrontPlacingPosition.getRotation().getDegrees()));
+      //     } else {
+      //       autoPlacingFront = false;
+      //       if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
+      //         teleopDrive();
+      //       } else {
+      //         // driveToTheta((Constants.Reef.processorMoreBlueBackPlacingPosition.getRotation().getDegrees()));
+      //         driveToPoint(Constants.Reef.processorMoreBlueBackPlacingPosition);
+      //       }
+      //     }
+      //   } else {
+      //     if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+      //         Constants.Reef.processorMoreRedFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
+      //       autoPlacingFront = true;
+      //       if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
+      //         teleopDrive();
+      //       } else {
+      //         driveToPoint(Constants.Reef.processorMoreRedFrontPlacingPosition);
+      //         // driveToTheta((Constants.Reef.processorMoreRedFrontPlacingPosition.getRotation().getDegrees()));
+      //       }
+      //     } else {
+      //       autoPlacingFront = false;
+      //       if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
+      //         teleopDrive();
+      //       } else {
+      //         driveToPoint(Constants.Reef.processorMoreRedBackPlacingPosition);
+      //       }
+      //       // driveToTheta((Constants.Reef.processorMoreRedBackPlacingPosition.getRotation().getDegrees()));
+      //     }
+      //   }
+      //   break;
+      // case NET_MORE:
+      //   if (OI.getDriverA()) {
+      //     teleopDrive();
+      //   } else if (Math.abs(OI.getDriverLeftY()) > 0.2) {
+      //     teleopDrive();
+      //   } else {
+      //     double[] setpointA = getNetMoreXTheta();
+      //     driveToXTheta(setpointA[0], setpointA[1]);
+      //   }
 
-        // if (OI.isBlueSide()) { // TODO: uncomment to revert to colorado algae code
-        // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
-        // Math.toDegrees(Constants.Reef.netBlueFrontThetaR)) <= 90) {
-        // autoPlacingFront = true;
-        // if (OI.driverA.getAsBoolean()) {
-        // teleopDrive();
-        // } else {
-        // driveToXTheta(Constants.Reef.netBlueXMore,
-        // Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
-        // }
-        // // driveToTheta(Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
-        // } else {
-        // autoPlacingFront = false;
-        // if (OI.driverA.getAsBoolean()) {
-        // teleopDrive();
-        // } else {
-        // driveToXTheta(Constants.Reef.netBlueXMore,
-        // Math.toDegrees(Constants.Reef.netBlueBackThetaR));
-        // }
-        // // driveToTheta(Math.toDegrees(Constants.Reef.netBlueBackThetaR));
-        // }
-        // } else {
-        // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
-        // Math.toDegrees(Constants.Reef.netRedFrontThetaR)) <= 90) {
-        // autoPlacingFront = true;
-        // if (OI.driverA.getAsBoolean()) {
-        // teleopDrive();
-        // } else {
-        // driveToXTheta(Constants.Reef.netRedXMore,
-        // Math.toDegrees(Constants.Reef.netRedFrontThetaR));
-        // }
-        // // driveToTheta(Math.toDegrees(Constants.Reef.netRedFrontThetaR));
-        // } else {
-        // autoPlacingFront = false;
-        // if (OI.driverA.getAsBoolean()) {
-        // teleopDrive();
-        // } else {
-        // driveToXTheta(Constants.Reef.netRedXMore,
-        // Math.toDegrees(Constants.Reef.netRedBackThetaR));
-        // }
-        // // driveToTheta(Math.toDegrees(Constants.Reef.netRedBackThetaR));
-        // }
-        // }
+      //   // if (OI.isBlueSide()) { // TODO: uncomment to revert to colorado algae code
+      //   // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+      //   // Math.toDegrees(Constants.Reef.netBlueFrontThetaR)) <= 90) {
+      //   // autoPlacingFront = true;
+      //   // if (OI.driverA.getAsBoolean()) {
+      //   // teleopDrive();
+      //   // } else {
+      //   // driveToXTheta(Constants.Reef.netBlueXMore,
+      //   // Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
+      //   // }
+      //   // // driveToTheta(Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
+      //   // } else {
+      //   // autoPlacingFront = false;
+      //   // if (OI.driverA.getAsBoolean()) {
+      //   // teleopDrive();
+      //   // } else {
+      //   // driveToXTheta(Constants.Reef.netBlueXMore,
+      //   // Math.toDegrees(Constants.Reef.netBlueBackThetaR));
+      //   // }
+      //   // // driveToTheta(Math.toDegrees(Constants.Reef.netBlueBackThetaR));
+      //   // }
+      //   // } else {
+      //   // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+      //   // Math.toDegrees(Constants.Reef.netRedFrontThetaR)) <= 90) {
+      //   // autoPlacingFront = true;
+      //   // if (OI.driverA.getAsBoolean()) {
+      //   // teleopDrive();
+      //   // } else {
+      //   // driveToXTheta(Constants.Reef.netRedXMore,
+      //   // Math.toDegrees(Constants.Reef.netRedFrontThetaR));
+      //   // }
+      //   // // driveToTheta(Math.toDegrees(Constants.Reef.netRedFrontThetaR));
+      //   // } else {
+      //   // autoPlacingFront = false;
+      //   // if (OI.driverA.getAsBoolean()) {
+      //   // teleopDrive();
+      //   // } else {
+      //   // driveToXTheta(Constants.Reef.netRedXMore,
+      //   // Math.toDegrees(Constants.Reef.netRedBackThetaR));
+      //   // }
+      //   // // driveToTheta(Math.toDegrees(Constants.Reef.netRedBackThetaR));
+      //   // }
+      //   // }
 
-        break;
-      case NET:
-        if (OI.driverA.getAsBoolean()) {
-          teleopDrive();
-        } else {
-          double[] setpointA = getNetXTheta();
-          driveToXTheta(setpointA[0], setpointA[1]);
-        }
+      //   break;
+      // case NET:
+      //   if (OI.driverA.getAsBoolean()) {
+      //     teleopDrive();
+      //   } else {
+      //     double[] setpointA = getNetXTheta();
+      //     driveToXTheta(setpointA[0], setpointA[1]);
+      //   }
 
-        // if (OI.isBlueSide()) { // TODO: uncomment to revert to colorado algae code
-        // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
-        // Math.toDegrees(Constants.Reef.netBlueFrontThetaR)) <= 90) {
-        // autoPlacingFront = true;
-        // if (OI.driverA.getAsBoolean()) {
-        // teleopDrive();
-        // } else {
-        // driveToXTheta(Constants.Reef.netBlueXM,
-        // Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
-        // }
-        // // driveToTheta(Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
-        // } else {
-        // autoPlacingFront = false;
-        // if (OI.driverA.getAsBoolean()) {
-        // teleopDrive();
-        // } else {
-        // driveToXTheta(Constants.Reef.netBlueXM,
-        // Math.toDegrees(Constants.Reef.netBlueBackThetaR));
-        // }
-        // // driveToTheta(Math.toDegrees(Constants.Reef.netBlueBackThetaR));
-        // }
-        // } else {
-        // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
-        // Math.toDegrees(Constants.Reef.netRedFrontThetaR)) <= 90) {
-        // autoPlacingFront = true;
-        // if (OI.driverA.getAsBoolean()) {
-        // teleopDrive();
-        // } else {
-        // driveToXTheta(Constants.Reef.netRedXM,
-        // Math.toDegrees(Constants.Reef.netRedFrontThetaR));
-        // }
-        // // driveToTheta(Math.toDegrees(Constants.Reef.netRedFrontThetaR));
-        // } else {
-        // autoPlacingFront = false;
-        // if (OI.driverA.getAsBoolean()) {
-        // teleopDrive();
-        // } else {
-        // driveToXTheta(Constants.Reef.netRedXM,
-        // Math.toDegrees(Constants.Reef.netRedBackThetaR));
-        // }
-        // // driveToTheta(Math.toDegrees(Constants.Reef.netRedBackThetaR));
-        // }
-        // }
+      //   // if (OI.isBlueSide()) { // TODO: uncomment to revert to colorado algae code
+      //   // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+      //   // Math.toDegrees(Constants.Reef.netBlueFrontThetaR)) <= 90) {
+      //   // autoPlacingFront = true;
+      //   // if (OI.driverA.getAsBoolean()) {
+      //   // teleopDrive();
+      //   // } else {
+      //   // driveToXTheta(Constants.Reef.netBlueXM,
+      //   // Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
+      //   // }
+      //   // // driveToTheta(Math.toDegrees(Constants.Reef.netBlueFrontThetaR));
+      //   // } else {
+      //   // autoPlacingFront = false;
+      //   // if (OI.driverA.getAsBoolean()) {
+      //   // teleopDrive();
+      //   // } else {
+      //   // driveToXTheta(Constants.Reef.netBlueXM,
+      //   // Math.toDegrees(Constants.Reef.netBlueBackThetaR));
+      //   // }
+      //   // // driveToTheta(Math.toDegrees(Constants.Reef.netBlueBackThetaR));
+      //   // }
+      //   // } else {
+      //   // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+      //   // Math.toDegrees(Constants.Reef.netRedFrontThetaR)) <= 90) {
+      //   // autoPlacingFront = true;
+      //   // if (OI.driverA.getAsBoolean()) {
+      //   // teleopDrive();
+      //   // } else {
+      //   // driveToXTheta(Constants.Reef.netRedXM,
+      //   // Math.toDegrees(Constants.Reef.netRedFrontThetaR));
+      //   // }
+      //   // // driveToTheta(Math.toDegrees(Constants.Reef.netRedFrontThetaR));
+      //   // } else {
+      //   // autoPlacingFront = false;
+      //   // if (OI.driverA.getAsBoolean()) {
+      //   // teleopDrive();
+      //   // } else {
+      //   // driveToXTheta(Constants.Reef.netRedXM,
+      //   // Math.toDegrees(Constants.Reef.netRedBackThetaR));
+      //   // }
+      //   // // driveToTheta(Math.toDegrees(Constants.Reef.netRedBackThetaR));
+      //   // }
+      //   // }
 
-        break;
-      case SCORE_L23:
-        autoRobotCentricDrive(scoreL23Vector, 0);
-        break;
-      case FEEDER:
-        if (getFieldSide() == "red") { // red side
-          if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
-            if ((standardizedAngle <= 324
-                &&
-                standardizedAngle >= 144)) {
-              driveToTheta(234);
-            } else { // robot back side redside left feeder (fieldside top right)
-              driveToTheta(54);
-            }
-          } else { // redside left feeder (fieldside bottom right)
-            if ((standardizedAngle <= 36
-                &&
-                standardizedAngle >= 0)
-                ||
-                (standardizedAngle <= 360
-                    &&
-                    standardizedAngle >= 216)) {
-              driveToTheta(306);
-            } else { // robot back side redside left (fieldside bottom right)
-              driveToTheta(126);
-            }
-          }
-        } else { // blue side
-          if (getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
-            if ((standardizedAngle <= 324
-                &&
-                standardizedAngle >= 144)) {
-              driveToTheta(234);
-            } else { // robot back side blueside right (fieldside bottom left)
-              driveToTheta(54);
-            }
-          } else { // blue side left feeder (fieldside top left)
-            if ((standardizedAngle <= 36
-                &&
-                standardizedAngle >= 0)
-                ||
-                (standardizedAngle <= 360
-                    &&
-                    standardizedAngle >= 216)) {
-              driveToTheta(306);
-            } else { // robot back side blueside left (fieldside top left)
-              driveToTheta(126);
-            }
-          }
-        }
+      //   break;
+      // case SCORE_L23:
+      //   autoRobotCentricDrive(scoreL23Vector, 0);
+      //   break;
+      // case FEEDER:
+      //   if (getFieldSide() == "red") { // red side
+      //     if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
+      //       if ((standardizedAngle <= 324
+      //           &&
+      //           standardizedAngle >= 144)) {
+      //         driveToTheta(234);
+      //       } else { // robot back side redside left feeder (fieldside top right)
+      //         driveToTheta(54);
+      //       }
+      //     } else { // redside left feeder (fieldside bottom right)
+      //       if ((standardizedAngle <= 36
+      //           &&
+      //           standardizedAngle >= 0)
+      //           ||
+      //           (standardizedAngle <= 360
+      //               &&
+      //               standardizedAngle >= 216)) {
+      //         driveToTheta(306);
+      //       } else { // robot back side redside left (fieldside bottom right)
+      //         driveToTheta(126);
+      //       }
+      //     }
+      //   } else { // blue side
+      //     if (getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
+      //       if ((standardizedAngle <= 324
+      //           &&
+      //           standardizedAngle >= 144)) {
+      //         driveToTheta(234);
+      //       } else { // robot back side blueside right (fieldside bottom left)
+      //         driveToTheta(54);
+      //       }
+      //     } else { // blue side left feeder (fieldside top left)
+      //       if ((standardizedAngle <= 36
+      //           &&
+      //           standardizedAngle >= 0)
+      //           ||
+      //           (standardizedAngle <= 360
+      //               &&
+      //               standardizedAngle >= 216)) {
+      //         driveToTheta(306);
+      //       } else { // robot back side blueside left (fieldside top left)
+      //         driveToTheta(126);
+      //       }
+      //     }
+      //   }
 
-        break;
-      case AUTO_FEEDER:
-        if (getFieldSide() == "red") { // red side
-          if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
-            if ((standardizedAngle <= 324
-                &&
-                standardizedAngle >= 144)) {
-              // driveToTheta(234);
-              driveToPoint(Constants.Reef.RED_RIGHT_FEEDER);
-            } else { // robot back side redside left feeder (fieldside top right)
-              // driveToTheta(54);
-              driveToPoint(Constants.Reef.RED_RIGHT_FEEDER
-                  .rotateAround(Constants.Reef.RED_RIGHT_FEEDER.getTranslation(), new Rotation2d(Math.PI)));
-            }
-          } else { // redside left feeder (fieldside bottom right)
-            if ((standardizedAngle <= 36
-                &&
-                standardizedAngle >= 0)
-                ||
-                (standardizedAngle <= 360
-                    &&
-                    standardizedAngle >= 216)) {
-              // driveToTheta(306);
-              driveToPoint(Constants.Reef.RED_LEFT_FEEDER.rotateAround(Constants.Reef.RED_LEFT_FEEDER.getTranslation(),
-                  new Rotation2d(Math.PI)));
-            } else { // robot back side redside left (fieldside bottom right)
-              // driveToTheta(126);
-              driveToPoint(Constants.Reef.RED_LEFT_FEEDER);
-            }
-          }
-        } else { // blue side
-          if (getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
-            if ((standardizedAngle <= 324
-                &&
-                standardizedAngle >= 144)) {
-              // driveToTheta(234);
-              driveToPoint(Constants.Reef.BLUE_RIGHT_FEEDER
-                  .rotateAround(Constants.Reef.BLUE_RIGHT_FEEDER.getTranslation(), new Rotation2d(Math.PI)));
-            } else { // robot back side blueside right (fieldside bottom left)
-              // driveToTheta(54);
-              driveToPoint(Constants.Reef.BLUE_RIGHT_FEEDER);
-            }
-          } else { // blue side left feeder (fieldside top left)
-            if ((standardizedAngle <= 36
-                &&
-                standardizedAngle >= 0)
-                ||
-                (standardizedAngle <= 360
-                    &&
-                    standardizedAngle >= 216)) {
-              // driveToTheta(306);
-              driveToPoint(Constants.Reef.BLUE_LEFT_FEEDER);
-            } else { // robot back side blueside left (fieldside top left)
-              // driveToTheta(126);
-              driveToPoint(Constants.Reef.BLUE_LEFT_FEEDER
-                  .rotateAround(Constants.Reef.BLUE_LEFT_FEEDER.getTranslation(), new Rotation2d(Math.PI)));
-            }
-          }
-        }
-        break;
-      case FEEDER_ALIGN:
-        if (getFieldSide() == "red") { // red side
-          if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
-            if ((standardizedAngle <= 324
-                &&
-                standardizedAngle >= 144)) {
-              Vector feederLine = new Vector(-Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getSin(),
-                  Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getCos());
-              if (OI.driverA.getAsBoolean()) {
-                teleopDrive();
-              } else {
-                driveOnLine(feederLine, Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getTranslation(),
-                    Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getRadians());
-              }
-            } else { // robot back side redside left feeder (fieldside top right)
-              Vector feederLine = new Vector(-Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getSin(),
-                  Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getCos());
-              if (OI.driverA.getAsBoolean()) {
-                teleopDrive();
-              } else {
-                driveOnLine(feederLine, Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getTranslation(),
-                    Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
-              }
-            }
-          } else { // redside left feeder (fieldside bottom right)
-            if ((standardizedAngle <= 36
-                &&
-                standardizedAngle >= 0)
-                ||
-                (standardizedAngle <= 360
-                    &&
-                    standardizedAngle >= 216)) {
-              Vector feederLine = new Vector(-Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getSin(),
-                  Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getCos());
-              if (OI.driverA.getAsBoolean()) {
-                teleopDrive();
-              } else {
-                driveOnLine(feederLine, Constants.Reef.RED_LEFT_FEEDER_TELEOP.getTranslation(),
-                    Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
-              }
-            } else { // robot back side redside left feeder (fieldside top right)
-              Vector feederLine = new Vector(-Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getSin(),
-                  Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getCos());
-              if (OI.driverA.getAsBoolean()) {
-                teleopDrive();
-              } else {
-                driveOnLine(feederLine, Constants.Reef.RED_LEFT_FEEDER_TELEOP.getTranslation(),
-                    Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getRadians());
-              }
-            }
-          }
-        } else { // blue side
-          if (getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
-            if ((standardizedAngle <= 324
-                &&
-                standardizedAngle >= 144)) {
-              Vector feederLine = new Vector(-Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getSin(),
-                  Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getCos());
-              if (OI.driverA.getAsBoolean()) {
-                teleopDrive();
-              } else {
-                driveOnLine(feederLine, Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getTranslation(),
-                    Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
-              }
-            } else { // robot back side redside left feeder (fieldside top right)
-              Vector feederLine = new Vector(-Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getSin(),
-                  Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getCos());
-              if (OI.driverA.getAsBoolean()) {
-                teleopDrive();
-              } else {
-                driveOnLine(feederLine, Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getTranslation(),
-                    Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getRadians());
-              }
-            }
-          } else { // blue side left feeder (fieldside top left)
-            if ((standardizedAngle <= 36
-                &&
-                standardizedAngle >= 0)
-                ||
-                (standardizedAngle <= 360
-                    &&
-                    standardizedAngle >= 216)) {
-              Vector feederLine = new Vector(-Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getSin(),
-                  Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getCos());
-              if (OI.driverA.getAsBoolean()) {
-                teleopDrive();
-              } else {
-                driveOnLine(feederLine, Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getTranslation(),
-                    Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getRadians());
-              }
-            } else { // robot back side redside left feeder (fieldside top right)
-              Vector feederLine = new Vector(-Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getSin(),
-                  Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getCos());
-              if (OI.driverA.getAsBoolean()) {
-                teleopDrive();
-              } else {
-                driveOnLine(feederLine, Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getTranslation(),
-                    Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
-              }
-            }
-          }
-        }
-        break;
-      case FEEDER_AUTO:
-        if (getFieldSide() == "red") { // red side
-          if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
-            Pose2d closestPose = getClosestPose(Constants.Reef.RED_RIGHT_FEEDER_LEFT,
-                Constants.Reef.RED_RIGHT_FEEDER_RIGHT);
-            if ((standardizedAngle <= 324
-                &&
-                standardizedAngle >= 144)) {
-              // driveToTheta(234);
-              driveToPoint(closestPose);
-            } else { // robot back side redside left feeder (fieldside top right)
-              // driveToTheta(54);
-              driveToPoint(closestPose.rotateAround(closestPose.getTranslation(), new Rotation2d(Math.PI)));
-            }
-          } else { // redside left feeder (fieldside bottom right)
-            Pose2d closestPose = getClosestPose(Constants.Reef.RED_LEFT_FEEDER_LEFT,
-                Constants.Reef.RED_LEFT_FEEDER_RIGHT);
-            if ((standardizedAngle <= 36
-                &&
-                standardizedAngle >= 0)
-                ||
-                (standardizedAngle <= 360
-                    &&
-                    standardizedAngle >= 216)) {
-              // driveToTheta(306);
-              driveToPoint(closestPose.rotateAround(closestPose.getTranslation(), new Rotation2d(Math.PI)));
-            } else { // robot back side redside left (fieldside bottom right)
-              // driveToTheta(126);
-              driveToPoint(closestPose);
-            }
-          }
-        } else { // blue side
-          if (getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
-            Pose2d closestPose = getClosestPose(Constants.Reef.BLUE_RIGHT_FEEDER_LEFT,
-                Constants.Reef.BLUE_RIGHT_FEEDER_RIGHT);
-            if ((standardizedAngle <= 324
-                &&
-                standardizedAngle >= 144)) {
-              // driveToTheta(234);
-              driveToPoint(closestPose.rotateAround(closestPose.getTranslation(),
-                  new Rotation2d(Math.PI)));
-            } else { // robot back side blueside right (fieldside bottom left)
-              // driveToTheta(54);
-              driveToPoint(closestPose);
-            }
-          } else { // blue side left feeder (fieldside top left)
-            Pose2d closestPose = getClosestPose(Constants.Reef.BLUE_LEFT_FEEDER_LEFT,
-                Constants.Reef.BLUE_LEFT_FEEDER_RIGHT);
-            if ((standardizedAngle <= 36
-                &&
-                standardizedAngle >= 0)
-                ||
-                (standardizedAngle <= 360
-                    &&
-                    standardizedAngle >= 216)) {
-              // driveToTheta(306);
-              driveToPoint(
-                  closestPose);
-            } else { // robot back side blueside left (fieldside top left)
-              // driveToTheta(126);
-              driveToPoint(closestPose.rotateAround(closestPose.getTranslation(), new Rotation2d(Math.PI)));
-            }
-          }
-        }
+      //   break;
+      // case AUTO_FEEDER:
+      //   if (getFieldSide() == "red") { // red side
+      //     if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
+      //       if ((standardizedAngle <= 324
+      //           &&
+      //           standardizedAngle >= 144)) {
+      //         // driveToTheta(234);
+      //         driveToPoint(Constants.Reef.RED_RIGHT_FEEDER);
+      //       } else { // robot back side redside left feeder (fieldside top right)
+      //         // driveToTheta(54);
+      //         driveToPoint(Constants.Reef.RED_RIGHT_FEEDER
+      //             .rotateAround(Constants.Reef.RED_RIGHT_FEEDER.getTranslation(), new Rotation2d(Math.PI)));
+      //       }
+      //     } else { // redside left feeder (fieldside bottom right)
+      //       if ((standardizedAngle <= 36
+      //           &&
+      //           standardizedAngle >= 0)
+      //           ||
+      //           (standardizedAngle <= 360
+      //               &&
+      //               standardizedAngle >= 216)) {
+      //         // driveToTheta(306);
+      //         driveToPoint(Constants.Reef.RED_LEFT_FEEDER.rotateAround(Constants.Reef.RED_LEFT_FEEDER.getTranslation(),
+      //             new Rotation2d(Math.PI)));
+      //       } else { // robot back side redside left (fieldside bottom right)
+      //         // driveToTheta(126);
+      //         driveToPoint(Constants.Reef.RED_LEFT_FEEDER);
+      //       }
+      //     }
+      //   } else { // blue side
+      //     if (getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
+      //       if ((standardizedAngle <= 324
+      //           &&
+      //           standardizedAngle >= 144)) {
+      //         // driveToTheta(234);
+      //         driveToPoint(Constants.Reef.BLUE_RIGHT_FEEDER
+      //             .rotateAround(Constants.Reef.BLUE_RIGHT_FEEDER.getTranslation(), new Rotation2d(Math.PI)));
+      //       } else { // robot back side blueside right (fieldside bottom left)
+      //         // driveToTheta(54);
+      //         driveToPoint(Constants.Reef.BLUE_RIGHT_FEEDER);
+      //       }
+      //     } else { // blue side left feeder (fieldside top left)
+      //       if ((standardizedAngle <= 36
+      //           &&
+      //           standardizedAngle >= 0)
+      //           ||
+      //           (standardizedAngle <= 360
+      //               &&
+      //               standardizedAngle >= 216)) {
+      //         // driveToTheta(306);
+      //         driveToPoint(Constants.Reef.BLUE_LEFT_FEEDER);
+      //       } else { // robot back side blueside left (fieldside top left)
+      //         // driveToTheta(126);
+      //         driveToPoint(Constants.Reef.BLUE_LEFT_FEEDER
+      //             .rotateAround(Constants.Reef.BLUE_LEFT_FEEDER.getTranslation(), new Rotation2d(Math.PI)));
+      //       }
+      //     }
+      //   }
+      //   break;
+      // case FEEDER_ALIGN:
+      //   if (getFieldSide() == "red") { // red side
+      //     if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
+      //       if ((standardizedAngle <= 324
+      //           &&
+      //           standardizedAngle >= 144)) {
+      //         Vector feederLine = new Vector(-Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getSin(),
+      //             Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getCos());
+      //         if (OI.driverA.getAsBoolean()) {
+      //           teleopDrive();
+      //         } else {
+      //           driveOnLine(feederLine, Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getTranslation(),
+      //               Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getRadians());
+      //         }
+      //       } else { // robot back side redside left feeder (fieldside top right)
+      //         Vector feederLine = new Vector(-Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getSin(),
+      //             Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getCos());
+      //         if (OI.driverA.getAsBoolean()) {
+      //           teleopDrive();
+      //         } else {
+      //           driveOnLine(feederLine, Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getTranslation(),
+      //               Constants.Reef.RED_RIGHT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
+      //         }
+      //       }
+      //     } else { // redside left feeder (fieldside bottom right)
+      //       if ((standardizedAngle <= 36
+      //           &&
+      //           standardizedAngle >= 0)
+      //           ||
+      //           (standardizedAngle <= 360
+      //               &&
+      //               standardizedAngle >= 216)) {
+      //         Vector feederLine = new Vector(-Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getSin(),
+      //             Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getCos());
+      //         if (OI.driverA.getAsBoolean()) {
+      //           teleopDrive();
+      //         } else {
+      //           driveOnLine(feederLine, Constants.Reef.RED_LEFT_FEEDER_TELEOP.getTranslation(),
+      //               Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
+      //         }
+      //       } else { // robot back side redside left feeder (fieldside top right)
+      //         Vector feederLine = new Vector(-Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getSin(),
+      //             Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getCos());
+      //         if (OI.driverA.getAsBoolean()) {
+      //           teleopDrive();
+      //         } else {
+      //           driveOnLine(feederLine, Constants.Reef.RED_LEFT_FEEDER_TELEOP.getTranslation(),
+      //               Constants.Reef.RED_LEFT_FEEDER_TELEOP.getRotation().getRadians());
+      //         }
+      //       }
+      //     }
+      //   } else { // blue side
+      //     if (getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
+      //       if ((standardizedAngle <= 324
+      //           &&
+      //           standardizedAngle >= 144)) {
+      //         Vector feederLine = new Vector(-Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getSin(),
+      //             Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getCos());
+      //         if (OI.driverA.getAsBoolean()) {
+      //           teleopDrive();
+      //         } else {
+      //           driveOnLine(feederLine, Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getTranslation(),
+      //               Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
+      //         }
+      //       } else { // robot back side redside left feeder (fieldside top right)
+      //         Vector feederLine = new Vector(-Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getSin(),
+      //             Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getCos());
+      //         if (OI.driverA.getAsBoolean()) {
+      //           teleopDrive();
+      //         } else {
+      //           driveOnLine(feederLine, Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getTranslation(),
+      //               Constants.Reef.BLUE_RIGHT_FEEDER_TELEOP.getRotation().getRadians());
+      //         }
+      //       }
+      //     } else { // blue side left feeder (fieldside top left)
+      //       if ((standardizedAngle <= 36
+      //           &&
+      //           standardizedAngle >= 0)
+      //           ||
+      //           (standardizedAngle <= 360
+      //               &&
+      //               standardizedAngle >= 216)) {
+      //         Vector feederLine = new Vector(-Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getSin(),
+      //             Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getCos());
+      //         if (OI.driverA.getAsBoolean()) {
+      //           teleopDrive();
+      //         } else {
+      //           driveOnLine(feederLine, Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getTranslation(),
+      //               Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getRadians());
+      //         }
+      //       } else { // robot back side redside left feeder (fieldside top right)
+      //         Vector feederLine = new Vector(-Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getSin(),
+      //             Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getCos());
+      //         if (OI.driverA.getAsBoolean()) {
+      //           teleopDrive();
+      //         } else {
+      //           driveOnLine(feederLine, Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getTranslation(),
+      //               Constants.Reef.BLUE_LEFT_FEEDER_TELEOP.getRotation().getRadians() + Math.PI);
+      //         }
+      //       }
+      //     }
+      //   }
+      //   break;
+      // case FEEDER_AUTO:
+      //   if (getFieldSide() == "red") { // red side
+      //     if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
+      //       Pose2d closestPose = getClosestPose(Constants.Reef.RED_RIGHT_FEEDER_LEFT,
+      //           Constants.Reef.RED_RIGHT_FEEDER_RIGHT);
+      //       if ((standardizedAngle <= 324
+      //           &&
+      //           standardizedAngle >= 144)) {
+      //         // driveToTheta(234);
+      //         driveToPoint(closestPose);
+      //       } else { // robot back side redside left feeder (fieldside top right)
+      //         // driveToTheta(54);
+      //         driveToPoint(closestPose.rotateAround(closestPose.getTranslation(), new Rotation2d(Math.PI)));
+      //       }
+      //     } else { // redside left feeder (fieldside bottom right)
+      //       Pose2d closestPose = getClosestPose(Constants.Reef.RED_LEFT_FEEDER_LEFT,
+      //           Constants.Reef.RED_LEFT_FEEDER_RIGHT);
+      //       if ((standardizedAngle <= 36
+      //           &&
+      //           standardizedAngle >= 0)
+      //           ||
+      //           (standardizedAngle <= 360
+      //               &&
+      //               standardizedAngle >= 216)) {
+      //         // driveToTheta(306);
+      //         driveToPoint(closestPose.rotateAround(closestPose.getTranslation(), new Rotation2d(Math.PI)));
+      //       } else { // robot back side redside left (fieldside bottom right)
+      //         // driveToTheta(126);
+      //         driveToPoint(closestPose);
+      //       }
+      //     }
+      //   } else { // blue side
+      //     if (getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
+      //       Pose2d closestPose = getClosestPose(Constants.Reef.BLUE_RIGHT_FEEDER_LEFT,
+      //           Constants.Reef.BLUE_RIGHT_FEEDER_RIGHT);
+      //       if ((standardizedAngle <= 324
+      //           &&
+      //           standardizedAngle >= 144)) {
+      //         // driveToTheta(234);
+      //         driveToPoint(closestPose.rotateAround(closestPose.getTranslation(),
+      //             new Rotation2d(Math.PI)));
+      //       } else { // robot back side blueside right (fieldside bottom left)
+      //         // driveToTheta(54);
+      //         driveToPoint(closestPose);
+      //       }
+      //     } else { // blue side left feeder (fieldside top left)
+      //       Pose2d closestPose = getClosestPose(Constants.Reef.BLUE_LEFT_FEEDER_LEFT,
+      //           Constants.Reef.BLUE_LEFT_FEEDER_RIGHT);
+      //       if ((standardizedAngle <= 36
+      //           &&
+      //           standardizedAngle >= 0)
+      //           ||
+      //           (standardizedAngle <= 360
+      //               &&
+      //               standardizedAngle >= 216)) {
+      //         // driveToTheta(306);
+      //         driveToPoint(
+      //             closestPose);
+      //       } else { // robot back side blueside left (fieldside top left)
+      //         // driveToTheta(126);
+      //         driveToPoint(closestPose.rotateAround(closestPose.getTranslation(), new Rotation2d(Math.PI)));
+      //       }
+      //     }
+      //   }
 
-        break;
-      case AUTO_CLIMB:
-        Vector moveBack = new Vector(0.2, 0);
+      //   break;
+      // case AUTO_CLIMB:
+      //   Vector moveBack = new Vector(0.2, 0);
 
-        if (!firstClimb) {
-          startX = getMT2OdometryX();
-          startY = getMT2OdometryY();
-          firstClimb = true;
-        }
+      //   if (!firstClimb) {
+      //     startX = getMT2OdometryX();
+      //     startY = getMT2OdometryY();
+      //     firstClimb = true;
+      //   }
 
-        if (Math.hypot((Math.abs(getMT2OdometryX() - startX)), Math.abs(getMT2OdometryY() - startY)) < 0.15) {
-          autoRobotCentricDrive(moveBack, 0);
-        } else {
-          autoRobotCentricDrive(new Vector(0, 0), 0);
-        }
-        break;
+      //   if (Math.hypot((Math.abs(getMT2OdometryX() - startX)), Math.abs(getMT2OdometryY() - startY)) < 0.15) {
+      //     autoRobotCentricDrive(moveBack, 0);
+      //   } else {
+      //     autoRobotCentricDrive(new Vector(0, 0), 0);
+      //   }
+      //   break;
 
       default:
 

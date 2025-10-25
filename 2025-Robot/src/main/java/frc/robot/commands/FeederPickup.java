@@ -22,7 +22,7 @@ public class FeederPickup extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    superstructure.setWantedState(SuperState.FEEDER);
+    // superstructure.setWantedState(SuperState.FEEDER);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,6 +43,7 @@ public class FeederPickup extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return superstructure.hasCoralSticky();
+    // return superstructure.hasCoralSticky();
+    return true;
   }
 }
