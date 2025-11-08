@@ -71,6 +71,9 @@ public class Elevator extends SubsystemBase {
 
   private ArmItem intakeItem = ArmItem.NONE;
 
+  private boolean initNet = false;
+  private boolean initNotNet = false;
+
   public void updateIntakeItem(ArmItem intakeItem) {
     this.intakeItem = intakeItem;
   }
@@ -112,6 +115,17 @@ public class Elevator extends SubsystemBase {
     currentLimitsConfigs.SupplyCurrentLimit = 60;
     elevatorMotorMaster.getConfigurator().apply(currentLimitsConfigs);
     elevatorMotorFollower.getConfigurator().apply(currentLimitsConfigs);
+  }
+
+  public void setCurrentLimit(double stator, double supply) {
+    CurrentLimitsConfigs currentLimitsConfigs = new CurrentLimitsConfigs();
+    currentLimitsConfigs.StatorCurrentLimitEnable = true;
+    currentLimitsConfigs.SupplyCurrentLimitEnable = true;
+    currentLimitsConfigs.StatorCurrentLimit = stator;
+    currentLimitsConfigs.SupplyCurrentLimit = supply;
+    elevatorMotorMaster.getConfigurator().apply(currentLimitsConfigs);
+    elevatorMotorFollower.getConfigurator().apply(currentLimitsConfigs);
+    System.out.println("settting elevator current " + stator + supply);
   }
 
   public void init() {
@@ -296,6 +310,14 @@ public class Elevator extends SubsystemBase {
       idleTime = Timer.getFPGATimestamp();
       zeroTime = 0.0;
     }
+
+    if (systemState != ElevatorState.NET) {
+      initNet = false;
+      if (!initNotNet) {
+        setCurrentLimit(60, 60);
+        initNotNet = true;
+      }
+    }
     // System.out.println("Elevator Current: " +
     // elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
     // Logger.recordOutput("Elevator Current",
@@ -303,6 +325,7 @@ public class Elevator extends SubsystemBase {
     // Logger.recordOutput("Elevator Idle Time", idleTime);
     // Logger.recordOutput("First Time Idle", firstTimeIdle);
     Logger.recordOutput("Elevator State", systemState);
+    Logger.recordOutput("init net", initNet);
     // Logger.recordOutput("Elevator Velocity",
     // Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble()));
     Logger.recordOutput("Elevator Height", getElevatorPosition() * 39.37);
@@ -319,6 +342,11 @@ public class Elevator extends SubsystemBase {
         break;
       case NET:
         firstTimeIdle = true;
+        if (!initNet) {
+          setCurrentLimit(40, 40);
+          initNet = true;
+          initNotNet = false;
+        }
         moveElevatorToPosition(ElevatorPosition.kNET.meters);
         break;
       case PROCESSOR:
