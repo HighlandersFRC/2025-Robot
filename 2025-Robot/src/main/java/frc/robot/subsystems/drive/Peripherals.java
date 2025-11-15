@@ -28,11 +28,6 @@ public class Peripherals {
 
   AprilTagFieldLayout aprilTagFieldLayout;
 
-  private Pigeon2 pigeon = new Pigeon2(0, "Canivore");
-  private Pigeon2 pigeonExtra = new Pigeon2(1, "Canivore");
-
-  private Pigeon2Configuration pigeonConfig = new Pigeon2Configuration();
-  private Pigeon2Configuration pigeonExtraConfig = new Pigeon2Configuration();
   Transform3d robotToCam = new Transform3d(
       new Translation3d(Constants.inchesToMeters(1.75), Constants.inchesToMeters(11.625),
           Constants.inchesToMeters(33.5)),
@@ -64,24 +59,6 @@ public class Peripherals {
     }
     photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
-    // Set the mount pose configuration for the IMU
-    pigeonConfig.MountPose.MountPosePitch = 0.3561480641365051;
-    pigeonConfig.MountPose.MountPoseRoll = -0.10366992652416229;
-    pigeonConfig.MountPose.MountPoseYaw = -0.24523599445819855;
-
-    pigeonExtraConfig.MountPose.MountPosePitch = 2.9378318786621094;
-    pigeonExtraConfig.MountPose.MountPoseRoll = -1.7237101793289185;
-    pigeonExtraConfig.MountPose.MountPoseYaw = -1.0769075155258179;
-
-    // Apply the IMU configuration
-    pigeon.getConfigurator().apply(pigeonConfig);
-    pigeonExtra.getConfigurator().apply(pigeonExtraConfig);
-
-    // Zero the IMU angle
-    zeroPigeon();
-
-    setPigeonPitchOffset(getPigeonPitch());
-
   }
 
   public void setBackCamPipline(int index) {
@@ -172,90 +149,9 @@ public class Peripherals {
     }
   }
 
-  /**
-   * Sets the IMU angle to 0
-   */
-  public void zeroPigeon() {
-    setPigeonAngle(0.0);
-  }
-
-  /**
-   * Sets the angle of the IMU
-   * 
-   * @param degrees - Angle to be set to the IMU
-   */
-  public void setPigeonAngle(double degrees) {
-    pigeon.setYaw(degrees);
-    pigeonExtra.setYaw(degrees);
-  }
-
-  /**
-   * Retrieves the yaw of the robot
-   * 
-   * @return Yaw in degrees
-   */
-  public double getPigeonAngle() {
-    return pigeon.getYaw().getValueAsDouble();
-  }
-
-  public double getPigeonExtraAngle() {
-    return pigeonExtra.getYaw().getValueAsDouble();
-  }
-
-  /**
-   * Retrieves the absolute angular velocity of the IMU's Z-axis in device
-   * coordinates.
-   *
-   * @return The absolute angular velocity of the IMU's Z-axis in device
-   *         coordinates.
-   *         The value is in degrees per second.
-   */
-  public double getPigeonAngularVelocity() {
-    return Math.abs(pigeon.getAngularVelocityZDevice().getValueAsDouble());
-  }
-
-  /**
-   * Retrieves the absolute angular velocity of the IMU's Z-axis in world
-   * coordinates.
-   *
-   * @return The absolute angular velocity of the IMU's Z-axis in world
-   *         coordinates.
-   *         The value is in radians per second.
-   */
-  public double getPigeonAngularVelocityW() {
-    return pigeon.getAngularVelocityZWorld().getValueAsDouble();
-  }
-
-  /**
-   * Retrieves the acceleration vector of the robot
-   * 
-   * @return Current acceleration vector of the robot
-   */
-  public Vector getPigeonLinAccel() {
-    Vector accelVector = new Vector();
-    accelVector.setI(pigeon.getAccelerationX().getValueAsDouble() / Constants.Physical.GRAVITY_ACCEL_MS2);
-    accelVector.setJ(pigeon.getAccelerationY().getValueAsDouble() / Constants.Physical.GRAVITY_ACCEL_MS2);
-    return accelVector;
-  }
-
-  public double getPigeonPitch() {
-    return pigeon.getPitch().getValueAsDouble();
-  }
-
-  public double getPigeonPitchAdjusted() {
-    return getPigeonPitch() - pigeonPitchOffset;
-  }
-
-  double pigeonPitchOffset = 0.0;
-
-  public void setPigeonPitchOffset(double newOffset) {
-    pigeonPitchOffset = newOffset;
-  }
-
   double cameraScreenshotTime = 0.0;
 
   public void periodic() {
-    Logger.recordOutput("Pigeon Pitch", getPigeonPitchAdjusted());
 
     // Use to take snapshots of camera stream (Output means processed stream, input
     // means raw stream)

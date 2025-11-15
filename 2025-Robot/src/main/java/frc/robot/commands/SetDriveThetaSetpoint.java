@@ -24,7 +24,7 @@ public class SetDriveThetaSetpoint extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drive.setSetpointAngle(peripherals.getPigeonAngle());
+    drive.setSetpointAngle(drive.getPigeonAngle());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

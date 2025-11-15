@@ -535,7 +535,7 @@ public class Superstructure extends SubsystemBase {
               "Elevator: " + (elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters));
           if (((drive.hitSetPoint(closest))
               && elevator.getElevatorPosition() > Constants.SetPoints.ElevatorPosition.kAUTOL4.meters - 3.0 / 39.37
-              && (Math.abs(peripherals.getPigeonPitch()) < 2.0 || true)) || OI.getDriverLB()) {
+              && (Math.abs(drive.getGyroPitch()) < 2.0 || true)) || OI.getDriverLB()) {
             currentSuperState = SuperState.AUTO_SCORE_L4;
             wantedSuperState = SuperState.AUTO_SCORE_L4;
           } else {
