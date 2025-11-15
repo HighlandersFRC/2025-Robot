@@ -1,6 +1,5 @@
 package frc.robot.subsystems.twist;
 
-import frc.robot.subsystems.manipulator.Manipulator.ArmItem;
 import frc.robot.subsystems.twist.Twist.TwistState;
 
 public interface TwistIO {
@@ -8,7 +7,7 @@ public interface TwistIO {
 
     public void updateInputs(TwistState systemState);
 
-    public void setPosition(double rotations, ArmItem armItem);
+    public void setPosition(double rotations, int slot);
 
     public void setPercent(double percent);
 

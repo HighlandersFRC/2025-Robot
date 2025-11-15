@@ -1,6 +1,5 @@
 package frc.robot.subsystems.twist;
 
-import frc.robot.subsystems.manipulator.Manipulator.ArmItem;
 import frc.robot.subsystems.twist.Twist.TwistState;
 
 public class TwistIOSim implements TwistIO {
@@ -15,12 +14,6 @@ public class TwistIOSim implements TwistIO {
     public void updateInputs(TwistState systemState) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateInputs'");
-    }
-
-    @Override
-    public void setPosition(double rotations, ArmItem armItem) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setPosition'");
     }
 
     @Override
@@ -45,6 +38,12 @@ public class TwistIOSim implements TwistIO {
     public void setEncoderPosition(double position) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setEncoderPosition'");
+    }
+
+    @Override
+    public void setPosition(double rotations, int slot) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setPosition'");
     }
 
 }
