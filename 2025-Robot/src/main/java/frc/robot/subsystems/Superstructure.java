@@ -14,7 +14,6 @@ import frc.robot.OI;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.Climber.ClimbState;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.Peripherals;
 import frc.robot.subsystems.drive.Drive.DriveState;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.Elevator.ElevatorState;
@@ -40,7 +39,6 @@ public class Superstructure extends SubsystemBase {
   private final Intake intake;
   private final Climber climber;
   private final Lights lights;
-  private final Peripherals peripherals;
   double outakeIdleInitTime = 0;
   boolean outakeIdleInit = false;
   boolean firstTimeDefault = true;
@@ -118,7 +116,7 @@ public class Superstructure extends SubsystemBase {
 
   public Superstructure(Drive drive, Elevator elevator, Manipulator manipulator, Pivot pivot, Twist twist,
       Climber climber,
-      Lights lights, Peripherals peripherals, Intake intake) {
+      Lights lights, Intake intake) {
     this.drive = drive;
     this.elevator = elevator;
     this.manipulator = manipulator;
@@ -126,7 +124,6 @@ public class Superstructure extends SubsystemBase {
     this.twist = twist;
     this.climber = climber;
     this.lights = lights;
-    this.peripherals = peripherals;
     this.intake = intake;
   }
 

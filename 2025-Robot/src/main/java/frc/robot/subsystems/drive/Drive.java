@@ -39,8 +39,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.pivot.PivotIOComp;
-import frc.robot.subsystems.pivot.PivotIOSim;
 import frc.robot.tools.controlloops.PID;
 import frc.robot.tools.math.Vector;
 
