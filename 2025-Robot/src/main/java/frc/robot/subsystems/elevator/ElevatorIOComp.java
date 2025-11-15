@@ -119,51 +119,13 @@ public class ElevatorIOComp implements ElevatorIO {
     }
 
     @Override
-    public void moveElevatorToPosition(double position) {
-        if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
-            elevatorMotorMaster.setControl(
-                    elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))
-                            .withSlot(0));
-            elevatorMotorFollower.setControl(
-                    elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position))
-                            .withSlot(0));
-        } else {
-            if (position > Constants.inchesToMeters(64.0) && getElevatorPosition() > Constants.inchesToMeters(62.0)) {
-                moveWithTorque(18, 0.20);
-                // System.out.println("running torque");
-            } else {
-                elevatorMotorMaster.setControl(
-                        elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))
-                                .withSlot(1));
-                elevatorMotorFollower.setControl(
-                        elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position))
-                                .withSlot(1));
-            }
-        }
-    }
-
-    @Override
-    public void moveElevatorToPositionSlow(double position) {
-        if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
-            elevatorMotorMaster.setControl(
-                    elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))
-                            .withSlot(2));
-            elevatorMotorFollower.setControl(
-                    elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position))
-                            .withSlot(2));
-        } else {
-            if (position > Constants.inchesToMeters(64.0) && getElevatorPosition() > Constants.inchesToMeters(62.0)) {
-                moveWithTorque(18, 0.20);
-                // System.out.println("running torque");
-            } else {
-                elevatorMotorMaster.setControl(
-                        elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))
-                                .withSlot(1));
-                elevatorMotorFollower.setControl(
-                        elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position))
-                                .withSlot(1));
-            }
-        }
+    public void setElevatorPosition(double position, int slot) {
+        elevatorMotorMaster.setControl(
+                elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))
+                        .withSlot(slot));
+        elevatorMotorFollower.setControl(
+                elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position))
+                        .withSlot(slot));
     }
 
     @Override
@@ -178,18 +140,13 @@ public class ElevatorIOComp implements ElevatorIO {
     }
 
     @Override
-    public boolean getZeroed() {
-        if (Math.abs(elevatorMotorMaster.getStatorCurrent().getValueAsDouble()) > 10.0
-                && Math.abs(elevatorMotorMaster.getVelocity().getValueAsDouble()) < 5.0) {
-            return true;
-        } else {
-            return false;
-        }
+    public double getVelocity() {
+        return elevatorMotorMaster.getVelocity().getValueAsDouble();
     }
 
     @Override
-    public double getVelocity() {
-        return elevatorMotorMaster.getVelocity().getValueAsDouble();
+    public double getCurrent() {
+        return elevatorMotorMaster.getStatorCurrent().getValueAsDouble();
     }
 
 }

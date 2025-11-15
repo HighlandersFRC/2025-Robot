@@ -18,16 +18,14 @@ public interface ElevatorIO {
 
     public void moveWithTorque(double current, double maxPercent);
 
-    public void moveElevatorToPosition(double position);
-
-    public void moveElevatorToPositionSlow(double position);
+    public void setElevatorPosition(double position, int slot);
 
     public double getElevatorPosition();
 
     public void setElevatorEncoderPosition(double position);
 
-    public boolean getZeroed();
-
     public double getVelocity();
+
+    public double getCurrent();
 
 }

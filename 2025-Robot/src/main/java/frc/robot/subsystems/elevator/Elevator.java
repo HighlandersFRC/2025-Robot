@@ -208,7 +208,17 @@ public class Elevator extends SubsystemBase {
     //             .withSlot(1));
     //   }
     // }
-    io.moveElevatorToPosition(position);
+    if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
+      io.setElevatorPosition(position, 0);
+    } else {
+      if (position > Constants.inchesToMeters(64.0) && getElevatorPosition() > Constants.inchesToMeters(62.0)) {
+        moveWithTorque(18, 0.20);
+        // System.out.println("running torque");
+      } else {
+
+        io.setElevatorPosition(position, 1);
+      }
+    }
   }
 
   public void moveElevatorToPositionSlow(double position) {
@@ -230,7 +240,16 @@ public class Elevator extends SubsystemBase {
     //             .withSlot(1));
     //   }
     // }
-    io.moveElevatorToPositionSlow(position);
+    if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
+      io.setElevatorPosition(position, 2);
+    } else {
+      if (position > Constants.inchesToMeters(64.0) && getElevatorPosition() > Constants.inchesToMeters(62.0)) {
+        moveWithTorque(18, 0.20);
+        // System.out.println("running torque");
+      } else {
+        io.setElevatorPosition(position, 1);
+      }
+    }
   }
 
   public double getElevatorPosition() {
@@ -312,18 +331,12 @@ public class Elevator extends SubsystemBase {
   }
 
   public boolean getZeroed() {
-    // if (Math.abs(elevatorMotorMaster.getStatorCurrent().getValueAsDouble()) > 10.0
-    //     && Math.abs(elevatorMotorMaster.getVelocity().getValueAsDouble()) < 5.0) {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
-    return io.getZeroed();
-  }
-
-  public double getVelocity() {
-    // return elevatorMotorMaster.getVelocity().getValueAsDouble();
-    return io.getVelocity();
+    if (Math.abs(io.getCurrent()) > 10.0
+        && Math.abs(io.getVelocity()) < 5.0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   private double zeroTime = 0.0;
@@ -484,7 +497,7 @@ public class Elevator extends SubsystemBase {
                 .abs(
                     Constants.Ratios
                         .elevatorRotationsToMeters(
-                            getVelocity())) < 0.1
+                            io.getVelocity())) < 0.1
                 && Timer.getFPGATimestamp() - idleTime > 0.3
                 && !firstTimeIdle) {
               // System.out.println("Stupid ahh ts pmo 4");
@@ -529,7 +542,7 @@ public class Elevator extends SubsystemBase {
                   .abs(
                       Constants.Ratios
                           .elevatorRotationsToMeters(
-                              getVelocity())) < 0.1
+                              io.getVelocity())) < 0.1
                   && Timer.getFPGATimestamp() - idleTime > 0.3
                   && !firstTimeIdle) {
                 // System.out.println("Stupid ahh ts pmo 14");
@@ -560,7 +573,7 @@ public class Elevator extends SubsystemBase {
           // System.out.println("Stupid ahh ts pmo 20");
           if (Math.abs(
               Constants.Ratios.elevatorRotationsToMeters(
-                  getVelocity())) < 0.1
+                  io.getVelocity())) < 0.1
               && Timer.getFPGATimestamp() - idleTime > 0.3
               && !firstTimeIdle) {
             // System.out.println("Stupid ahh ts pmo 21");

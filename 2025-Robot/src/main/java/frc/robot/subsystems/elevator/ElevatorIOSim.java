@@ -48,15 +48,9 @@ public class ElevatorIOSim implements ElevatorIO {
     }
 
     @Override
-    public void moveElevatorToPosition(double position) {
+    public void setElevatorPosition(double position, int slot) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'moveElevatorToPosition'");
-    }
-
-    @Override
-    public void moveElevatorToPositionSlow(double position) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'moveElevatorToPositionSlow'");
+        throw new UnsupportedOperationException("Unimplemented method 'setElevatorPosition'");
     }
 
     @Override
@@ -72,9 +66,9 @@ public class ElevatorIOSim implements ElevatorIO {
     }
 
     @Override
-    public boolean getZeroed() {
+    public double getCurrent() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getZeroed'");
+        throw new UnsupportedOperationException("Unimplemented method 'getCurrent'");
     }
 
     @Override
