@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.pivot;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -13,7 +13,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Manipulator.ArmItem;
+import frc.robot.subsystems.manipulator.Manipulator.ArmItem;
 
 public class Pivot extends SubsystemBase {
 
@@ -623,15 +623,15 @@ public class Pivot extends SubsystemBase {
         break;
       case AUTO_SCORE_L4_SLOW:
         // switch (systemFlip) {
-        //   case FRONT:
-        //     setPivotPercent(0.1);
-        //     break;
-        //   case BACK:
-        //     setPivotPercent(-0.1);
-        //     break;
-        //   default:
-        //     setPivotPercent(0.1);
-        //     break;
+        // case FRONT:
+        // setPivotPercent(0.1);
+        // break;
+        // case BACK:
+        // setPivotPercent(-0.1);
+        // break;
+        // default:
+        // setPivotPercent(0.1);
+        // break;
         // }
         // break;
         switch (systemFlip) {

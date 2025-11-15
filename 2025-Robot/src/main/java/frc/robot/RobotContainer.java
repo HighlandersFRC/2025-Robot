@@ -32,17 +32,17 @@ import frc.robot.commands.SetRobotStateOnce;
 import frc.robot.commands.SetRobotStateSimple;
 import frc.robot.commands.SetRobotStateSimpleOnce;
 import frc.robot.commands.ZeroAngleMidMatch;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Manipulator;
-import frc.robot.subsystems.Lights;
-import frc.robot.subsystems.Peripherals;
-import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Superstructure;
-import frc.robot.subsystems.Twist;
 import frc.robot.subsystems.Superstructure.SuperState;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.Peripherals;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.lights.Lights;
+import frc.robot.subsystems.manipulator.Manipulator;
+import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.twist.Twist;
 
 /**
  * This class is where the bulk of the robot should be declared. Since

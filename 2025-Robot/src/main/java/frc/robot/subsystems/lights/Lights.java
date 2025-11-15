@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.lights;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -15,7 +15,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
-import frc.robot.subsystems.Manipulator.ArmItem;
+import frc.robot.subsystems.manipulator.Manipulator;
+import frc.robot.subsystems.manipulator.Manipulator.ArmItem;
 
 public class Lights extends SubsystemBase {
   /** Creates a new Lights. */
@@ -255,7 +256,7 @@ public class Lights extends SubsystemBase {
     }
 
     Logger.recordOutput("Lights State", systemState);
-    if (partyMode /* party mode */) { //TODO: enable or disable party mode here
+    if (partyMode /* party mode */) { // TODO: enable or disable party mode here
       weLikeToParty();
       // System.out.println("Jam Peanut Butter Bread Bread Make a sandwich eat it");
       // System.out.println("You want it? I got it");
@@ -267,8 +268,10 @@ public class Lights extends SubsystemBase {
       // System.out.println("got guns");
       // System.out.println("and lassos");
       // System.out.println("reach reach reach reach");
-      // System.out.println("sock it to me sock it to me sock it to me sock it to me");
-      // System.out.println("left right left left right left right right left right left left right left right right");
+      // System.out.println("sock it to me sock it to me sock it to me sock it to
+      // me");
+      // System.out.println("left right left left right left right right left right
+      // left left right left right right");
       // System.out.println("travolta! travolta! travolta! travolta!");
       // System.out.println("Party! wooo wooo wooo wooo");
     } else {

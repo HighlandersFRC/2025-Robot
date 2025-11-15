@@ -6,7 +6,7 @@ import frc.robot.tools.math.Vector;
 import frc.robot.tools.wrappers.AutoFollower;
 import frc.robot.Constants;
 import frc.robot.OI;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.drive.Drive;
 
 public class FullSendFollower extends AutoFollower {
     private Drive drive;

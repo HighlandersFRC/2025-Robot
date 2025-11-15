@@ -11,16 +11,25 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
-import frc.robot.subsystems.Climber.ClimbState;
-import frc.robot.subsystems.Drive.DriveState;
-import frc.robot.subsystems.Elevator.ElevatorState;
-import frc.robot.subsystems.Intake.IntakeState;
-import frc.robot.subsystems.Manipulator.ArmItem;
-import frc.robot.subsystems.Manipulator.ManipulatorState;
-import frc.robot.subsystems.Lights.LightsState;
-import frc.robot.subsystems.Pivot.PivotFlip;
-import frc.robot.subsystems.Pivot.PivotState;
-import frc.robot.subsystems.Twist.TwistState;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.Climber.ClimbState;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.Peripherals;
+import frc.robot.subsystems.drive.Drive.DriveState;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.Elevator.ElevatorState;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.Intake.IntakeState;
+import frc.robot.subsystems.lights.Lights;
+import frc.robot.subsystems.lights.Lights.LightsState;
+import frc.robot.subsystems.manipulator.Manipulator;
+import frc.robot.subsystems.manipulator.Manipulator.ArmItem;
+import frc.robot.subsystems.manipulator.Manipulator.ManipulatorState;
+import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.pivot.Pivot.PivotFlip;
+import frc.robot.subsystems.pivot.Pivot.PivotState;
+import frc.robot.subsystems.twist.Twist;
+import frc.robot.subsystems.twist.Twist.TwistState;
 
 public class Superstructure extends SubsystemBase {
   private final Drive drive;
@@ -611,7 +620,9 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case AUTO_NET_MORE:
-        if (netHitNet && Timer.getFPGATimestamp() - netHitTimeNet > 0.75) { // TODO: you can change this number to change the wait time for net (0.5 is when it outakes btw)
+        if (netHitNet && Timer.getFPGATimestamp() - netHitTimeNet > 0.75) { // TODO: you can change this number to
+                                                                            // change the wait time for net (0.5 is when
+                                                                            // it outakes btw)
           wantedSuperState = SuperState.AUTO_NET_MORE_MORE;
           currentSuperState = SuperState.AUTO_NET_MORE_MORE;
         } else {

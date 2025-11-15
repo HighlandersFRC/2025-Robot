@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.manipulator;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -176,7 +176,7 @@ public class Manipulator extends SubsystemBase {
     return manipulatorMotor.getVelocity().getValueAsDouble();
   }
 
-  boolean inL1State = false;
+  public boolean inL1State = false;
   double initOutakeL1Position = 0.0;
   boolean initOutakeL1 = false;
 
