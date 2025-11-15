@@ -2,16 +2,6 @@ package frc.robot.subsystems.elevator;
 
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.TorqueCurrentFOC;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.GravityTypeValue;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
@@ -19,23 +9,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.Constants.SetPoints.ElevatorPosition;
-import frc.robot.subsystems.manipulator.Manipulator;
 import frc.robot.subsystems.manipulator.Manipulator.ArmItem;
-import frc.robot.subsystems.twist.TwistIO;
-import frc.robot.subsystems.twist.TwistIOComp;
-import frc.robot.subsystems.twist.TwistIOSim;
 
 public class Elevator extends SubsystemBase {
-  ElevatorIO io;
-  private final TalonFX elevatorMotorMaster = new TalonFX(Constants.CANInfo.MASTER_ELEVATOR_MOTOR_ID,
-      new CANBus(Constants.CANInfo.CANBUS_NAME));
-  private final TalonFX elevatorMotorFollower = new TalonFX(Constants.CANInfo.FOLLOWER_ELEVATOR_MOTOR_ID,
-      new CANBus(Constants.CANInfo.CANBUS_NAME));
-
-  private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
-  private final double elevatorAcceleration = 1482542976.0;
-  private final double elevatorCruiseVelocity = 449929104911.0;
-  private final MotionMagicTorqueCurrentFOC elevatorMotionProfileRequest = new MotionMagicTorqueCurrentFOC(0);
+  private final ElevatorIO io;
 
   public enum ElevatorState {
     DEFAULT,
@@ -159,8 +136,10 @@ public class Elevator extends SubsystemBase {
     // elevatorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
     // elevatorConfig.Slot1.GravityType = GravityTypeValue.Elevator_Static;
     // elevatorConfig.Slot2.GravityType = GravityTypeValue.Elevator_Static;
-    // elevatorConfig.MotionMagic.MotionMagicAcceleration = this.elevatorAcceleration;
-    // elevatorConfig.MotionMagic.MotionMagicCruiseVelocity = this.elevatorCruiseVelocity;
+    // elevatorConfig.MotionMagic.MotionMagicAcceleration =
+    // this.elevatorAcceleration;
+    // elevatorConfig.MotionMagic.MotionMagicCruiseVelocity =
+    // this.elevatorCruiseVelocity;
     // elevatorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     // elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     // elevatorConfig.CurrentLimits.StatorCurrentLimit = 60;
@@ -191,22 +170,23 @@ public class Elevator extends SubsystemBase {
 
   public void moveElevatorToPosition(double position) {
     // if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
-    //   elevatorMotorMaster.setControl(
-    //       elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
-    //   elevatorMotorFollower.setControl(
-    //       elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
+    // elevatorMotorMaster.setControl(
+    // elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
+    // elevatorMotorFollower.setControl(
+    // elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
     // } else {
-    //   if (position > Constants.inchesToMeters(64.0) && getElevatorPosition() > Constants.inchesToMeters(62.0)) {
-    //     moveWithTorque(18, 0.20);
-    //     // System.out.println("running torque");
-    //   } else {
-    //     elevatorMotorMaster.setControl(
-    //         elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))
-    //             .withSlot(1));
-    //     elevatorMotorFollower.setControl(
-    //         elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position))
-    //             .withSlot(1));
-    //   }
+    // if (position > Constants.inchesToMeters(64.0) && getElevatorPosition() >
+    // Constants.inchesToMeters(62.0)) {
+    // moveWithTorque(18, 0.20);
+    // // System.out.println("running torque");
+    // } else {
+    // elevatorMotorMaster.setControl(
+    // elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))
+    // .withSlot(1));
+    // elevatorMotorFollower.setControl(
+    // elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position))
+    // .withSlot(1));
+    // }
     // }
     if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
       io.setElevatorPosition(position, 0);
@@ -223,22 +203,23 @@ public class Elevator extends SubsystemBase {
 
   public void moveElevatorToPositionSlow(double position) {
     // if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
-    //   elevatorMotorMaster.setControl(
-    //       elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(2));
-    //   elevatorMotorFollower.setControl(
-    //       elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(2));
+    // elevatorMotorMaster.setControl(
+    // elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(2));
+    // elevatorMotorFollower.setControl(
+    // elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(2));
     // } else {
-    //   if (position > Constants.inchesToMeters(64.0) && getElevatorPosition() > Constants.inchesToMeters(62.0)) {
-    //     moveWithTorque(18, 0.20);
-    //     // System.out.println("running torque");
-    //   } else {
-    //     elevatorMotorMaster.setControl(
-    //         elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))
-    //             .withSlot(1));
-    //     elevatorMotorFollower.setControl(
-    //         elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position))
-    //             .withSlot(1));
-    //   }
+    // if (position > Constants.inchesToMeters(64.0) && getElevatorPosition() >
+    // Constants.inchesToMeters(62.0)) {
+    // moveWithTorque(18, 0.20);
+    // // System.out.println("running torque");
+    // } else {
+    // elevatorMotorMaster.setControl(
+    // elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))
+    // .withSlot(1));
+    // elevatorMotorFollower.setControl(
+    // elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position))
+    // .withSlot(1));
+    // }
     // }
     if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
       io.setElevatorPosition(position, 2);
@@ -253,7 +234,8 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getElevatorPosition() {
-    // return Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getPosition().getValueAsDouble());
+    // return
+    // Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getPosition().getValueAsDouble());
     return io.getElevatorPosition();
   }
 
