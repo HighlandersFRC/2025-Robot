@@ -14,7 +14,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.elevator.Elevator.ElevatorState;
-import frc.robot.subsystems.twist.Twist.TwistState;
 
 public class ElevatorIOComp implements ElevatorIO {
     private final TalonFX elevatorMotorMaster = new TalonFX(Constants.CANInfo.MASTER_ELEVATOR_MOTOR_ID,
