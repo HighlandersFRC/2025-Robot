@@ -9,7 +9,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.manipulator.Manipulator.ArmItem;
 
 public class Pivot extends SubsystemBase {
-  private PivotIO io;
+  private final PivotIO io;
   private double nonAlgaeTime = 0.0;
 
   private double maxPivotDegrees = 180.0;
