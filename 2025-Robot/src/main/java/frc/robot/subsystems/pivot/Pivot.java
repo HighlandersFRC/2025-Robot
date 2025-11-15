@@ -2,87 +2,31 @@ package frc.robot.subsystems.pivot;
 
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.manipulator.Manipulator.ArmItem;
 
 public class Pivot extends SubsystemBase {
-
+  private final PivotIO io;
   private double nonAlgaeTime = 0.0;
 
-  private final TalonFX pivotMotor = new TalonFX(Constants.CANInfo.PIVOT_MOTOR_ID,
-      new CANBus(Constants.CANInfo.CANBUS_NAME));
-  private final CANcoder pivotCANcoder = new CANcoder(Constants.CANInfo.PIVOT_CANCODER_ID,
-      new CANBus(Constants.CANInfo.CANBUS_NAME));
-
-  private final double pivotJerk = 0.0;
-  private final double pivotAcceleration = 6.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
-  private final double pivotCruiseVelocity = 6.0 * Constants.Ratios.PIVOT_GEAR_RATIO;
-
-  private final double pivotJerkSlow = 0.0;
-  private final double pivotAccelerationSlow = 3.0;
-  private final double pivotCruiseVelocitySlow = 3.0;
-
-  private final double pivotJerkSlower = 0.0;
-  private final double pivotAccelerationSlower = 1.0;
-  private final double pivotCruiseVelocitySlower = 1.0;
-
-  private final double pivotProfileScalarFactor = 1;
-
   private double maxPivotDegrees = 180.0;
-
-  private final DynamicMotionMagicVoltage pivotMotionProfileRequest = new DynamicMotionMagicVoltage(0,
-      pivotCruiseVelocity,
-      pivotAcceleration,
-      pivotJerk);
 
   private boolean runManualDownOrUp = false;
   // private Speed fastMode = Speed.FAST;
 
   public Pivot() {
+    if (RobotBase.isReal()) {
+      io = new PivotIOComp();
+    } else {
+      io = new PivotIOSim();
+    }
   }
 
   public void init() {
-    pivotMotor.setNeutralMode(NeutralModeValue.Brake);
-    TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
-    pivotConfig.Slot0.kP = 100.0;
-    pivotConfig.Slot0.kI = 0.0;
-    pivotConfig.Slot0.kD = 5.0;
-    pivotConfig.Slot1.kP = 30.0;
-    pivotConfig.Slot1.kI = 0.0;
-    pivotConfig.Slot1.kD = 5.0;
-    pivotConfig.Slot2.kP = 50.0;
-    pivotConfig.Slot2.kI = 0.0;
-    pivotConfig.Slot2.kD = 15.0;
-    pivotConfig.MotionMagic.MotionMagicJerk = this.pivotJerk;
-    pivotConfig.MotionMagic.MotionMagicAcceleration = this.pivotAcceleration;
-    pivotConfig.MotionMagic.MotionMagicCruiseVelocity = this.pivotCruiseVelocity;
-    pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    pivotConfig.CurrentLimits.StatorCurrentLimit = 40;
-    pivotConfig.CurrentLimits.SupplyCurrentLimit = 40;
-    pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-    pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
-    pivotConfig.Feedback.SensorToMechanismRatio = 1.0;
-    pivotConfig.Feedback.RotorToSensorRatio = Constants.Ratios.PIVOT_GEAR_RATIO;
-    // pivotConfig.Feedback.FeedbackSensorSource =
-    // FeedbackSensorSourceValue.FusedCANcoder;
-    // pivotConfig.Feedback.FeedbackRemoteSensorID = pivotCANcoder.getDeviceID();
-    // pivotConfig.Feedback.SensorToMechanismRatio = 1.0;
-    // pivotConfig.Feedback.RotorToSensorRatio = Constants.Ratios.PIVOT_GEAR_RATIO;
-
-    pivotMotor.getConfigurator().apply(pivotConfig);
-    pivotMotor.setNeutralMode(NeutralModeValue.Brake);
-    // pivotMotor.setPosition(0.0);
+    io.init();
   }
 
   private ArmItem intakeItem = ArmItem.NONE;
@@ -92,70 +36,24 @@ public class Pivot extends SubsystemBase {
   }
 
   public void pivotToPosition(double pivotPosition) {
-    // if (intakeItem == IntakeItem.ALGAE && fastMode != Speed.ALGAE) {
-    // flashSlower();
-    // } else if (fastMode != Speed.FAST) {
-    // flashFast();
-    // }
-    if (Math.abs(pivotPosition) * 360.0 > maxPivotDegrees) {
-      pivotPosition = Math.copySign(maxPivotDegrees / 360.0, pivotPosition);
-    }
-    if (Timer.getFPGATimestamp() - nonAlgaeTime < 1.0) {
-      pivotToPositionSlower(pivotPosition);
-    } else {
-      pivotMotor.setControl(this.pivotMotionProfileRequest
-          .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
-          .withVelocity(this.pivotCruiseVelocity * pivotProfileScalarFactor)
-          .withAcceleration(this.pivotAcceleration * pivotProfileScalarFactor)
-          .withJerk(
-              this.pivotJerk * pivotProfileScalarFactor)
-          .withSlot(0));
-    }
+    io.setPosition(pivotPosition, maxPivotDegrees, nonAlgaeTime);
   }
 
   public void pivotToPositionSlow(double pivotPosition) {
-    // if (Math.abs(pivotPosition) * 360.0 > 135.0) {
-    // pivotPosition = Math.copySign(135.0 / 360.0, pivotPosition);
-    // }
-    if (Math.abs(pivotPosition) * 360.0 > maxPivotDegrees) {
-      pivotPosition = Math.copySign(maxPivotDegrees / 360.0, pivotPosition);
-    }
-    pivotMotor.setControl(this.pivotMotionProfileRequest
-        .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
-        .withVelocity(this.pivotCruiseVelocitySlow * pivotProfileScalarFactor)
-        .withAcceleration(this.pivotAccelerationSlow * pivotProfileScalarFactor)
-        .withJerk(
-            this.pivotJerkSlow * pivotProfileScalarFactor)
-        .withSlot(0));
+    io.setPositionSlow(pivotPosition, maxPivotDegrees);
+
   }
 
   public void pivotToPositionSlower(double pivotPosition) {
-    // if (fastMode) {
-    // flashSlow();
-    // }
-    if (Math.abs(pivotPosition) * 360.0 > maxPivotDegrees) {
-      pivotPosition = Math.copySign(maxPivotDegrees / 360.0, pivotPosition);
-    }
-
-    pivotMotor.setControl(this.pivotMotionProfileRequest
-        .withPosition(pivotPosition/* Constants.Ratios.PIVOT_GEAR_RATIO */)
-        .withVelocity(this.pivotCruiseVelocitySlower * pivotProfileScalarFactor)
-        .withAcceleration(this.pivotAccelerationSlower * pivotProfileScalarFactor)
-        .withJerk(
-            this.pivotJerkSlower * pivotProfileScalarFactor)
-        .withSlot(0));
+    io.setPositionSlower(pivotPosition, maxPivotDegrees);
   }
 
   public double getPivotPosition() {
-    return (pivotMotor.getPosition().getValueAsDouble());
+    return io.getPosition();
   }
 
-  // public void setpivotEncoderPosition(double position) {
-  // pivotMotor.setPosition(position);
-  // }
-
   public void setPivotPercent(double percent) {
-    pivotMotor.set(percent);
+    io.setPercent(percent);
   }
 
   public void setMaxPivotDegrees(double degrees) {
@@ -166,12 +64,6 @@ public class Pivot extends SubsystemBase {
     FRONT,
     BACK,
   }
-
-  // public enum Speed {
-  // FAST,
-  // SLOW,
-  // ALGAE,
-  // }
 
   public enum PivotState {
     PREP,
@@ -184,8 +76,6 @@ public class Pivot extends SubsystemBase {
     L4,
     PROCESSOR,
     NET,
-    // FEEDER_FRONT,
-    // FEEDER_BACK,
     FEEDER,
     GROUND_CORAL_FRONT,
     GROUND_CORAL_PREP_BACK,
@@ -258,10 +148,6 @@ public class Pivot extends SubsystemBase {
         return PivotState.AUTO_L3;
       case AUTO_L4:
         return PivotState.AUTO_L4;
-      // case FEEDER_FRONT:
-      // return PivotState.FEEDER_FRONT;
-      // case FEEDER_BACK:
-      // return PivotState.FEEDER_BACK;
       case FEEDER:
         return PivotState.FEEDER;
       case REEF_ALGAE:
@@ -315,9 +201,7 @@ public class Pivot extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // System.out.println("Pivot Current: " +
-    // pivotMotor.getStatorCurrent().getValueAsDouble());
-    // System.out.println("Pivot Position: " + (getPivotPosition() * 360.0));
+    io.updateInputs(systemState);
     Logger.recordOutput("Pivot Position", getPivotPosition());
     if (systemState != PivotState.L23 && systemState != PivotState.L4 && systemState != PivotState.MANUAL_PLACE
         && systemState != PivotState.MANUAL_RESET) {
@@ -328,10 +212,6 @@ public class Pivot extends SubsystemBase {
     } else if (intakeItem == ArmItem.ALGAE) {
       nonAlgaeTime = 0.0;
     }
-    // Logger.recordOutput("Pivot Output",
-    // pivotMotor.getClosedLoopOutput().getValueAsDouble());
-    // Logger.recordOutput("Pivot Current",
-    // pivotMotor.getStatorCurrent().getValueAsDouble());
     systemState = handleStateTransition();
     systemFlip = handleFlipTransition();
     Logger.recordOutput("Pivot State", systemState);
@@ -622,18 +502,6 @@ public class Pivot extends SubsystemBase {
         }
         break;
       case AUTO_SCORE_L4_SLOW:
-        // switch (systemFlip) {
-        // case FRONT:
-        // setPivotPercent(0.1);
-        // break;
-        // case BACK:
-        // setPivotPercent(-0.1);
-        // break;
-        // default:
-        // setPivotPercent(0.1);
-        // break;
-        // }
-        // break;
         switch (systemFlip) {
           case FRONT:
             pivotToPositionSlower(Constants.SetPoints.PivotPosition.kAUTOL4SCORESLOW.rotations);
@@ -646,12 +514,6 @@ public class Pivot extends SubsystemBase {
             break;
         }
         break;
-      // case FEEDER_FRONT:
-      // pivotToPosition(Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-      // break;
-      // case FEEDER_BACK:
-      // pivotToPosition(-Constants.SetPoints.PivotPosition.kFEEDER.rotations);
-      // break;
       case FEEDER:
         switch (systemFlip) {
           case FRONT:
@@ -735,6 +597,5 @@ public class Pivot extends SubsystemBase {
         setPivotPercent(0.0);
         break;
     }
-    // This method will be called once per scheduler run
   }
 }

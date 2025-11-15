@@ -6,7 +6,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.manipulator.Manipulator.ArmItem;
 
 public class Twist extends SubsystemBase {
-  TwistIO io;
+  private final TwistIO io;
 
   public boolean algaeMode = false;
 
