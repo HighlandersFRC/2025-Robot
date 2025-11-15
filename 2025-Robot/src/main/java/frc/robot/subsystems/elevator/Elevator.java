@@ -85,109 +85,30 @@ public class Elevator extends SubsystemBase {
   public void teleopInit() {
     firstTimeIdle = true;
     firstTimeDefault = false;
-    // CurrentLimitsConfigs currentLimitsConfigs = new CurrentLimitsConfigs();
-    // currentLimitsConfigs.StatorCurrentLimitEnable = true;
-    // currentLimitsConfigs.SupplyCurrentLimitEnable = true;
-    // currentLimitsConfigs.StatorCurrentLimit = 60;
-    // currentLimitsConfigs.SupplyCurrentLimit = 60;
-    // elevatorMotorMaster.getConfigurator().apply(currentLimitsConfigs);
-    // elevatorMotorFollower.getConfigurator().apply(currentLimitsConfigs);
     io.teleopInit();
   }
 
   public void autoInit() {
-    // CurrentLimitsConfigs currentLimitsConfigs = new CurrentLimitsConfigs();
-    // currentLimitsConfigs.StatorCurrentLimitEnable = true;
-    // currentLimitsConfigs.SupplyCurrentLimitEnable = true;
-    // currentLimitsConfigs.StatorCurrentLimit = 60;
-    // currentLimitsConfigs.SupplyCurrentLimit = 60;
-    // elevatorMotorMaster.getConfigurator().apply(currentLimitsConfigs);
-    // elevatorMotorFollower.getConfigurator().apply(currentLimitsConfigs);
     io.autoInit();
   }
 
   public void setCurrentLimit(double stator, double supply) {
-    // CurrentLimitsConfigs currentLimitsConfigs = new CurrentLimitsConfigs();
-    // currentLimitsConfigs.StatorCurrentLimitEnable = true;
-    // currentLimitsConfigs.SupplyCurrentLimitEnable = true;
-    // currentLimitsConfigs.StatorCurrentLimit = stator;
-    // currentLimitsConfigs.SupplyCurrentLimit = supply;
-    // elevatorMotorMaster.getConfigurator().apply(currentLimitsConfigs);
-    // elevatorMotorFollower.getConfigurator().apply(currentLimitsConfigs);
-    // System.out.println("settting elevator current " + stator + supply);
     io.setCurrentLimit(stator, supply);
   }
 
   public void init() {
-    // TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
-    // double elevatorMultiplier = 45.01 / 33.39;
-    // elevatorConfig.Slot0.kP = 33.39 * elevatorMultiplier;
-    // elevatorConfig.Slot0.kI = 0.0 * elevatorMultiplier;
-    // elevatorConfig.Slot0.kD = 2.7 * elevatorMultiplier;
-    // elevatorConfig.Slot0.kG = 4.499 * elevatorMultiplier;
-    // elevatorConfig.Slot1.kP = 75.83 * elevatorMultiplier;
-    // elevatorConfig.Slot1.kI = 0.0 * elevatorMultiplier;
-    // elevatorConfig.Slot1.kD = 4.690 * elevatorMultiplier;
-    // elevatorConfig.Slot1.kG = 8.044 * elevatorMultiplier;
-    // elevatorConfig.Slot2.kP = 33.39 * elevatorMultiplier * 0.5;
-    // elevatorConfig.Slot2.kI = 0.0 * elevatorMultiplier * 0.5;
-    // elevatorConfig.Slot2.kD = 2.7 * elevatorMultiplier * 0.5;
-    // elevatorConfig.Slot2.kG = 4.499 * elevatorMultiplier * 0.5;
-    // elevatorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
-    // elevatorConfig.Slot1.GravityType = GravityTypeValue.Elevator_Static;
-    // elevatorConfig.Slot2.GravityType = GravityTypeValue.Elevator_Static;
-    // elevatorConfig.MotionMagic.MotionMagicAcceleration =
-    // this.elevatorAcceleration;
-    // elevatorConfig.MotionMagic.MotionMagicCruiseVelocity =
-    // this.elevatorCruiseVelocity;
-    // elevatorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    // elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    // elevatorConfig.CurrentLimits.StatorCurrentLimit = 60;
-    // elevatorConfig.CurrentLimits.SupplyCurrentLimit = 60;
-
-    // elevatorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-    // elevatorMotorMaster.getConfigurator().apply(elevatorConfig);
-    // elevatorMotorFollower.getConfigurator().apply(elevatorConfig);
-    // elevatorMotorMaster.setNeutralMode(NeutralModeValue.Brake);
-    // elevatorMotorFollower.setNeutralMode(NeutralModeValue.Brake);
-    // elevatorMotorMaster.setPosition(0.0);
-    // elevatorMotorFollower.setPosition(0.0);
     io.init();
   }
 
   public void moveWithPercent(double percent) {
-    // elevatorMotorMaster.set(percent);
-    // elevatorMotorFollower.set(-percent);
     io.moveWithPercent(percent);
   }
 
   public void moveWithTorque(double current, double maxPercent) {
-    // elevatorMotorMaster.setControl(torqueCurrentFOCRequest.withOutput(current).withMaxAbsDutyCycle(maxPercent));
-    // elevatorMotorFollower.setControl(torqueCurrentFOCRequest.withOutput(-current).withMaxAbsDutyCycle(maxPercent));
     io.moveWithTorque(current, maxPercent);
   }
 
   public void moveElevatorToPosition(double position) {
-    // if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
-    // elevatorMotorMaster.setControl(
-    // elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
-    // elevatorMotorFollower.setControl(
-    // elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(0));
-    // } else {
-    // if (position > Constants.inchesToMeters(64.0) && getElevatorPosition() >
-    // Constants.inchesToMeters(62.0)) {
-    // moveWithTorque(18, 0.20);
-    // // System.out.println("running torque");
-    // } else {
-    // elevatorMotorMaster.setControl(
-    // elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))
-    // .withSlot(1));
-    // elevatorMotorFollower.setControl(
-    // elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position))
-    // .withSlot(1));
-    // }
-    // }
     if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
       io.setElevatorPosition(position, 0);
     } else {
@@ -202,25 +123,6 @@ public class Elevator extends SubsystemBase {
   }
 
   public void moveElevatorToPositionSlow(double position) {
-    // if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
-    // elevatorMotorMaster.setControl(
-    // elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position)).withSlot(2));
-    // elevatorMotorFollower.setControl(
-    // elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position)).withSlot(2));
-    // } else {
-    // if (position > Constants.inchesToMeters(64.0) && getElevatorPosition() >
-    // Constants.inchesToMeters(62.0)) {
-    // moveWithTorque(18, 0.20);
-    // // System.out.println("running torque");
-    // } else {
-    // elevatorMotorMaster.setControl(
-    // elevatorMotionProfileRequest.withPosition(Constants.Ratios.elevatorMetersToRotations(position))
-    // .withSlot(1));
-    // elevatorMotorFollower.setControl(
-    // elevatorMotionProfileRequest.withPosition(-Constants.Ratios.elevatorMetersToRotations(position))
-    // .withSlot(1));
-    // }
-    // }
     if (position < Constants.Ratios.ELEVATOR_FIRST_STAGE) {
       io.setElevatorPosition(position, 2);
     } else {
@@ -234,14 +136,10 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getElevatorPosition() {
-    // return
-    // Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getPosition().getValueAsDouble());
     return io.getElevatorPosition();
   }
 
   public void setElevatorEncoderPosition(double position) {
-    // elevatorMotorMaster.setPosition(position);
-    // elevatorMotorFollower.setPosition(position);
     io.setElevatorEncoderPosition(position);
   }
 
@@ -346,11 +244,11 @@ public class Elevator extends SubsystemBase {
     // elevatorMotorMaster.getStatorCurrent().getValueAsDouble());
     // Logger.recordOutput("Elevator Idle Time", idleTime);
     // Logger.recordOutput("First Time Idle", firstTimeIdle);
-    Logger.recordOutput("Elevator State", systemState);
+    // Logger.recordOutput("Elevator State", systemState);
     Logger.recordOutput("init net", initNet);
     // Logger.recordOutput("Elevator Velocity",
     // Constants.Ratios.elevatorRotationsToMeters(elevatorMotorMaster.getVelocity().getValueAsDouble()));
-    Logger.recordOutput("Elevator Height", getElevatorPosition() * 39.37);
+    // Logger.recordOutput("Elevator Height", getElevatorPosition() * 39.37);
     switch (systemState) {
       case GROUND_CORAL_INTAKE:
         firstTimeIdle = true;
