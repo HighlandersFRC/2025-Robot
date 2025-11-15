@@ -66,7 +66,7 @@ public class RobotContainer {
         Climber climber = new Climber();
         Intake intake = new Intake();
         Superstructure superstructure = new Superstructure(drive, elevator, manipulator, pivot, twist, climber, lights,
-                        peripherals, intake);
+                        intake);
 
         public boolean algaeMode = false;
         boolean manualMode = false;

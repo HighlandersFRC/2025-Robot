@@ -13,7 +13,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.manipulator.Manipulator.ArmItem;
 import frc.robot.subsystems.twist.Twist.TwistState;
 
 public class TwistIOComp implements TwistIO {
@@ -68,18 +67,11 @@ public class TwistIOComp implements TwistIO {
     }
 
     @Override
-    public void setPosition(double rotations, ArmItem armItem) {
+    public void setPosition(double rotations, int slot) {
         Logger.recordOutput("Twist Target Pos", Constants.rotationsToDegrees(rotations));
-
-        if (armItem == ArmItem.ALGAE) {
-            twistMotor.setControl(this.twistTorqueCurrentFOC
-                    .withPosition(rotations)
-                    .withEnableFOC(true).withSlot(1));
-        } else {
-            twistMotor.setControl(this.twistTorqueCurrentFOC
-                    .withPosition(rotations)
-                    .withEnableFOC(true).withSlot(0));
-        }
+        twistMotor.setControl(this.twistTorqueCurrentFOC
+                .withPosition(rotations)
+                .withEnableFOC(true).withSlot(slot));
     }
 
     @Override

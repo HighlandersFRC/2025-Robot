@@ -2,11 +2,6 @@ package frc.robot.subsystems.elevator;
 
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.TorqueCurrentFOC;
-import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
@@ -17,7 +12,7 @@ import frc.robot.Constants.SetPoints.ElevatorPosition;
 import frc.robot.subsystems.manipulator.Manipulator.ArmItem;
 
 public class Elevator extends SubsystemBase {
-  ElevatorIO io;
+  private final ElevatorIO io;
 
   public enum ElevatorState {
     DEFAULT,

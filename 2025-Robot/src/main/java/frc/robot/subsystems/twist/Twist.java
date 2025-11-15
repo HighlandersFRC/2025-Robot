@@ -32,7 +32,12 @@ public class Twist extends SubsystemBase {
   }
 
   public void twistToPosition(double rotations) {
-    io.setPosition(rotations, _armItem);
+    if (_armItem == ArmItem.ALGAE) {
+      io.setPosition(rotations, 1);
+    } else {
+      io.setPosition(rotations, 0);
+      ;
+    }
   }
 
   public void setTwistPercent(double percent) {

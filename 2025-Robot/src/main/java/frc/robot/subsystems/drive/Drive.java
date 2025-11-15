@@ -33,6 +33,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -124,15 +125,13 @@ public class Drive extends SubsystemBase {
   }
 
   // creates all 4 modules
-  private final SwerveModule frontRight = new SwerveModule(1, frontRightAngleMotor, frontRightDriveMotor,
-      frontRightCanCoder);
-  private final SwerveModule frontLeft = new SwerveModule(2, frontLeftAngleMotor, frontLeftDriveMotor,
-      frontLeftCanCoder);
-  private final SwerveModule backLeft = new SwerveModule(3, backLeftAngleMotor, backLeftDriveMotor, backLeftCanCoder);
-  private final SwerveModule backRight = new SwerveModule(4, backRightAngleMotor, backRightDriveMotor,
-      backRightCanCoder);
+  private final SwerveModule frontRight;
+  private final SwerveModule frontLeft;
+  private final SwerveModule backLeft;
+  private final SwerveModule backRight;
 
   Peripherals peripherals;
+  GyroIO gyro; // new
   boolean firstClimb = false;
 
   // xy position of module based on robot width and distance from edge of robot
@@ -387,6 +386,22 @@ public class Drive extends SubsystemBase {
   public Drive(Peripherals peripherals, Elevator elevator) {
     this.peripherals = peripherals;
     this.elevator = elevator;
+    if (RobotBase.isReal()) {
+      frontRight = new SwerveModule(1, new ModuleIOTalonFX(
+          frontRightAngleMotor, frontRightDriveMotor, frontRightCanCoder));
+      frontLeft = new SwerveModule(2, new ModuleIOTalonFX(
+          frontLeftAngleMotor, frontLeftDriveMotor, frontLeftCanCoder));
+      backLeft = new SwerveModule(3, new ModuleIOTalonFX(
+          backLeftAngleMotor, backLeftDriveMotor, backLeftCanCoder));
+      backRight = new SwerveModule(4, new ModuleIOTalonFX(
+          backRightAngleMotor, backRightDriveMotor, backRightCanCoder));
+      gyro = new GyroIOComp();
+    } else {
+      frontRight = new SwerveModule(1, new ModuleIOSim());
+      frontLeft = new SwerveModule(2, new ModuleIOSim());
+      backLeft = new SwerveModule(3, new ModuleIOSim());
+      backRight = new SwerveModule(4, new ModuleIOSim());
+    }
 
     SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
     swerveModulePositions[0] = new SwerveModulePosition(0, new Rotation2d(frontLeft.getCanCoderPositionRadians()));
@@ -396,7 +411,7 @@ public class Drive extends SubsystemBase {
 
     Pose2d m_pose = new Pose2d();
     mt2Odometry = new SwerveDrivePoseEstimator(m_kinematics,
-        new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())), swerveModulePositions, m_pose);
+        new Rotation2d(Math.toRadians(gyro.getYawDegrees())), swerveModulePositions, m_pose);
   }
 
   // public boolean atSetpoint() {
@@ -471,6 +486,7 @@ public class Drive extends SubsystemBase {
     backRight.init();
     backLeft.init();
 
+    gyro.init();
     xxPID.setMinOutput(-3.0);
     xxPID.setMaxOutput(3.0);
 
@@ -542,7 +558,7 @@ public class Drive extends SubsystemBase {
   }
 
   public void teleopInit() {
-    angleSetpoint = peripherals.getPigeonAngle();
+    angleSetpoint = gyro.getYawDegrees();
     if (getFieldSide() == "red") {
       angleSetpoint -= 180;
     }
@@ -573,7 +589,7 @@ public class Drive extends SubsystemBase {
   public void zeroIMU() {
     angleSetpoint = 0;
     turningPID.setSetPoint(angleSetpoint);
-    peripherals.zeroPigeon();
+    gyro.zeroYaw();
     // SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
     // swerveModulePositions[0] = new
     // SwerveModulePosition(frontLeft.getModuleDistance(),
@@ -604,7 +620,7 @@ public class Drive extends SubsystemBase {
    * wraps it around 360 degrees.
    */
   public void setPigeonAfterAuto() {
-    peripherals.setPigeonAngle((peripherals.getPigeonAngle() + 180) % 360);
+    gyro.setYaw((gyro.getYawDegrees() + 180) % 360);
   }
 
   /**
@@ -613,7 +629,7 @@ public class Drive extends SubsystemBase {
    * @param angle The angle to set for the pigeon sensor in degrees.
    */
   public void setPigeonAngle(double angle) {
-    peripherals.setPigeonAngle(angle);
+    gyro.setYaw(angle);
   }
 
   /**
@@ -622,7 +638,7 @@ public class Drive extends SubsystemBase {
    * @return The current angle reported by the pigeon sensor in degrees.
    */
   public double getPigeonAngle() {
-    return peripherals.getPigeonAngle();
+    return gyro.getYawDegrees();
   }
 
   /**
@@ -669,7 +685,7 @@ public class Drive extends SubsystemBase {
     backLeft.setDriveCurrentLimits(60, 120);
     backRight.setDriveCurrentLimits(60, 120);
 
-    peripherals.setPigeonAngle(Math.toDegrees(firstPointAngle));
+    gyro.setYaw(Math.toDegrees(firstPointAngle));
     SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
     swerveModulePositions[0] = new SwerveModulePosition(frontLeft.getModuleDistance(),
         new Rotation2d(frontLeft.getCanCoderPositionRadians()));
@@ -774,7 +790,7 @@ public class Drive extends SubsystemBase {
    * time differences.
    */
   public void updateOdometryFusedArray() {
-    double navxOffset = Math.toRadians(peripherals.getPigeonAngle());
+    double navxOffset = gyro.getYawRadians();
 
     SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
     swerveModulePositions[0] = new SwerveModulePosition(frontLeft.getModuleDistance(),
@@ -2332,7 +2348,7 @@ public class Drive extends SubsystemBase {
       originalY = 0;
     }
 
-    double pigeonAngle = Math.toRadians(peripherals.getPigeonAngle());
+    double pigeonAngle = gyro.getYawRadians();
     double xPower = getAdjustedX(originalX, originalY);
     double yPower = getAdjustedY(originalX, originalY);
 
@@ -2422,12 +2438,12 @@ public class Drive extends SubsystemBase {
     if (Math.abs(turn) < 0.05) {
       turn = 0.0;
     }
-    angleSetpoint = peripherals.getPigeonAngle();
-    double compensation = peripherals.getPigeonAngularVelocityW() * 0.050;
+    angleSetpoint = gyro.getYawDegrees();
+    double compensation = gyro.getAngularVelocityZWorldRadPerSec() * 0.050;
     angleSetpoint += compensation;
     // Logger.recordOutput("setpoint", angleSetpoint);
     turningPID.setSetPoint(angleSetpoint);
-    double pigeonAngle = Math.toRadians(peripherals.getPigeonAngle());
+    double pigeonAngle = gyro.getYawRadians();
     double xPower = getAdjustedX(originalX, originalY);
     double yPower = getAdjustedY(originalX, originalY);
 
@@ -2502,8 +2518,8 @@ public class Drive extends SubsystemBase {
       turn = 0.0;
     }
 
-    angleSetpoint = peripherals.getPigeonAngle();
-    double compensation = peripherals.getPigeonAngularVelocityW() * 0.050;
+    angleSetpoint = gyro.getYawDegrees();
+    double compensation = gyro.getAngularVelocityZWorldRadPerSec() * 0.050;
     angleSetpoint += compensation;
     // Logger.recordOutput("setpoint", angleSetpoint);
     turningPID.setSetPoint(angleSetpoint);
@@ -2553,7 +2569,7 @@ public class Drive extends SubsystemBase {
 
     if (turn == 0.0) {
       turningPID.setSetPoint(angleSetpoint);
-      double yaw = peripherals.getPigeonAngle();
+      double yaw = gyro.getYawDegrees();
 
       yaw = Constants.standardizeAngleToOtherDegrees(yaw, angleSetpoint);
       double result = -2 * turningPID.updatePID(yaw);
@@ -2566,7 +2582,7 @@ public class Drive extends SubsystemBase {
         originalX = 0;
       }
 
-      double pigeonAngle = Math.toRadians(peripherals.getPigeonAngle());
+      double pigeonAngle = gyro.getYawRadians();
       double xPower = getAdjustedX(x, y);
       double yPower = getAdjustedY(x, y);
 
@@ -2583,12 +2599,12 @@ public class Drive extends SubsystemBase {
       backLeft.drive(controllerVector, result, pigeonAngle);
       backRight.drive(controllerVector, result, pigeonAngle);
     } else {
-      angleSetpoint = peripherals.getPigeonAngle();
-      double compensation = peripherals.getPigeonAngularVelocityW() * 0.050;
+      angleSetpoint = gyro.getYawDegrees();
+      double compensation = gyro.getAngularVelocityZWorldRadPerSec() * 0.050;
       angleSetpoint += compensation;
       // Logger.recordOutput("setpoint", angleSetpoint);
       turningPID.setSetPoint(angleSetpoint);
-      double pigeonAngle = Math.toRadians(peripherals.getPigeonAngle());
+      double pigeonAngle = gyro.getYawRadians();
       double xPower = getAdjustedX(originalX, originalY);
       double yPower = getAdjustedY(originalX, originalY);
 
@@ -3045,7 +3061,7 @@ public class Drive extends SubsystemBase {
    */
   public void autoDrive(Vector vector, double turnRadiansPerSec) {
 
-    double pigeonAngle = Math.toRadians(peripherals.getPigeonAngle());
+    double pigeonAngle = gyro.getYawRadians();
 
     frontLeft.drive(vector, turnRadiansPerSec, pigeonAngle);
     frontRight.drive(vector, turnRadiansPerSec, pigeonAngle);
@@ -3062,7 +3078,7 @@ public class Drive extends SubsystemBase {
    */
   public Vector getRobotVelocityVector() {
     Vector velocityVector = new Vector(0, 0);
-    double pigeonAngleRadians = Math.toRadians(this.peripherals.getPigeonAngle());
+    double pigeonAngleRadians = gyro.getYawRadians();
 
     double frV = this.frontRight.getGroundSpeed();
     double frTheta = this.frontRight.getWheelPosition() + pigeonAngleRadians;
@@ -3090,6 +3106,14 @@ public class Drive extends SubsystemBase {
     return velocityVector;
   }
 
+  public double getGyroPitch() {
+    return gyro.getPitchDegrees();
+  }
+
+  public double getGyroYaw() {
+    return gyro.getYawDegrees();
+  }
+
   /**
    * Retrieves the acceleration vector of the robot.
    * The acceleration is calculated based on the linear acceleration measured by
@@ -3102,11 +3126,11 @@ public class Drive extends SubsystemBase {
   public Vector getRobotAccelerationVector() {
     Vector accelerationVector = new Vector();
 
-    Vector robotCentricAccelerationVector = this.peripherals.getPigeonLinAccel();
+    Vector robotCentricAccelerationVector = this.gyro.getLinearAccelGVector();
     double accelerationMagnitude = Constants.getDistance(robotCentricAccelerationVector.getI(),
         robotCentricAccelerationVector.getJ(), 0, 0);
-    accelerationVector.setI(accelerationMagnitude * Math.cos(Math.toRadians(this.peripherals.getPigeonAngle())));
-    accelerationVector.setJ(accelerationMagnitude * Math.sin(Math.toRadians(this.peripherals.getPigeonAngle())));
+    accelerationVector.setI(accelerationMagnitude * Math.cos(Math.toRadians(this.gyro.getYawDegrees())));
+    accelerationVector.setJ(accelerationMagnitude * Math.sin(Math.toRadians(this.gyro.getYawDegrees())));
 
     return accelerationVector;
   }
@@ -3257,7 +3281,7 @@ public class Drive extends SubsystemBase {
   }
 
   public void calculateAngleChange(double angle) {
-    double pigeonAngleDegrees = this.peripherals.getPigeonAngle();
+    double pigeonAngleDegrees = this.gyro.getYawDegrees();
     double targetAngle = 0;
     if (getFieldSide() == "red") {
       targetAngle = angle + 180;
@@ -3738,7 +3762,7 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
-    Logger.recordOutput("Extra Pigeon Angle", peripherals.getPigeonExtraAngle());
+    Logger.recordOutput("Extra Pigeon Angle", gyro.getSecondaryYawDegrees());
     Logger.recordOutput("Robot Velocity", getRobotSpeed());
     // Pose2d target = getGamePiecePosition();
     // System.out.println(Math.toDegrees(getThetaToCenterReef()));
