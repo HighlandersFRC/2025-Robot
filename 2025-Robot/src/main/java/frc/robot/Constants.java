@@ -3747,6 +3747,14 @@ public final class Constants {
                                 this.rotations = rotations;
                         }
                 }
+
+                public class TwistSetpoints {
+                        public static final double TWIST_DOWN = 0.25; // rotations
+                        public static final double TWIST_SIDE = 0.0; // rotations
+                        public static final double TWIST_UP = -0.25; // rotations
+                        public static final double TWIST_DEFAULT = 0.0; // rotations
+                        public static final double ARM_RETRACTED_POSITION_M = inchesToMeters(6.0);
+                }
         }
 
         // Vision constants (e.g. camera offsets)
