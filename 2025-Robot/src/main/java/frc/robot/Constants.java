@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class Constants {
@@ -68,6 +69,8 @@ public final class Constants {
                 }
 
         }
+
+        public static double loopPeriodSecs;
 
         public static void periodic() {
                 int index = Autonomous.getSelectedPathIndex();
@@ -3542,7 +3545,8 @@ public final class Constants {
                 public static final double MAX_ACCELERATION = feetToMeters(30.0); // TODO: actually tune the top speed
                                                                                   // and max acceleration. Add a max
                                                                                   // deceleration if needed.
-
+                public static final double TWIST_MOI = (1.0 / 3.0) * Units.lbsToKilograms(8.5)
+                                * Math.pow(Units.inchesToMeters(14.5), 2.0);// made up for now
                 public static final double ROBOT_LENGTH = inchesToMeters(26);
                 public static final double ROBOT_WIDTH = inchesToMeters(26);
                 public static final double MODULE_OFFSET = inchesToMeters(2.625);
