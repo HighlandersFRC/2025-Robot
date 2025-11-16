@@ -4,43 +4,29 @@
 
 package frc.robot.subsystems.climber;
 
-//
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.TorqueCurrentFOC;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
-  private final TalonFX climberPivot = new TalonFX(Constants.CANInfo.CLIMBER_PIVOT_MOTOR_ID,
-      Constants.CANInfo.CANBUS_NAME);
   private final DigitalInput climbSensor = new DigitalInput(1);
+  private final ClimberIO io;
 
-  private final TorqueCurrentFOC pivotTorqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
   public int timesTriggered = 0;
 
   /** Creates a new Climiber. */
   public Climber() {
+    io = RobotBase.isReal() ? new ClimberIOComp() : new ClimberIOSim();
   }
 
   public void init() {
-    TalonFXConfiguration climberConfig = new TalonFXConfiguration();
-    climberConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    climberConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    climberConfig.CurrentLimits.StatorCurrentLimit = 160;
-    climberConfig.CurrentLimits.SupplyCurrentLimit = 160;
-    climberPivot.setNeutralMode(NeutralModeValue.Brake);
-    climberPivot.setPosition(0.0);
-
+    io.init();
   }
 
   public double getPosition() {
-    return climberPivot.getPosition().getValueAsDouble();
+    return io.getPosition();
   }
 
   public enum ClimbState {
@@ -67,7 +53,7 @@ public class Climber extends SubsystemBase {
   }
 
   public void setPivotTorque(double current, double maxPercent) {
-    climberPivot.setControl(pivotTorqueCurrentFOCRequest.withOutput(current).withMaxAbsDutyCycle(maxPercent));
+    io.setTorque(current, maxPercent);
   }
 
   public void setWantedState(ClimbState wantedState) {
@@ -95,6 +81,8 @@ public class Climber extends SubsystemBase {
       systemState = newState;
     }
 
+    io.updateInputs(systemState);
+
     Logger.recordOutput("Climber State", systemState);
     switch (systemState) {
       case EXTENDING:
@@ -110,6 +98,5 @@ public class Climber extends SubsystemBase {
         // setPivotTorque(0, 0);
         break;
     }
-    // This method will be called once per scheduler run
   }
 }
