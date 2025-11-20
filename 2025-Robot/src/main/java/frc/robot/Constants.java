@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -3545,8 +3546,8 @@ public final class Constants {
                 public static final double MAX_ACCELERATION = feetToMeters(30.0); // TODO: actually tune the top speed
                                                                                   // and max acceleration. Add a max
                                                                                   // deceleration if needed.
-                public static final double TWIST_MOI = (1.0 / 3.0) * Units.lbsToKilograms(8.5)
-                                * Math.pow(Units.inchesToMeters(14.5), 2.0);// made up for now
+                public static final double TWIST_MOI = Units.lbsToKilograms(5.98)
+                                * Math.pow(Units.inchesToMeters(0.5), 2.0);// made up for now
                 public static final double ROBOT_LENGTH = inchesToMeters(26);
                 public static final double ROBOT_WIDTH = inchesToMeters(26);
                 public static final double MODULE_OFFSET = inchesToMeters(2.625);
@@ -4121,6 +4122,24 @@ public final class Constants {
                 public static final double LEFT_TRIGGER_DEADZONE = 0.1;
                 public static final double LEFT_STICK_DEADZONE = 0.03;
                 public static final double RIGHT_STICK_DEADZONE = 0.05;
+        }
+
+        // Motor Specs (used for simulation)
+        public static final class MotorSpecs {
+                public static final class x44 {
+                        public static final double X44_FREE_SPEED_RPM = 7530;
+                        public static final double X44_STALL_TORQUE_NM = 4.05;
+                        public static final double X44_STALL_CURRENT_A = 275;
+                        public static final double X44_FREE_CURRENT_A = 1.4;
+                        public static final double X44_NOMINAL_VOLTAGE_V = 12;
+
+                        public static DCMotor getX44Gearbox(int numMotors) {
+                                return new DCMotor(X44_NOMINAL_VOLTAGE_V, X44_STALL_TORQUE_NM, X44_STALL_CURRENT_A,
+                                                X44_FREE_CURRENT_A, Units.rotationsPerMinuteToRadiansPerSecond(
+                                                                X44_FREE_SPEED_RPM),
+                                                numMotors);
+                        }
+                }
         }
 
         /**
