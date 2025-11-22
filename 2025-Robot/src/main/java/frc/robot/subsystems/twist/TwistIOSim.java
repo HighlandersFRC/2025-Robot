@@ -18,7 +18,7 @@ import frc.robot.subsystems.twist.Twist.TwistState;
 import frc.robot.tools.controlloops.PID;
 
 public class TwistIOSim implements TwistIO {
-    DCMotor gearbox = Constants.MotorSpecs.x44.getX44Gearbox(1)
+    DCMotor gearbox = Constants.MotorSpecs.x44.getX44Gearbox(Constants.Physical.TWIST_MOTOR_COUNT)
             .withReduction(Constants.Ratios.TWIST_GEAR_RATIO_ROTOR);
     private final Matrix<N2, N2> A = MatBuilder.fill(
             Nat.N2(),
@@ -32,11 +32,15 @@ public class TwistIOSim implements TwistIO {
     double positionSetpointRad = 0.0;
     boolean closedLoop = true;
     private Vector<N2> simState;
-    private PID slot0 = new PID(Units.radiansToRotations(40.0), Units.radiansToRotations(0.0),
-            Units.radiansToRotations(4.6));
+    private PID slot0 = new PID(Units.radiansToRotations(Constants.PIDConstants.Twist.kP0), Units.radiansToRotations(
+            Constants.PIDConstants.Twist.kI0),
+            Units.radiansToRotations(Constants.PIDConstants.Twist.kD0));
     // private double kS0 = Units.radiansToRotations(5.0);
-    private PID slot1 = new PID(Units.radiansToRotations(33.0), Units.radiansToRotations(0.0),
-            Units.radiansToRotations(6.0));
+    private PID slot1 = new PID(Units.radiansToRotations(
+            Constants.PIDConstants.Twist.kP1),
+            Units.radiansToRotations(
+                    Constants.PIDConstants.Twist.kI1),
+            Units.radiansToRotations(Constants.PIDConstants.Twist.kD1));
     // private double kS1 = Units.radiansToRotations(3.0);
     int slot = 0;
 

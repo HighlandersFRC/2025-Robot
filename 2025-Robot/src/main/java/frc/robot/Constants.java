@@ -3554,7 +3554,8 @@ public final class Constants {
                                                                                   // and max acceleration. Add a max
                                                                                   // deceleration if needed.
                 public static final double TWIST_MOI = Units.lbsToKilograms(5.98)
-                                * Math.pow(Units.inchesToMeters(0.5), 2.0);// made up for now
+                                * Math.pow(Units.inchesToMeters(0.5), 2.0);// used cad to find
+                public static final int TWIST_MOTOR_COUNT = 1;
                 public static final double ROBOT_LENGTH = inchesToMeters(26);
                 public static final double ROBOT_WIDTH = inchesToMeters(26);
                 public static final double MODULE_OFFSET = inchesToMeters(2.625);
@@ -3766,6 +3767,20 @@ public final class Constants {
                         public static final double TWIST_UP = -0.25; // rotations
                         public static final double TWIST_DEFAULT = 0.0; // rotations
                         public static final double ARM_RETRACTED_POSITION_M = inchesToMeters(6.0);
+                }
+        }
+
+        // PID constants
+        public static final class PIDConstants {
+                public static final class Twist {
+                        public static final double kP0 = 40.0;
+                        public static final double kI0 = 0.0;
+                        public static final double kD0 = 4.6;
+                        public static final double kS0 = 5.0;
+                        public static final double kP1 = 33.0;
+                        public static final double kI1 = 0.0;
+                        public static final double kD1 = 6.0;
+                        public static final double kS1 = 3.0;
                 }
         }
 

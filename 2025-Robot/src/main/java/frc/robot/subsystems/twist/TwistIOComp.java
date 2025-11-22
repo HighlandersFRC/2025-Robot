@@ -32,14 +32,14 @@ public class TwistIOComp implements TwistIO {
     @Override
     public void init() {
         TalonFXConfiguration twistConfig = new TalonFXConfiguration();
-        twistConfig.Slot0.kP = 40.0;
-        twistConfig.Slot0.kI = 0.0;
-        twistConfig.Slot0.kD = 4.6;
-        twistConfig.Slot0.kS = 5.0;
-        twistConfig.Slot1.kP = 33.0;
-        twistConfig.Slot1.kI = 0.0;
-        twistConfig.Slot1.kD = 6.0;
-        twistConfig.Slot1.kS = 3.0;
+        twistConfig.Slot0.kP = Constants.PIDConstants.Twist.kP0;
+        twistConfig.Slot0.kI = Constants.PIDConstants.Twist.kI0;
+        twistConfig.Slot0.kD = Constants.PIDConstants.Twist.kD0;
+        twistConfig.Slot0.kS = Constants.PIDConstants.Twist.kS0;
+        twistConfig.Slot1.kP = Constants.PIDConstants.Twist.kP1;
+        twistConfig.Slot1.kI = Constants.PIDConstants.Twist.kI1;
+        twistConfig.Slot1.kD = Constants.PIDConstants.Twist.kD1;
+        twistConfig.Slot1.kS = Constants.PIDConstants.Twist.kS1;
         twistConfig.MotionMagic.MotionMagicJerk = this.twistJerk;
         twistConfig.MotionMagic.MotionMagicAcceleration = this.twistAcceleration;
         twistConfig.MotionMagic.MotionMagicCruiseVelocity = this.twistCruiseVelocity;
