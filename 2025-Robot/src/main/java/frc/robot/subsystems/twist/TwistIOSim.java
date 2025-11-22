@@ -34,10 +34,10 @@ public class TwistIOSim implements TwistIO {
     private Vector<N2> simState;
     private PID slot0 = new PID(Units.radiansToRotations(40.0), Units.radiansToRotations(0.0),
             Units.radiansToRotations(4.6));
-    private double kS0 = Units.radiansToRotations(5.0);
+    // private double kS0 = Units.radiansToRotations(5.0);
     private PID slot1 = new PID(Units.radiansToRotations(33.0), Units.radiansToRotations(0.0),
             Units.radiansToRotations(6.0));
-    private double kS1 = Units.radiansToRotations(3.0);
+    // private double kS1 = Units.radiansToRotations(3.0);
     int slot = 0;
 
     public TwistIOSim() {
