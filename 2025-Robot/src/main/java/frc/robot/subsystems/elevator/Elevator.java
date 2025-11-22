@@ -75,11 +75,11 @@ public class Elevator extends SubsystemBase {
   }
 
   public Elevator() {
-    if (RobotBase.isReal()) {
-      io = new ElevatorIOComp();
-    } else {
-      io = new ElevatorIOSim();
-    }
+    // if (RobotBase.isReal()) {
+    io = new ElevatorIOComp();
+    // } else {
+    // io = new ElevatorIOSim();
+    // }
   }
 
   public void teleopInit() {

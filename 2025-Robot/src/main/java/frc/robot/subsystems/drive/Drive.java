@@ -386,22 +386,22 @@ public class Drive extends SubsystemBase {
   public Drive(Peripherals peripherals, Elevator elevator) {
     this.peripherals = peripherals;
     this.elevator = elevator;
-    if (RobotBase.isReal()) {
-      frontRight = new SwerveModule(1, new ModuleIOTalonFX(
-          frontRightAngleMotor, frontRightDriveMotor, frontRightCanCoder));
-      frontLeft = new SwerveModule(2, new ModuleIOTalonFX(
-          frontLeftAngleMotor, frontLeftDriveMotor, frontLeftCanCoder));
-      backLeft = new SwerveModule(3, new ModuleIOTalonFX(
-          backLeftAngleMotor, backLeftDriveMotor, backLeftCanCoder));
-      backRight = new SwerveModule(4, new ModuleIOTalonFX(
-          backRightAngleMotor, backRightDriveMotor, backRightCanCoder));
-      gyro = new GyroIOComp();
-    } else {
-      frontRight = new SwerveModule(1, new ModuleIOSim());
-      frontLeft = new SwerveModule(2, new ModuleIOSim());
-      backLeft = new SwerveModule(3, new ModuleIOSim());
-      backRight = new SwerveModule(4, new ModuleIOSim());
-    }
+    // if (RobotBase.isReal()) {
+    frontRight = new SwerveModule(1, new ModuleIOTalonFX(
+        frontRightAngleMotor, frontRightDriveMotor, frontRightCanCoder));
+    frontLeft = new SwerveModule(2, new ModuleIOTalonFX(
+        frontLeftAngleMotor, frontLeftDriveMotor, frontLeftCanCoder));
+    backLeft = new SwerveModule(3, new ModuleIOTalonFX(
+        backLeftAngleMotor, backLeftDriveMotor, backLeftCanCoder));
+    backRight = new SwerveModule(4, new ModuleIOTalonFX(
+        backRightAngleMotor, backRightDriveMotor, backRightCanCoder));
+    gyro = new GyroIOComp();
+    // } else {
+    // frontRight = new SwerveModule(1, new ModuleIOSim());
+    // frontLeft = new SwerveModule(2, new ModuleIOSim());
+    // backLeft = new SwerveModule(3, new ModuleIOSim());
+    // backRight = new SwerveModule(4, new ModuleIOSim());
+    // }
 
     SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
     swerveModulePositions[0] = new SwerveModulePosition(0, new Rotation2d(frontLeft.getCanCoderPositionRadians()));

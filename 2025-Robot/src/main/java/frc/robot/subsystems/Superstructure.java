@@ -1547,6 +1547,7 @@ public class Superstructure extends SubsystemBase {
   public void handleFeederAutoState() { // function for an actual field, comment
     // out the function above when running on
     // an actual field
+    twist.setWantedState(TwistState.UP);
     lights.setWantedState(LightsState.FEEDER);
     drive.setWantedState(DriveState.FEEDER);
     manipulator.setWantedState(ManipulatorState.CORAL_INTAKE);

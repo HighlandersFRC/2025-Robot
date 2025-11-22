@@ -4,12 +4,14 @@ import java.util.logging.Level;
 
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -112,7 +114,9 @@ public class Robot extends LoggedRobot {
     m_robotContainer.peripherals.periodic();
     m_logHandler.write();
     Logger.recordOutput("finished", m_robotContainer.superstructure.placedCoralL4());
-
+    LoggedMechanism2d arm = new LoggedMechanism2d(0.7, 0.7);
+    arm.getRoot("bl", 0.35, 0.1).append(m_robotContainer.twist.getLigament());
+    Logger.recordOutput("Arm Sim", arm);
   }
 
   @Override

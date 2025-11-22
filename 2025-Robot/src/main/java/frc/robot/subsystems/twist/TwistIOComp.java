@@ -60,10 +60,6 @@ public class TwistIOComp implements TwistIO {
 
     @Override
     public void updateInputs(TwistState systemState) {
-        Logger.recordOutput("Twist State: ", systemState);
-        Logger.recordOutput("Twist Position", getPosition());
-        Logger.recordOutput("Twist Desired Pos",
-                Constants.rotationsToDegrees(twistMotor.getClosedLoopReference().getValueAsDouble()));
     }
 
     @Override

@@ -18,11 +18,11 @@ public class Pivot extends SubsystemBase {
   // private Speed fastMode = Speed.FAST;
 
   public Pivot() {
-    if (RobotBase.isReal()) {
-      io = new PivotIOComp();
-    } else {
-      io = new PivotIOSim();
-    }
+    // if (RobotBase.isReal()) {
+    io = new PivotIOComp();
+    // } else {
+    // io = new PivotIOSim();
+    // }
   }
 
   public void init() {

@@ -128,11 +128,11 @@ public class Manipulator extends SubsystemBase {
   }
 
   public Manipulator() {
-    if (RobotBase.isReal()) {
-      io = new ManipulatorIOComp();
-    } else {
-      io = new ManipulatorIOSim();
-    }
+    // if (RobotBase.isReal()) {
+    io = new ManipulatorIOComp();
+    // } else {
+    // io = new ManipulatorIOSim();
+    // }
   }
 
   public void setIntakePercent(double percent) {

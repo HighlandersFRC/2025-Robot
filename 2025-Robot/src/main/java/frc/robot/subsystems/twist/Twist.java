@@ -1,5 +1,9 @@
 package frc.robot.subsystems.twist;
 
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
+
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -52,8 +56,21 @@ public class Twist extends SubsystemBase {
     return io.getPosition();
   }
 
+  /**
+   * Sets the twist encoder position to a specific value.
+   * The position is specified in rotations, where one rotation corresponds to a
+   * full 360-degree turn.
+   * 
+   * @param position The desired encoder position in rotations.
+   */
   public void setTwistEncoderPosition(double position) {
     io.setEncoderPosition(position);
+  }
+
+  public LoggedMechanismLigament2d getLigament() {
+    LoggedMechanismLigament2d mech = new LoggedMechanismLigament2d("Twist", Units.inchesToMeters(6),
+        getTwistPosition() + 90);
+    return mech;
   }
 
   public enum TwistState {
@@ -85,6 +102,8 @@ public class Twist extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(systemState);
+    Logger.recordOutput("Twist State: ", systemState);
+    Logger.recordOutput("Twist Position", getTwistPosition());
     systemState = handleStateTransition();
     switch (systemState) {
       case DOWN:

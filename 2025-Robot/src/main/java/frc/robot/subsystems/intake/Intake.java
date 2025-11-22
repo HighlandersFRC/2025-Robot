@@ -30,11 +30,11 @@ public class Intake extends SubsystemBase {
   }
 
   public Intake() {
-    if (RobotBase.isReal()) {
-      io = new IntakeIOComp();
-    } else {
-      io = new IntakeIOSim();
-    }
+    // if (RobotBase.isReal()) {
+    io = new IntakeIOComp();
+    // } else {
+    // io = new IntakeIOSim();
+    // }
   }
 
   public void init() {

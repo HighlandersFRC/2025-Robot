@@ -1,5 +1,7 @@
 package frc.robot.subsystems.twist;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
@@ -13,9 +15,11 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 import frc.robot.subsystems.twist.Twist.TwistState;
+import frc.robot.tools.controlloops.PID;
 
 public class TwistIOSim implements TwistIO {
-    DCMotor gearbox = Constants.MotorSpecs.x44.getX44Gearbox(1).withReduction(Constants.Ratios.TWIST_GEAR_RATIO_ROTOR);
+    DCMotor gearbox = Constants.MotorSpecs.x44.getX44Gearbox(1)
+            .withReduction(Constants.Ratios.TWIST_GEAR_RATIO_ROTOR);
     private final Matrix<N2, N2> A = MatBuilder.fill(
             Nat.N2(),
             Nat.N2(),
@@ -25,7 +29,16 @@ public class TwistIOSim implements TwistIO {
             -gearbox.KtNMPerAmp / (gearbox.KvRadPerSecPerVolt * gearbox.rOhms * Constants.Physical.TWIST_MOI));
     private final Vector<N2> B = VecBuilder.fill(0.0, gearbox.KtNMPerAmp / Constants.Physical.TWIST_MOI);
     double inputTorqueCurrent = 0.0;
+    double positionSetpointRad = 0.0;
+    boolean closedLoop = true;
     private Vector<N2> simState;
+    private PID slot0 = new PID(Units.radiansToRotations(40.0), Units.radiansToRotations(0.0),
+            Units.radiansToRotations(4.6));
+    private double kS0 = Units.radiansToRotations(5.0);
+    private PID slot1 = new PID(Units.radiansToRotations(33.0), Units.radiansToRotations(0.0),
+            Units.radiansToRotations(6.0));
+    private double kS1 = Units.radiansToRotations(3.0);
+    int slot = 0;
 
     public TwistIOSim() {
         simState = VecBuilder.fill(Units.rotationsToRadians(Constants.SetPoints.TwistSetpoints.TWIST_SIDE), 0.0);
@@ -37,6 +50,30 @@ public class TwistIOSim implements TwistIO {
 
     @Override
     public void updateInputs(TwistState systemState) {
+        Logger.recordOutput("twist setpoint", Units.radiansToDegrees(positionSetpointRad));
+        if (!closedLoop) {
+            update(Constants.loopPeriodSecs);
+        } else {
+            double dt = Constants.loopPeriodSecs;
+            int numSteps = (int) Math.floor(dt / Constants.closedLoopSimResolution);
+            slot0.setSetPoint(positionSetpointRad);
+            slot1.setSetPoint(positionSetpointRad);
+            for (int i = 0; i < numSteps; i++) {
+                double pidOutput;
+                if (slot == 0) {
+                    pidOutput = slot0.updatePID(simState.get(0));
+                } else {
+                    pidOutput = slot1.updatePID(simState.get(0));
+                }
+                double feedforward = 0;// Math.copySign((slot == 0 ? kS0 : kS1), pidOutput);
+                double wantedSpeed = pidOutput + feedforward;
+                inputTorqueCurrent = Math.copySign(
+                        gearbox.getCurrent(simState.get(0), gearbox.KvRadPerSecPerVolt * wantedSpeed), wantedSpeed);
+                update(dt / numSteps);
+            }
+            Logger.recordOutput("twist sim error", Units.radiansToDegrees(positionSetpointRad - simState.get(0)));
+            Logger.recordOutput("twist sim current", inputTorqueCurrent);
+        }
     }
 
     @Override
@@ -44,48 +81,48 @@ public class TwistIOSim implements TwistIO {
         double velocity = simState.get(1);
         double currentRequired = gearbox.getCurrent(velocity, 24 * percent /* volts * (Kv in rad/s/V) = rad/s */);
         inputTorqueCurrent = currentRequired;
+        closedLoop = false;
     }
 
     @Override
     public void setTorque(double torque, double maxPercent) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setTorque'");
+        inputTorqueCurrent = Math.min(torque, gearbox.getCurrent(simState.get(1), 24 * maxPercent));
+        closedLoop = false;
     }
 
     @Override
     public double getPosition() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPosition'");
+        return Units.radiansToRotations(simState.get(0)) * 360;
     }
 
     @Override
     public void setEncoderPosition(double position) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setEncoderPosition'");
+        simState.set(0, 0, Units.rotationsToRadians(position));
     }
 
     @Override
     public void setPosition(double rotations, int slot) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setPosition'");
+        positionSetpointRad = Units.rotationsToRadians(rotations);
+        this.slot = slot;
+        closedLoop = true;
     }
 
     private void update(double dt) {
-        inputTorqueCurrent = MathUtil.clamp(inputTorqueCurrent, -120.0, 120.0);
+        inputTorqueCurrent = MathUtil.clamp(inputTorqueCurrent, -gearbox.stallCurrentAmps, gearbox.stallCurrentAmps);
         Matrix<N2, N1> updatedState = NumericalIntegration.rkdp(
                 (Matrix<N2, N1> x, Matrix<N1, N1> u) -> A.times(x).plus(B.times(u)),
                 simState,
-                MatBuilder.fill(Nat.N1(), Nat.N1(), inputTorqueCurrent),
+                VecBuilder.fill(inputTorqueCurrent),
                 dt);
-        // Apply limits
+        if (updatedState.get(0, 0) < Units.rotationsToRadians(Constants.SetPoints.TwistSetpoints.TWIST_UP)
+                && updatedState.get(1, 0) < 0) {
+            updatedState.set(0, 0, Units.rotationsToRadians(Constants.SetPoints.TwistSetpoints.TWIST_UP));
+            updatedState.set(1, 0, 0.0);
+        } else if (updatedState.get(0, 0) > Units.rotationsToRadians(Constants.SetPoints.TwistSetpoints.TWIST_DOWN)
+                && updatedState.get(1, 0) > 0) {
+            updatedState.set(0, 0, Units.rotationsToRadians(Constants.SetPoints.TwistSetpoints.TWIST_DOWN));
+            updatedState.set(1, 0, 0.0);
+        }
         simState = VecBuilder.fill(updatedState.get(0, 0), updatedState.get(1, 0));
-        if (simState.get(0) <= Units.rotationsToRadians(Constants.SetPoints.TwistSetpoints.TWIST_UP)) {
-            simState.set(0, 0, Units.rotationsToRadians(Constants.SetPoints.TwistSetpoints.TWIST_UP));
-            simState.set(1, 0, 0.0);
-        }
-        if (simState.get(0) >= Units.rotationsToRadians(Constants.SetPoints.TwistSetpoints.TWIST_DOWN)) {
-            simState.set(0, 0, Units.rotationsToRadians(Constants.SetPoints.TwistSetpoints.TWIST_DOWN));
-            simState.set(1, 0, 0.0);
-        }
     }
 }
