@@ -72,19 +72,18 @@ public class ElevatorIOComp implements ElevatorIO {
     @Override
     public void init() {
         TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
-        double elevatorMultiplier = 45.01 / 33.39;
-        elevatorConfig.Slot0.kP = 33.39 * elevatorMultiplier;
-        elevatorConfig.Slot0.kI = 0.0 * elevatorMultiplier;
-        elevatorConfig.Slot0.kD = 2.7 * elevatorMultiplier;
-        elevatorConfig.Slot0.kG = 4.499 * elevatorMultiplier;
-        elevatorConfig.Slot1.kP = 75.83 * elevatorMultiplier;
-        elevatorConfig.Slot1.kI = 0.0 * elevatorMultiplier;
-        elevatorConfig.Slot1.kD = 4.690 * elevatorMultiplier;
-        elevatorConfig.Slot1.kG = 8.044 * elevatorMultiplier;
-        elevatorConfig.Slot2.kP = 33.39 * elevatorMultiplier * 0.5;
-        elevatorConfig.Slot2.kI = 0.0 * elevatorMultiplier * 0.5;
-        elevatorConfig.Slot2.kD = 2.7 * elevatorMultiplier * 0.5;
-        elevatorConfig.Slot2.kG = 4.499 * elevatorMultiplier * 0.5;
+        elevatorConfig.Slot0.kP = Constants.PIDConstants.Elevator.kP0;
+        elevatorConfig.Slot0.kI = Constants.PIDConstants.Elevator.kI0;
+        elevatorConfig.Slot0.kD = Constants.PIDConstants.Elevator.kD0;
+        elevatorConfig.Slot0.kG = Constants.PIDConstants.Elevator.kG0;
+        elevatorConfig.Slot1.kP = Constants.PIDConstants.Elevator.kP1;
+        elevatorConfig.Slot1.kI = Constants.PIDConstants.Elevator.kI1;
+        elevatorConfig.Slot1.kD = Constants.PIDConstants.Elevator.kD1;
+        elevatorConfig.Slot1.kG = Constants.PIDConstants.Elevator.kG1;
+        elevatorConfig.Slot2.kP = Constants.PIDConstants.Elevator.kP2;
+        elevatorConfig.Slot2.kI = Constants.PIDConstants.Elevator.kI2;
+        elevatorConfig.Slot2.kD = Constants.PIDConstants.Elevator.kD2;
+        elevatorConfig.Slot2.kG = Constants.PIDConstants.Elevator.kG2;
         elevatorConfig.Slot0.GravityType = GravityTypeValue.Elevator_Static;
         elevatorConfig.Slot1.GravityType = GravityTypeValue.Elevator_Static;
         elevatorConfig.Slot2.GravityType = GravityTypeValue.Elevator_Static;

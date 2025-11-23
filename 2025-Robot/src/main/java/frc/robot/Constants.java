@@ -3543,6 +3543,19 @@ public final class Constants {
 
         // Physical constants (e.g. field and robot dimensions)
         public static final class Physical {
+                public static final class Elevator {
+                        public static final int NUM_MOTORS = 2;
+                        public static final double CARRIAGE_MASS_LB = 9.206;
+                        public static final double STAGE_2_MASS_LB = 2.933;
+                        public static final double MOTOR_TO_DRUM_REDUCTION = 44 / 9;
+                        public static final double DRUM_DIAMETER_INCHES = 1.5;
+                        public static final double STAGE_1_MOI = Units.lbsToKilograms(CARRIAGE_MASS_LB) * Math
+                                        .pow(Units.inchesToMeters(DRUM_DIAMETER_INCHES / 2), 2.0);
+                        public static final double STAGE_2_MOI = Units
+                                        .lbsToKilograms(STAGE_2_MASS_LB + CARRIAGE_MASS_LB)
+                                        * Math.pow(Units.inchesToMeters(DRUM_DIAMETER_INCHES / 2), 2.0);
+                }
+
                 public static final double FIELD_WIDTH = 8.052;
                 public static final double FIELD_LENGTH = 17.548;
                 public static final double WHEEL_DIAMETER = inchesToMeters(4);
@@ -3781,6 +3794,22 @@ public final class Constants {
                         public static final double kI1 = 0.0;
                         public static final double kD1 = 6.0;
                         public static final double kS1 = 3.0;
+                }
+
+                public static final class Elevator {
+                        private static double elevatorMultiplier = 45.01 / 33.39;
+                        public static final double kP0 = 33.39 * elevatorMultiplier;
+                        public static final double kI0 = 0.0 * elevatorMultiplier;
+                        public static final double kD0 = 2.7 * elevatorMultiplier;
+                        public static final double kG0 = 4.499 * elevatorMultiplier;
+                        public static final double kP1 = 75.83 * elevatorMultiplier;
+                        public static final double kI1 = 0.0 * elevatorMultiplier;
+                        public static final double kD1 = 4.690 * elevatorMultiplier;
+                        public static final double kG1 = 8.044 * elevatorMultiplier;
+                        public static final double kP2 = 33.39 * elevatorMultiplier * 0.5;
+                        public static final double kI2 = 0.0 * elevatorMultiplier * 0.5;
+                        public static final double kD2 = 2.7 * elevatorMultiplier * 0.5;
+                        public static final double kG2 = 4.499 * elevatorMultiplier * 0.5;
                 }
         }
 
@@ -4077,7 +4106,7 @@ public final class Constants {
                 public static final double ELEVATOR_FIRST_STAGE = Constants.inchesToMeters(23.25);
                 public static final double ELEVATOR_MOTOR_ROTATIONS_FOR_FIRST_STAGE = 20.425781;
                 public static final double ELEVATOR_MOTOR_ROTATIONS_PER_METER = ELEVATOR_MOTOR_ROTATIONS_FOR_FIRST_STAGE
-                                * (1 / ELEVATOR_FIRST_STAGE);
+                                * (1 / ELEVATOR_FIRST_STAGE); // lmao
 
                 public static double elevatorRotationsToMeters(double rotations) {
                         return rotations / ELEVATOR_MOTOR_ROTATIONS_PER_METER;

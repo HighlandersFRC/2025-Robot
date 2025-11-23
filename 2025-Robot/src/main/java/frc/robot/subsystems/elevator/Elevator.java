@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -75,11 +76,11 @@ public class Elevator extends SubsystemBase {
   }
 
   public Elevator() {
-    // if (RobotBase.isReal()) {
-    io = new ElevatorIOComp();
-    // } else {
-    // io = new ElevatorIOSim();
-    // }
+    if (RobotBase.isReal()) {
+      io = new ElevatorIOComp();
+    } else {
+      io = new ElevatorIOSim();
+    }
   }
 
   public void teleopInit() {
@@ -145,6 +146,11 @@ public class Elevator extends SubsystemBase {
 
   public void setWantedState(ElevatorState wantedState) {
     this.wantedState = wantedState;
+  }
+
+  public LoggedMechanismLigament2d getElevatorLigament() {
+    return new LoggedMechanismLigament2d("Elevator", getElevatorPosition(),
+        90);
   }
 
   private ElevatorState handleStateTransition() {

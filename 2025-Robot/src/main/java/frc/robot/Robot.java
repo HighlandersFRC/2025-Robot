@@ -11,7 +11,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -116,6 +115,7 @@ public class Robot extends LoggedRobot {
     Logger.recordOutput("finished", m_robotContainer.superstructure.placedCoralL4());
     LoggedMechanism2d arm = new LoggedMechanism2d(0.7, 0.7);
     arm.getRoot("bl", 0.35, 0.1).append(m_robotContainer.twist.getLigament());
+    arm.getRoot("elevator", 0.0, 0.0).append(m_robotContainer.elevator.getElevatorLigament());
     Logger.recordOutput("Arm Sim", arm);
   }
 
