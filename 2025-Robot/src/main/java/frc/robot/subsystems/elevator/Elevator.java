@@ -3,9 +3,11 @@ package frc.robot.subsystems.elevator;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
@@ -150,7 +152,7 @@ public class Elevator extends SubsystemBase {
 
   public LoggedMechanismLigament2d getElevatorLigament() {
     return new LoggedMechanismLigament2d("Elevator", getElevatorPosition(),
-        90);
+        90, 10, new Color8Bit(100, 100, 255));
   }
 
   private ElevatorState handleStateTransition() {

@@ -5,9 +5,11 @@ import java.util.logging.Level;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -113,10 +115,12 @@ public class Robot extends LoggedRobot {
     m_robotContainer.peripherals.periodic();
     m_logHandler.write();
     Logger.recordOutput("finished", m_robotContainer.superstructure.placedCoralL4());
-    LoggedMechanism2d arm = new LoggedMechanism2d(0.7, 0.7);
-    arm.getRoot("bl", 0.35, 0.1).append(m_robotContainer.twist.getLigament());
-    arm.getRoot("elevator", 0.0, 0.0).append(m_robotContainer.elevator.getElevatorLigament());
-    Logger.recordOutput("Arm Sim", arm);
+    LoggedMechanismLigament2d twistLigament2d = m_robotContainer.twist.getLigament();
+    LoggedMechanismLigament2d elevatorLigament2d = m_robotContainer.elevator.getElevatorLigament();
+    elevatorLigament2d.append(twistLigament2d);
+    LoggedMechanism2d bot = new LoggedMechanism2d(0.7, 2.6);
+    bot.getRoot("elevator", 0.35, Units.inchesToMeters(12.5)).append(elevatorLigament2d);
+    Logger.recordOutput("Arm Sim", bot);
   }
 
   @Override

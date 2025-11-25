@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.manipulator.Manipulator.ArmItem;
@@ -69,7 +70,7 @@ public class Twist extends SubsystemBase {
 
   public LoggedMechanismLigament2d getLigament() {
     LoggedMechanismLigament2d mech = new LoggedMechanismLigament2d("Twist", Units.inchesToMeters(6),
-        getTwistPosition() + 90);
+        getTwistPosition(), 10, new Color8Bit(255, 255, 100));
     return mech;
   }
 
