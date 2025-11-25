@@ -3558,6 +3558,14 @@ public final class Constants {
                                         * Math.pow(Units.inchesToMeters(DRUM_DIAMETER_INCHES / 2), 2.0);
                 }
 
+                public static final class Pivot {
+                        public static final int NUM_MOTORS = 1;
+                        public static final double ARM_MASS_LB = 5.98;
+                        public static final double R_CG_M = 11.68;
+                        public static final double MOI = Units.lbsToKilograms(ARM_MASS_LB)
+                                        * Math.pow(Units.inchesToMeters(R_CG_M), 2.0);
+                }
+
                 public static final double FIELD_WIDTH = 8.052;
                 public static final double FIELD_LENGTH = 17.548;
                 public static final double WHEEL_DIAMETER = inchesToMeters(4);
@@ -3812,6 +3820,13 @@ public final class Constants {
                         public static final double kI2 = 0.0 * elevatorMultiplier * 0.5;
                         public static final double kD2 = 2.7 * elevatorMultiplier * 0.5;
                         public static final double kG2 = 4.499 * elevatorMultiplier * 0.5;
+                }
+
+                public static final class Pivot {
+                        public static final double kP0 = 100.0;
+                        public static final double kI0 = 0.0;
+                        public static final double kD0 = 5.0;
+                        public static final double kG0 = 0.0;
                 }
         }
 

@@ -72,7 +72,6 @@ public class PivotIOComp implements PivotIO {
 
     @Override
     public void setPosition(double rotations, double maxPivotDegrees, double nonAlgaeTime) {
-
         if (Math.abs(rotations) * 360.0 > maxPivotDegrees) {
             rotations = Math.copySign(maxPivotDegrees / 360.0, rotations);
         }

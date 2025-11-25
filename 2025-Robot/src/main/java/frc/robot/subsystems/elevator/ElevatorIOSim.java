@@ -94,7 +94,7 @@ public class ElevatorIOSim implements ElevatorIO {
                 double feedforward = (slot == 0 ? kG0 : (slot == 1 ? kG1 : kG2));
                 wantedSpeed = pidOutput + feedforward;
                 inputTorqueCurrent = Math.copySign(
-                        gearbox.getCurrent(simState.get(0), gearbox.KvRadPerSecPerVolt * wantedSpeed), wantedSpeed);
+                        gearbox.getCurrent(simState.get(0), wantedSpeed / gearbox.KvRadPerSecPerVolt), wantedSpeed);
                 update(dt / numSteps);
             }
             Logger.recordOutput("elevator wanted speed",

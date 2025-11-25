@@ -72,7 +72,7 @@ public class TwistIOSim implements TwistIO {
                 double feedforward = 0;// Math.copySign((slot == 0 ? kS0 : kS1), pidOutput);
                 double wantedSpeed = pidOutput + feedforward;
                 inputTorqueCurrent = Math.copySign(
-                        gearbox.getCurrent(simState.get(0), gearbox.KvRadPerSecPerVolt * wantedSpeed), wantedSpeed);
+                        gearbox.getCurrent(simState.get(0), wantedSpeed / gearbox.KvRadPerSecPerVolt), wantedSpeed);
                 update(dt / numSteps);
             }
             Logger.recordOutput("twist sim error", Units.radiansToDegrees(positionSetpointRad - simState.get(0)));

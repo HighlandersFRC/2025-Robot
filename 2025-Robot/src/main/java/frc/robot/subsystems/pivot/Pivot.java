@@ -1,7 +1,9 @@
 package frc.robot.subsystems.pivot;
 
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,11 +20,11 @@ public class Pivot extends SubsystemBase {
   // private Speed fastMode = Speed.FAST;
 
   public Pivot() {
-    // if (RobotBase.isReal()) {
-    io = new PivotIOComp();
-    // } else {
-    // io = new PivotIOSim();
-    // }
+    if (RobotBase.isReal()) {
+      io = new PivotIOComp();
+    } else {
+      io = new PivotIOSim();
+    }
   }
 
   public void init() {
@@ -58,6 +60,10 @@ public class Pivot extends SubsystemBase {
 
   public void setMaxPivotDegrees(double degrees) {
     maxPivotDegrees = degrees;
+  }
+
+  public LoggedMechanismLigament2d getLigament() {
+    return new LoggedMechanismLigament2d("Pivot", Units.inchesToMeters(29), io.getPosition() * 360);
   }
 
   public enum PivotFlip {

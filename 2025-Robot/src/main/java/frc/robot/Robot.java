@@ -117,9 +117,11 @@ public class Robot extends LoggedRobot {
     Logger.recordOutput("finished", m_robotContainer.superstructure.placedCoralL4());
     LoggedMechanismLigament2d twistLigament2d = m_robotContainer.twist.getLigament();
     LoggedMechanismLigament2d elevatorLigament2d = m_robotContainer.elevator.getElevatorLigament();
-    elevatorLigament2d.append(twistLigament2d);
-    LoggedMechanism2d bot = new LoggedMechanism2d(0.7, 2.6);
-    bot.getRoot("elevator", 0.35, Units.inchesToMeters(12.5)).append(elevatorLigament2d);
+    LoggedMechanismLigament2d pivotLigament2d = m_robotContainer.pivot.getLigament();
+    pivotLigament2d.append(twistLigament2d);
+    elevatorLigament2d.append(pivotLigament2d);
+    LoggedMechanism2d bot = new LoggedMechanism2d(2.0, 2.6);
+    bot.getRoot("elevator", 1.0, Units.inchesToMeters(12.5)).append(elevatorLigament2d);
     Logger.recordOutput("Arm Sim", bot);
   }
 
