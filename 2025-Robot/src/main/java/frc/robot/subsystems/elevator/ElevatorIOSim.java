@@ -165,9 +165,22 @@ public class ElevatorIOSim implements ElevatorIO {
         inputTorqueCurrent = MathUtil.clamp(inputTorqueCurrent, minCurrent, maxCurrent);
         BiFunction<Matrix<N2, N1>, Matrix<N1, N1>, Matrix<N2, N1>> stateFunction = (x, u) -> {
             if (x.get(0, 0) < Units.rotationsToRadians(Constants.Ratios.ELEVATOR_MOTOR_ROTATIONS_FOR_FIRST_STAGE)) {
-                return A_1.times(x).plus(B_1.times(u));
+                return A_1.times(x).plus(B_1.times(u)).plus(
+                        VecBuilder.fill(
+                                0.0,
+                                -Constants.G
+                                        * Units.lbsToKilograms(Constants.Physical.Elevator.CARRIAGE_MASS_LB)
+                                        * Units.inchesToMeters(Constants.Physical.Elevator.DRUM_DIAMETER_INCHES / 2)
+                                        / Constants.Physical.Elevator.STAGE_1_MOI));
             } else {
-                return A_2.times(x).plus(B_2.times(u));
+                return A_2.times(x).plus(B_2.times(u)).plus(
+                        VecBuilder.fill(
+                                0.0,
+                                -Constants.G
+                                        * Units.lbsToKilograms(Constants.Physical.Elevator.CARRIAGE_MASS_LB
+                                                + Constants.Physical.Elevator.STAGE_2_MASS_LB)
+                                        * Units.inchesToMeters(Constants.Physical.Elevator.DRUM_DIAMETER_INCHES / 2)
+                                        / Constants.Physical.Elevator.STAGE_2_MOI));
             }
         };
         Matrix<N2, N1> updatedState = NumericalIntegration.rkdp(

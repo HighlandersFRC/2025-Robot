@@ -76,6 +76,8 @@ public final class Constants {
 
         public static final double closedLoopSimResolution = 0.01; // seconds
 
+        public static final double G = 9.80665;
+
         private static double prevTimeSecs = 0.0;
 
         public static void periodic() {
