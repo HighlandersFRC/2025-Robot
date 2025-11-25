@@ -173,7 +173,10 @@ public class ElevatorIOSim implements ElevatorIO {
         Matrix<N2, N1> updatedState = NumericalIntegration.rkdp(
                 stateFunction,
                 simState,
-                VecBuilder.fill(inputTorqueCurrent),
+                VecBuilder.fill(inputTorqueCurrent
+                        * Constants.Physical.Elevator.MOTOR_TO_DRUM_REDUCTION
+                        * Constants.Physical.Elevator.MOTOR_TO_DRUM_REDUCTION), // Multiply current by reduction squared
+                                                                                // to get torque at drum
                 dt);
         if (updatedState.get(0, 0) < Units.rotationsToRadians(
                 Constants.Ratios.elevatorMetersToRotations(Constants.SetPoints.ELEVATOR_BOTTOM_POSITION_M))
