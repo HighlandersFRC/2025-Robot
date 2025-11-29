@@ -35,13 +35,13 @@ public class TwistIOSim implements TwistIO {
     private PID slot0 = new PID(Units.radiansToRotations(Constants.PIDConstants.Twist.kP0), Units.radiansToRotations(
             Constants.PIDConstants.Twist.kI0),
             Units.radiansToRotations(Constants.PIDConstants.Twist.kD0));
-    // private double kS0 = Units.radiansToRotations(5.0);
+    private double kS0 = Units.radiansToRotations(Constants.PIDConstants.Twist.kS0);
     private PID slot1 = new PID(Units.radiansToRotations(
             Constants.PIDConstants.Twist.kP1),
             Units.radiansToRotations(
                     Constants.PIDConstants.Twist.kI1),
             Units.radiansToRotations(Constants.PIDConstants.Twist.kD1));
-    // private double kS1 = Units.radiansToRotations(3.0);
+    private double kS1 = Units.radiansToRotations(Constants.PIDConstants.Twist.kS1);
     int slot = 0;
 
     public TwistIOSim() {
@@ -69,7 +69,7 @@ public class TwistIOSim implements TwistIO {
                 } else {
                     pidOutput = slot1.updatePID(simState.get(0));
                 }
-                double feedforward = 0;// Math.copySign((slot == 0 ? kS0 : kS1), pidOutput);
+                double feedforward = Math.copySign((slot == 0 ? kS0 : kS1), pidOutput);
                 double wantedSpeed = pidOutput + feedforward;
                 inputTorqueCurrent = Math.copySign(
                         gearbox.getCurrent(simState.get(0), wantedSpeed / gearbox.KvRadPerSecPerVolt), wantedSpeed);
