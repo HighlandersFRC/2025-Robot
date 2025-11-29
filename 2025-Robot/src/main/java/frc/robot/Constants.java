@@ -3656,6 +3656,7 @@ public final class Constants {
                 public static final double ELEVATOR_LOLLIPOP_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_PRE_HANDOFF_POSITION_M = inchesToMeters(39.0);
                 public static final double ELEVATOR_HANDOFF_POSITION_M = inchesToMeters(35.0);
+                public static final double ELEVATOR_MAX_HEIGHT = inchesToMeters(61.625);
 
                 public enum ElevatorPosition {
                         kDOWN(ELEVATOR_BOTTOM_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_BOTTOM_POSITION_M)),

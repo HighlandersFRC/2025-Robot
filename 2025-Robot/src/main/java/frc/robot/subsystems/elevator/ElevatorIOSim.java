@@ -188,12 +188,13 @@ public class ElevatorIOSim implements ElevatorIO {
                 simState,
                 VecBuilder.fill(inputTorqueCurrent
                         * Constants.Physical.Elevator.MOTOR_TO_DRUM_REDUCTION
-                        * Constants.Physical.Elevator.MOTOR_TO_DRUM_REDUCTION * Constants.Physical.Elevator.NUM_MOTORS), // Multiply
-                                                                                                                         // current
-                                                                                                                         // by
-                                                                                                                         // reduction
-                                                                                                                         // squared
-                // to get torque at drum
+                        * Constants.Physical.Elevator.MOTOR_TO_DRUM_REDUCTION * Constants.Physical.Elevator.NUM_MOTORS
+                        * 4 / 3), // Multiply
+                // current
+                // by
+                // reduction
+                // squared
+                // to get torque at drum and then multiply by motors. 4/3 is a magical constant
                 dt);
         if (updatedState.get(0, 0) < Units.rotationsToRadians(
                 Constants.Ratios.elevatorMetersToRotations(Constants.SetPoints.ELEVATOR_BOTTOM_POSITION_M))
@@ -202,10 +203,10 @@ public class ElevatorIOSim implements ElevatorIO {
                     Constants.Ratios.elevatorMetersToRotations(Constants.SetPoints.ELEVATOR_BOTTOM_POSITION_M)));
             updatedState.set(1, 0, 0.0);
         } else if (updatedState.get(0, 0) > Units.rotationsToRadians(
-                Constants.Ratios.elevatorMetersToRotations(Constants.SetPoints.ELEVATOR_TOP_POSITION_M))
+                Constants.Ratios.elevatorMetersToRotations(Constants.SetPoints.ELEVATOR_MAX_HEIGHT))
                 && updatedState.get(1, 0) > 0) {
             updatedState.set(0, 0, Units.rotationsToRadians(
-                    Constants.Ratios.elevatorMetersToRotations(Constants.SetPoints.ELEVATOR_TOP_POSITION_M)));
+                    Constants.Ratios.elevatorMetersToRotations(Constants.SetPoints.ELEVATOR_MAX_HEIGHT)));
             updatedState.set(1, 0, 0.0);
         }
         simState = VecBuilder.fill(updatedState.get(0, 0), updatedState.get(1, 0));
