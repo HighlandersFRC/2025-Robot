@@ -17,4 +17,6 @@ public interface ManipulatorIO {
     double getPosition();
 
     double getStatorCurrent();
+
+    void updateInputs();
 }

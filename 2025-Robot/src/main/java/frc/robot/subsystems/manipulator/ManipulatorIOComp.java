@@ -61,4 +61,8 @@ public class ManipulatorIOComp implements ManipulatorIO {
         return manipulatorMotor.getStatorCurrent().getValueAsDouble();
     }
 
+    @Override
+    public void updateInputs() {
+    }
+
 }

@@ -6,7 +6,6 @@ package frc.robot.subsystems.manipulator;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;

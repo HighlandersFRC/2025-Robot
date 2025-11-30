@@ -3566,6 +3566,14 @@ public final class Constants {
                                         * Math.pow(Units.inchesToMeters(R_CG_M), 2.0);
                 }
 
+                public static final class Manipulator {
+                        public static final double REDUCTION = 35 / 3;
+                        public static final double MOI_KG_M2 = 0.0000090589 * REDUCTION * REDUCTION; // moi at motor
+                                                                                                     // shaft, converted
+                                                                                                     // to roller shaft
+                        public static final int NUM_MOTORS = 1;
+                }
+
                 public static final double FIELD_WIDTH = 8.052;
                 public static final double FIELD_LENGTH = 17.548;
                 public static final double WHEEL_DIAMETER = inchesToMeters(4);
