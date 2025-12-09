@@ -192,8 +192,10 @@ public class Manipulator extends SubsystemBase {
 
   @Override
   public void periodic() {
+    io.updateInputs();
     Logger.recordOutput("Manipulator Motor Current", io.getTorqueCurrent());
     Logger.recordOutput("Manipulator Torque Current", io.getStatorCurrent());
+    Logger.recordOutput("Manipulator Velocity", io.getVelocity());
     if (armItem != getArmItem()) {
       armItem = getArmItem();
     }

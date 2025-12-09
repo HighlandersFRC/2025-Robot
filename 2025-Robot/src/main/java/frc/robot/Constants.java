@@ -3572,6 +3572,8 @@ public final class Constants {
                                                                                                      // shaft, converted
                                                                                                      // to roller shaft
                         public static final int NUM_MOTORS = 1;
+                        public static final double VISCOUS_DAMPING_COEFF = 0.001; // Friction = VISCOUS_DAMPING_COEFF *
+                                                                                  // angular_velocity
                 }
 
                 public static final double FIELD_WIDTH = 8.052;

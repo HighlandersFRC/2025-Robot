@@ -29,6 +29,7 @@ public class ManipulatorIOSim implements ManipulatorIO {
     double prevVel = 0.0;
     double acceleration = 0.0;
     private Vector<N2> simState = VecBuilder.fill(0.0, 0.0);
+    private final double b = Constants.Physical.Manipulator.VISCOUS_DAMPING_COEFF; // viscous damping coefficient
 
     @Override
     public void init() {
@@ -73,6 +74,7 @@ public class ManipulatorIOSim implements ManipulatorIO {
 
     @Override
     public void updateInputs() {
+        System.out.println("simming manipulator");
         update(Constants.loopPeriodSecs);
         double dt = Constants.loopPeriodSecs;
         double dv = simState.get(1) - prevVel;
@@ -82,7 +84,14 @@ public class ManipulatorIOSim implements ManipulatorIO {
     private void update(double dt) {
         inputTorqueCurrent = MathUtil.clamp(inputTorqueCurrent, -gearbox.stallCurrentAmps, gearbox.stallCurrentAmps);
         Matrix<N2, N1> updatedState = NumericalIntegration.rkdp(
-                (Matrix<N2, N1> x, Matrix<N1, N1> u) -> A.times(x).plus(B.times(u)),
+                (Matrix<N2, N1> x, Matrix<N1, N1> u) -> {
+                    double theta = x.get(0, 0);
+                    double omega = x.get(1, 0);
+                    double viscous = -b * omega;
+                    return A.times(x)
+                            .plus(B.times(u))
+                            .plus(VecBuilder.fill(0, viscous));
+                },
                 simState,
                 VecBuilder.fill(inputTorqueCurrent),
                 dt);
