@@ -3537,7 +3537,7 @@ public final class Constants {
                 public static final double WHEEL_DIAMETER = inchesToMeters(4);
                 public static final double WHEEL_CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER;
                 public static final double WHEEL_ROTATION_PER_METER = 1 / WHEEL_CIRCUMFERENCE;
-                public static final double WHEEL_TO_FRAME_DISTANCE = inchesToMeters(2.5);
+                public static final double WHEEL_TO_FRAME_DISTANCE = inchesToMeters(2.5); // TODO: is this different for mk5s?
                 public static final double TOP_SPEED = feetToMeters(30.0);
                 public static final double MAX_ACCELERATION = feetToMeters(30.0); // TODO: actually tune the top speed
                                                                                   // and max acceleration. Add a max
@@ -3545,7 +3545,7 @@ public final class Constants {
 
                 public static final double ROBOT_LENGTH = inchesToMeters(26);
                 public static final double ROBOT_WIDTH = inchesToMeters(26);
-                public static final double MODULE_OFFSET = inchesToMeters(2.625);
+                public static final double MODULE_OFFSET = inchesToMeters(2.625); // TODO: is this different for mk5s?
                 public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
                                 ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
                 public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(23.5);
@@ -4035,8 +4035,10 @@ public final class Constants {
                 public static final double PIVOT_GEAR_RATIO = 95.238;
 
                 // drive
-                public static final double DRIVE_GEAR_RATIO = 6.12;
-                public static final double STEER_GEAR_RATIO = 21.43;
+                // public static final double DRIVE_GEAR_RATIO = 7.03; // mk5 R1
+                public static final double DRIVE_GEAR_RATIO = 6.03; // mk5 R2
+                // public static final double DRIVE_GEAR_RATIO = 5.27; // mk5 R3
+                public static final double STEER_GEAR_RATIO = 26.09; // mk5
 
                 // elevator
                 public static final double ELEVATOR_FIRST_STAGE = Constants.inchesToMeters(23.25);
