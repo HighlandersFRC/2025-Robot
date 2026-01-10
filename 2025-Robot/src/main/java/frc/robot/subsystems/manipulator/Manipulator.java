@@ -2,27 +2,17 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.manipulator;
 
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.TorqueCurrentFOC;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.OI;
 
 public class Manipulator extends SubsystemBase {
   /** Creates a new Intake. */
-  private final TalonFX manipulatorMotor = new TalonFX(Constants.CANInfo.MANIPULATOR_MOTOR_ID,
-      Constants.CANInfo.CANBUS_NAME);
-
-  private final TorqueCurrentFOC torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
+  private final ManipulatorIO io;
 
   private boolean algaeMode = false;
   private ArmItem armItem = ArmItem.NONE;
@@ -38,14 +28,7 @@ public class Manipulator extends SubsystemBase {
   }
 
   public void init() {
-    TalonFXConfiguration manipulatorConfig = new TalonFXConfiguration();
-    manipulatorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    manipulatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    manipulatorConfig.CurrentLimits.StatorCurrentLimit = 80;
-    manipulatorConfig.CurrentLimits.SupplyCurrentLimit = 80;
-    manipulatorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-    manipulatorMotor.getConfigurator().apply(manipulatorConfig);
-    manipulatorMotor.setNeutralMode(NeutralModeValue.Brake);
+    io.init();
   }
 
   public enum ManipulatorState {
@@ -60,7 +43,7 @@ public class Manipulator extends SubsystemBase {
   private ManipulatorState systemState = ManipulatorState.DEFAULT;
 
   public void setIntakeTorque(double current, double maxPercent) {
-    manipulatorMotor.setControl(torqueCurrentFOCRequest.withOutput(current).withMaxAbsDutyCycle(maxPercent));
+    io.setTorque(current, maxPercent);
   }
 
   private boolean firstTimeCoral = true;
@@ -70,19 +53,8 @@ public class Manipulator extends SubsystemBase {
   private boolean hasCoralSticky = false;
 
   public boolean hasCoral() {
-    // Logger.recordOutput("Has Coral",
-    // (intakeMotor.getVelocity().getValueAsDouble() > -10
-    // && intakeMotor.getTorqueCurrent().getValueAsDouble() < -15
-    // && intakeMotor.getAcceleration().getValueAsDouble() < -100));
-    // Logger.recordOutput("Intake Velocity",
-    // manipulatorMotor.getVelocity().getValueAsDouble());
-    // Logger.recordOutput("Intake Torque",
-    // manipulatorMotor.getTorqueCurrent().getValueAsDouble());
-    // Logger.recordOutput("Intake Acceleration",
-    // manipulatorMotor.getAcceleration().getValueAsDouble());
-    if (Math.abs(manipulatorMotor.getVelocity().getValueAsDouble()) < 5.0
-        && Math.abs(manipulatorMotor.getTorqueCurrent().getValueAsDouble()) > 5.0
-    /* && Math.abs(manipulatorMotor.getAcceleration().getValueAsDouble()) < 10 */) {
+    if (Math.abs(io.getVelocity()) < 5.0
+        && Math.abs(io.getTorqueCurrent()) > 5.0) {
       if (firstTimeCoral) {
         firstTimeCoral = false;
         coralTime = Timer.getFPGATimestamp();
@@ -124,16 +96,6 @@ public class Manipulator extends SubsystemBase {
   }
 
   public boolean hasCoralForTime(double time) {
-    // Logger.recordOutput("Has Coral",
-    // (intakeMotor.getVelocity().getValueAsDouble() > -10
-    // && intakeMotor.getTorqueCurrent().getValueAsDouble() < -15
-    // && intakeMotor.getAcceleration().getValueAsDouble() < -100));
-    // Logger.recordOutput("Intake Velocity",
-    // manipulatorMotor.getVelocity().getValueAsDouble());
-    // Logger.recordOutput("Intake Torque",
-    // manipulatorMotor.getTorqueCurrent().getValueAsDouble());
-    // Logger.recordOutput("Intake Acceleration",
-    // manipulatorMotor.getAcceleration().getValueAsDouble());
     if (hasCoral() && Timer.getFPGATimestamp() - coralTime > time) {
       return true;
     } else {
@@ -142,10 +104,9 @@ public class Manipulator extends SubsystemBase {
   }
 
   public ArmItem getArmItem() {
-    // System.out.println(Math.abs(intakeMotor.getAcceleration().getValueAsDouble()));
-    if (!algaeMode && manipulatorMotor.getTorqueCurrent().getValueAsDouble() > 5.0) {
-      if (Math.abs(manipulatorMotor.getVelocity().getValueAsDouble()) < 5.0) {
-        if (Math.abs(manipulatorMotor.getAcceleration().getValueAsDouble()) < 10.0) {
+    if (!algaeMode && io.getTorqueCurrent() > 5.0) {
+      if (Math.abs(io.getVelocity()) < 5.0) {
+        if (Math.abs(io.getAcceleration()) < 10.0) {
           return ArmItem.CORAL;
         } else {
           return ArmItem.NONE;
@@ -153,8 +114,8 @@ public class Manipulator extends SubsystemBase {
       } else {
         return ArmItem.NONE;
       }
-    } else if (algaeMode && manipulatorMotor.getTorqueCurrent().getValueAsDouble() > 1.0) {
-      if (Math.abs(manipulatorMotor.getVelocity().getValueAsDouble()) < 15.0) {
+    } else if (algaeMode && io.getTorqueCurrent() > 1.0) {
+      if (Math.abs(io.getVelocity()) < 15.0) {
         if (true) {
           return ArmItem.ALGAE;
         }
@@ -166,27 +127,27 @@ public class Manipulator extends SubsystemBase {
   }
 
   public Manipulator() {
+    // if (RobotBase.isReal()) {
+    io = new ManipulatorIOComp();
+    // } else {
+    // io = new ManipulatorIOSim();
+    // }
   }
 
   public void setIntakePercent(double percent) {
-    manipulatorMotor.set(percent);
+    io.setPercent(percent);
   }
 
   public double getIntakeRPS() {
-    return manipulatorMotor.getVelocity().getValueAsDouble();
+    return io.getVelocity();
   }
 
-  boolean inL1State = false;
+  public boolean inL1State = false;
   double initOutakeL1Position = 0.0;
   boolean initOutakeL1 = false;
 
   private ManipulatorState handleStateTransition() {
-    // System.out.println("current: " + intakeMotor.getPosition().getValueAsDouble()
-    // / 12.5);
-    // System.out.println("init: " + initOutakeL1Position);
-    // System.out.println("bool: " + initOutakeL1);
     Logger.recordOutput("povup presses", OI.driverPOVUp.getAsBoolean());
-    // System.out.println("in l1 state: " + inL1State);
     if (!OI.driverPOVUp.getAsBoolean() || !OI.driverLT.getAsBoolean()) {
       inL1State = false;
       initOutakeL1Position = 0.0;
@@ -195,12 +156,12 @@ public class Manipulator extends SubsystemBase {
     if (OI.driverLT.getAsBoolean()) {
       if (OI.driverPOVUp.getAsBoolean()) {
         if (!initOutakeL1) {
-          initOutakeL1Position = manipulatorMotor.getPosition().getValueAsDouble() / 12.5;
+          initOutakeL1Position = io.getPosition() / 12.5;
           initOutakeL1 = true;
         }
 
         if (Math.abs(
-            Math.abs(manipulatorMotor.getPosition().getValueAsDouble()) / 12.5
+            Math.abs(io.getPosition()) / 12.5
                 - Math.abs(initOutakeL1Position)) < 0.5) {
           return ManipulatorState.OUTAKE;
         } else {
@@ -231,27 +192,22 @@ public class Manipulator extends SubsystemBase {
 
   @Override
   public void periodic() {
-    Logger.recordOutput("Manipulator Motor Current", manipulatorMotor.getTorqueCurrent().getValueAsDouble());
-    Logger.recordOutput("Manipulator Torque Current", manipulatorMotor.getStatorCurrent().getValueAsDouble());
+    io.updateInputs();
+    Logger.recordOutput("Manipulator Motor Current", io.getTorqueCurrent());
+    Logger.recordOutput("Manipulator Torque Current", io.getStatorCurrent());
+    Logger.recordOutput("Manipulator Velocity", io.getVelocity());
     if (armItem != getArmItem()) {
       armItem = getArmItem();
     }
     systemState = handleStateTransition();
-    // System.out.println("Intake Current: " +
-    // intakeMotor.getStatorCurrent().getValueAsDouble());
     Logger.recordOutput("Intake State", systemState);
     Logger.recordOutput("Manipulator Has coral", hasCoral());
     Logger.recordOutput("Intake Item", armItem);
-    // Logger.recordOutput("Has Coral", hasCoral());
     switch (systemState) {
       case CORAL_INTAKE:
         switch (armItem) {
           case CORAL:
-            // if (timeSinceItemSwitch > 1.0) {
             setIntakeTorque(30, 1.0);
-            // } else {
-            // setIntakePercent(1.0);
-            // }
             break;
           default:
             setIntakePercent(1.0);
@@ -259,14 +215,9 @@ public class Manipulator extends SubsystemBase {
         }
         break;
       case ALGAE_INTAKE:
-        // System.out.println("algae running");
         switch (armItem) {
           case ALGAE:
-            // if (timeSinceItemSwitch > 1.0) {
             setIntakeTorque(55, 0.8);
-            // } else {
-            // setIntakePercent(1.0);
-            // }
             break;
           default:
             setIntakeTorque(60, 0.8);
@@ -275,12 +226,6 @@ public class Manipulator extends SubsystemBase {
         break;
       case OUTAKE:
         switch (armItem) {
-          // case CORAL:
-          // setIntakePercent(-0.5);
-          // break;
-          // case ALGAE:
-          // setIntakePercent(0.5);
-          // break;
           default:
             if (algaeMode) {
               if (OI.driverPOVUp.getAsBoolean()) {
@@ -309,7 +254,6 @@ public class Manipulator extends SubsystemBase {
         setIntakePercent(0.0);
         break;
       default:
-        // System.out.println("Motor Current: " + intakeMotor.getTorqueCurrent());
         if (algaeMode) {
           setIntakeTorque(67, 0.4);
         } else {

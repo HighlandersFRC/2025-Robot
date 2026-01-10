@@ -20,9 +20,9 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Lights;
-import frc.robot.subsystems.Peripherals;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.Peripherals;
+import frc.robot.subsystems.lights.Lights;
 import frc.robot.tools.wrappers.AutoFollower;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more

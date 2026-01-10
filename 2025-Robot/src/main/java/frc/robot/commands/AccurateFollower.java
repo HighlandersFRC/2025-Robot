@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import frc.robot.tools.math.Vector;
 import frc.robot.tools.wrappers.AutoFollower;
 import frc.robot.Constants;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.drive.Drive;
 
 public class AccurateFollower extends AutoFollower {
     private Drive drive;
@@ -56,9 +56,9 @@ public class AccurateFollower extends AutoFollower {
     @Override
     public void execute() {
         // System.out.println("Variable Speed");
-        odometryFusedX = drive.getMT2OdometryX();
-        odometryFusedY = drive.getMT2OdometryY();
-        odometryFusedTheta = drive.getMT2OdometryAngle();
+        odometryFusedX = drive.getMt2Pose2dX();
+        odometryFusedY = drive.getMt2Pose2dY();
+        odometryFusedTheta = drive.getMt2Pose2dAngle();
         // call PIDController function
         currentPathPointIndex = returnPathPointIndex;
         desiredVelocityArray = drive.purePursuitController(odometryFusedX, odometryFusedY, odometryFusedTheta,
@@ -118,9 +118,9 @@ public class AccurateFollower extends AutoFollower {
     }
 
     private boolean readyToEnd(JSONObject point) {
-        double odometryFusedX = drive.getMT2OdometryX();
-        double odometryFusedY = drive.getMT2OdometryY();
-        double odometryFusedTheta = drive.getMT2OdometryAngle();
+        double odometryFusedX = drive.getMt2Pose2dX();
+        double odometryFusedY = drive.getMt2Pose2dY();
+        double odometryFusedTheta = drive.getMt2Pose2dAngle();
         if (drive.getFieldSide() == "blue") {
             odometryFusedX = Constants.Physical.FIELD_LENGTH - odometryFusedX;
             odometryFusedTheta = Math.PI - odometryFusedTheta;

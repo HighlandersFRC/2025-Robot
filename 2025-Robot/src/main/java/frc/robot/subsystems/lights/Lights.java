@@ -2,50 +2,28 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.lights;
 
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix.led.CANdle;
-import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 import com.ctre.phoenix.led.*;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.OI;
-import frc.robot.subsystems.Manipulator.ArmItem;
+import frc.robot.subsystems.manipulator.Manipulator.ArmItem;
 
 public class Lights extends SubsystemBase {
   /** Creates a new Lights. */
+  private final LightsIO io;
+
+  private boolean partyMode = false;
   private double strobeSpeed = 0.4;
   private double flashSpeed = 0.05;
-  CANdle candleSwerve = new CANdle(Constants.CANInfo.CANDLE_ID_0, "Canivore");
-  CANdle candleBack = new CANdle(Constants.CANInfo.CANDLE_ID_1, "rio");
-  CANdle candleFront = new CANdle(Constants.CANInfo.CANDLE_ID_2, "rio");
   private int ledNumber = 2000;
   private int ledsPerSwerve = 3000;
-
-  // ColorFlowAnimation redSolidDim = new ColorFlowAnimation(100, 0, 0, 0, 1.0,
-  // ledNumber, Direction.Forward, 0);
-  // ColorFlowAnimation redSolidBright = new ColorFlowAnimation(255, 0, 0, 0, 0.0,
-  // ledNumber, Direction.Forward, 0);
-  // ColorFlowAnimation blueSolidDim = new ColorFlowAnimation(0, 0, 100, 0, 0.0,
-  // ledNumber, Direction.Forward, 0);
-  // ColorFlowAnimation blueSolidBright = new ColorFlowAnimation(0, 0, 255, 0,
-  // 0.0, ledNumber, Direction.Forward, 0);
-
-  // FireAnimation redSolidDim = new FireAnimation(0.5, 1.0, ledNumber, 0.0, 0.0,
-  // false, 0);
-  // LarsonAnimation redSolidDim = new LarsonAnimation(100, 0, 0, 0, 0.5,
-  // ledNumber, BounceMode.Back, 1000, 0);
-
-  // ColorFlowAnimation greenSolidBright = new ColorFlowAnimation(0, 255, 0, 0,
-  // 0.0, ledNumber, Direction.Forward, 0);
-  // ColorFlowAnimation whiteSolidBright = new ColorFlowAnimation(255, 255, 255,
-  // 255, 0.0, ledNumber, Direction.Forward,
-  // 0);
 
   StrobeAnimation redFlash = new StrobeAnimation(255, 0, 0, 0, 0.1, ledNumber, 0);
   StrobeAnimation blueFlash = new StrobeAnimation(0, 0, 255, 0, 0.1, ledNumber, 0);
@@ -60,10 +38,6 @@ public class Lights extends SubsystemBase {
   StrobeAnimation purpleFlash = new StrobeAnimation(100, 0, 100, 0, flashSpeed, ledNumber, 0);
   StrobeAnimation yellowFlash = new StrobeAnimation(100, 100, 0, 0, flashSpeed, ledNumber, 0);
 
-  // ColorFlowAnimation algaeSolid = new ColorFlowAnimation(0, 255, 150, 0, 0.0,
-  // ledNumber, Direction.Forward, 0);
-  // ColorFlowAnimation coralSolid = new ColorFlowAnimation(255, 255, 255, 255,
-  // 0.0, ledNumber, Direction.Forward, 0);
   StrobeAnimation algaeFlashing = new StrobeAnimation(0, 75, 25, 0, flashSpeed, ledNumber, 0);
   StrobeAnimation coralFlashing = new StrobeAnimation(50, 50, 50, 50, flashSpeed, ledNumber, 0);
   StrobeAnimation algaeStrobing = new StrobeAnimation(0, 75, 25, 0, strobeSpeed, ledNumber, 0);
@@ -80,8 +54,6 @@ public class Lights extends SubsystemBase {
       100, 0);
   LarsonAnimation blueCylonAnimation = new LarsonAnimation(0, 0, 255, 0, 0.8, ledNumber, BounceMode.Back,
       100, 0);
-
-  private boolean partyMode = false;
 
   public void PARTY() {
     partyMode = true;
@@ -182,9 +154,13 @@ public class Lights extends SubsystemBase {
   /**
    * Constructs a new Lights object.
    * 
-   * @param tof Time of Flight sensor.
    */
   public Lights() {
+    if (RobotBase.isReal()) {
+      io = new LightsIOComp();
+    } else {
+      io = new LightsIOSim();
+    }
   }
 
   public void setWantedState(LightsState wantedState) {
@@ -221,10 +197,10 @@ public class Lights extends SubsystemBase {
    * @param g The green component value (0-255).
    * @param b The blue component value (0-255).
    */
-  public void setCandleRGB(int r, int g, int b) { // sets the RGB values of the lights
-    candleSwerve.setLEDs(r, g, b);
-    candleBack.setLEDs(r, g, b);
-    candleFront.setLEDs(r, g, b);
+  public void setCandleRGB(int r, int g, int b) {
+    io.setSwerveLEDs(r, g, b);
+    io.setBackLEDs(r, g, b);
+    io.setFrontLEDs(r, g, b);
   }
 
   private AllianceState lastAllianceState = AllianceState.RED;
@@ -248,29 +224,15 @@ public class Lights extends SubsystemBase {
       newState = LightsState.DISABLED;
     }
     if (newState != systemState) {
-      candleSwerve.clearAnimation(0);
-      candleBack.clearAnimation(0);
-      candleFront.clearAnimation(0);
+      io.clearSwerveAnimation(0);
+      io.clearBackAnimation(0);
+      io.clearFrontAnimation(0);
       systemState = newState;
     }
 
     Logger.recordOutput("Lights State", systemState);
-    if (partyMode /* party mode */) { //TODO: enable or disable party mode here
+    if (partyMode) {
       weLikeToParty();
-      // System.out.println("Jam Peanut Butter Bread Bread Make a sandwich eat it");
-      // System.out.println("You want it? I got it");
-      // System.out.println("You want it? I got it");
-      // System.out.println("Don't you know you want my peanut butter?");
-      // System.out.println("Don't you know you want my jam?");
-      // System.out.println("Cause cowboys");
-      // System.out.println("got what?");
-      // System.out.println("got guns");
-      // System.out.println("and lassos");
-      // System.out.println("reach reach reach reach");
-      // System.out.println("sock it to me sock it to me sock it to me sock it to me");
-      // System.out.println("left right left left right left right right left right left left right left right right");
-      // System.out.println("travolta! travolta! travolta! travolta!");
-      // System.out.println("Party! wooo wooo wooo wooo");
     } else {
 
       if (systemState != LightsState.DISABLED) {
@@ -282,17 +244,17 @@ public class Lights extends SubsystemBase {
             setAuto();
             break;
           default:
-            candleFront.setLEDs(10, 50, 10);
-            candleSwerve.setLEDs(10, 50, 10);
+            io.setFrontLEDs(10, 50, 10);
+            io.setSwerveLEDs(10, 50, 10);
             break;
         }
       } else {
         switch (allianceState) {
           case RED:
-            candleSwerve.setLEDs(50, 0, 0);
+            io.setSwerveLEDs(50, 0, 0);
             break;
           case BLUE:
-            candleSwerve.setLEDs(0, 0, 50);
+            io.setSwerveLEDs(0, 0, 50);
             break;
           default:
             break;
@@ -354,15 +316,9 @@ public class Lights extends SubsystemBase {
             switch (allianceState) {
               case RED:
                 setRedBouncing();
-                // setAllBlue();
-                // candleSwerve.clearAnimation(0);
-                // candleSwerve.setLEDs(0, 0, 0);
                 break;
               default:
                 setBlueBouncing();
-                // setAllRed();
-                // candleSwerve.clearAnimation(0);
-                // candleSwerve.setLEDs(0, 0, 0);
                 break;
             }
             ;
@@ -371,277 +327,165 @@ public class Lights extends SubsystemBase {
           }
       }
     }
-    // // This method will be called once per scheduler run
-    // if (!commandRunning) { // only makes lights red/blue if a command is not
-    // trying to change light colors
-    // if (!OI.autoChooserConnected()) {
-    // fieldSide = "none";
-    // } else if (OI.isBlueSide()) {
-    // fieldSide = "blue";
-    // } else {
-    // fieldSide = "red";
-    // }
-
-    // if (fieldSide == "red") { // sets lights to color of alliance
-    // candle.setLEDs(255, 0, 0);
-    // } else if (fieldSide == "blue") {
-    // candle.setLEDs(0, 0, 255);
-    // } else if (fieldSide == "none") {
-    // candle.setLEDs(255, 255, 0);
-    // } else {
-    // candle.setLEDs(255, 255, 255);
-    // }
-    // } else if (timedFlashes) { // allows lights to flash for a certain period of
-    // time before returning to
-    // // default colors
-    // if (Timer.getFPGATimestamp() - time > timeout) {
-    // timedFlashes = false;
-    // candle.clearAnimation(0);
-    // setCommandRunning(false);
-    // }
-    // }
   }
 
-  // public void flashGreen(double seconds) { // blinks green for a certain amount
-  // of time
-  // setCommandRunning(true);
-  // candle0.clearAnimation(0);
-  // candle1.clearAnimation(0);
-  // if (seconds != -1) {
-  // time = Timer.getFPGATimestamp();
-  // timeout = seconds;
-  // timedFlashes = true;
-  // }
-  // candle0.animate(greenFlash);
-  // candle1.animate(greenFlash);
-  // }
-
-  // public void blinkYellow(double seconds) { // blinks yellow for a certain
-  // amount of time
-  // setCommandRunning(true);
-  // candle0.clearAnimation(0);
-  // candle1.clearAnimation(0);
-  // if (seconds != -1) {
-  // time = Timer.getFPGATimestamp();
-  // timeout = seconds;
-  // timedFlashes = true;
-  // }
-  // candle0.animate(yellowFlash);
-  // candle1.animate(yellowFlash);
-  // }
-
-  public void clearAnimations() { // clears all animations currently running
-    candleSwerve.clearAnimation(0);
-    candleBack.clearAnimation(0);
-    candleFront.clearAnimation(0);
+  public void clearAnimations() {
+    io.clearSwerveAnimation(0);
+    io.clearBackAnimation(0);
+    io.clearFrontAnimation(0);
   }
 
   public void setAllRed() {
-    candleSwerve.setLEDs(0, 0, 255);
-    candleBack.setLEDs(0, 0, 255);
-    candleFront.setLEDs(0, 0, 255);
+    io.setSwerveLEDs(0, 0, 255);
+    io.setBackLEDs(0, 0, 255);
+    io.setFrontLEDs(0, 0, 255);
   }
 
   public void setAllBlue() {
-    candleSwerve.setLEDs(255, 0, 0);
-    candleBack.setLEDs(255, 0, 0);
-    candleFront.setLEDs(255, 0, 0);
+    io.setSwerveLEDs(255, 0, 0);
+    io.setBackLEDs(255, 0, 0);
+    io.setFrontLEDs(255, 0, 0);
   }
 
   public void setStrobeGreen() {
-    candleSwerve.animate(greenStrobe);
-    candleBack.animate(greenStrobe);
-    // candleFront.animate(greenStrobe);
+    io.animateSwerve(greenStrobe);
+    io.animateBack(greenStrobe);
   }
 
   public void setStrobePurple() {
-    candleSwerve.animate(purpleStrobe);
-    candleBack.animate(purpleStrobe);
-    // candleFront.animate(purpleStrobe);
+    io.animateSwerve(purpleStrobe);
+    io.animateBack(purpleStrobe);
   }
 
   public void setStrobeYellow() {
-    candleSwerve.animate(yellowStrobe);
-    candleBack.animate(yellowStrobe);
-    // candleFront.animate(yellowStrobe);
+    io.animateSwerve(yellowStrobe);
+    io.animateBack(yellowStrobe);
   }
 
   public void setFlashGreen() {
-    candleSwerve.animate(greenFlash);
-    candleBack.animate(greenFlash);
-    candleFront.animate(greenFlash);
+    io.animateSwerve(greenFlash);
+    io.animateBack(greenFlash);
+    io.animateFront(greenFlash);
   }
 
   public void setFlashPurple() {
-    candleSwerve.animate(purpleFlash);
-    candleBack.animate(purpleFlash);
-    // candleFront.animate(purpleFlash);
+    io.animateSwerve(purpleFlash);
+    io.animateBack(purpleFlash);
   }
 
   public void setFlashYellow() {
-    candleSwerve.animate(yellowFlash);
-    candleBack.animate(yellowFlash);
-    // candleFront.animate(yellowFlash);
+    io.animateSwerve(yellowFlash);
+    io.animateBack(yellowFlash);
   }
 
   public void setRedBright() {
-    // candle0.animate(redSolidBright);
-    // candle1.animate(redSolidBright);
-    // candle2.animate(redSolidBright);
     clearAnimations();
-    // setCandleRGB(255, 0, 0);
-    candleBack.setLEDs(255, 0, 0);
-    candleSwerve.setLEDs(255, 0, 0, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
+    io.setBackLEDs(255, 0, 0);
+    io.setSwerveLEDs(255, 0, 0, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
   }
 
   public void setRedDim() {
     clearAnimations();
-    candleBack.setLEDs(100, 0, 0);
-    candleSwerve.setLEDs(100, 0, 0, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
+    io.setBackLEDs(100, 0, 0);
+    io.setSwerveLEDs(100, 0, 0, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
   }
 
   public void setBlueBright() {
     clearAnimations();
-    candleBack.setLEDs(0, 0, 255);
-    candleSwerve.setLEDs(0, 0, 255, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
+    io.setBackLEDs(0, 0, 255);
+    io.setSwerveLEDs(0, 0, 255, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
   }
 
   public void setBlueDim() {
     clearAnimations();
-    candleBack.setLEDs(0, 0, 100);
-    candleSwerve.setLEDs(0, 0, 100, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
+    io.setBackLEDs(0, 0, 100);
+    io.setSwerveLEDs(0, 0, 100, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
   }
 
   public void setWhiteBright() {
     clearAnimations();
-    candleBack.setLEDs(255, 255, 255);
-    candleSwerve.setLEDs(255, 255, 255, 255, ledsPerSwerve * 0, ledsPerSwerve * 2);
+    io.setBackLEDs(255, 255, 255);
+    io.setSwerveLEDs(255, 255, 255, 255, ledsPerSwerve * 0, ledsPerSwerve * 2);
   }
 
   public void setRedFlash() {
-    // candleSwerve.animate(redFlash);
-    candleBack.animate(redFlash);
-    // candleFront.animate(redFlash);
+    io.animateBack(redFlash);
   }
 
   public void setBlueFlash() {
-    // candleSwerve.animate(blueFlash);
-    candleBack.animate(blueFlash);
-    // candleFront.animate(blueFlash);
+    io.animateBack(blueFlash);
   }
 
   public void setCoralSolid() {
-    // candle0.animate(coralSolid);
-    // candle1.animate(coralSolid);
-    // candle2.animate(coralSolid);
     clearAnimations();
-    candleBack.setLEDs(30, 30, 30);
-    candleSwerve.setLEDs(30, 30, 30, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
+    io.setBackLEDs(30, 30, 30);
+    io.setSwerveLEDs(30, 30, 30, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
   }
 
   public void setAlgaeSolid() {
-    // candle0.animate(algaeSolid);
-    // candle1.animate(algaeSolid);
-    // candle2.animate(algaeSolid);
     clearAnimations();
-    candleBack.setLEDs(0, 75, 25);
-    candleSwerve.setLEDs(0, 75, 25, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
+    io.setBackLEDs(0, 75, 25);
+    io.setSwerveLEDs(0, 75, 25, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
   }
 
   public void setCoralFlashing() {
-    // candleSwerve.animate(coralFlashing);
-    candleBack.animate(coralFlashing);
-    // candleFront.animate(coralFlashing);
+    io.animateBack(coralFlashing);
   }
 
   public void setAlgaeFlashing() {
-    // candleSwerve.animate(algaeFlashing);
-    candleBack.animate(algaeFlashing);
-    // candleFront.animate(algaeFlashing);
+    io.animateBack(algaeFlashing);
   }
 
   public void setCoralStrobing() {
-    // candleSwerve.animate(coralStrobing);
-    candleBack.animate(coralStrobing);
-    // candleFront.animate(coralStrobing);
+    io.animateBack(coralStrobing);
   }
 
   public void setAlgaeStrobing() {
-    // candleSwerve.animate(algaeStrobing);
-    candleBack.animate(algaeStrobing);
-    // candleFront.animate(algaeStrobing);
+    io.animateBack(algaeStrobing);
   }
 
   public void setCoralBouncing() {
-    // candleSwerve.animate(coralKnightRiderAnimation);
-    candleBack.animate(coralKnightRiderAnimation);
-    // candleFront.animate(coralKnightRiderAnimation);
+    io.animateBack(coralKnightRiderAnimation);
   }
 
   public void setAlgaeBouncing() {
-    // candleSwerve.animate(algaeKnightRiderAnimation);
-    candleBack.animate(algaeKnightRiderAnimation);
-    // candleFront.animate(algaeKnightRiderAnimation);
+    io.animateBack(algaeKnightRiderAnimation);
   }
 
   public void setRedBouncing() {
-    // candleSwerve.clearAnimation(0);
-    candleSwerve.animate(redCylonAnimation);
-    candleBack.animate(redCylonAnimation);
-    candleFront.animate(redCylonAnimation);
+    io.animateSwerve(redCylonAnimation);
+    io.animateBack(redCylonAnimation);
+    io.animateFront(redCylonAnimation);
   }
 
   public void setBlueBouncing() {
-    // candleSwerve.animate(blueCylonAnimation);
-    candleBack.animate(blueCylonAnimation);
-    candleFront.animate(blueCylonAnimation);
+    io.animateBack(blueCylonAnimation);
+    io.animateFront(blueCylonAnimation);
   }
 
   public void weLikeToParty() {
-    candleBack.animate(party);
-    candleFront.animate(party);
-    candleSwerve.animate(party);
+    io.animateBack(party);
+    io.animateFront(party);
+    io.animateSwerve(party);
   }
 
   public void setManual() {
     switch (allianceState) {
       case RED:
-        candleFront.setLEDs(100, 0, 0);
-        // candleSwerve.setLEDs(100, 0, 0, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
+        io.setFrontLEDs(100, 0, 0);
         break;
       case BLUE:
-        candleFront.setLEDs(0, 0, 100);
-        // candleSwerve.setLEDs(0, 0, 100, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
+        io.setFrontLEDs(0, 0, 100);
         break;
       default:
-        candleFront.setLEDs(125, 80, 0);
-        // candleSwerve.setLEDs(125, 80, 0, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
+        io.setFrontLEDs(125, 80, 0);
         break;
     }
   }
 
   public void setAuto() {
-    candleFront.setLEDs(80, 0, 80);
-    // candleSwerve.setLEDs(80, 0, 80, 0, ledsPerSwerve * 0, ledsPerSwerve * 2);
+    io.setFrontLEDs(80, 0, 80);
   }
-
-  /*
-   * 
-   * 
-   * 
-   * 
-   * 
-   * 
-   * 
-   * 
-   * 
-   * 
-   * 
-   * 
-   * 
-   * 
-   * s
-   */
 
   /**
    * Initializes the Lights subsystem with the specified field side.
@@ -650,8 +494,6 @@ public class Lights extends SubsystemBase {
    * @param fieldSide The side of the field to initialize with.
    */
   public void init(String fieldSide) {
-    candleSwerve.clearAnimation(0);
-    candleBack.clearAnimation(0);
-    candleFront.clearAnimation(0);
+    clearAnimations();
   }
 }

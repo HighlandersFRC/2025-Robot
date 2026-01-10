@@ -13,6 +13,8 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class Constants {
@@ -69,14 +71,9 @@ public final class Constants {
 
         }
 
-        public static void periodic() {
-                int index = Autonomous.getSelectedPathIndex();
-                if (index == -1 || index > Constants.Autonomous.paths.length) {
-                        Logger.recordOutput("Selected Auto", "Do Nothing");
-                } else {
-                        Logger.recordOutput("Selected Auto", Autonomous.paths[index]);
-                }
-        }
+        public static final double closedLoopSimResolution = 0.01; // seconds
+
+        public static final double G = 9.80665;
 
         public static void init() {
 
@@ -3532,6 +3529,37 @@ public final class Constants {
 
         // Physical constants (e.g. field and robot dimensions)
         public static final class Physical {
+                public static final class Elevator {
+                        public static final int NUM_MOTORS = 2;
+                        public static final double CARRIAGE_MASS_LB = 9.206;
+                        public static final double STAGE_2_MASS_LB = 2.933;
+                        public static final double MOTOR_TO_DRUM_REDUCTION = 44 / 9;
+                        public static final double DRUM_DIAMETER_INCHES = 1.5;
+                        public static final double STAGE_1_MOI = Units.lbsToKilograms(CARRIAGE_MASS_LB) * Math
+                                        .pow(Units.inchesToMeters(DRUM_DIAMETER_INCHES / 2), 2.0);
+                        public static final double STAGE_2_MOI = Units
+                                        .lbsToKilograms(STAGE_2_MASS_LB + CARRIAGE_MASS_LB)
+                                        * Math.pow(Units.inchesToMeters(DRUM_DIAMETER_INCHES / 2), 2.0);
+                }
+
+                public static final class Pivot {
+                        public static final int NUM_MOTORS = 1;
+                        public static final double ARM_MASS_LB = 5.98;
+                        public static final double R_CG_M = 11.68;
+                        public static final double MOI = Units.lbsToKilograms(ARM_MASS_LB)
+                                        * Math.pow(Units.inchesToMeters(R_CG_M), 2.0);
+                }
+
+                public static final class Manipulator {
+                        public static final double REDUCTION = 35 / 3;
+                        public static final double MOI_KG_M2 = 0.0000090589 * REDUCTION * REDUCTION; // moi at motor
+                                                                                                     // shaft, converted
+                                                                                                     // to roller shaft
+                        public static final int NUM_MOTORS = 1;
+                        public static final double VISCOUS_DAMPING_COEFF = 0.001; // Friction = VISCOUS_DAMPING_COEFF *
+                                                                                  // angular_velocity
+                }
+
                 public static final double FIELD_WIDTH = 8.052;
                 public static final double FIELD_LENGTH = 17.548;
                 public static final double WHEEL_DIAMETER = inchesToMeters(4);
@@ -3542,7 +3570,9 @@ public final class Constants {
                 public static final double MAX_ACCELERATION = feetToMeters(30.0); // TODO: actually tune the top speed
                                                                                   // and max acceleration. Add a max
                                                                                   // deceleration if needed.
-
+                public static final double TWIST_MOI = Units.lbsToKilograms(5.98)
+                                * Math.pow(Units.inchesToMeters(0.5), 2.0);// used cad to find
+                public static final int TWIST_MOTOR_COUNT = 1;
                 public static final double ROBOT_LENGTH = inchesToMeters(26);
                 public static final double ROBOT_WIDTH = inchesToMeters(26);
                 public static final double MODULE_OFFSET = inchesToMeters(2.625); // TODO: is this different for mk5s?
@@ -3620,6 +3650,7 @@ public final class Constants {
                 public static final double ELEVATOR_LOLLIPOP_POSITION_M = inchesToMeters(0.0);
                 public static final double ELEVATOR_PRE_HANDOFF_POSITION_M = inchesToMeters(39.0);
                 public static final double ELEVATOR_HANDOFF_POSITION_M = inchesToMeters(35.0);
+                public static final double ELEVATOR_MAX_HEIGHT = inchesToMeters(61.625);
 
                 public enum ElevatorPosition {
                         kDOWN(ELEVATOR_BOTTOM_POSITION_M, Ratios.elevatorMetersToRotations(ELEVATOR_BOTTOM_POSITION_M)),
@@ -3746,6 +3777,51 @@ public final class Constants {
                                 this.degrees = degrees;
                                 this.rotations = rotations;
                         }
+                }
+
+                public class TwistSetpoints {
+                        public static final double TWIST_DOWN = 0.25; // rotations
+                        public static final double TWIST_SIDE = 0.0; // rotations
+                        public static final double TWIST_UP = -0.25; // rotations
+                        public static final double TWIST_DEFAULT = 0.0; // rotations
+                        public static final double ARM_RETRACTED_POSITION_M = inchesToMeters(6.0);
+                }
+        }
+
+        // PID constants
+        public static final class PIDConstants {
+                public static final class Twist {
+                        public static final double kP0 = 40.0;
+                        public static final double kI0 = 0.0;
+                        public static final double kD0 = 4.6;
+                        public static final double kS0 = 5.0;
+                        public static final double kP1 = 33.0;
+                        public static final double kI1 = 0.0;
+                        public static final double kD1 = 6.0;
+                        public static final double kS1 = 3.0;
+                }
+
+                public static final class Elevator {
+                        private static double elevatorMultiplier = 45.01 / 33.39;
+                        public static final double kP0 = 33.39 * elevatorMultiplier;
+                        public static final double kI0 = 0.0 * elevatorMultiplier;
+                        public static final double kD0 = 2.7 * elevatorMultiplier;
+                        public static final double kG0 = 4.499 * elevatorMultiplier;
+                        public static final double kP1 = 75.83 * elevatorMultiplier;
+                        public static final double kI1 = 0.0 * elevatorMultiplier;
+                        public static final double kD1 = 4.690 * elevatorMultiplier;
+                        public static final double kG1 = 8.044 * elevatorMultiplier;
+                        public static final double kP2 = 33.39 * elevatorMultiplier * 0.5;
+                        public static final double kI2 = 0.0 * elevatorMultiplier * 0.5;
+                        public static final double kD2 = 2.7 * elevatorMultiplier * 0.5;
+                        public static final double kG2 = 4.499 * elevatorMultiplier * 0.5;
+                }
+
+                public static final class Pivot {
+                        public static final double kP0 = 100.0;
+                        public static final double kI0 = 0.0;
+                        public static final double kD0 = 5.0;
+                        public static final double kG0 = 0.0;
                 }
         }
 
@@ -4044,7 +4120,7 @@ public final class Constants {
                 public static final double ELEVATOR_FIRST_STAGE = Constants.inchesToMeters(23.25);
                 public static final double ELEVATOR_MOTOR_ROTATIONS_FOR_FIRST_STAGE = 20.425781;
                 public static final double ELEVATOR_MOTOR_ROTATIONS_PER_METER = ELEVATOR_MOTOR_ROTATIONS_FOR_FIRST_STAGE
-                                * (1 / ELEVATOR_FIRST_STAGE);
+                                * (1 / ELEVATOR_FIRST_STAGE); // lmao
 
                 public static double elevatorRotationsToMeters(double rotations) {
                         return rotations / ELEVATOR_MOTOR_ROTATIONS_PER_METER;
@@ -4111,6 +4187,24 @@ public final class Constants {
                 public static final double LEFT_TRIGGER_DEADZONE = 0.1;
                 public static final double LEFT_STICK_DEADZONE = 0.03;
                 public static final double RIGHT_STICK_DEADZONE = 0.05;
+        }
+
+        // Motor Specs (used for simulation)
+        public static final class MotorSpecs {
+                public static final class x44 {
+                        public static final double X44_FREE_SPEED_RPM = 7530;
+                        public static final double X44_STALL_TORQUE_NM = 4.05;
+                        public static final double X44_STALL_CURRENT_A = 275;
+                        public static final double X44_FREE_CURRENT_A = 1.4;
+                        public static final double X44_NOMINAL_VOLTAGE_V = 12;
+
+                        public static DCMotor getX44Gearbox(int numMotors) {
+                                return new DCMotor(X44_NOMINAL_VOLTAGE_V, X44_STALL_TORQUE_NM, X44_STALL_CURRENT_A,
+                                                X44_FREE_CURRENT_A, Units.rotationsPerMinuteToRadiansPerSecond(
+                                                                X44_FREE_SPEED_RPM),
+                                                numMotors);
+                        }
+                }
         }
 
         /**

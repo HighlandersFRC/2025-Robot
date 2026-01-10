@@ -4,15 +4,19 @@ import java.util.logging.Level;
 
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.Autonomous;
 import frc.robot.subsystems.Superstructure.SuperState;
 import frc.robot.tools.logging.AdvantageKitMultiLevelLogHandler;
 
@@ -28,6 +32,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotInit() {
+    Globals.initTime = Timer.getFPGATimestamp();
     /*
      * The Logging Framework built into Java has 5 levels of logging:
      * 
@@ -97,7 +102,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    Logger.recordOutput("MT2 Odometry", m_robotContainer.drive.getMT2Odometry());
+    Logger.recordOutput("MT2 Odometry", m_robotContainer.drive.getMt2Pose2d());
     m_robotContainer.superstructure.algaeMode = m_robotContainer.algaeMode;
     m_robotContainer.lights.updateIntakeItem(m_robotContainer.manipulator.getArmItem());
     m_robotContainer.manipulator.updateAlgaeMode(m_robotContainer.algaeMode);
@@ -106,13 +111,29 @@ public class Robot extends LoggedRobot {
     m_robotContainer.drive.algaeMode = m_robotContainer.algaeMode;
     Logger.recordOutput("Algae Mode", m_robotContainer.algaeMode);
     Logger.recordOutput("Manual Mode", m_robotContainer.manualMode);
-    Logger.recordOutput("IMU", m_robotContainer.peripherals.getPigeonAngle());
-    Constants.periodic();
+    Logger.recordOutput("IMU", m_robotContainer.drive.getGyroYaw());
+    int index = Autonomous.getSelectedPathIndex();
+    if (index == -1 || index > Constants.Autonomous.paths.length) {
+      Logger.recordOutput("Selected Auto", "Do Nothing");
+    } else {
+      Logger.recordOutput("Selected Auto", Autonomous.paths[index]);
+    }
+    Globals.loopPeriodSecs = Timer.getFPGATimestamp() - Globals.prevTimeSecs;
+    Globals.prevTimeSecs = Timer.getFPGATimestamp();
+    Globals.runTime = Timer.getFPGATimestamp() - Globals.initTime;
+
     m_robotContainer.lights.periodic();
     m_robotContainer.peripherals.periodic();
     m_logHandler.write();
     Logger.recordOutput("finished", m_robotContainer.superstructure.placedCoralL4());
-
+    LoggedMechanismLigament2d twistLigament2d = m_robotContainer.twist.getLigament();
+    LoggedMechanismLigament2d elevatorLigament2d = m_robotContainer.elevator.getElevatorLigament();
+    LoggedMechanismLigament2d pivotLigament2d = m_robotContainer.pivot.getLigament();
+    pivotLigament2d.append(twistLigament2d);
+    elevatorLigament2d.append(pivotLigament2d);
+    LoggedMechanism2d bot = new LoggedMechanism2d(2.0, 2.6);
+    bot.getRoot("elevator", 1.0, Units.inchesToMeters(12.5)).append(elevatorLigament2d);
+    Logger.recordOutput("Arm Sim", bot);
   }
 
   @Override
@@ -179,7 +200,6 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopPeriodic() {
-    this.m_robotContainer.drive.teleopPeriodic();
     if (OI.driverB.getAsBoolean()) {
       if (bPressed) {
         m_robotContainer.algaeMode = !m_robotContainer.algaeMode;
