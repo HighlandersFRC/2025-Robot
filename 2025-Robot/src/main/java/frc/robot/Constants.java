@@ -3565,11 +3565,14 @@ public final class Constants {
                 public static final double WHEEL_DIAMETER = inchesToMeters(4);
                 public static final double WHEEL_CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER;
                 public static final double WHEEL_ROTATION_PER_METER = 1 / WHEEL_CIRCUMFERENCE;
-                public static final double WHEEL_TO_FRAME_DISTANCE = inchesToMeters(2.5); // TODO: is this different for mk5s?
+                public static final double WHEEL_TO_FRAME_DISTANCE = inchesToMeters(2.5); // TODO: is this different for
+                                                                                          // mk5s?
                 public static final double TOP_SPEED = feetToMeters(30.0);
+                public static final double SIM_TOP_SPEED = 6.0; // meters per second
                 public static final double MAX_ACCELERATION = feetToMeters(30.0); // TODO: actually tune the top speed
                                                                                   // and max acceleration. Add a max
                                                                                   // deceleration if needed.
+                public static final double SIM_MAX_ACCELERATION = 4.0; // meters per second
                 public static final double TWIST_MOI = Units.lbsToKilograms(5.98)
                                 * Math.pow(Units.inchesToMeters(0.5), 2.0);// used cad to find
                 public static final int TWIST_MOTOR_COUNT = 1;
@@ -3578,6 +3581,7 @@ public final class Constants {
                 public static final double MODULE_OFFSET = inchesToMeters(2.625); // TODO: is this different for mk5s?
                 public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
                                 ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
+                public static final double SIM_MAX_ANGULAR_ACCELERATION = SIM_MAX_ACCELERATION / ROBOT_RADIUS;
                 public static double INTAKE_X_OFFSET_FRONT = inchesToMeters(23.5);
                 public static double INTAKE_Y_OFFSET_FRONT = inchesToMeters(0.7);
                 public static double INTAKE_X_OFFSET_BACK = inchesToMeters(25.3);

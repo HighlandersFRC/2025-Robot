@@ -2,81 +2,92 @@ package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Constants;
+import frc.robot.Globals;
 import frc.robot.subsystems.drive.Drive.DriveState;
 import frc.robot.tools.math.Vector;
 
 public class DriveIOSim extends DriveIO {
+    private Vector velocityVector = new Vector(0, 0);
+    private Vector positionVector = new Vector(0, 0);
+    private Vector wantedVelocityVector = new Vector(0, 0);
+    private double angle = 0; // radians
+    private double angularVelocity = 0; // radians per second
+    private double wantedAngularVelocity = 0; // radians per second squared
 
     @Override
     void zeroIMU() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'zeroIMU'");
+        angle = 0;
     }
 
     @Override
     void setYaw(double degrees) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setYaw'");
+        angle = Math.toRadians(degrees);
     }
 
     @Override
     Rotation2d getYaw() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getYaw'");
+        return new Rotation2d(angle);
     }
 
     @Override
     void setWheelsStraight() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setWheelsStraight'");
     }
 
     @Override
     protected void setCurrentLimits(int supply, int stator) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setCurrentLimits'");
     }
 
     @Override
     protected void setPosition(Pose2d pose) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setPosition'");
+        positionVector = new Vector(pose.getX(), pose.getY());
+        angle = pose.getRotation().getRadians();
     }
 
     @Override
     protected Pose2d getPosition() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPosition'");
+        return new Pose2d(positionVector.getI(), positionVector.getJ(), new Rotation2d(angle));
     }
 
     @Override
     protected void drive(Vector velocityVector, double turnVelocity) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'drive'");
+        wantedVelocityVector = velocityVector.flipY();
+        wantedAngularVelocity = -turnVelocity;
     }
 
     @Override
     protected void driveRobotCentric(Vector velocityVector, double turnRadiansPerSec) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'driveRobotCentric'");
+        wantedVelocityVector = velocityVector.rotate(angle).flipY();
+        wantedAngularVelocity = -turnRadiansPerSec;
     }
 
     @Override
     protected void driveCamCentric(Vector velocityVector, double turnRadiansPerSec, double camAngle) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'driveCamCentric'");
+        wantedVelocityVector = velocityVector.rotate(camAngle).flipY();
+        wantedAngularVelocity = -turnRadiansPerSec;
     }
 
     @Override
     protected Vector getVelocityVector() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getVelocityVector'");
+        return velocityVector;
     }
 
     @Override
     void update(DriveState currentState) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        int numSteps = (int) Math.floor(Globals.loopPeriodSecs / Constants.closedLoopSimResolution);
+        double dt = Globals.loopPeriodSecs / numSteps;
+        for (int i = 0; i < numSteps; i++) {
+            Vector acceleration = wantedVelocityVector.subtract(velocityVector).unit()
+                    .scaled(Constants.Physical.SIM_MAX_ACCELERATION * 10);
+            velocityVector = velocityVector.add(acceleration.scaled(dt));
+            if (velocityVector.magnitude() > Constants.Physical.SIM_TOP_SPEED) {
+                velocityVector = velocityVector.scaled(Constants.Physical.SIM_TOP_SPEED / velocityVector.magnitude());
+            }
+            positionVector = positionVector.add(velocityVector.scaled(dt));
+            double angularAcceleration = Math.signum(wantedAngularVelocity - angularVelocity)
+                    * Constants.Physical.SIM_MAX_ANGULAR_ACCELERATION;
+            angularVelocity += angularAcceleration * dt;
+            angle += angularVelocity * dt;
+        }
     }
-
 }
