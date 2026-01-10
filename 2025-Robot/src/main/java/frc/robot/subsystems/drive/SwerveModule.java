@@ -97,7 +97,7 @@ public class SwerveModule extends SubsystemBase {
     TalonFXConfiguration angleMotorConfig = new TalonFXConfiguration();
     TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
 
-    angleMotorConfig.Slot0.kP = 370.0;
+    angleMotorConfig.Slot0.kP = 850.0;
     angleMotorConfig.Slot0.kI = 0.0;
     angleMotorConfig.Slot0.kD = 15;
 
@@ -112,24 +112,24 @@ public class SwerveModule extends SubsystemBase {
 
     angleMotorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.1;
 
-    angleMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    angleMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
     angleMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     angleMotorConfig.Feedback.FeedbackRemoteSensorID = canCoder.getDeviceID();
     angleMotorConfig.Feedback.SensorToMechanismRatio = 1.0;
     angleMotorConfig.Feedback.RotorToSensorRatio = Constants.Ratios.STEER_GEAR_RATIO;
 
-    if (moduleNumber == 2 || moduleNumber == 3) {
-      driveMotorConfig.Slot0.kP = 9.4;
-      driveMotorConfig.Slot0.kI = 0.0;
-      driveMotorConfig.Slot0.kD = 0.0;
-      driveMotorConfig.Slot0.kV = 0.0;
-    } else {
-      driveMotorConfig.Slot0.kP = 8.0;
-      driveMotorConfig.Slot0.kI = 0.0;
-      driveMotorConfig.Slot0.kD = 0.0;
-      driveMotorConfig.Slot0.kV = 0.0;
-    }
+    // if (moduleNumber == 2 || moduleNumber == 3) {
+    // driveMotorConfig.Slot0.kP = 9.4;
+    // driveMotorConfig.Slot0.kI = 0.0;
+    // driveMotorConfig.Slot0.kD = 0.0;
+    // driveMotorConfig.Slot0.kV = 0.0;
+    // } else {
+    driveMotorConfig.Slot0.kP = 8.0;
+    driveMotorConfig.Slot0.kI = 0.0;
+    driveMotorConfig.Slot0.kD = 0.0;
+    driveMotorConfig.Slot0.kV = 0.0;
+    // }
 
     // driveMotorConfig.Slot1.kP = 4.0;
     // driveMotorConfig.Slot1.kI = 0.0;

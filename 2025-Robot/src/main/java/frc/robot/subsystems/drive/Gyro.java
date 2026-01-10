@@ -16,9 +16,10 @@ public class Gyro {
     private double pitchOffset = 0.0;
 
     public void init() {
-        pigeonConfig.MountPose.MountPosePitch = 0.3561480641365051;
-        pigeonConfig.MountPose.MountPoseRoll = -0.10366992652416229;
-        pigeonConfig.MountPose.MountPoseYaw = -0.24523599445819855;
+        // Set the mount pose configuration for the IMU // IN CORRECT ORDER NOW
+        pigeonConfig.MountPose.MountPoseYaw = -1.0769108533859253;
+        pigeonConfig.MountPose.MountPosePitch = 2.9378323554992676;
+        pigeonConfig.MountPose.MountPoseRoll = -1.7237112522125244;
 
         pigeonExtraConfig.MountPose.MountPosePitch = 2.9378318786621094;
         pigeonExtraConfig.MountPose.MountPoseRoll = -1.7237101793289185;
