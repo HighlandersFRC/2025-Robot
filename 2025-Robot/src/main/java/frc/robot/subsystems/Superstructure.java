@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
+import frc.robot.subsystems.FlyWheel.FlyWheelState;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.Climber.ClimbState;
 import frc.robot.subsystems.drive.Drive;
@@ -32,6 +33,7 @@ import frc.robot.subsystems.twist.Twist.TwistState;
 
 public class Superstructure extends SubsystemBase {
   private final Drive drive;
+  private final FlyWheel fly;
   private final Elevator elevator;
   private final Manipulator manipulator;
   private final Pivot pivot;
@@ -47,6 +49,7 @@ public class Superstructure extends SubsystemBase {
 
   public enum SuperState {
     DEFAULT,
+    FLY_WHEEL_TEST,
     AUTO_L1_PLACE,
     AUTO_L1_PLACE_MORE,
     AUTO_L2_PLACE,
@@ -114,10 +117,11 @@ public class Superstructure extends SubsystemBase {
   private boolean continueFeeding = false;
   private double handoffInitTime = 0.0;
 
-  public Superstructure(Drive drive, Elevator elevator, Manipulator manipulator, Pivot pivot, Twist twist,
+  public Superstructure(Drive drive, FlyWheel fly, Elevator elevator, Manipulator manipulator, Pivot pivot, Twist twist,
       Climber climber,
       Lights lights, Intake intake) {
     this.drive = drive;
+    this.fly = fly;
     this.elevator = elevator;
     this.manipulator = manipulator;
     this.pivot = pivot;
@@ -155,6 +159,9 @@ public class Superstructure extends SubsystemBase {
     switch (currentSuperState) {
       case DEFAULT:
         handleDefaultState();
+        break;
+      case FLY_WHEEL_TEST:
+        handleFlyWheelTestState();
         break;
       case ZERO:
         handleZeroState();
@@ -847,7 +854,12 @@ public class Superstructure extends SubsystemBase {
     }
   }
 
+  public void handleFlyWheelTestState() {
+    fly.setWantedState(FlyWheelState.SPINNING);
+  }
+
   public void handleDefaultState() {
+    fly.setWantedState(FlyWheelState.DEFAULT);
     // peripherals.setBackCamPipline(0);
     lights.setWantedState(LightsState.DEFAULT);
     drive.setWantedState(DriveState.DEFAULT);
@@ -2196,6 +2208,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   public void handleIdleState() {
+    fly.setWantedState(FlyWheelState.DEFAULT);
     intake.setWantedState(IntakeState.DEFAULT);
     if (Math.abs(twist.getTwistPosition()) < 30.0 || Math.abs(pivot.getPivotPosition()) > 60.0 / 360.0) {
       pivot.setWantedState(PivotState.DEFAULT);

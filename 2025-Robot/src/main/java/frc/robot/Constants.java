@@ -4132,6 +4132,9 @@ public final class Constants {
 
                 // intake
                 public static final double INTAKE_PIVOT_GEAR_RATIO = 30.0;
+
+                // Testing
+                public static final double TEST_MOTOR_TO_FLY_WHEEL_RATIO = 1.0;
         }
 
         // Can info such as IDs
@@ -4179,6 +4182,9 @@ public final class Constants {
                 public static final int INTAKE_ROLLER_MOTOR_ID = 16;
                 public static final int INTAKE_PIVOT_MOTOR_ID = 17;
                 public static final int INTAKE_BEAM_BREAK_PORT = 0;
+
+                // Testing
+                public static final int TEST_MOTOR_ID = 0;
         }
 
         // Misc. controller values
