@@ -112,11 +112,11 @@ public class Robot extends LoggedRobot {
     Logger.recordOutput("Algae Mode", m_robotContainer.algaeMode);
     Logger.recordOutput("Manual Mode", m_robotContainer.manualMode);
     Logger.recordOutput("IMU", m_robotContainer.drive.getGyroYaw());
-    int index = Autonomous.getSelectedPathIndex();
+    int index = Constants.Autonomous.getSelectedPathIndex();
     if (index == -1 || index > Constants.Autonomous.paths.length) {
       Logger.recordOutput("Selected Auto", "Do Nothing");
     } else {
-      Logger.recordOutput("Selected Auto", Autonomous.paths[index]);
+      Logger.recordOutput("Selected Auto", Constants.Autonomous.paths[index]);
     }
     Globals.loopPeriodSecs = Timer.getFPGATimestamp() - Globals.prevTimeSecs;
     Globals.prevTimeSecs = Timer.getFPGATimestamp();
