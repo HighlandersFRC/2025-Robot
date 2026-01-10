@@ -69,14 +69,10 @@ public class Peripherals {
     }
     photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
-    // Set the mount pose configuration for the IMU
-    pigeonConfig.MountPose.MountPosePitch = 0.3561480641365051;
-    pigeonConfig.MountPose.MountPoseRoll = -0.10366992652416229;
-    pigeonConfig.MountPose.MountPoseYaw = -0.24523599445819855;
-
-    pigeonExtraConfig.MountPose.MountPosePitch = 2.9378318786621094;
-    pigeonExtraConfig.MountPose.MountPoseRoll = -1.7237101793289185;
-    pigeonExtraConfig.MountPose.MountPoseYaw = -1.0769075155258179;
+    // Set the mount pose configuration for the IMU // IN CORRECT ORDER NOW
+    pigeonConfig.MountPose.MountPoseYaw = -1.0769108533859253;
+    pigeonConfig.MountPose.MountPosePitch = 2.9378323554992676;
+    pigeonConfig.MountPose.MountPoseRoll = -1.7237112522125244;
 
     // Apply the IMU configuration
     pigeon.getConfigurator().apply(pigeonConfig);
