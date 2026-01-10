@@ -105,7 +105,7 @@ public class DriveIOComp extends DriveIO {
                         new Translation3d(Constants.inchesToMeters(-12.375), Constants.inchesToMeters(9.375),
                                         Constants.inchesToMeters(8.6875)),
                         new Rotation3d(Math.toRadians(1.2), Math.toRadians(-19.7), Math.toRadians(181.53))); // 0.4,
-                                                                                                             // -20.5
+                                                                                                                                                                                                                                                                                           // -20.5
 
         Transform3d backRightReefRobotToCam = new Transform3d(
                         new Translation3d(Constants.inchesToMeters(
@@ -647,8 +647,31 @@ public class DriveIOComp extends DriveIO {
                 return mt2Odometry.getEstimatedPosition();
         }
 
+        public double[] getModuleSetpoints() {
+                double[] setpoints = {
+                                frontLeft.getAngleMotorSetpoint() * 360, frontLeft.getDriveMotorSetpoint(),
+                                frontRight.getAngleMotorSetpoint() * 360, frontRight.getDriveMotorSetpoint(),
+                                backLeft.getAngleMotorSetpoint() * 360, backLeft.getDriveMotorSetpoint(),
+                                backRight.getAngleMotorSetpoint() * 360, backRight.getDriveMotorSetpoint(),
+                };
+                return setpoints;
+        }
+
+        public double[] getModuleStates() {
+                double[] states = {
+                                frontLeft.getCanCoderPosition() * 360.0, frontLeft.getGroundSpeed(),
+                                frontRight.getCanCoderPosition() * 360.0, frontRight.getGroundSpeed(),
+                                backLeft.getCanCoderPosition() * 360.0, backLeft.getGroundSpeed(),
+                                backRight.getCanCoderPosition() * 360.0, backRight.getGroundSpeed(),
+                };
+                return states;
+        }
+
         @Override
         protected void drive(Vector velocityVector, double turnVelocity) {
+                Logger.recordOutput("Module Setpoints", getModuleSetpoints());
+                Logger.recordOutput("Module States", getModuleStates());
+                Logger.recordOutput("Robot Speed", getRobotSpeed());
                 double yaw = getYaw().getRadians();
                 frontLeft.drive(velocityVector, turnVelocity, yaw);
                 frontRight.drive(velocityVector, turnVelocity, yaw);
