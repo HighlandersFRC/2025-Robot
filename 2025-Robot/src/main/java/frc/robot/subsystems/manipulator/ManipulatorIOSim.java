@@ -11,6 +11,7 @@ import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.NumericalIntegration;
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.robot.Constants;
+import frc.robot.Globals;
 
 public class ManipulatorIOSim implements ManipulatorIO {
     DCMotor gearbox = Constants.MotorSpecs.x44.getX44Gearbox(Constants.Physical.Manipulator.NUM_MOTORS)
@@ -75,8 +76,8 @@ public class ManipulatorIOSim implements ManipulatorIO {
     @Override
     public void updateInputs() {
         System.out.println("simming manipulator");
-        update(Constants.loopPeriodSecs);
-        double dt = Constants.loopPeriodSecs;
+        update(Globals.loopPeriodSecs);
+        double dt = Globals.loopPeriodSecs;
         double dv = simState.get(1) - prevVel;
         acceleration = dv / dt;
     }

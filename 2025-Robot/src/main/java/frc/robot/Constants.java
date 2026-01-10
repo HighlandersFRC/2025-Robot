@@ -15,7 +15,6 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class Constants {
@@ -72,24 +71,9 @@ public final class Constants {
 
         }
 
-        public static double loopPeriodSecs;
-
         public static final double closedLoopSimResolution = 0.01; // seconds
 
         public static final double G = 9.80665;
-
-        private static double prevTimeSecs = 0.0;
-
-        public static void periodic() {
-                loopPeriodSecs = Timer.getFPGATimestamp() - prevTimeSecs;
-                prevTimeSecs = Timer.getFPGATimestamp();
-                int index = Autonomous.getSelectedPathIndex();
-                if (index == -1 || index > Constants.Autonomous.paths.length) {
-                        Logger.recordOutput("Selected Auto", "Do Nothing");
-                } else {
-                        Logger.recordOutput("Selected Auto", Autonomous.paths[index]);
-                }
-        }
 
         public static void init() {
 

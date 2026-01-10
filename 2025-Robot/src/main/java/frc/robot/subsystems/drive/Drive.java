@@ -45,104 +45,10 @@ import frc.robot.tools.math.Vector;
 // **Zero Wheels with the bolt head showing on the left when the front side(battery) is facing down/away from you**
 
 public class Drive extends SubsystemBase {
-  private final TalonFX frontRightDriveMotor = new TalonFX(Constants.CANInfo.FRONT_RIGHT_DRIVE_MOTOR_ID,
-      Constants.CANInfo.CANBUS_NAME);
-  private final TalonFX frontRightAngleMotor = new TalonFX(Constants.CANInfo.FRONT_RIGHT_ANGLE_MOTOR_ID,
-      Constants.CANInfo.CANBUS_NAME);
-  private final TalonFX frontLeftDriveMotor = new TalonFX(Constants.CANInfo.FRONT_LEFT_DRIVE_MOTOR_ID,
-      Constants.CANInfo.CANBUS_NAME);
-  private final TalonFX frontLeftAngleMotor = new TalonFX(Constants.CANInfo.FRONT_LEFT_ANGLE_MOTOR_ID,
-      Constants.CANInfo.CANBUS_NAME);
-  private final TalonFX backLeftDriveMotor = new TalonFX(Constants.CANInfo.BACK_LEFT_DRIVE_MOTOR_ID,
-      Constants.CANInfo.CANBUS_NAME);
-  private final TalonFX backLeftAngleMotor = new TalonFX(Constants.CANInfo.BACK_LEFT_ANGLE_MOTOR_ID,
-      Constants.CANInfo.CANBUS_NAME);
-  private final TalonFX backRightDriveMotor = new TalonFX(Constants.CANInfo.BACK_RIGHT_DRIVE_MOTOR_ID,
-      Constants.CANInfo.CANBUS_NAME);
-  private final TalonFX backRightAngleMotor = new TalonFX(Constants.CANInfo.BACK_RIGHT_ANGLE_MOTOR_ID,
-      Constants.CANInfo.CANBUS_NAME);
 
-  private final CANcoder frontRightCanCoder = new CANcoder(Constants.CANInfo.FRONT_RIGHT_MODULE_CANCODER_ID,
-      Constants.CANInfo.CANBUS_NAME);
-  private final CANcoder frontLeftCanCoder = new CANcoder(Constants.CANInfo.FRONT_LEFT_MODULE_CANCODER_ID,
-      Constants.CANInfo.CANBUS_NAME);
-  private final CANcoder backLeftCanCoder = new CANcoder(Constants.CANInfo.BACK_LEFT_MODULE_CANCODER_ID,
-      Constants.CANInfo.CANBUS_NAME);
-  private final CANcoder backRightCanCoder = new CANcoder(Constants.CANInfo.BACK_RIGHT_MODULE_CANCODER_ID,
-      Constants.CANInfo.CANBUS_NAME);
-
-  public boolean getSwerveCAN() { // checks to see if all of the swerve motors and encoders are connected
-    if (getSwerveMotorsConnected() == 8 && getSwerveCANCodersConnected() == 4) {
-      return true;
-    } else
-      return false;
-  }
-
-  public int getSwerveMotorsConnected() { // counts all of the swerve motors that are connected
-    int count = 0;
-    if (frontRightDriveMotor.clearStickyFault_BootDuringEnable() == StatusCode.OK) {
-      count++;
-    }
-    if (frontLeftDriveMotor.clearStickyFault_BootDuringEnable() == StatusCode.OK) {
-      count++;
-    }
-    if (backRightDriveMotor.clearStickyFault_BootDuringEnable() == StatusCode.OK) {
-      count++;
-    }
-    if (backLeftDriveMotor.clearStickyFault_BootDuringEnable() == StatusCode.OK) {
-      count++;
-    }
-    if (frontRightAngleMotor.clearStickyFault_BootDuringEnable() == StatusCode.OK) {
-      count++;
-    }
-    if (frontLeftAngleMotor.clearStickyFault_BootDuringEnable() == StatusCode.OK) {
-      count++;
-    }
-    if (backRightAngleMotor.clearStickyFault_BootDuringEnable() == StatusCode.OK) {
-      count++;
-    }
-    if (backLeftAngleMotor.clearStickyFault_BootDuringEnable() == StatusCode.OK) {
-      count++;
-    }
-    return count;
-  }
-
-  public int getSwerveCANCodersConnected() { // counts all of the swerve encoders that are connected
-    int count = 0;
-    if (frontRightCanCoder.clearStickyFault_BadMagnet() == StatusCode.OK) {
-      count++;
-    }
-    if (frontLeftCanCoder.clearStickyFault_BadMagnet() == StatusCode.OK) {
-      count++;
-    }
-    if (backRightCanCoder.clearStickyFault_BadMagnet() == StatusCode.OK) {
-      count++;
-    }
-    if (backLeftCanCoder.clearStickyFault_BadMagnet() == StatusCode.OK) {
-      count++;
-    }
-    return count;
-  }
-
-  // creates all 4 modules
-  private final SwerveModule frontRight;
-  private final SwerveModule frontLeft;
-  private final SwerveModule backLeft;
-  private final SwerveModule backRight;
-
+  DriveIO io;
   Peripherals peripherals;
-  GyroIO gyro; // new
   boolean firstClimb = false;
-
-  // xy position of module based on robot width and distance from edge of robot
-  private final double moduleX = ((Constants.Physical.ROBOT_LENGTH) / 2) - Constants.Physical.MODULE_OFFSET;
-  private final double moduleY = ((Constants.Physical.ROBOT_WIDTH) / 2) - Constants.Physical.MODULE_OFFSET;
-
-  // Locations for the swerve drive modules relative to the robot center.
-  Translation2d m_frontLeftLocation = new Translation2d(moduleX, moduleY);
-  Translation2d m_frontRightLocation = new Translation2d(moduleX, -moduleY);
-  Translation2d m_backLeftLocation = new Translation2d(-moduleX, moduleY);
-  Translation2d m_backRightLocation = new Translation2d(-moduleX, -moduleY);
 
   // odometry
 
@@ -150,58 +56,6 @@ public class Drive extends SubsystemBase {
   private double m_currentTime;
 
   // Creating my kinematics object using the module locations
-  SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
-      m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
-
-  SwerveDrivePoseEstimator mt2Odometry;
-  Pose2d mt2Pose;
-
-  PhotonPoseEstimator photonPoseEstimator;
-  PhotonPoseEstimator backPhotonPoseEstimator;
-  PhotonPoseEstimator backLeftPhotonPoseEstimator;
-  PhotonPoseEstimator backRightPhotonPoseEstimator;
-
-  // PhotonPoseEstimator rightPhotonPoseEstimator;
-  // PhotonPoseEstimator leftPhotonPoseEstimator;
-  PhotonPoseEstimator swervePhotonPoseEstimator;
-  PhotonPoseEstimator gamePiecePhotonPoseEstimator;
-  AprilTagFieldLayout aprilTagFieldLayout;
-
-  // *********************NOTE THE PITCH IS POSITIVE DOWNWARDS
-  // **********************************
-
-  Transform3d frontReefRobotToCam = new Transform3d( // top front reef cam
-      new Translation3d(Constants.inchesToMeters(2.0), Constants.inchesToMeters(-11.5),
-          Constants.inchesToMeters(23.625)),
-      new Rotation3d(Math.toRadians(0.3), Math.toRadians(25.6), Math.toRadians(15.0)));
-
-  Transform3d frontSwerveRobotToCam = new Transform3d( // front reef cam on swerve module
-      new Translation3d(Constants.inchesToMeters(11.75),
-          Constants.inchesToMeters(-8.5),
-          Constants.inchesToMeters(8.75)),
-      new Rotation3d(Math.toRadians(1.1), Math.toRadians(15.4),
-          Math.toRadians(35.0)));
-
-  Transform3d backReefRobotToCam = new Transform3d( // top back reef cam
-      new Translation3d(Constants.inchesToMeters(-2.0), Constants.inchesToMeters(-11.5),
-          Constants.inchesToMeters(23.625)),
-      new Rotation3d(Math.toRadians(2.8), Math.toRadians(25.9), Math.toRadians(165.0)));
-
-  Transform3d backLeftReefRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(-12.375), Constants.inchesToMeters(9.375),
-          Constants.inchesToMeters(8.6875)),
-      new Rotation3d(Math.toRadians(1.2), Math.toRadians(-19.7), Math.toRadians(181.53))); // 0.4, -20.5
-
-  Transform3d backRightReefRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(
-          -12.375), Constants.inchesToMeters(-9.25),
-          Constants.inchesToMeters(8.6875)),
-      new Rotation3d(Math.toRadians(1.5), Math.toRadians(-19.7), Math.toRadians(178.47)));
-
-  Transform3d gamePieceReefRobotToCam = new Transform3d(
-      new Translation3d(Constants.inchesToMeters(2.0), Constants.inchesToMeters(-11.5),
-          Constants.inchesToMeters(20.25)),
-      new Rotation3d(Math.toRadians(1.0), Math.toRadians(21.4), Math.toRadians(15.0)));
 
   double initAngle;
   double setAngle;
@@ -339,7 +193,7 @@ public class Drive extends SubsystemBase {
 
   private String m_fieldSide = "blue";
 
-  private double angleSetpoint = 0;
+  AprilTagFieldLayout aprilTagFieldLayout;
   double startX;
   double startY;
 
@@ -386,36 +240,15 @@ public class Drive extends SubsystemBase {
   public Drive(Peripherals peripherals, Elevator elevator) {
     this.peripherals = peripherals;
     this.elevator = elevator;
-    // if (RobotBase.isReal()) {
-    frontRight = new SwerveModule(1, new ModuleIOTalonFX(
-        frontRightAngleMotor, frontRightDriveMotor, frontRightCanCoder));
-    frontLeft = new SwerveModule(2, new ModuleIOTalonFX(
-        frontLeftAngleMotor, frontLeftDriveMotor, frontLeftCanCoder));
-    backLeft = new SwerveModule(3, new ModuleIOTalonFX(
-        backLeftAngleMotor, backLeftDriveMotor, backLeftCanCoder));
-    backRight = new SwerveModule(4, new ModuleIOTalonFX(
-        backRightAngleMotor, backRightDriveMotor, backRightCanCoder));
-    gyro = new GyroIOComp();
-    // } else {
-    // frontRight = new SwerveModule(1, new ModuleIOSim());
-    // frontLeft = new SwerveModule(2, new ModuleIOSim());
-    // backLeft = new SwerveModule(3, new ModuleIOSim());
-    // backRight = new SwerveModule(4, new ModuleIOSim());
-    // }
-
-    SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
-    swerveModulePositions[0] = new SwerveModulePosition(0, new Rotation2d(frontLeft.getCanCoderPositionRadians()));
-    swerveModulePositions[1] = new SwerveModulePosition(0, new Rotation2d(frontRight.getCanCoderPositionRadians()));
-    swerveModulePositions[2] = new SwerveModulePosition(0, new Rotation2d(backLeft.getCanCoderPositionRadians()));
-    swerveModulePositions[3] = new SwerveModulePosition(0, new Rotation2d(backRight.getCanCoderPositionRadians()));
-
-    Pose2d m_pose = new Pose2d();
-    mt2Odometry = new SwerveDrivePoseEstimator(m_kinematics,
-        new Rotation2d(Math.toRadians(gyro.getYawDegrees())), swerveModulePositions, m_pose);
+    if (RobotBase.isReal()) {
+      this.io = new DriveIOComp(this.peripherals);
+    } else {
+      this.io = new DriveIOSim();
+    }
   }
 
   // public boolean atSetpoint() {
-  // double currentAngle = peripherals.getPigeonAngle();
+  // double currentAngle = gyro.getYawDegrees();
   // if (getFieldSide().equals("red")) {
   // currentAngle -= 180;
   // }
@@ -429,12 +262,6 @@ public class Drive extends SubsystemBase {
 
   public void setWantedState(DriveState wantedState, double angle) {
     this.wantedState = wantedState;
-    setSetpointAngle(angle);
-  }
-
-  public void setSetpointAngle(double angle) {
-    this.angleSetpoint = angle;
-    // Logger.recordOutput("Setpoint Theta: ", angle);
   }
 
   /**
@@ -457,36 +284,6 @@ public class Drive extends SubsystemBase {
     } catch (Exception e) {
       java.util.logging.Logger.getGlobal().warning("error with april tag: " + e.getMessage());
     }
-    photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontReefRobotToCam);
-
-    backPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backReefRobotToCam);
-
-    backLeftPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backLeftReefRobotToCam);
-
-    backRightPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backRightReefRobotToCam);
-
-    swervePhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontSwerveRobotToCam);
-
-    // rightPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-    // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontBargeRobotToCam);
-
-    // leftPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-    // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backBargeRobotToCam);
-
-    gamePiecePhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, gamePieceReefRobotToCam);
-
-    frontRight.init();
-    frontLeft.init();
-    backRight.init();
-    backLeft.init();
-
-    gyro.init();
     xxPID.setMinOutput(-3.0);
     xxPID.setMaxOutput(3.0);
 
@@ -558,26 +355,7 @@ public class Drive extends SubsystemBase {
   }
 
   public void teleopInit() {
-    angleSetpoint = gyro.getYawDegrees();
-    if (getFieldSide() == "red") {
-      angleSetpoint -= 180;
-    }
-    turningPID.setSetPoint(angleSetpoint);
-    if (Math.abs(turningPID.getSetPoint() - angleSetpoint) > 100) {
-      turningPID.setSetPoint(angleSetpoint);
-    }
 
-    frontLeft.setDriveCurrentLimits(120, 120); // if robot starts browning out in a placement sequence, just drop these
-                                               // to 40
-    frontRight.setDriveCurrentLimits(120, 120);
-    backLeft.setDriveCurrentLimits(120, 120);
-    backRight.setDriveCurrentLimits(120, 120);
-  }
-
-  public void teleopPeriodic() {
-    if (Math.abs(turningPID.getSetPoint() - angleSetpoint) > 100) {
-      turningPID.setSetPoint(angleSetpoint);
-    }
   }
 
   /**
@@ -587,31 +365,7 @@ public class Drive extends SubsystemBase {
    * odometry with this new zeroed angle.
    */
   public void zeroIMU() {
-    angleSetpoint = 0;
-    turningPID.setSetPoint(angleSetpoint);
-    gyro.zeroYaw();
-    // SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
-    // swerveModulePositions[0] = new
-    // SwerveModulePosition(frontLeft.getModuleDistance(),
-    // new Rotation2d(frontLeft.getCanCoderPositionRadians()));
-    // swerveModulePositions[1] = new
-    // SwerveModulePosition(frontRight.getModuleDistance(),
-    // new Rotation2d(frontRight.getCanCoderPositionRadians()));
-    // swerveModulePositions[2] = new
-    // SwerveModulePosition(backLeft.getModuleDistance(),
-    // new Rotation2d(backLeft.getCanCoderPositionRadians()));
-    // swerveModulePositions[3] = new
-    // SwerveModulePosition(backRight.getModuleDistance(),
-    // new Rotation2d(backRight.getCanCoderPositionRadians()));
-
-    // m_pose = m_odometry.update(new
-    // Rotation2d((Math.toRadians(peripherals.getPigeonAngle()))),
-    // swerveModulePositions);
-    // loggingPose = loggingOdometry.update(new Rotation2d(
-    // Math.toRadians(peripherals.getPigeonAngle())), swerveModulePositions);
-    // mt2Pose = mt2Odometry.update(new
-    // Rotation2d(Math.toRadians(peripherals.getPigeonAngle())),
-    // swerveModulePositions);
+    io.zeroIMU();
   }
 
   /**
@@ -620,7 +374,7 @@ public class Drive extends SubsystemBase {
    * wraps it around 360 degrees.
    */
   public void setPigeonAfterAuto() {
-    gyro.setYaw((gyro.getYawDegrees() + 180) % 360);
+    io.setYaw((io.getYaw().getDegrees() + 180) % 360);
   }
 
   /**
@@ -629,7 +383,7 @@ public class Drive extends SubsystemBase {
    * @param angle The angle to set for the pigeon sensor in degrees.
    */
   public void setPigeonAngle(double angle) {
-    gyro.setYaw(angle);
+    io.setYaw(angle);
   }
 
   /**
@@ -638,7 +392,7 @@ public class Drive extends SubsystemBase {
    * @return The current angle reported by the pigeon sensor in degrees.
    */
   public double getPigeonAngle() {
-    return gyro.getYawDegrees();
+    return io.getYaw().getDegrees();
   }
 
   /**
@@ -646,10 +400,7 @@ public class Drive extends SubsystemBase {
    * straight.
    */
   public void setWheelsStraight() {
-    frontRight.setWheelPID(0.0, 0.0);
-    frontLeft.setWheelPID(0.0, 0.0);
-    backLeft.setWheelPID(0.0, 0.0);
-    backRight.setWheelPID(0.0, 0.0);
+
   }
 
   /**
@@ -679,28 +430,11 @@ public class Drive extends SubsystemBase {
       firstPointY = Constants.Physical.FIELD_WIDTH - firstPointY;
       firstPointAngle = -firstPointAngle;
     }
-
-    frontLeft.setDriveCurrentLimits(60, 120);
-    frontRight.setDriveCurrentLimits(60, 120);
-    backLeft.setDriveCurrentLimits(60, 120);
-    backRight.setDriveCurrentLimits(60, 120);
-
-    gyro.setYaw(Math.toDegrees(firstPointAngle));
-    SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
-    swerveModulePositions[0] = new SwerveModulePosition(frontLeft.getModuleDistance(),
-        new Rotation2d(frontLeft.getCanCoderPositionRadians()));
-    swerveModulePositions[1] = new SwerveModulePosition(frontRight.getModuleDistance(),
-        new Rotation2d(frontRight.getCanCoderPositionRadians()));
-    swerveModulePositions[2] = new SwerveModulePosition(backLeft.getModuleDistance(),
-        new Rotation2d(backLeft.getCanCoderPositionRadians()));
-    swerveModulePositions[3] = new SwerveModulePosition(backRight.getModuleDistance(),
-        new Rotation2d(backRight.getCanCoderPositionRadians()));
-    mt2Odometry.resetPosition(new Rotation2d(firstPointAngle), swerveModulePositions,
-        new Pose2d(new Translation2d(firstPointX, firstPointY), new Rotation2d(firstPointAngle)));
+    Pose2d firstPose2d = new Pose2d(new Translation2d(firstPointX, firstPointY), new Rotation2d(firstPointAngle));
+    io.setCurrentLimits(60, 120);
+    io.setPosition(firstPose2d);
 
     m_initTime = Timer.getFPGATimestamp();
-
-    updateOdometryFusedArray();
   }
 
   /**
@@ -736,7 +470,7 @@ public class Drive extends SubsystemBase {
   public void setOdometry(Pose2d pose) {
     // Logger.recordOutput("Odometry Reset to:", pose.toString());
     java.util.logging.Logger.getGlobal().fine("New Odometry Pose: " + pose.toString());
-    mt2Odometry.resetPose(pose);
+    io.setPosition(pose);
   }
 
   public boolean isPoseInField(Pose2d pose) {
@@ -746,306 +480,6 @@ public class Drive extends SubsystemBase {
     } else {
       return true;
     }
-  }
-
-  private int getClosestTagId(Pose2d pose) {
-    int closestTag = 0;
-    double closestDistance = Double.MAX_VALUE;
-
-    for (int i = 1; i <= aprilTagFieldLayout.getTags().size(); i++) {
-      Optional<Pose3d> tagPose = aprilTagFieldLayout.getTagPose(i);
-      if (tagPose.isPresent()) {
-        double distance = Constants.Vision.distBetweenPose2d(pose, tagPose.get().toPose2d());
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestTag = i;
-        }
-      }
-    }
-    return closestTag;
-  }
-
-  private boolean inReefInteractionState() {
-    return systemState == DriveState.L4_REEF || systemState == DriveState.L3_REEF ||
-        systemState == DriveState.REEF || systemState == DriveState.AUTO_L1 ||
-        systemState == DriveState.AUTO_L1_MORE || systemState == DriveState.ALGAE ||
-        systemState == DriveState.ALGAE_MORE || systemState == DriveState.ALGAE_MORE_MORE;
-  }
-
-  private boolean closeToReef() {
-    double dist = DriverStation.isAutonomousEnabled() ? 2.7 : 2.3;
-    if (distanceFromCenterOfReef() < dist) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /**
-   * Updates the fused odometry array with current robot position and orientation
-   * information.
-   * Calculates the robot's position and orientation using swerve module positions
-   * and the gyro angle.
-   * Updates the current X, Y, and theta values, as well as previous values and
-   * time differences.
-   */
-  public void updateOdometryFusedArray() {
-    double navxOffset = gyro.getYawRadians();
-
-    SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
-    swerveModulePositions[0] = new SwerveModulePosition(frontLeft.getModuleDistance(),
-        new Rotation2d(frontLeft.getCanCoderPositionRadians()));
-    swerveModulePositions[1] = new SwerveModulePosition(frontRight.getModuleDistance(),
-        new Rotation2d(frontRight.getCanCoderPositionRadians()));
-    swerveModulePositions[2] = new SwerveModulePosition(backLeft.getModuleDistance(),
-        new Rotation2d(backLeft.getCanCoderPositionRadians()));
-    swerveModulePositions[3] = new SwerveModulePosition(backRight.getModuleDistance(),
-        new Rotation2d(backRight.getCanCoderPositionRadians()));
-    mt2Pose = mt2Odometry.update(new Rotation2d(navxOffset), swerveModulePositions);
-
-    Matrix<N3, N1> standardDeviation = new Matrix<>(Nat.N3(), Nat.N1());
-    Logger.recordOutput("Closde to reef", closeToReef());
-
-    if (((closeToReef()) || inReefInteractionState())
-        && systemState != DriveState.REEF_MORE) {
-      photonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
-      backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
-      backLeftPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
-      backRightPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
-      swervePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
-      gamePiecePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
-
-      Rotation2d robotRotation = new Rotation2d(navxOffset);
-      double time = Timer.getFPGATimestamp();
-      photonPoseEstimator.addHeadingData(time, robotRotation);
-      backPhotonPoseEstimator.addHeadingData(time, robotRotation);
-      backLeftPhotonPoseEstimator.addHeadingData(time, robotRotation);
-      backRightPhotonPoseEstimator.addHeadingData(time, robotRotation);
-      swervePhotonPoseEstimator.addHeadingData(time, robotRotation);
-      gamePiecePhotonPoseEstimator.addHeadingData(time, robotRotation);
-    } else {
-      photonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
-      backPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
-      backLeftPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
-      backRightPhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
-      swervePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
-      gamePiecePhotonPoseEstimator.setPrimaryStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
-    }
-    Logger.recordOutput("Back Strategy: ",
-        backPhotonPoseEstimator.getPrimaryStrategy().toString());
-    Logger.recordOutput("Back left strat: ", backLeftPhotonPoseEstimator.getPrimaryStrategy().toString());
-    Logger.recordOutput("Back right strat: ",
-        backRightPhotonPoseEstimator.getPrimaryStrategy().toString());
-
-    if (getRobotSpeed() < 2.4) {
-      var backResult = peripherals.getBackReefCamResult();
-      Optional<EstimatedRobotPose> backMultiTagResult = backPhotonPoseEstimator.update(backResult);
-      if (backMultiTagResult.isPresent()) {
-        if (backResult.getBestTarget().getPoseAmbiguity() < 0.3 && backResult.getBestTarget().fiducialId != 5
-            && backResult.getBestTarget().fiducialId != 4 && backResult.getBestTarget().fiducialId != 14
-            && backResult.getBestTarget().fiducialId != 15 && backResult.getBestTarget().fiducialId != 3
-            && backResult.getBestTarget().fiducialId != 16) {
-          Pose3d robotPose = backMultiTagResult.get().estimatedPose;
-          Logger.recordOutput("multitag result", robotPose);
-          int numFrontTracks = backResult.getTargets().size();
-          Pose3d tagPose = aprilTagFieldLayout.getTagPose(backResult.getBestTarget().getFiducialId()).get();
-          double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-          // Logger.recordOutput("Distance to tag", distToTag);
-          if (distToTag < 3.2) {
-            if (inReefInteractionState()) {
-              standardDeviation.set(0, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
-
-              if (backResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
-                mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                    backResult.getTimestampSeconds());
-              }
-            } else {
-              standardDeviation.set(0, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
-
-              mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                  backResult.getTimestampSeconds());
-            }
-            // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-            // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-          }
-        }
-      }
-
-      var swerveResult = peripherals.getFrontSwerveCamResult();
-      Optional<EstimatedRobotPose> swerveMultiTagResult = swervePhotonPoseEstimator.update(swerveResult);
-      if (swerveMultiTagResult.isPresent()
-          && (!inReefInteractionState()
-              || getAutoPlacementSideIsFront())) {
-        if (swerveResult.getBestTarget().getPoseAmbiguity() < 0.3) {
-          Pose3d robotPose = swerveMultiTagResult.get().estimatedPose;
-          int numFrontTracks = swerveResult.getTargets().size();
-          Pose3d tagPose = aprilTagFieldLayout.getTagPose(swerveResult.getBestTarget().getFiducialId()).get();
-          double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-          // Logger.recordOutput("Distance to tag", distToTag);
-          if (distToTag < 3.2) {
-            if (inReefInteractionState()) {
-              standardDeviation.set(0, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
-
-              if (swerveResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
-                mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                    swerveResult.getTimestampSeconds());
-              }
-            } else {
-              standardDeviation.set(0, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
-
-              mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                  swerveResult.getTimestampSeconds());
-            }
-            // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-            // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-          }
-        }
-      }
-
-      var backLeftResult = peripherals.getBackLeftReefCamResult();
-      Optional<EstimatedRobotPose> backLeftMultiTagResult = backLeftPhotonPoseEstimator.update(backLeftResult);
-      if (backLeftMultiTagResult.isPresent()) {
-        if (backLeftResult.getBestTarget().getPoseAmbiguity() < 0.3 && backLeftResult.getBestTarget().fiducialId != 5
-            && backLeftResult.getBestTarget().fiducialId != 4 && backLeftResult.getBestTarget().fiducialId != 14
-            && backLeftResult.getBestTarget().fiducialId != 15 && backLeftResult.getBestTarget().fiducialId != 3
-            && backLeftResult.getBestTarget().fiducialId != 16) {
-          Pose3d robotPose = backLeftMultiTagResult.get().estimatedPose;
-          int numFrontTracks = backLeftResult.getTargets().size();
-          Pose3d tagPose = aprilTagFieldLayout.getTagPose(backLeftResult.getBestTarget().getFiducialId()).get();
-          double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-          if (distToTag < 3.2) {
-            if (inReefInteractionState()) {
-              standardDeviation.set(0, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
-
-              if (backLeftResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
-                mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                    backLeftResult.getTimestampSeconds());
-              }
-            } else {
-              standardDeviation.set(0, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
-
-              mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                  backLeftResult.getTimestampSeconds());
-            }
-            // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-            // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-          }
-        }
-      }
-
-      var backRightResult = peripherals.getBackRightReefCamResult();
-      Optional<EstimatedRobotPose> backRightMultiTagResult = backRightPhotonPoseEstimator.update(backRightResult);
-      if (backRightMultiTagResult.isPresent()) {
-        if (backRightResult.getBestTarget().getPoseAmbiguity() < 0.3 && backRightResult.getBestTarget().fiducialId != 5
-            && backRightResult.getBestTarget().fiducialId != 4 && backRightResult.getBestTarget().fiducialId != 14
-            && backRightResult.getBestTarget().fiducialId != 15 && backRightResult.getBestTarget().fiducialId != 3
-            && backRightResult.getBestTarget().fiducialId != 16) {
-          Pose3d robotPose = backRightMultiTagResult.get().estimatedPose;
-          int numFrontTracks = backRightResult.getTargets().size();
-          Pose3d tagPose = aprilTagFieldLayout.getTagPose(backRightResult.getBestTarget().getFiducialId()).get();
-          double distToTag = Constants.Vision.distBetweenPose(tagPose, robotPose);
-          // Logger.recordOutput("Distance to tag", distToTag);
-          if (distToTag < 3.2) {
-            if (inReefInteractionState()) {
-              standardDeviation.set(0, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  0.5
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
-
-              if (backRightResult.getBestTarget().getFiducialId() == getClosestTagId(getMt2Pose2d())) {
-                mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                    backRightResult.getTimestampSeconds());
-              }
-            } else {
-              standardDeviation.set(0, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(1, 0,
-                  Constants.Vision.getNumTagStdDevScalar(numFrontTracks)
-                      * Constants.Vision.getTagDistStdDevScalar(distToTag));
-              // + Math.pow(dif, Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_DEGREE)
-              // * Constants.Vision.ODOMETRY_JUMP_STANDARD_DEVIATION_SCALAR);
-              standardDeviation.set(2, 0, 0.9);
-
-              mt2Odometry.addVisionMeasurement(robotPose.toPose2d(),
-                  backRightResult.getTimestampSeconds());
-            }
-            // Pose2d poseWithoutAngle = new Pose2d(robotPose.toPose2d().getTranslation(),
-            // new Rotation2d(Math.toRadians(peripherals.getPigeonAngle())));
-          }
-        }
-      }
-    }
-    m_currentTime = Timer.getFPGATimestamp() - m_initTime;
   }
 
   /**
@@ -1062,15 +496,15 @@ public class Drive extends SubsystemBase {
    *         back right module position in degrees,
    *         back right module ground speed in meters per second.
    */
-  public double[] getModuleStates() {
-    double[] states = {
-        frontLeft.getCanCoderPosition() * 360.0, frontLeft.getGroundSpeed(),
-        frontRight.getCanCoderPosition() * 360.0, frontRight.getGroundSpeed(),
-        backLeft.getCanCoderPosition() * 360.0, backLeft.getGroundSpeed(),
-        backRight.getCanCoderPosition() * 360.0, backRight.getGroundSpeed(),
-    };
-    return states;
-  }
+  // public double[] getModuleStates() {
+  // double[] states = {
+  // frontLeft.getCanCoderPosition() * 360.0, frontLeft.getGroundSpeed(),
+  // frontRight.getCanCoderPosition() * 360.0, frontRight.getGroundSpeed(),
+  // backLeft.getCanCoderPosition() * 360.0, backLeft.getGroundSpeed(),
+  // backRight.getCanCoderPosition() * 360.0, backRight.getGroundSpeed(),
+  // };
+  // return states;
+  // }
 
   /**
    * Retrieves the setpoints of the modules (angle and drive motors) of the
@@ -1083,39 +517,15 @@ public class Drive extends SubsystemBase {
    *         back left angle motor, back left drive motor,
    *         back right angle motor, back right drive motor.
    */
-  public double[] getModuleSetpoints() {
-    double[] setpoints = {
-        frontLeft.getAngleMotorSetpoint() * 360, frontLeft.getDriveMotorSetpoint(),
-        frontRight.getAngleMotorSetpoint() * 360, frontRight.getDriveMotorSetpoint(),
-        backLeft.getAngleMotorSetpoint() * 360, backLeft.getDriveMotorSetpoint(),
-        backRight.getAngleMotorSetpoint() * 360, backRight.getDriveMotorSetpoint(),
-    };
-    return setpoints;
-  }
-
-  public double getRobotSpeed() {
-    return (Math.abs(frontLeft.getGroundSpeed()) + Math.abs(frontRight.getGroundSpeed())
-        + Math.abs(backLeft.getGroundSpeed())
-        + Math.abs(backRight.getGroundSpeed())) / 4.0;
-  }
-
-  /**
-   * Retrieves the current velocity of the angle motors of the robot.
-   *
-   * @return An array containing the current velocity of the angle motors for
-   *         front right, front left, back left, and back right wheels.
-   */
-  public double[] getAngleMotorVelocity() {
-    double[] velocity = {
-        frontRight.getAngleVelocity(), frontLeft.getAngleVelocity(), backLeft.getAngleVelocity(),
-        backRight.getAngleVelocity()
-    };
-    return velocity;
-  }
-
-  public Pose2d getMT2Odometry() {
-    return mt2Odometry.getEstimatedPosition();
-  }
+  // public double[] getModuleSetpoints() {
+  // double[] setpoints = {
+  // frontLeft.getAngleMotorSetpoint() * 360, frontLeft.getDriveMotorSetpoint(),
+  // frontRight.getAngleMotorSetpoint() * 360, frontRight.getDriveMotorSetpoint(),
+  // backLeft.getAngleMotorSetpoint() * 360, backLeft.getDriveMotorSetpoint(),
+  // backRight.getAngleMotorSetpoint() * 360, backRight.getDriveMotorSetpoint(),
+  // };
+  // return setpoints;
+  // }
 
   private boolean autoPlacingFront = true;
 
@@ -1129,7 +539,7 @@ public class Drive extends SubsystemBase {
   }
 
   public boolean isGoingForL3Algae() {
-    double thetaSetpoint = getAlgaeClosestSetpoint(getMT2Odometry()).getRotation().getRadians();
+    double thetaSetpoint = getAlgaeClosestSetpoint(getMt2Pose2d()).getRotation().getRadians();
     if (autoPlacingFront) {
       if (!isOnBlueSide()) {
         if (getAngleDifferenceDegrees(Math.toDegrees(thetaSetpoint), 60.0) <= 30.0 || getAngleDifferenceDegrees(
@@ -1216,7 +626,7 @@ public class Drive extends SubsystemBase {
       }
     }
     if (chosenSetpoint.getTranslation().getDistance(currentOdometry.getTranslation()) > 5) {
-      return getMT2Odometry();
+      return getMt2Pose2d();
     } else {
       return chosenSetpoint;
     }
@@ -1270,7 +680,7 @@ public class Drive extends SubsystemBase {
       }
     }
     if (chosenSetpoint.getTranslation().getDistance(currentOdometry.getTranslation()) > 5) {
-      return getMT2Odometry();
+      return getMt2Pose2d();
     } else {
       return chosenSetpoint;
     }
@@ -1322,7 +732,7 @@ public class Drive extends SubsystemBase {
       }
     }
     if (chosenSetpoint.getTranslation().getDistance(currentOdometry.getTranslation()) > 5) {
-      return getMT2Odometry();
+      return getMt2Pose2d();
     } else {
       return chosenSetpoint;
     }
@@ -1433,7 +843,7 @@ public class Drive extends SubsystemBase {
       }
     }
     if (chosenSetpoint.getTranslation().getDistance(currentOdometry.getTranslation()) > 5) {
-      return getMT2Odometry();
+      return getMt2Pose2d();
     } else {
       Logger.recordOutput("L2 target pose", chosenSetpoint);
       return chosenSetpoint;
@@ -1493,7 +903,7 @@ public class Drive extends SubsystemBase {
       }
     }
     if (chosenSetpoint.getTranslation().getDistance(currentOdometry.getTranslation()) > 5) {
-      return getMT2Odometry();
+      return getMt2Pose2d();
     } else {
       Logger.recordOutput("L2 target pose", chosenSetpoint);
       return chosenSetpoint;
@@ -1561,7 +971,7 @@ public class Drive extends SubsystemBase {
       }
     }
     if (chosenSetpoint.getTranslation().getDistance(currentOdometry.getTranslation()) > 5) {
-      return getMT2Odometry();
+      return getMt2Pose2d();
     } else {
       Logger.recordOutput("L2 target pose", chosenSetpoint);
       return chosenSetpoint;
@@ -1623,7 +1033,7 @@ public class Drive extends SubsystemBase {
       }
     }
     if (chosenSetpoint.getTranslation().getDistance(currentOdometry.getTranslation()) > 2.0) {
-      return getMT2Odometry();
+      return getMt2Pose2d();
     } else {
       return chosenSetpoint;
     }
@@ -1733,7 +1143,7 @@ public class Drive extends SubsystemBase {
       }
     }
     if (chosenSetpoint.getTranslation().getDistance(currentOdometry.getTranslation()) > 5) {
-      return getMT2Odometry();
+      return getMt2Pose2d();
     } else {
       Logger.recordOutput("L4 target pose", chosenSetpoint);
       return chosenSetpoint;
@@ -1854,7 +1264,7 @@ public class Drive extends SubsystemBase {
       }
     }
     if (chosenSetpoint.getTranslation().getDistance(currentOdometry.getTranslation()) > 5) {
-      return getMT2Odometry();
+      return getMt2Pose2d();
     } else {
       Logger.recordOutput("L3 target pose", chosenSetpoint);
       return chosenSetpoint;
@@ -1965,7 +1375,7 @@ public class Drive extends SubsystemBase {
       }
     }
     if (chosenSetpoint.getTranslation().getDistance(currentOdometry.getTranslation()) > 5) {
-      return getMT2Odometry();
+      return getMt2Pose2d();
     } else {
       Logger.recordOutput("L3 target pose", chosenSetpoint);
       return chosenSetpoint;
@@ -2086,7 +1496,7 @@ public class Drive extends SubsystemBase {
       }
     }
     if (chosenSetpoint.getTranslation().getDistance(currentOdometry.getTranslation()) > 5) {
-      return getMT2Odometry();
+      return getMt2Pose2d();
     } else {
       Logger.recordOutput("L4 target pose", chosenSetpoint);
       return chosenSetpoint;
@@ -2106,7 +1516,7 @@ public class Drive extends SubsystemBase {
 
   public Pose2d getGamePiecePosition() {
     if (!firstTimeAutoPickup) {
-      firstTimePickupAngle = getMT2OdometryAngle();
+      firstTimePickupAngle = getMt2Pose2dAngle();
       firstTimeAutoPickup = true;
     }
 
@@ -2149,9 +1559,9 @@ public class Drive extends SubsystemBase {
       double intakeXOffset = Constants.inchesToMeters(20.5);
       double intakeYOffset = Constants.inchesToMeters(3.0); // 4.0
 
-      double robotX = getMT2OdometryX();
-      double robotY = getMT2OdometryY();
-      // double robotAngle = getMT2OdometryAngle();
+      double robotX = getMt2Pose2dX();
+      double robotY = getMt2Pose2dY();
+      // double robotAngle = getMt2Pose2dAngle();
       double robotAngle = firstTimePickupAngle;
       Pose2d robotPose = new Pose2d(robotX, robotY, new Rotation2d(robotAngle));
 
@@ -2262,6 +1672,10 @@ public class Drive extends SubsystemBase {
     }
   }
 
+  public double getGyroYaw() {
+    return io.getYaw().getDegrees();
+  }
+
   public void goToCoral() {
     double yaw = 0.0;
     double pitch = 0.0;
@@ -2297,7 +1711,7 @@ public class Drive extends SubsystemBase {
   }
 
   public Pose2d getMt2Pose2d() {
-    return mt2Odometry.getEstimatedPosition();
+    return io.getPosition();
   }
 
   /**
@@ -2305,8 +1719,8 @@ public class Drive extends SubsystemBase {
    *
    * @return The current X-coordinate of the robot.
    */
-  public double getMT2OdometryX() {
-    return mt2Odometry.getEstimatedPosition().getX();
+  public double getMt2Pose2dX() {
+    return getMt2Pose2d().getX();
   }
 
   /**
@@ -2314,8 +1728,8 @@ public class Drive extends SubsystemBase {
    *
    * @return The current Y-coordinate of the robot.
    */
-  public double getMT2OdometryY() {
-    return mt2Odometry.getEstimatedPosition().getY();
+  public double getMt2Pose2dY() {
+    return getMt2Pose2d().getY();
   }
 
   /**
@@ -2323,8 +1737,8 @@ public class Drive extends SubsystemBase {
    *
    * @return The current orientation angle of the robot in radians.
    */
-  public double getMT2OdometryAngle() {
-    return mt2Odometry.getEstimatedPosition().getRotation().getRadians();
+  public double getMt2Pose2dAngle() {
+    return getMt2Pose2d().getRotation().getRadians();
   }
 
   /**
@@ -2348,7 +1762,6 @@ public class Drive extends SubsystemBase {
       originalY = 0;
     }
 
-    double pigeonAngle = gyro.getYawRadians();
     double xPower = getAdjustedX(originalX, originalY);
     double yPower = getAdjustedY(originalX, originalY);
 
@@ -2360,11 +1773,7 @@ public class Drive extends SubsystemBase {
       controllerVector.setI(-xSpeed);
       controllerVector.setJ(-ySpeed);
     }
-
-    frontLeft.drive(controllerVector, turn, pigeonAngle);
-    frontRight.drive(controllerVector, turn, pigeonAngle);
-    backLeft.drive(controllerVector, turn, pigeonAngle);
-    backRight.drive(controllerVector, turn, pigeonAngle);
+    io.drive(controllerVector, turn);
   }
 
   /**
@@ -2373,10 +1782,7 @@ public class Drive extends SubsystemBase {
    * @param turn The rate at which the robot should turn in radians per second.
    */
   public void autoRobotCentricTurn(double turn) {
-    frontLeft.drive(new Vector(0, 0), turn, 0.0);
-    frontRight.drive(new Vector(0, 0), turn, 0.0);
-    backLeft.drive(new Vector(0, 0), turn, 0.0);
-    backRight.drive(new Vector(0, 0), turn, 0.0);
+    io.drive(new Vector(0, 0), turn);
   }
 
   /**
@@ -2389,10 +1795,7 @@ public class Drive extends SubsystemBase {
    *                          per second.
    */
   public void autoRobotCentricDrive(Vector velocityVector, double turnRadiansPerSec) {
-    frontLeft.drive(velocityVector, turnRadiansPerSec, 0);
-    frontRight.drive(velocityVector, turnRadiansPerSec, 0);
-    backLeft.drive(velocityVector, turnRadiansPerSec, 0);
-    backRight.drive(velocityVector, turnRadiansPerSec, 0);
+    io.driveRobotCentric(velocityVector, turnRadiansPerSec);
   }
 
   /**
@@ -2438,12 +1841,6 @@ public class Drive extends SubsystemBase {
     if (Math.abs(turn) < 0.05) {
       turn = 0.0;
     }
-    angleSetpoint = gyro.getYawDegrees();
-    double compensation = gyro.getAngularVelocityZWorldRadPerSec() * 0.050;
-    angleSetpoint += compensation;
-    // Logger.recordOutput("setpoint", angleSetpoint);
-    turningPID.setSetPoint(angleSetpoint);
-    double pigeonAngle = gyro.getYawRadians();
     double xPower = getAdjustedX(originalX, originalY);
     double yPower = getAdjustedY(originalX, originalY);
 
@@ -2455,11 +1852,7 @@ public class Drive extends SubsystemBase {
       controllerVector.setI(-xSpeed);
       controllerVector.setJ(-ySpeed);
     }
-    frontLeft.drive(controllerVector, turn, pigeonAngle);
-    frontRight.drive(controllerVector, turn, pigeonAngle);
-    backLeft.drive(controllerVector, turn, pigeonAngle);
-    backRight.drive(controllerVector, turn, pigeonAngle);
-    // }
+    io.drive(controllerVector, turn);
   }
 
   public void robotCentricDrive(double angle) {
@@ -2518,11 +1911,6 @@ public class Drive extends SubsystemBase {
       turn = 0.0;
     }
 
-    angleSetpoint = gyro.getYawDegrees();
-    double compensation = gyro.getAngularVelocityZWorldRadPerSec() * 0.050;
-    angleSetpoint += compensation;
-    // Logger.recordOutput("setpoint", angleSetpoint);
-    turningPID.setSetPoint(angleSetpoint);
     double xPower = getAdjustedX(originalX, originalY);
     double yPower = getAdjustedY(originalX, originalY);
 
@@ -2534,11 +1922,7 @@ public class Drive extends SubsystemBase {
       controllerVector.setI(-xSpeed);
       controllerVector.setJ(-ySpeed);
     }
-    frontLeft.drive(controllerVector, turn, Math.toRadians(angle));
-    frontRight.drive(controllerVector, turn, Math.toRadians(angle));
-    backLeft.drive(controllerVector, turn, Math.toRadians(angle));
-    backRight.drive(controllerVector, turn, Math.toRadians(angle));
-    // }
+    io.driveCamCentric(controllerVector, turn, Math.toRadians(angle));
   }
 
   public void teleopDriveToPiece(double yToPiece) {
@@ -2568,10 +1952,8 @@ public class Drive extends SubsystemBase {
     }
 
     if (turn == 0.0) {
-      turningPID.setSetPoint(angleSetpoint);
-      double yaw = gyro.getYawDegrees();
+      double yaw = io.getYaw().getDegrees();
 
-      yaw = Constants.standardizeAngleToOtherDegrees(yaw, angleSetpoint);
       double result = -2 * turningPID.updatePID(yaw);
       // Logger.recordOutput("result", result);
 
@@ -2582,7 +1964,7 @@ public class Drive extends SubsystemBase {
         originalX = 0;
       }
 
-      double pigeonAngle = gyro.getYawRadians();
+      double pigeonAngle = io.getYaw().getRadians();
       double xPower = getAdjustedX(x, y);
       double yPower = getAdjustedY(x, y);
 
@@ -2594,17 +1976,9 @@ public class Drive extends SubsystemBase {
         controllerVector.setI(-xSpeed);
         controllerVector.setJ(-ySpeed);
       }
-      frontLeft.drive(controllerVector, result, pigeonAngle);
-      frontRight.drive(controllerVector, result, pigeonAngle);
-      backLeft.drive(controllerVector, result, pigeonAngle);
-      backRight.drive(controllerVector, result, pigeonAngle);
+      io.drive(controllerVector, result);
     } else {
-      angleSetpoint = gyro.getYawDegrees();
-      double compensation = gyro.getAngularVelocityZWorldRadPerSec() * 0.050;
-      angleSetpoint += compensation;
-      // Logger.recordOutput("setpoint", angleSetpoint);
-      turningPID.setSetPoint(angleSetpoint);
-      double pigeonAngle = gyro.getYawRadians();
+      double pigeonAngle = io.getYaw().getRadians();
       double xPower = getAdjustedX(originalX, originalY);
       double yPower = getAdjustedY(originalX, originalY);
 
@@ -2616,10 +1990,7 @@ public class Drive extends SubsystemBase {
         controllerVector.setI(-xSpeed);
         controllerVector.setJ(-ySpeed);
       }
-      frontLeft.drive(controllerVector, turn, pigeonAngle);
-      frontRight.drive(controllerVector, turn, pigeonAngle);
-      backLeft.drive(controllerVector, turn, pigeonAngle);
-      backRight.drive(controllerVector, turn, pigeonAngle);
+      io.drive(controllerVector, turn);
     }
   }
 
@@ -2630,23 +2001,23 @@ public class Drive extends SubsystemBase {
 
   public boolean hitSetPoint(Pose2d pose) { // adjust for l4 TODO:
     // Logger.recordOutput("Error for setpoint",
-    // Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
-    // + Math.pow((y - getMT2OdometryY()), 2)));
+    // Math.sqrt(Math.pow((x - getMt2Pose2dX()), 2)
+    // + Math.pow((y - getMt2Pose2dY()), 2)));
     // System.out.println("X Y error: "
-    // + Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
-    // + Math.pow((y - getMT2OdometryY()), 2))
+    // + Math.sqrt(Math.pow((x - getMt2Pose2dX()), 2)
+    // + Math.pow((y - getMt2Pose2dY()), 2))
     // + " Angle error: " + getAngleDifferenceDegrees(Math.toDegrees(theta),
-    // Math.toDegrees(getMT2OdometryAngle()))
+    // Math.toDegrees(getMt2Pose2dAngle()))
     // + " Hits: "
     // + hitNumber);
     double x = pose.getX();
     double y = pose.getY();
     double theta = pose.getRotation().getRadians();
     if (Math
-        .sqrt(Math.pow((x - getMT2OdometryX()), 2)
-            + Math.pow((y - getMT2OdometryY()), 2)) < 0.045
+        .sqrt(Math.pow((x - getMt2Pose2dX()), 2)
+            + Math.pow((y - getMt2Pose2dY()), 2)) < 0.045
         && getAngleDifferenceDegrees(Math.toDegrees(theta),
-            Math.toDegrees(getMT2OdometryAngle())) < 1.5) {
+            Math.toDegrees(getMt2Pose2dAngle())) < 1.5) {
       hitNumber += 1;
     } else {
       hitNumber = 0;
@@ -2660,26 +2031,26 @@ public class Drive extends SubsystemBase {
 
   public boolean hitSetPointSemiGenerous(Pose2d pose) { // adjust for l4 TODO:
     // Logger.recordOutput("Error for setpoint",
-    // Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
-    // + Math.pow((y - getMT2OdometryY()), 2)));
+    // Math.sqrt(Math.pow((x - getMt2Pose2dX()), 2)
+    // + Math.pow((y - getMt2Pose2dY()), 2)));
     // System.out.println("X Y error: "
-    // + Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
-    // + Math.pow((y - getMT2OdometryY()), 2))
+    // + Math.sqrt(Math.pow((x - getMt2Pose2dX()), 2)
+    // + Math.pow((y - getMt2Pose2dY()), 2))
     // + " Angle error: " + getAngleDifferenceDegrees(Math.toDegrees(theta),
-    // Math.toDegrees(getMT2OdometryAngle()))
+    // Math.toDegrees(getMt2Pose2dAngle()))
     // + " Hits: "
     // + hitNumber);
     double x = pose.getX();
     double y = pose.getY();
     double theta = pose.getRotation().getRadians();
     Logger.recordOutput("Error for semi-generous", Math
-        .sqrt(Math.pow((x - getMT2OdometryX()), 2)
-            + Math.pow((y - getMT2OdometryY()), 2)));
+        .sqrt(Math.pow((x - getMt2Pose2dX()), 2)
+            + Math.pow((y - getMt2Pose2dY()), 2)));
     if (Math
-        .sqrt(Math.pow((x - getMT2OdometryX()), 2)
-            + Math.pow((y - getMT2OdometryY()), 2)) < 0.05
+        .sqrt(Math.pow((x - getMt2Pose2dX()), 2)
+            + Math.pow((y - getMt2Pose2dY()), 2)) < 0.05
         && getAngleDifferenceDegrees(Math.toDegrees(theta),
-            Math.toDegrees(getMT2OdometryAngle())) < 2) {
+            Math.toDegrees(getMt2Pose2dAngle())) < 2) {
       hitNumberSemiGenerous += 1;
     } else {
       hitNumberSemiGenerous = 0;
@@ -2731,7 +2102,7 @@ public class Drive extends SubsystemBase {
       }
     }
     if (chosenSetpoint.getTranslation().getDistance(currentOdometry.getTranslation()) > 5) {
-      return getMT2Odometry();
+      return getMt2Pose2d();
     } else {
       return chosenSetpoint;
     }
@@ -2739,23 +2110,23 @@ public class Drive extends SubsystemBase {
 
   public boolean hitSetPointGenerous(Pose2d pose) { // adjust for l4 TODO:
     // Logger.recordOutput("Error for setpoint",
-    // Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
-    // + Math.pow((y - getMT2OdometryY()), 2)));
+    // Math.sqrt(Math.pow((x - getMt2Pose2dX()), 2)
+    // + Math.pow((y - getMt2Pose2dY()), 2)));
     // System.out.println("X Y error: "
-    // + Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
-    // + Math.pow((y - getMT2OdometryY()), 2))
+    // + Math.sqrt(Math.pow((x - getMt2Pose2dX()), 2)
+    // + Math.pow((y - getMt2Pose2dY()), 2))
     // + " Angle error: " + getAngleDifferenceDegrees(Math.toDegrees(theta),
-    // Math.toDegrees(getMT2OdometryAngle()))
+    // Math.toDegrees(getMt2Pose2dAngle()))
     // + " Hits: "
     // + hitNumber);
     double x = pose.getX();
     double y = pose.getY();
     double theta = pose.getRotation().getRadians();
     if (Math
-        .sqrt(Math.pow((x - getMT2OdometryX()), 2)
-            + Math.pow((y - getMT2OdometryY()), 2)) < 0.10
+        .sqrt(Math.pow((x - getMt2Pose2dX()), 2)
+            + Math.pow((y - getMt2Pose2dY()), 2)) < 0.10
         && getAngleDifferenceDegrees(Math.toDegrees(theta),
-            Math.toDegrees(getMT2OdometryAngle())) < 2.5) {
+            Math.toDegrees(getMt2Pose2dAngle())) < 2.5) {
       hitNumberGenerous += 1;
     } else {
       hitNumberGenerous = 0;
@@ -2769,23 +2140,23 @@ public class Drive extends SubsystemBase {
 
   public boolean hitSetPointUltraGenerous(Pose2d pose) { // adjust for l4 TODO:
     // Logger.recordOutput("Error for setpoint",
-    // Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
-    // + Math.pow((y - getMT2OdometryY()), 2)));
+    // Math.sqrt(Math.pow((x - getMt2Pose2dX()), 2)
+    // + Math.pow((y - getMt2Pose2dY()), 2)));
     // System.out.println("X Y error: "
-    // + Math.sqrt(Math.pow((x - getMT2OdometryX()), 2)
-    // + Math.pow((y - getMT2OdometryY()), 2))
+    // + Math.sqrt(Math.pow((x - getMt2Pose2dX()), 2)
+    // + Math.pow((y - getMt2Pose2dY()), 2))
     // + " Angle error: " + getAngleDifferenceDegrees(Math.toDegrees(theta),
-    // Math.toDegrees(getMT2OdometryAngle()))
+    // Math.toDegrees(getMt2Pose2dAngle()))
     // + " Hits: "
     // + hitNumber);
     double x = pose.getX();
     double y = pose.getY();
     double theta = pose.getRotation().getRadians();
     if (Math
-        .sqrt(Math.pow((x - getMT2OdometryX()), 2)
-            + Math.pow((y - getMT2OdometryY()), 2)) < 0.10
+        .sqrt(Math.pow((x - getMt2Pose2dX()), 2)
+            + Math.pow((y - getMt2Pose2dY()), 2)) < 0.10
         && getAngleDifferenceDegrees(Math.toDegrees(theta),
-            Math.toDegrees(getMT2OdometryAngle())) < 10.0) {
+            Math.toDegrees(getMt2Pose2dAngle())) < 10.0) {
       hitNumberUltraGenerous += 1;
     } else {
       hitNumberUltraGenerous = 0;
@@ -2800,14 +2171,14 @@ public class Drive extends SubsystemBase {
   public void driveToPoint(Pose2d targetPoint) {
     Logger.recordOutput("Goal X, Y, Theta", targetPoint);
     // Logger.recordOutput("Magnitude Error Inches",
-    // Constants.metersToInches(Math.sqrt(Math.pow(x - getMT2OdometryX(), 2) +
-    // Math.pow(y - getMT2OdometryY(), 2))));
+    // Constants.metersToInches(Math.sqrt(Math.pow(x - getMt2Pose2dX(), 2) +
+    // Math.pow(y - getMt2Pose2dY(), 2))));
     // Logger.recordOutput("Theta Error Degrees", Math.toDegrees(theta -
-    // getMT2OdometryAngle()));
+    // getMt2Pose2dAngle()));
     double x = targetPoint.getX();
     double y = targetPoint.getY();
     double theta = targetPoint.getRotation().getRadians();
-    theta = Constants.standardizeAngleToOther(theta, getMT2OdometryAngle());
+    theta = Constants.standardizeAngleToOther(theta, getMt2Pose2dAngle());
 
     double xVelNoFF = 0.0;
     double yVelNoFF = 0.0;
@@ -2818,9 +2189,9 @@ public class Drive extends SubsystemBase {
       yyPID4A.setSetPoint(y);
       thetaaPID4A.setSetPoint(theta);
 
-      xxPID4A.updatePID(getMT2OdometryX());
-      yyPID4A.updatePID(getMT2OdometryY());
-      thetaaPID4A.updatePID(getMT2OdometryAngle());
+      xxPID4A.updatePID(getMt2Pose2dX());
+      yyPID4A.updatePID(getMt2Pose2dY());
+      thetaaPID4A.updatePID(getMt2Pose2dAngle());
 
       xVelNoFF = xxPID4A.getResult();
       yVelNoFF = yyPID4A.getResult();
@@ -2836,9 +2207,9 @@ public class Drive extends SubsystemBase {
       yyPID4.setSetPoint(y);
       thetaaPID4.setSetPoint(theta);
 
-      xxPID4.updatePID(getMT2OdometryX());
-      yyPID4.updatePID(getMT2OdometryY());
-      thetaaPID4.updatePID(getMT2OdometryAngle());
+      xxPID4.updatePID(getMt2Pose2dX());
+      yyPID4.updatePID(getMt2Pose2dY());
+      thetaaPID4.updatePID(getMt2Pose2dAngle());
 
       xVelNoFF = xxPID4.getResult();
       yVelNoFF = yyPID4.getResult();
@@ -2851,9 +2222,9 @@ public class Drive extends SubsystemBase {
       yyPID23.setSetPoint(y);
       thetaaPID23.setSetPoint(theta);
 
-      xxPID23.updatePID(getMT2OdometryX());
-      yyPID23.updatePID(getMT2OdometryY());
-      thetaaPID23.updatePID(getMT2OdometryAngle());
+      xxPID23.updatePID(getMt2Pose2dX());
+      yyPID23.updatePID(getMt2Pose2dY());
+      thetaaPID23.updatePID(getMt2Pose2dAngle());
 
       xVelNoFF = xxPID23.getResult();
       yVelNoFF = yyPID23.getResult();
@@ -2865,9 +2236,9 @@ public class Drive extends SubsystemBase {
       yyPID1.setSetPoint(y);
       thetaaPID1.setSetPoint(theta);
 
-      xxPID1.updatePID(getMT2OdometryX());
-      yyPID1.updatePID(getMT2OdometryY());
-      thetaaPID1.updatePID(getMT2OdometryAngle());
+      xxPID1.updatePID(getMt2Pose2dX());
+      yyPID1.updatePID(getMt2Pose2dY());
+      thetaaPID1.updatePID(getMt2Pose2dAngle());
 
       xVelNoFF = xxPID1.getResult();
       yVelNoFF = yyPID1.getResult();
@@ -2879,9 +2250,9 @@ public class Drive extends SubsystemBase {
       yyPIDPickup.setSetPoint(y);
       thetaaPIDPickup.setSetPoint(theta);
 
-      xxPIDPickup.updatePID(getMT2OdometryX());
-      yyPIDPickup.updatePID(getMT2OdometryY());
-      thetaaPIDPickup.updatePID(getMT2OdometryAngle());
+      xxPIDPickup.updatePID(getMt2Pose2dX());
+      yyPIDPickup.updatePID(getMt2Pose2dY());
+      thetaaPIDPickup.updatePID(getMt2Pose2dAngle());
 
       xVelNoFF = xxPIDPickup.getResult();
       yVelNoFF = yyPIDPickup.getResult();
@@ -2893,9 +2264,9 @@ public class Drive extends SubsystemBase {
       yyPID.setSetPoint(y);
       thetaaPID.setSetPoint(theta);
 
-      xxPID.updatePID(getMT2OdometryX());
-      yyPID.updatePID(getMT2OdometryY());
-      thetaaPID.updatePID(getMT2OdometryAngle());
+      xxPID.updatePID(getMt2Pose2dX());
+      yyPID.updatePID(getMt2Pose2dY());
+      thetaaPID.updatePID(getMt2Pose2dAngle());
 
       xVelNoFF = xxPID.getResult();
       yVelNoFF = yyPID.getResult();
@@ -2961,12 +2332,12 @@ public class Drive extends SubsystemBase {
   public void driveToXTheta(double x, double theta) {
     java.util.logging.Logger.getGlobal().finer(theta + "");
     // theta = Math.toRadians(theta);
-    theta = Constants.standardizeAngleToOther(theta, getMT2OdometryAngle());
+    theta = Constants.standardizeAngleToOther(theta, getMt2Pose2dAngle());
     xxPID.setSetPoint(x);
     thetaaPID.setSetPoint(theta);
 
-    xxPID.updatePID(getMT2OdometryX());
-    thetaaPID.updatePID(getMT2OdometryAngle());
+    xxPID.updatePID(getMt2Pose2dX());
+    thetaaPID.updatePID(getMt2Pose2dAngle());
 
     double xVelNoFF = xxPID.getResult();
     double yVelNoFF = OI.getDriverLeftX() * 2.9;
@@ -3015,38 +2386,38 @@ public class Drive extends SubsystemBase {
     }
     Vector projectedJoystick = lineVector.projectOther(controllerVector);
     Logger.recordOutput("controllerProjection",
-        new Pose2d(new Translation2d(projectedJoystick.getI() + getMT2OdometryX(),
-            projectedJoystick.getJ() + getMT2OdometryY()), new Rotation2d(angrad)));
-    Translation2d currentPoint = new Translation2d(getMT2OdometryX(), getMT2OdometryY());
+        new Pose2d(new Translation2d(projectedJoystick.getI() + getMt2Pose2dX(),
+            projectedJoystick.getJ() + getMt2Pose2dY()), new Rotation2d(angrad)));
+    Translation2d currentPoint = new Translation2d(getMt2Pose2dX(), getMt2Pose2dY());
     Translation2d closestPointOnLine = lineVector.getClosestPointOnLine(pointOnLine, currentPoint);
     Logger.recordOutput("closestPointOnLine", new Pose2d(closestPointOnLine, new Rotation2d(angrad)));
     xxPID.setSetPoint(closestPointOnLine.getX());
     yyPID.setSetPoint(closestPointOnLine.getY());
-    angrad = Constants.standardizeAngleToOther(angrad, getMT2OdometryAngle());
+    angrad = Constants.standardizeAngleToOther(angrad, getMt2Pose2dAngle());
     thetaaPID.setSetPoint(angrad);
-    double toPointXVel = xxPID.updatePID(getMT2OdometryX());
-    double toPointYVel = -yyPID.updatePID(getMT2OdometryY());
-    double thetaVel = -thetaaPID.updatePID(getMT2OdometryAngle());
+    double toPointXVel = xxPID.updatePID(getMt2Pose2dX());
+    double toPointYVel = -yyPID.updatePID(getMt2Pose2dY());
+    double thetaVel = -thetaaPID.updatePID(getMt2Pose2dAngle());
     Logger.recordOutput("feederAngle", Math.toDegrees(angrad));
     Logger.recordOutput("thetaVel", thetaVel);
     Logger.recordOutput("toPointYVel", toPointYVel);
     Logger.recordOutput("toPointXVel", toPointXVel);
     Vector toPointVector = new Vector(toPointXVel, toPointYVel);
     Vector driveVector = toPointVector.add(projectedJoystick);
-    Logger.recordOutput("driveVector", new Pose2d(new Translation2d(driveVector.getI() + getMT2OdometryX(),
-        driveVector.getJ() + getMT2OdometryY()), new Rotation2d(angrad)));
+    Logger.recordOutput("driveVector", new Pose2d(new Translation2d(driveVector.getI() + getMt2Pose2dX(),
+        driveVector.getJ() + getMt2Pose2dY()), new Rotation2d(angrad)));
     autoDrive(driveVector, thetaVel);
   }
 
   public void driveToTheta(double theta) {
-    theta = Constants.standardizeAngleToOtherDegrees(theta, getMT2OdometryAngle());
+    theta = Constants.standardizeAngleToOtherDegrees(theta, getMt2Pose2dAngle());
 
     // Logger.recordOutput("Drive Angle Setpoint", theta);
     turningPID.setSetPoint(theta);
-    turningPID.updatePID(Math.toDegrees(getMT2OdometryAngle()));
+    turningPID.updatePID(Math.toDegrees(getMt2Pose2dAngle()));
 
     double result = -turningPID.getResult();
-    if (Math.abs(Math.toDegrees(getMT2OdometryAngle()) - theta) < 2) {
+    if (Math.abs(Math.toDegrees(getMt2Pose2dAngle()) - theta) < 2) {
       result = 0;
     }
     driveAutoAligned(result);
@@ -3060,13 +2431,7 @@ public class Drive extends SubsystemBase {
    *                          per second.
    */
   public void autoDrive(Vector vector, double turnRadiansPerSec) {
-
-    double pigeonAngle = gyro.getYawRadians();
-
-    frontLeft.drive(vector, turnRadiansPerSec, pigeonAngle);
-    frontRight.drive(vector, turnRadiansPerSec, pigeonAngle);
-    backLeft.drive(vector, turnRadiansPerSec, pigeonAngle);
-    backRight.drive(vector, turnRadiansPerSec, pigeonAngle);
+    io.drive(vector, turnRadiansPerSec);
   }
 
   /**
@@ -3077,62 +2442,8 @@ public class Drive extends SubsystemBase {
    * @return The current velocity vector of the robot in meters per second (m/s).
    */
   public Vector getRobotVelocityVector() {
-    Vector velocityVector = new Vector(0, 0);
-    double pigeonAngleRadians = gyro.getYawRadians();
-
-    double frV = this.frontRight.getGroundSpeed();
-    double frTheta = this.frontRight.getWheelPosition() + pigeonAngleRadians;
-    double frVX = frV * Math.cos(frTheta);
-    double frVY = frV * Math.sin(frTheta);
-    double flV = this.frontLeft.getGroundSpeed();
-    double flTheta = this.frontLeft.getWheelPosition() + pigeonAngleRadians;
-    double flVX = flV * Math.cos(flTheta);
-    double flVY = flV * Math.sin(flTheta);
-    double blV = this.backLeft.getGroundSpeed();
-    double blTheta = this.backLeft.getWheelPosition() + pigeonAngleRadians;
-    double blVX = blV * Math.cos(blTheta);
-    double blVY = blV * Math.sin(blTheta);
-    double brV = this.backRight.getGroundSpeed();
-    double brTheta = this.backRight.getWheelPosition() + pigeonAngleRadians;
-    double brVX = brV * Math.cos(brTheta);
-    double brVY = brV * Math.sin(brTheta);
-
-    velocityVector.setI(frVX + flVX + blVX + brVX);
-    velocityVector.setJ(frVY + flVY + blVY + brVY);
-
-    // System.out.println("VVector: <" + velocityVector.getI() + ", " +
-    // velocityVector.getJ() + ">");
-
+    Vector velocityVector = io.getVelocityVector();
     return velocityVector;
-  }
-
-  public double getGyroPitch() {
-    return gyro.getPitchDegrees();
-  }
-
-  public double getGyroYaw() {
-    return gyro.getYawDegrees();
-  }
-
-  /**
-   * Retrieves the acceleration vector of the robot.
-   * The acceleration is calculated based on the linear acceleration measured by
-   * the Pigeon IMU.
-   * The acceleration is expressed in field-centric coordinates.
-   *
-   * @return The acceleration vector of the robot in meters per second squared
-   *         (m/s^2).
-   */
-  public Vector getRobotAccelerationVector() {
-    Vector accelerationVector = new Vector();
-
-    Vector robotCentricAccelerationVector = this.gyro.getLinearAccelGVector();
-    double accelerationMagnitude = Constants.getDistance(robotCentricAccelerationVector.getI(),
-        robotCentricAccelerationVector.getJ(), 0, 0);
-    accelerationVector.setI(accelerationMagnitude * Math.cos(Math.toRadians(this.gyro.getYawDegrees())));
-    accelerationVector.setJ(accelerationMagnitude * Math.sin(Math.toRadians(this.gyro.getYawDegrees())));
-
-    return accelerationVector;
   }
 
   /**
@@ -3281,7 +2592,7 @@ public class Drive extends SubsystemBase {
   }
 
   public void calculateAngleChange(double angle) {
-    double pigeonAngleDegrees = this.gyro.getYawDegrees();
+    double pigeonAngleDegrees = io.getYaw().getDegrees();
     double targetAngle = 0;
     if (getFieldSide() == "red") {
       targetAngle = angle + 180;
@@ -3362,23 +2673,23 @@ public class Drive extends SubsystemBase {
   Vector pickupAlgaeBackVector = new Vector(-2.5, 0);
 
   public double getDistanceFromL23Setpoint() {
-    return l23Setpoint.getTranslation().getDistance(getMT2Odometry().getTranslation());
+    return l23Setpoint.getTranslation().getDistance(getMt2Pose2d().getTranslation());
   }
 
   public double getDistanceFromAlgaeSetpoint() {
-    return algaeSetpoint.getTranslation().getDistance(getMT2Odometry().getTranslation());
+    return algaeSetpoint.getTranslation().getDistance(getMt2Pose2d().getTranslation());
   }
 
   public double getThetaToCenterReef() {
     double theta = 0.0;
     if (OI.isRedSide()) {
-      theta = Math.atan2(Constants.Reef.centerRed.getY() - getMT2OdometryY(),
-          Constants.Reef.centerRed.getX() - getMT2OdometryX());
+      theta = Math.atan2(Constants.Reef.centerRed.getY() - getMt2Pose2dY(),
+          Constants.Reef.centerRed.getX() - getMt2Pose2dX());
     } else {
-      theta = Math.atan2((Constants.Reef.centerBlue.getY() - getMT2OdometryY()),
-          (Constants.Reef.centerBlue.getX() - getMT2OdometryX()));
+      theta = Math.atan2((Constants.Reef.centerBlue.getY() - getMt2Pose2dY()),
+          (Constants.Reef.centerBlue.getX() - getMt2Pose2dX()));
     }
-    if (getAngleDifferenceDegrees(Math.toDegrees(theta), Math.toDegrees(getMT2OdometryAngle())) > 90.0) {
+    if (getAngleDifferenceDegrees(Math.toDegrees(theta), Math.toDegrees(getMt2Pose2dAngle())) > 90.0) {
       theta -= Math.PI;
     }
     return theta;
@@ -3391,8 +2702,8 @@ public class Drive extends SubsystemBase {
     double y1 = lineStart[1];
     double x2 = lineEnd[0];
     double y2 = lineEnd[1];
-    double px = getMT2OdometryX();
-    double py = getMT2OdometryY();
+    double px = getMt2Pose2dX();
+    double py = getMt2Pose2dY();
 
     double dx = x2 - x1;
     double dy = y2 - y1;
@@ -3412,8 +2723,8 @@ public class Drive extends SubsystemBase {
   }
 
   public double getThetaToPoint(double xMeters, double yMeters) {
-    return Math.atan2(yMeters - getMT2OdometryY(),
-        xMeters - getMT2OdometryX());
+    return Math.atan2(yMeters - getMt2Pose2dY(),
+        xMeters - getMt2Pose2dX());
   }
 
   public double[] getClosestL1PointXY() { // returns the closest point on the trough for l1
@@ -3462,8 +2773,8 @@ public class Drive extends SubsystemBase {
         // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
         // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
         currentDist = Math.hypot(
-            getMT2OdometryX() - (Constants.Reef.l1BlueDrivePoints.get(i).getX()),
-            getMT2OdometryY() - (Constants.Reef.l1BlueDrivePoints.get(i).getY()));
+            getMt2Pose2dX() - (Constants.Reef.l1BlueDrivePoints.get(i).getX()),
+            getMt2Pose2dY() - (Constants.Reef.l1BlueDrivePoints.get(i).getY()));
         if (currentDist < dist) {
           dist = currentDist;
           chosenSetpoint[0] = Constants.Reef.l1BlueDrivePoints.get(i).getX();
@@ -3480,8 +2791,8 @@ public class Drive extends SubsystemBase {
         // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
         // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
         currentDist = Math.hypot(
-            getMT2OdometryX() - (Constants.Reef.l1BlueDrivePoints.get(i).getX()),
-            getMT2OdometryY() - (Constants.Reef.l1BlueDrivePoints.get(i).getY()));
+            getMt2Pose2dX() - (Constants.Reef.l1BlueDrivePoints.get(i).getX()),
+            getMt2Pose2dY() - (Constants.Reef.l1BlueDrivePoints.get(i).getY()));
         if (currentDist < dist && Math.hypot(Math.abs(Constants.Reef.l1BlueDrivePoints.get(i).getX() - list.get(0)[0]),
             Math.abs(Constants.Reef.l1BlueDrivePoints.get(i).getY() - list.get(0)[1])) > 0.1) {
           dist = currentDist;
@@ -3504,8 +2815,8 @@ public class Drive extends SubsystemBase {
         // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
         // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
         currentDist = Math.hypot(
-            getMT2OdometryX() - (Constants.Reef.l1RedDrivePoints.get(i).getX()),
-            getMT2OdometryY() - (Constants.Reef.l1RedDrivePoints.get(i).getY()));
+            getMt2Pose2dX() - (Constants.Reef.l1RedDrivePoints.get(i).getX()),
+            getMt2Pose2dY() - (Constants.Reef.l1RedDrivePoints.get(i).getY()));
         if (currentDist < dist) {
           dist = currentDist;
           chosenSetpoint[0] = Constants.Reef.l1RedDrivePoints.get(i).getX();
@@ -3522,8 +2833,8 @@ public class Drive extends SubsystemBase {
         // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
         // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
         currentDist = Math.hypot(
-            getMT2OdometryX() - (Constants.Reef.l1RedDrivePoints.get(i).getX()),
-            getMT2OdometryY() - (Constants.Reef.l1RedDrivePoints.get(i).getY()));
+            getMt2Pose2dX() - (Constants.Reef.l1RedDrivePoints.get(i).getX()),
+            getMt2Pose2dY() - (Constants.Reef.l1RedDrivePoints.get(i).getY()));
         if (currentDist < dist && Math.abs(Constants.Reef.l1RedDrivePoints.get(i).getX() - list.get(0)[0]) > 0.1
             && Math.abs(Constants.Reef.l1RedDrivePoints.get(i).getY() - list.get(0)[1]) > 0.1) {
           dist = currentDist;
@@ -3549,8 +2860,8 @@ public class Drive extends SubsystemBase {
         // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
         // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
         currentDist = Math.hypot(
-            getMT2OdometryX() - (Constants.Reef.l1BlueCornerPoints.get(i).getX()),
-            getMT2OdometryY() - (Constants.Reef.l1BlueCornerPoints.get(i).getY()));
+            getMt2Pose2dX() - (Constants.Reef.l1BlueCornerPoints.get(i).getX()),
+            getMt2Pose2dY() - (Constants.Reef.l1BlueCornerPoints.get(i).getY()));
         if (currentDist < dist) {
           dist = currentDist;
           chosenSetpoint[0] = Constants.Reef.l1BlueCornerPoints.get(i).getX();
@@ -3567,8 +2878,8 @@ public class Drive extends SubsystemBase {
         // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
         // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
         currentDist = Math.hypot(
-            getMT2OdometryX() - (Constants.Reef.l1BlueCornerPoints.get(i).getX()),
-            getMT2OdometryY() - (Constants.Reef.l1BlueCornerPoints.get(i).getY()));
+            getMt2Pose2dX() - (Constants.Reef.l1BlueCornerPoints.get(i).getX()),
+            getMt2Pose2dY() - (Constants.Reef.l1BlueCornerPoints.get(i).getY()));
         if (currentDist < dist && Math.hypot(Math.abs(Constants.Reef.l1BlueCornerPoints.get(i).getX() - list.get(0)[0]),
             Math.abs(Constants.Reef.l1BlueCornerPoints.get(i).getY() - list.get(0)[1])) > 0.1) {
           dist = currentDist;
@@ -3591,8 +2902,8 @@ public class Drive extends SubsystemBase {
         // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
         // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
         currentDist = Math.hypot(
-            getMT2OdometryX() - (Constants.Reef.l1RedCornerPoints.get(i).getX()),
-            getMT2OdometryY() - (Constants.Reef.l1RedCornerPoints.get(i).getY()));
+            getMt2Pose2dX() - (Constants.Reef.l1RedCornerPoints.get(i).getX()),
+            getMt2Pose2dY() - (Constants.Reef.l1RedCornerPoints.get(i).getY()));
         if (currentDist < dist) {
           dist = currentDist;
           chosenSetpoint[0] = Constants.Reef.l1RedCornerPoints.get(i).getX();
@@ -3609,8 +2920,8 @@ public class Drive extends SubsystemBase {
         // Constants.Reef.redFrontPlacingPositions.get(i).getX()), 2)
         // + Math.pow((y - Constants.Reef.redFrontPlacingPositions.get(i).getY()), 2));
         currentDist = Math.hypot(
-            getMT2OdometryX() - (Constants.Reef.l1RedCornerPoints.get(i).getX()),
-            getMT2OdometryY() - (Constants.Reef.l1RedCornerPoints.get(i).getY()));
+            getMt2Pose2dX() - (Constants.Reef.l1RedCornerPoints.get(i).getX()),
+            getMt2Pose2dY() - (Constants.Reef.l1RedCornerPoints.get(i).getY()));
         if (currentDist < dist && Math.abs(Constants.Reef.l1RedCornerPoints.get(i).getX() - list.get(0)[0]) > 0.1
             && Math.abs(Constants.Reef.l1RedCornerPoints.get(i).getY() - list.get(0)[1]) > 0.1) {
           dist = currentDist;
@@ -3635,8 +2946,8 @@ public class Drive extends SubsystemBase {
   }
 
   public Pose2d getClosestPose(Pose2d pose1, Pose2d pose2) {
-    double dist1 = Math.hypot(Math.abs(pose1.getX() - getMT2OdometryX()), Math.abs(pose1.getY() - getMT2OdometryY()));
-    double dist2 = Math.hypot(Math.abs(pose2.getX() - getMT2OdometryX()), Math.abs(pose2.getY() - getMT2OdometryY()));
+    double dist1 = Math.hypot(Math.abs(pose1.getX() - getMt2Pose2dX()), Math.abs(pose1.getY() - getMt2Pose2dY()));
+    double dist2 = Math.hypot(Math.abs(pose2.getX() - getMt2Pose2dX()), Math.abs(pose2.getY() - getMt2Pose2dY()));
     if (dist1 <= dist2) {
       return pose1;
     } else {
@@ -3680,20 +2991,16 @@ public class Drive extends SubsystemBase {
   }
 
   public boolean isOnBlueSide() {
-    if (getMT2OdometryX() < Constants.Physical.FIELD_LENGTH / 2.0) {
-      return true;
-    } else {
-      return false;
-    }
+    return io.getPosition().getX() < Constants.Physical.FIELD_LENGTH / 2.0;
   }
 
   public double[] getNetXTheta() {
-    double goalX = getMT2OdometryX();
-    double goalTheta = getMT2OdometryAngle();
+    double goalX = getMt2Pose2dX();
+    double goalTheta = getMt2Pose2dAngle();
 
     if (isOnBlueSide()) {
       goalX = Constants.Reef.netBlueXM;
-      if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+      if (getAngleDifferenceDegrees(Math.toDegrees(getMt2Pose2dAngle()),
           Math.toDegrees(Constants.Reef.netBlueFrontThetaR)) <= 90) {
         autoPlacingFront = true;
         goalTheta = Constants.Reef.netBlueFrontThetaR;
@@ -3703,7 +3010,7 @@ public class Drive extends SubsystemBase {
       }
     } else {
       goalX = Constants.Reef.netRedXM;
-      if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+      if (getAngleDifferenceDegrees(Math.toDegrees(getMt2Pose2dAngle()),
           Math.toDegrees(Constants.Reef.netRedFrontThetaR)) <= 90) {
         autoPlacingFront = true;
         goalTheta = Constants.Reef.netRedFrontThetaR;
@@ -3718,12 +3025,12 @@ public class Drive extends SubsystemBase {
   }
 
   public double[] getNetMoreXTheta() {
-    double goalX = getMT2OdometryX();
-    double goalTheta = getMT2OdometryAngle();
+    double goalX = getMt2Pose2dX();
+    double goalTheta = getMt2Pose2dAngle();
 
     if (isOnBlueSide()) {
       goalX = Constants.Reef.netBlueXMore;
-      if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+      if (getAngleDifferenceDegrees(Math.toDegrees(getMt2Pose2dAngle()),
           Math.toDegrees(Constants.Reef.netBlueFrontThetaR)) <= 90) {
         autoPlacingFront = true;
         goalTheta = Constants.Reef.netBlueFrontThetaR;
@@ -3733,7 +3040,7 @@ public class Drive extends SubsystemBase {
       }
     } else {
       goalX = Constants.Reef.netRedXMore;
-      if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+      if (getAngleDifferenceDegrees(Math.toDegrees(getMt2Pose2dAngle()),
           Math.toDegrees(Constants.Reef.netRedFrontThetaR)) <= 90) {
         autoPlacingFront = true;
         goalTheta = Constants.Reef.netRedFrontThetaR;
@@ -3749,11 +3056,11 @@ public class Drive extends SubsystemBase {
 
   public double distanceFromCenterOfReef() {
     if (isOnBlueSide()) {
-      return Math.hypot((getMT2OdometryX() - Constants.Reef.centerBlue.getX()),
-          ((getMT2OdometryY() - Constants.Reef.centerBlue.getY())));
+      return Math.hypot((getMt2Pose2dX() - Constants.Reef.centerBlue.getX()),
+          ((getMt2Pose2dY() - Constants.Reef.centerBlue.getY())));
     } else {
-      return Math.hypot((getMT2OdometryX() - Constants.Reef.centerRed.getX()),
-          ((getMT2OdometryY() - Constants.Reef.centerRed.getY())));
+      return Math.hypot((getMt2Pose2dX() - Constants.Reef.centerRed.getX()),
+          ((getMt2Pose2dY() - Constants.Reef.centerRed.getY())));
     }
   }
 
@@ -3762,22 +3069,20 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
-    Logger.recordOutput("Extra Pigeon Angle", gyro.getSecondaryYawDegrees());
-    Logger.recordOutput("Robot Velocity", getRobotSpeed());
     // Pose2d target = getGamePiecePosition();
     // System.out.println(Math.toDegrees(getThetaToCenterReef()));
-    // Translation2d t1 = new Translation2d(getMT2OdometryX(), getMT2OdometryY());
+    // Translation2d t1 = new Translation2d(getMt2Pose2dX(), getMt2Pose2dY());
     // Rotation2d r1 = new Rotation2d(getThetaToCenterReef());
     // Pose2d p1 = new Pose2d(t1, r1);
     // Logger.recordOutput("L1 Auto Angle", p1);
-    l23Setpoint = getReefClosestSetpoint(getMT2Odometry(), false);
-    algaeSetpoint = getAlgaeClosestSetpoint(getMT2Odometry());
-    // Logger.recordOutput("Robot Odometry", getMT2Odometry());
-    updateOdometryFusedArray();
+    l23Setpoint = getReefClosestSetpoint(getMt2Pose2d(), false);
+    algaeSetpoint = getAlgaeClosestSetpoint(getMt2Pose2d());
+    io.update(systemState);
+    // Logger.recordOutput("Robot Odometry", getMt2Pose2d());
     // process inputs
     DriveState newState = handleStateTransition();
     Pose2d setpoint = new Pose2d();
-    double standardizedAngle = Constants.standardizeAngleDegrees(Math.toDegrees(getMT2OdometryAngle()));
+    double standardizedAngle = Constants.standardizeAngleDegrees(Math.toDegrees(getMt2Pose2dAngle()));
     if (newState != systemState) {
       systemState = newState;
     }
@@ -3800,24 +3105,6 @@ public class Drive extends SubsystemBase {
     if (!OI.getDriverA()) {
       firstTimeReef = true;
     }
-    // Logger.recordOutput("L1 Vector",
-    // new Pose2d(new Translation2d(2.0, 2.0),
-    // new Rotation2d(
-    // Math.atan2(getClosestL1Points().get(0)[1] - getClosestL1Points().get(
-    // 1)[1], getClosestL1Points().get(0)[0] - getClosestL1Points().get(1)[0]))));
-
-    // Logger.recordOutput("Point 1", new Pose2d(new
-    // Translation2d(getClosestL1Points().get(0)[0],
-    // getClosestL1Points().get(0)[1]), new Rotation2d(0.0)));
-    // Logger.recordOutput("Point 2", new Pose2d(new
-    // Translation2d(getClosestL1Points().get(1)[0],
-    // getClosestL1Points().get(1)[1]), new Rotation2d(0.0)));
-
-    // Pose2d l1Pose = new Pose2d(getClosestL1PointXY()[0],
-    // getClosestL1PointXY()[1],
-    // new Rotation2d(getThetaToPoint(getClosestL1PointXY()[0],
-    // getClosestL1PointXY()[1])));
-
     switch (systemState) {
       case DEFAULT:
         if (OI.driverA.getAsBoolean() && !(OI.driverPOVDown.getAsBoolean() || OI.driverPOVLeft.getAsBoolean()
@@ -3852,9 +3139,9 @@ public class Drive extends SubsystemBase {
         // System.out.println(Math.toDegrees(getThetaToCenterReef()));
         if (firstTimeReef) {
           firstTimeReef = false;
-          origionalSetpointPose = getL1ReefClosestSetpoint(getMT2Odometry());
+          origionalSetpointPose = getL1ReefClosestSetpoint(getMt2Pose2d());
         }
-        setpoint = getL1ReefClosestSetpoint(getMT2Odometry());
+        setpoint = getL1ReefClosestSetpoint(getMt2Pose2d());
         driveToPoint(setpoint);
         break;
       case AUTO_L1_MORE:
@@ -3873,21 +3160,21 @@ public class Drive extends SubsystemBase {
         // System.out.println(Math.toDegrees(getThetaToCenterReef()));
         // if (firstTimeReef) {
         // firstTimeReef = false;
-        // origionalSetpointPose = getL1ReefClosestSetpoint(getMT2Odometry(), false);
+        // origionalSetpointPose = getL1ReefClosestSetpoint(getMt2Pose2d(), false);
         // }
-        setpoint = getL1ReefClosestSetpointMore(getMT2Odometry());
+        setpoint = getL1ReefClosestSetpointMore(getMt2Pose2d());
         driveToPoint(setpoint);
         break;
       case REEF:
         if (firstTimeReef) {
           firstTimeReef = false;
-          origionalSetpointPose = getReefClosestSetpoint(getMT2Odometry(), false);
+          origionalSetpointPose = getReefClosestSetpoint(getMt2Pose2d(), false);
         }
-        setpoint = getReefClosestSetpoint(getMT2Odometry(), OI.getDriverA());
+        setpoint = getReefClosestSetpoint(getMt2Pose2d(), OI.getDriverA());
         driveToPoint(setpoint);
         break;
       case REEF_MORE:
-        setpoint = getReefMoreClosestSetpoint(getMT2Odometry());
+        setpoint = getReefMoreClosestSetpoint(getMt2Pose2d());
         driveToPoint(setpoint);
         break;
       case BACK:
@@ -3900,21 +3187,21 @@ public class Drive extends SubsystemBase {
       case L4_REEF:
         if (firstTimeReef) {
           firstTimeReef = false;
-          origionalSetpointPose = getReefL4ClosestSetpoint(getMT2Odometry(), false);
+          origionalSetpointPose = getReefL4ClosestSetpoint(getMt2Pose2d(), false);
         }
         // System.out.println(origionalSetpointPose);
         // Logger.recordOutput("Targeted L4 Point",
-        // getReefL4ClosestSetpoint(getMT2Odometry(), OI.getDriverA()));
+        // getReefL4ClosestSetpoint(getMt2Pose2d(), OI.getDriverA()));
         // TODO: make this work
-        setpoint = getReefL4ClosestSetpoint(getMT2Odometry(), OI.getDriverA());
+        setpoint = getReefL4ClosestSetpoint(getMt2Pose2d(), OI.getDriverA());
         driveToPoint(setpoint);
         break;
       case L3_REEF:
         if (firstTimeReef) {
           firstTimeReef = false;
-          origionalSetpointPose = getReefL3ClosestSetpoint(getMT2Odometry(), false);
+          origionalSetpointPose = getReefL3ClosestSetpoint(getMt2Pose2d(), false);
         }
-        setpoint = getReefL3ClosestSetpoint(getMT2Odometry(), OI.getDriverA());
+        setpoint = getReefL3ClosestSetpoint(getMt2Pose2d(), OI.getDriverA());
         driveToPoint(setpoint);
         break;
       case PIECE_PICKUP:
@@ -3935,27 +3222,27 @@ public class Drive extends SubsystemBase {
         // }
         break;
       case ALGAE:
-        setpoint = getAlgaeClosestSetpoint(getMT2Odometry());
+        setpoint = getAlgaeClosestSetpoint(getMt2Pose2d());
         driveToPoint(setpoint);
         break;
       case ALGAE_MORE:
         // if
-        // (getAngleDifferenceDegrees(Math.toDegrees(getAlgaeClosestSetpoint(getMT2Odometry())[2]),
-        // Math.toDegrees(getMT2OdometryAngle())) <= 90) {
+        // (getAngleDifferenceDegrees(Math.toDegrees(getAlgaeClosestSetpoint(getMt2Pose2d())[2]),
+        // Math.toDegrees(getMt2Pose2dAngle())) <= 90) {
         // autoRobotCentricDrive(scoreL23Vector, 0);
         // } else {
         // autoRobotCentricDrive(scoreL23Vector, 0);
         // }
-        setpoint = getAlgaeMoreClosestSetpoint(getMT2Odometry());
+        setpoint = getAlgaeMoreClosestSetpoint(getMt2Pose2d());
         driveToPoint(setpoint);
         break;
       case ALGAE_MORE_MORE:
-        setpoint = getAlgaeMoreMoreClosestSetpoint(getMT2Odometry());
+        setpoint = getAlgaeMoreMoreClosestSetpoint(getMt2Pose2d());
         driveToPoint(setpoint);
         break;
       case PROCESSOR:
         if (isOnBlueSide()) {
-          if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+          if (getAngleDifferenceDegrees(Math.toDegrees(getMt2Pose2dAngle()),
               Constants.Reef.processorBlueFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
             autoPlacingFront = true;
             if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
@@ -3974,7 +3261,7 @@ public class Drive extends SubsystemBase {
             }
           }
         } else {
-          if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+          if (getAngleDifferenceDegrees(Math.toDegrees(getMt2Pose2dAngle()),
               Constants.Reef.processorRedFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
             autoPlacingFront = true;
             if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
@@ -3996,7 +3283,7 @@ public class Drive extends SubsystemBase {
         break;
       case PROCESSOR_MORE:
         if (isOnBlueSide()) {
-          if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+          if (getAngleDifferenceDegrees(Math.toDegrees(getMt2Pose2dAngle()),
               Constants.Reef.processorMoreBlueFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
             autoPlacingFront = true;
             if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
@@ -4015,7 +3302,7 @@ public class Drive extends SubsystemBase {
             }
           }
         } else {
-          if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+          if (getAngleDifferenceDegrees(Math.toDegrees(getMt2Pose2dAngle()),
               Constants.Reef.processorMoreRedFrontPlacingPosition.getRotation().getDegrees()) <= 90) {
             autoPlacingFront = true;
             if (OI.driverA.getAsBoolean() || OI.driverLT.getAsBoolean()) {
@@ -4046,7 +3333,7 @@ public class Drive extends SubsystemBase {
         }
 
         // if (OI.isBlueSide()) { // TODO: uncomment to revert to colorado algae code
-        // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+        // if (getAngleDifferenceDegrees(Math.toDegrees(getMt2Pose2dAngle()),
         // Math.toDegrees(Constants.Reef.netBlueFrontThetaR)) <= 90) {
         // autoPlacingFront = true;
         // if (OI.driverA.getAsBoolean()) {
@@ -4067,7 +3354,7 @@ public class Drive extends SubsystemBase {
         // // driveToTheta(Math.toDegrees(Constants.Reef.netBlueBackThetaR));
         // }
         // } else {
-        // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+        // if (getAngleDifferenceDegrees(Math.toDegrees(getMt2Pose2dAngle()),
         // Math.toDegrees(Constants.Reef.netRedFrontThetaR)) <= 90) {
         // autoPlacingFront = true;
         // if (OI.driverA.getAsBoolean()) {
@@ -4099,7 +3386,7 @@ public class Drive extends SubsystemBase {
         }
 
         // if (OI.isBlueSide()) { // TODO: uncomment to revert to colorado algae code
-        // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+        // if (getAngleDifferenceDegrees(Math.toDegrees(getMt2Pose2dAngle()),
         // Math.toDegrees(Constants.Reef.netBlueFrontThetaR)) <= 90) {
         // autoPlacingFront = true;
         // if (OI.driverA.getAsBoolean()) {
@@ -4120,7 +3407,7 @@ public class Drive extends SubsystemBase {
         // // driveToTheta(Math.toDegrees(Constants.Reef.netBlueBackThetaR));
         // }
         // } else {
-        // if (getAngleDifferenceDegrees(Math.toDegrees(getMT2OdometryAngle()),
+        // if (getAngleDifferenceDegrees(Math.toDegrees(getMt2Pose2dAngle()),
         // Math.toDegrees(Constants.Reef.netRedFrontThetaR)) <= 90) {
         // autoPlacingFront = true;
         // if (OI.driverA.getAsBoolean()) {
@@ -4148,7 +3435,7 @@ public class Drive extends SubsystemBase {
         break;
       case FEEDER:
         if (getFieldSide() == "red") { // red side
-          if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
+          if (getMt2Pose2dY() > 4.026) { // redside right feeder (field top right)
             if ((standardizedAngle <= 324
                 &&
                 standardizedAngle >= 144)) {
@@ -4170,7 +3457,7 @@ public class Drive extends SubsystemBase {
             }
           }
         } else { // blue side
-          if (getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
+          if (getMt2Pose2dY() < 4.026) { // blue side right feeder (fieldside bottom left)
             if ((standardizedAngle <= 324
                 &&
                 standardizedAngle >= 144)) {
@@ -4196,7 +3483,7 @@ public class Drive extends SubsystemBase {
         break;
       case AUTO_FEEDER:
         if (getFieldSide() == "red") { // red side
-          if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
+          if (getMt2Pose2dY() > 4.026) { // redside right feeder (field top right)
             if ((standardizedAngle <= 324
                 &&
                 standardizedAngle >= 144)) {
@@ -4224,7 +3511,7 @@ public class Drive extends SubsystemBase {
             }
           }
         } else { // blue side
-          if (getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
+          if (getMt2Pose2dY() < 4.026) { // blue side right feeder (fieldside bottom left)
             if ((standardizedAngle <= 324
                 &&
                 standardizedAngle >= 144)) {
@@ -4255,7 +3542,7 @@ public class Drive extends SubsystemBase {
         break;
       case FEEDER_ALIGN:
         if (getFieldSide() == "red") { // red side
-          if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
+          if (getMt2Pose2dY() > 4.026) { // redside right feeder (field top right)
             if ((standardizedAngle <= 324
                 &&
                 standardizedAngle >= 144)) {
@@ -4305,7 +3592,7 @@ public class Drive extends SubsystemBase {
             }
           }
         } else { // blue side
-          if (getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
+          if (getMt2Pose2dY() < 4.026) { // blue side right feeder (fieldside bottom left)
             if ((standardizedAngle <= 324
                 &&
                 standardizedAngle >= 144)) {
@@ -4358,7 +3645,7 @@ public class Drive extends SubsystemBase {
         break;
       case FEEDER_AUTO:
         if (getFieldSide() == "red") { // red side
-          if (getMT2OdometryY() > 4.026) { // redside right feeder (field top right)
+          if (getMt2Pose2dY() > 4.026) { // redside right feeder (field top right)
             Pose2d closestPose = getClosestPose(Constants.Reef.RED_RIGHT_FEEDER_LEFT,
                 Constants.Reef.RED_RIGHT_FEEDER_RIGHT);
             if ((standardizedAngle <= 324
@@ -4388,7 +3675,7 @@ public class Drive extends SubsystemBase {
             }
           }
         } else { // blue side
-          if (getMT2OdometryY() < 4.026) { // blue side right feeder (fieldside bottom left)
+          if (getMt2Pose2dY() < 4.026) { // blue side right feeder (fieldside bottom left)
             Pose2d closestPose = getClosestPose(Constants.Reef.BLUE_RIGHT_FEEDER_LEFT,
                 Constants.Reef.BLUE_RIGHT_FEEDER_RIGHT);
             if ((standardizedAngle <= 324
@@ -4426,12 +3713,12 @@ public class Drive extends SubsystemBase {
         Vector moveBack = new Vector(0.2, 0);
 
         if (!firstClimb) {
-          startX = getMT2OdometryX();
-          startY = getMT2OdometryY();
+          startX = getMt2Pose2dX();
+          startY = getMt2Pose2dY();
           firstClimb = true;
         }
 
-        if (Math.hypot((Math.abs(getMT2OdometryX() - startX)), Math.abs(getMT2OdometryY() - startY)) < 0.15) {
+        if (Math.hypot((Math.abs(getMt2Pose2dX() - startX)), Math.abs(getMt2Pose2dY() - startY)) < 0.15) {
           autoRobotCentricDrive(moveBack, 0);
         } else {
           autoRobotCentricDrive(new Vector(0, 0), 0);

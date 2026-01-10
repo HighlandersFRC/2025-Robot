@@ -63,9 +63,9 @@ public class VariableSpeedFollower extends AutoFollower {
   @Override
   public void execute() {
     // System.out.println("Variable Speed");
-    odometryFusedX = drive.getMT2OdometryX();
-    odometryFusedY = drive.getMT2OdometryY();
-    odometryFusedTheta = drive.getMT2OdometryAngle();
+    odometryFusedX = drive.getMt2Pose2dX();
+    odometryFusedY = drive.getMt2Pose2dY();
+    odometryFusedTheta = drive.getMt2Pose2dAngle();
     // call PIDController function
     currentPathPointIndex = returnPathPointIndex;
     desiredVelocityArray = drive.purePursuitController(odometryFusedX, odometryFusedY, odometryFusedTheta,
@@ -133,9 +133,9 @@ public class VariableSpeedFollower extends AutoFollower {
   }
 
   private boolean readyToEnd(JSONObject point) {
-    double odometryFusedX = drive.getMT2OdometryX();
-    double odometryFusedY = drive.getMT2OdometryY();
-    double odometryFusedTheta = drive.getMT2OdometryAngle();
+    double odometryFusedX = drive.getMt2Pose2dX();
+    double odometryFusedY = drive.getMt2Pose2dY();
+    double odometryFusedTheta = drive.getMt2Pose2dAngle();
     if (drive.getFieldSide() == "blue") {
       odometryFusedX = Constants.Physical.FIELD_LENGTH - odometryFusedX;
       odometryFusedY = Constants.Physical.FIELD_WIDTH - odometryFusedY;

@@ -15,6 +15,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
+import frc.robot.Globals;
 import frc.robot.subsystems.pivot.Pivot.PivotState;
 import frc.robot.tools.controlloops.PID;
 
@@ -46,9 +47,9 @@ public class PivotIOSim implements PivotIO {
     @Override
     public void updateInputs(PivotState systemState) {
         if (!closedLoop) {
-            update(Constants.loopPeriodSecs);
+            update(Globals.loopPeriodSecs);
         } else {
-            double dt = Constants.loopPeriodSecs;
+            double dt = Globals.loopPeriodSecs;
             int numSteps = (int) Math.floor(dt / Constants.closedLoopSimResolution);
             slot0.setSetPoint(positionSetpointRad);
             for (int i = 0; i < numSteps; i++) {

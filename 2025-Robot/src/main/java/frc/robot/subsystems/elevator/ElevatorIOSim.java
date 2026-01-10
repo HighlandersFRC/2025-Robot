@@ -16,6 +16,7 @@ import edu.wpi.first.math.system.NumericalIntegration;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
+import frc.robot.Globals;
 import frc.robot.subsystems.elevator.Elevator.ElevatorState;
 import frc.robot.tools.controlloops.PID;
 
@@ -74,9 +75,9 @@ public class ElevatorIOSim implements ElevatorIO {
     public void updateInputs(ElevatorState systemState) {
         Logger.recordOutput("elevator setpoint", Units.radiansToDegrees(positionSetpointRad));
         if (!closedLoop) {
-            update(Constants.loopPeriodSecs);
+            update(Globals.loopPeriodSecs);
         } else {
-            double dt = Constants.loopPeriodSecs;
+            double dt = Globals.loopPeriodSecs;
             int numSteps = (int) Math.floor(dt / Constants.closedLoopSimResolution);
             slot0.setSetPoint(positionSetpointRad);
             slot1.setSetPoint(positionSetpointRad);

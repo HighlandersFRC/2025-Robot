@@ -14,6 +14,7 @@ import edu.wpi.first.math.system.NumericalIntegration;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
+import frc.robot.Globals;
 import frc.robot.subsystems.twist.Twist.TwistState;
 import frc.robot.tools.controlloops.PID;
 
@@ -56,9 +57,9 @@ public class TwistIOSim implements TwistIO {
     public void updateInputs(TwistState systemState) {
         Logger.recordOutput("twist setpoint", Units.radiansToDegrees(positionSetpointRad));
         if (!closedLoop) {
-            update(Constants.loopPeriodSecs);
+            update(Globals.loopPeriodSecs);
         } else {
-            double dt = Constants.loopPeriodSecs;
+            double dt = Globals.loopPeriodSecs;
             int numSteps = (int) Math.floor(dt / Constants.closedLoopSimResolution);
             slot0.setSetPoint(positionSetpointRad);
             slot1.setSetPoint(positionSetpointRad);
