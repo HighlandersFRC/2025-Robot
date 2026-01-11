@@ -135,4 +135,24 @@ public class Vector {
     public Vector perpendicular() {
         return new Vector(-j, i);
     }
+
+    public Vector unit() {
+        double mag = magnitude();
+        if (mag == 0) {
+            return new Vector(0, 0); // Return zero vector if original vector is zero
+        }
+        return new Vector(i / mag, j / mag);
+    }
+
+    public Vector rotate(double angleRadians) {
+        double cosAngle = Math.cos(angleRadians);
+        double sinAngle = Math.sin(angleRadians);
+        double newI = i * cosAngle - j * sinAngle;
+        double newJ = i * sinAngle + j * cosAngle;
+        return new Vector(newI, newJ);
+    }
+
+    public Vector flipY() {
+        return new Vector(i, -j);
+    }
 }
