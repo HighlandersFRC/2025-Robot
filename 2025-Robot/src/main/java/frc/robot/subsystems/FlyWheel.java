@@ -22,6 +22,8 @@ public class FlyWheel extends SubsystemBase {
     /** Creates a new Intake. */
     private final TalonFX fly = new TalonFX(Constants.CANInfo.TEST_MOTOR_ID,
             Constants.CANInfo.CANBUS_NAME);
+    private final TalonFX fly2 = new TalonFX(Constants.CANInfo.TEST_MOTOR_ID2,
+            Constants.CANInfo.CANBUS_NAME);
 
     private final TorqueCurrentFOC m_torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
     private final PositionTorqueCurrentFOC m_positionTorqueCurrentFOCRequest = new PositionTorqueCurrentFOC(0.0);
@@ -53,6 +55,8 @@ public class FlyWheel extends SubsystemBase {
         config.MotionMagic.MotionMagicCruiseVelocity = Constants.SetPoints.IntakeSetpoints.INTAKE_CRUISE_VELOCITY;
         fly.getConfigurator().apply(config);
         fly.setNeutralMode(NeutralModeValue.Brake);
+        fly2.getConfigurator().apply(config);
+        fly2.setNeutralMode(NeutralModeValue.Brake);
     }
 
     private FlyWheelState handleStateTransition() {
@@ -66,10 +70,12 @@ public class FlyWheel extends SubsystemBase {
 
     public void setFlyWheelCurrent(double amps, double maxPercent) {
         fly.setControl(m_torqueCurrentFOCRequest.withOutput(amps).withMaxAbsDutyCycle(maxPercent));
+        fly2.setControl(m_torqueCurrentFOCRequest.withOutput(amps).withMaxAbsDutyCycle(maxPercent));
     }
 
     public void setFlyWheelPercent(double percent) {
         fly.set(percent);
+        fly2.set(percent);
     }
 
     public void setWantedState(FlyWheelState wantedState) {
@@ -83,11 +89,13 @@ public class FlyWheel extends SubsystemBase {
     @Override
     public void periodic() {
         systemState = handleStateTransition();
+        Logger.recordOutput("FlyWheel Stator Current", fly.getStatorCurrent().getValueAsDouble());
+        Logger.recordOutput("FlyWheel Supply Current", fly.getSupplyCurrent().getValueAsDouble());
         Logger.recordOutput("FlyWheel Velocity (RPM)", getVelocity() * 60.0); // convert from rps to rpm
         Logger.recordOutput("FlyWheel State", systemState);
         switch (systemState) {
             case SPINNING:
-                setFlyWheelPercent(1.0);
+                setFlyWheelPercent(0.5);
                 break;
             default:
                 setFlyWheelPercent(0.0);

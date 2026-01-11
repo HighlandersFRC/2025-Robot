@@ -4190,6 +4190,7 @@ public final class Constants {
 
                 // Testing
                 public static final int TEST_MOTOR_ID = 0;
+                public static final int TEST_MOTOR_ID2 = 0;
         }
 
         // Misc. controller values
