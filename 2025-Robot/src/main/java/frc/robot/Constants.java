@@ -40,7 +40,7 @@ public final class Constants {
                 public static final double ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER = 1;
                 public static final String[] paths = new String[] {
                                 "2AlgaeCenter.polarauto",
-                                "2+1PieceFeeder.polarauto",
+                                "odometry test.polarauto",
                                 "3PieceFeederSmart.polarauto",
                                 "4PieceFeederGroundSmart.polarauto",
                                 "TushPush.polarauto",
@@ -4112,7 +4112,8 @@ public final class Constants {
 
                 // drive
                 // public static final double DRIVE_GEAR_RATIO = 7.03; // mk5 R1
-                public static final double DRIVE_GEAR_RATIO = 6.03; // mk5 R2
+                public static final double DRIVE_GEAR_RATIO = 7.2409; // mk5 R1 wierd?
+                // public static final double DRIVE_GEAR_RATIO = 6.03; // mk5 R2
                 // public static final double DRIVE_GEAR_RATIO = 5.27; // mk5 R3
                 public static final double STEER_GEAR_RATIO = 26.09; // mk5
 
