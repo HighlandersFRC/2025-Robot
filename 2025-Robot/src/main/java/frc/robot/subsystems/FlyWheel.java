@@ -44,13 +44,12 @@ public class FlyWheel extends SubsystemBase {
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        config.CurrentLimits.StatorCurrentLimit = 70;
-        config.CurrentLimits.SupplyCurrentLimit = 70;
-        config.Slot0.kP = 4.068;
+        config.CurrentLimits.StatorCurrentLimit = 120;
+        config.CurrentLimits.SupplyCurrentLimit = 120;
+        config.Slot0.kP = 400.068;
         config.Slot0.kI = 0.0;
         config.Slot0.kD = 0;
-        config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
-        config.Slot0.kG = 0;
+        // config.Slot0.kG = 0;
         config.MotionMagic.MotionMagicAcceleration = Constants.SetPoints.IntakeSetpoints.INTAKE_ACCELERATION;
         config.MotionMagic.MotionMagicCruiseVelocity = Constants.SetPoints.IntakeSetpoints.INTAKE_CRUISE_VELOCITY;
         fly.getConfigurator().apply(config);
@@ -82,6 +81,13 @@ public class FlyWheel extends SubsystemBase {
         this.wantedState = wantedState;
     }
 
+    public void setFlyWheelVelocity(double rpm) {
+        double rps = rpm / 60.0;
+        double motorRps = rps / Constants.Ratios.TEST_MOTOR_TO_FLY_WHEEL_RATIO;
+        fly.setControl(m_positionTorqueCurrentFOCRequest.withVelocity(-motorRps));
+        fly2.setControl(m_positionTorqueCurrentFOCRequest.withVelocity(motorRps));
+    }
+
     public double getVelocity() {
         return fly.getVelocity().getValueAsDouble() * Constants.Ratios.TEST_MOTOR_TO_FLY_WHEEL_RATIO;
     }
@@ -95,7 +101,8 @@ public class FlyWheel extends SubsystemBase {
         Logger.recordOutput("FlyWheel State", systemState);
         switch (systemState) {
             case SPINNING:
-                setFlyWheelPercent(0.53);
+                // setFlyWheelPercent(0.55);
+                setFlyWheelVelocity(2500.0);
                 break;
             default:
                 setFlyWheelPercent(0.0);
