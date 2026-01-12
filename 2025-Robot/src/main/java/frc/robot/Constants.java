@@ -4189,8 +4189,8 @@ public final class Constants {
                 public static final int INTAKE_BEAM_BREAK_PORT = 0;
 
                 // Testing
-                public static final int TEST_MOTOR_ID = 0;
-                public static final int TEST_MOTOR_ID2 = 0;
+                public static final int TEST_MOTOR_ID = 21;
+                public static final int TEST_MOTOR_ID2 = 22;
         }
 
         // Misc. controller values

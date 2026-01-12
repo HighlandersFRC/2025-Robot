@@ -75,7 +75,7 @@ public class FlyWheel extends SubsystemBase {
 
     public void setFlyWheelPercent(double percent) {
         fly.set(percent);
-        fly2.set(percent);
+        fly2.set(-percent);
     }
 
     public void setWantedState(FlyWheelState wantedState) {
@@ -95,7 +95,7 @@ public class FlyWheel extends SubsystemBase {
         Logger.recordOutput("FlyWheel State", systemState);
         switch (systemState) {
             case SPINNING:
-                setFlyWheelPercent(0.5);
+                setFlyWheelPercent(0.53);
                 break;
             default:
                 setFlyWheelPercent(0.0);

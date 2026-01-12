@@ -357,6 +357,9 @@ public class Superstructure extends SubsystemBase {
       case DEFAULT:
         currentSuperState = SuperState.DEFAULT;
         break;
+      case FLY_WHEEL_TEST:
+        currentSuperState = SuperState.FLY_WHEEL_TEST;
+        break;
       case ZERO:
         if (intake.getZeroed() && elevator.getZeroed() && firstTimeZero) {
           firstTimeZero = false;
