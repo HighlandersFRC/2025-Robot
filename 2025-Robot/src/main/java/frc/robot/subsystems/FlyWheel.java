@@ -4,19 +4,14 @@
 
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.intake.Intake.IntakeState;
 
 public class FlyWheel extends SubsystemBase {
     /** Creates a new Intake. */
@@ -49,9 +44,8 @@ public class FlyWheel extends SubsystemBase {
         config.Slot0.kP = 400.068;
         config.Slot0.kI = 0.0;
         config.Slot0.kD = 0;
-        // config.Slot0.kG = 0;
-        config.MotionMagic.MotionMagicAcceleration = Constants.SetPoints.IntakeSetpoints.INTAKE_ACCELERATION;
-        config.MotionMagic.MotionMagicCruiseVelocity = Constants.SetPoints.IntakeSetpoints.INTAKE_CRUISE_VELOCITY;
+        config.MotionMagic.MotionMagicAcceleration = 1.0;
+        config.MotionMagic.MotionMagicCruiseVelocity = 1.0;
         fly.getConfigurator().apply(config);
         fly.setNeutralMode(NeutralModeValue.Brake);
         fly2.getConfigurator().apply(config);
@@ -95,10 +89,6 @@ public class FlyWheel extends SubsystemBase {
     @Override
     public void periodic() {
         systemState = handleStateTransition();
-        Logger.recordOutput("FlyWheel Stator Current", fly.getStatorCurrent().getValueAsDouble());
-        Logger.recordOutput("FlyWheel Supply Current", fly.getSupplyCurrent().getValueAsDouble());
-        Logger.recordOutput("FlyWheel Velocity (RPM)", getVelocity() * 60.0); // convert from rps to rpm
-        Logger.recordOutput("FlyWheel State", systemState);
         switch (systemState) {
             case SPINNING:
                 // setFlyWheelPercent(0.55);

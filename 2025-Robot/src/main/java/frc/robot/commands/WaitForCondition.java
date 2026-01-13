@@ -29,7 +29,6 @@ public class WaitForCondition extends Command {
 
   @Override
   public boolean isFinished() {
-    // Logger.recordOutput("started", condition.getAsBoolean());
     return condition.getAsBoolean();
   }
 }

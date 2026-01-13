@@ -83,13 +83,7 @@ public class OI {
     public static JoystickButton autoChooserIsBlue = new JoystickButton(autoChooser, 8);
 
     public static void printAutoChooserInputs() {
-        java.util.logging.Logger.getGlobal().info("Driver Controller Connected: " + driverController.isConnected());
-        java.util.logging.Logger.getGlobal().info("Operator Controller Connected: " + operatorController.isConnected());
-        java.util.logging.Logger.getGlobal().info("Auto Chooser Connected: " + autoChooser.isConnected());
-        java.util.logging.Logger.getGlobal().info("Auto Chooser Num Buttons: " + autoChooser.getButtonCount());
-        java.util.logging.Logger.getGlobal().info("Is Blue: " + autoChooserIsBlue.getAsBoolean());
         for (int i = 1; i <= 16; i++) {
-            java.util.logging.Logger.getGlobal().info("Auto Chooser Button " + i + " : " + autoChooser.getRawButton(i));
         }
     }
 

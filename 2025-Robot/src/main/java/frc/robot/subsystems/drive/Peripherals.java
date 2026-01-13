@@ -51,7 +51,6 @@ public class Peripherals {
       aprilTagFieldLayout = new AprilTagFieldLayout(
           Filesystem.getDeployDirectory().getPath() + "/" + "2025-reefscape.json");
     } catch (Exception e) {
-      java.util.logging.Logger.getGlobal().warning("error with april tag: " + e.getMessage());
     }
     photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
@@ -157,13 +156,5 @@ public class Peripherals {
     // cameraScreenshotTime = Timer.getFPGATimestamp();
     // }
 
-    // Logger.recordOutput("Pidgeon Yaw?", pigeon.getYaw().getValueAsDouble());
-    // Logger.recordOutput("Pidgeon Pitch?", pigeon.getPitch().getValueAsDouble());
-    // Logger.recordOutput("Pidgeon Roll?", pigeon.getRoll().getValueAsDouble());
-    // TODO: uncomment if you want to see if the cameras have a track
-    // Logger.recordOutput("Front Cam Track", frontReefCamTrack);
-    // Logger.recordOutput("Back Cam Track", backReefCamTrack);
-    // Logger.recordOutput("Right Cam Track", frontBargeCamTrack);
-    // Logger.recordOutput("Left Cam Track", backBargeCamTrack);
   }
 }

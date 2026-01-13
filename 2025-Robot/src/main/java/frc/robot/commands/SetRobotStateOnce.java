@@ -36,7 +36,6 @@ public class SetRobotStateOnce extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    java.util.logging.Logger.getGlobal().fine("Interrupted? " + interrupted);
     if (DriverStation.isAutonomousEnabled()) {
       superstructure.setWantedState(SuperState.IDLE);
     } else {
