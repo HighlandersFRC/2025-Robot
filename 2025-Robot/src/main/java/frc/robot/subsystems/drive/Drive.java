@@ -1,14 +1,12 @@
 package frc.robot.subsystems.drive;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.photonvision.targeting.PhotonTrackedTarget;
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -431,8 +429,6 @@ public class Drive extends SubsystemBase {
       return true;
     }
   }
-
-  private boolean autoPlacingFront = true;
 
   public double getAngleDifferenceDegrees(double angle1, double angle2) {
     double difference = Math.abs(angle1 - angle2) % 360;
@@ -962,35 +958,21 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // Pose2d target = getGamePiecePosition();
-    // System.out.println(Math.toDegrees(getThetaToCenterReef()));
-    // Translation2d t1 = new Translation2d(getMt2Pose2dX(), getMt2Pose2dY());
-    // Rotation2d r1 = new Rotation2d(getThetaToCenterReef());
-    // Pose2d p1 = new Pose2d(t1, r1);
     io.update(systemState);
-    // process inputs
     DriveState newState = handleStateTransition();
-    Pose2d setpoint = new Pose2d();
-    double standardizedAngle = Constants.standardizeAngleDegrees(Math.toDegrees(getMt2Pose2dAngle()));
+
     if (newState != systemState) {
       systemState = newState;
     }
+    Logger.recordOutput("Drive State", systemState);
     // Stop moving when disabled
     if (DriverStation.isDisabled()) {
       systemState = DriveState.DEFAULT;
     }
 
-    if (!OI.getDriverA()) {
-      firstTimeReef = true;
-    }
     switch (systemState) {
       case DEFAULT:
-        if (OI.driverA.getAsBoolean() && !(OI.driverPOVDown.getAsBoolean() || OI.driverPOVLeft.getAsBoolean()
-            || OI.driverPOVUp.getAsBoolean() || OI.driverPOVRight.getAsBoolean())) {
-          robotCentricDrive(195.0);
-        } else {
-          teleopDrive();
-        }
+        teleopDrive();
         break;
       case IDLE:
         break;

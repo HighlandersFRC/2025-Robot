@@ -313,11 +313,16 @@ public final class Constants {
 
                 // Testing
                 public static final double TEST_MOTOR_TO_FLY_WHEEL_RATIO = 1.0;
+
+                public class Shooter {
+                        public static final double HOOD_GEAR_RATIO = 1.0; // TODO: make this the actual ratio
+                        public static final double SHOOTER_GEAR_RATIO = 1.0; // TODO: make this the actual ratio
+                }
         }
 
         // Can info such as IDs
         public static final class CANInfo {
-                public static final String CANBUS_NAME = "Canivore";
+                public static final String CANBUS_NAME = "rio";
 
                 // drive
                 public static final int FRONT_RIGHT_DRIVE_MOTOR_ID = 1;
@@ -336,6 +341,18 @@ public final class Constants {
                 // Testing
                 public static final int TEST_MOTOR_ID = 21;
                 public static final int TEST_MOTOR_ID2 = 22;
+
+                // Shooter
+                public static final int SHOOTER_FLYWHEEL_MOTOR_MASTER_ID = 9;
+                public static final int SHOOTER_FLYWHEEL_MOTOR_FOLLOWER_ID = 10;
+                public static final int SHOOTER_HOOD_MOTOR_ID = 13;
+
+                // Intake
+                public static final int INTAKE_ROLLER_ID = 12;
+
+                // Feeder
+                public static final int FEEDER_1_MOTOR_ID = 14;
+                public static final int FEEDER_2_MOTOR_ID = 15;
         }
 
         // Misc. controller values

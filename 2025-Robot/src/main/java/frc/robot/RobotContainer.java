@@ -17,7 +17,6 @@ import frc.robot.commands.DoNothing;
 import frc.robot.commands.SetRobotStateOnce;
 import frc.robot.commands.SetRobotStateSimple;
 import frc.robot.commands.ZeroAngleMidMatch;
-import frc.robot.subsystems.FlyWheel;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.SuperState;
 import frc.robot.subsystems.drive.Drive;
@@ -37,8 +36,7 @@ public class RobotContainer {
         // Subsystems
         Peripherals peripherals = new Peripherals();
         Drive drive = new Drive(peripherals);
-        FlyWheel fly = new FlyWheel();
-        Superstructure superstructure = new Superstructure(drive, fly);
+        Superstructure superstructure = new Superstructure(drive);
 
         public boolean algaeMode = false;
         boolean manualMode = false;
@@ -84,9 +82,6 @@ public class RobotContainer {
                 // COMPETITION CONTROLS
                 // Driver
                 OI.driverViewButton.whileTrue(new ZeroAngleMidMatch(drive)); // zero pidgeon
-
-                OI.driverRT.whileTrue(
-                                new SetRobotStateOnce(superstructure, SuperState.FLY_WHEEL_TEST));
 
         }
 

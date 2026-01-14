@@ -8,7 +8,7 @@ import frc.robot.Constants;
 import frc.robot.tools.math.Vector;
 
 public class Gyro {
-    private final Pigeon2 pigeon = new Pigeon2(0, "Canivore");
+    private final Pigeon2 pigeon = new Pigeon2(0, "rio");
 
     private final Pigeon2Configuration pigeonConfig = new Pigeon2Configuration();
     private final Pigeon2Configuration pigeonExtraConfig = new Pigeon2Configuration();

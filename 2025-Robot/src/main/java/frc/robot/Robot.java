@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Timer;
@@ -13,10 +14,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Superstructure.SuperState;
+import frc.robot.tools.logging.AdvantageKitMultiLevelLogHandler;
 
 public class Robot extends LoggedRobot {
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
+  private AdvantageKitMultiLevelLogHandler m_logHandler = new AdvantageKitMultiLevelLogHandler();
+
   String m_fieldSide = "blue";
   boolean bPressed = false;
   boolean yPressed = false;
@@ -52,7 +56,20 @@ public class Robot extends LoggedRobot {
 
     // The level for logs going to advantage scope. LEAVE THIS AT "ALL"
 
+    Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+    Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+    Logger.start();
     this.m_fieldSide = "blue";
+    // The level for logs going to advantage scope. LEAVE THIS AT "ALL"
+    java.util.logging.Logger.getLogger("").setLevel(Level.ALL);
+
+    // The level for logs printed to console. CHANGE THIS ONE TO OFF FOR COMP
+    java.util.logging.Logger.getLogger("").getHandlers()[0].setLevel(Level.INFO);
+
+    java.util.logging.Logger.getLogger("").addHandler(m_logHandler);
+
+    java.util.logging.Logger.getGlobal().info("Robot Init");
+
     SmartDashboard.putNumber("Shooter Angle Degrees (tuning)", 0);
     SmartDashboard.putNumber("Shooter RPM (input)", 0);
     m_robotContainer = new RobotContainer();
@@ -80,10 +97,14 @@ public class Robot extends LoggedRobot {
     Globals.runTime = Timer.getFPGATimestamp() - Globals.initTime;
 
     m_robotContainer.peripherals.periodic();
+    m_logHandler.write();
+
   }
 
   @Override
   public void disabledInit() {
+    java.util.logging.Logger.getGlobal().info("Robot Disabled");
+
     OI.driverController.setRumble(RumbleType.kBothRumble, 0);
     OI.operatorController.setRumble(RumbleType.kBothRumble, 0);
   }
@@ -112,6 +133,8 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
+    m_robotContainer.superstructure.setWantedState(SuperState.DEFAULT);
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
