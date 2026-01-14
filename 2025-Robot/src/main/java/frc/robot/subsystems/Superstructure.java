@@ -35,6 +35,7 @@ public class Superstructure extends SubsystemBase {
   private final Drive drive;
   private final FlyWheel fly;
   private final Elevator elevator;
+  private final Roller roller;
   private final Manipulator manipulator;
   private final Pivot pivot;
   private final Twist twist;
@@ -119,9 +120,10 @@ public class Superstructure extends SubsystemBase {
 
   public Superstructure(Drive drive, FlyWheel fly, Elevator elevator, Manipulator manipulator, Pivot pivot, Twist twist,
       Climber climber,
-      Lights lights, Intake intake) {
+      Lights lights, Intake intake, Roller roller) {
     this.drive = drive;
     this.fly = fly;
+    this.roller = roller;
     this.elevator = elevator;
     this.manipulator = manipulator;
     this.pivot = pivot;

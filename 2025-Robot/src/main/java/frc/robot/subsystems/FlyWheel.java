@@ -22,8 +22,8 @@ public class FlyWheel extends SubsystemBase {
     /** Creates a new Intake. */
     private final TalonFX fly = new TalonFX(Constants.CANInfo.TEST_MOTOR_ID,
             Constants.CANInfo.CANBUS_NAME);
-    private final TalonFX fly2 = new TalonFX(Constants.CANInfo.TEST_MOTOR_ID2,
-            Constants.CANInfo.CANBUS_NAME);
+    // private final TalonFX fly2 = new TalonFX(Constants.CANInfo.TEST_MOTOR_ID2,
+    // Constants.CANInfo.CANBUS_NAME);
 
     private final TorqueCurrentFOC m_torqueCurrentFOCRequest = new TorqueCurrentFOC(0.0).withMaxAbsDutyCycle(0.0);
     private final PositionTorqueCurrentFOC m_positionTorqueCurrentFOCRequest = new PositionTorqueCurrentFOC(0.0);
@@ -54,8 +54,8 @@ public class FlyWheel extends SubsystemBase {
         config.MotionMagic.MotionMagicCruiseVelocity = Constants.SetPoints.IntakeSetpoints.INTAKE_CRUISE_VELOCITY;
         fly.getConfigurator().apply(config);
         fly.setNeutralMode(NeutralModeValue.Brake);
-        fly2.getConfigurator().apply(config);
-        fly2.setNeutralMode(NeutralModeValue.Brake);
+        // fly2.getConfigurator().apply(config);
+        // fly2.setNeutralMode(NeutralModeValue.Brake);
     }
 
     private FlyWheelState handleStateTransition() {
@@ -69,12 +69,12 @@ public class FlyWheel extends SubsystemBase {
 
     public void setFlyWheelCurrent(double amps, double maxPercent) {
         fly.setControl(m_torqueCurrentFOCRequest.withOutput(amps).withMaxAbsDutyCycle(maxPercent));
-        fly2.setControl(m_torqueCurrentFOCRequest.withOutput(amps).withMaxAbsDutyCycle(maxPercent));
+        // fly2.setControl(m_torqueCurrentFOCRequest.withOutput(amps).withMaxAbsDutyCycle(maxPercent));
     }
 
     public void setFlyWheelPercent(double percent) {
         fly.set(percent);
-        fly2.set(-percent);
+        // fly2.set(-percent);
     }
 
     public void setWantedState(FlyWheelState wantedState) {
@@ -85,7 +85,7 @@ public class FlyWheel extends SubsystemBase {
         double rps = rpm / 60.0;
         double motorRps = rps / Constants.Ratios.TEST_MOTOR_TO_FLY_WHEEL_RATIO;
         fly.setControl(m_positionTorqueCurrentFOCRequest.withVelocity(-motorRps));
-        fly2.setControl(m_positionTorqueCurrentFOCRequest.withVelocity(motorRps));
+        // fly2.setControl(m_positionTorqueCurrentFOCRequest.withVelocity(motorRps));
     }
 
     public double getVelocity() {

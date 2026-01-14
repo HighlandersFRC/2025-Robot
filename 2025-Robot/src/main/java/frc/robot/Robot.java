@@ -19,9 +19,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.Autonomous;
 import frc.robot.subsystems.Superstructure.SuperState;
 import frc.robot.tools.logging.AdvantageKitMultiLevelLogHandler;
+import frc.robot.subsystems.Roller;
 
 public class Robot extends LoggedRobot {
   private RobotContainer m_robotContainer;
+  private Roller roller = new Roller();
   private Command m_autonomousCommand;
   private AdvantageKitMultiLevelLogHandler m_logHandler = new AdvantageKitMultiLevelLogHandler();
   String m_fieldSide = "blue";
@@ -201,12 +203,16 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopPeriodic() {
     if (OI.driverB.getAsBoolean()) {
-      if (bPressed) {
-        m_robotContainer.algaeMode = !m_robotContainer.algaeMode;
-        bPressed = false;
-      }
+      // if (bPressed) {
+      // m_robotContainer.algaeMode = !m_robotContainer.algaeMode;
+      // bPressed = false;
+      // }
+      // } else {
+      // bPressed = true;
+      roller.setRollerPercent(0.2);
+
     } else {
-      bPressed = true;
+      roller.setRollerPercent(0);
     }
 
     if (OI.driverX.getAsBoolean()) {

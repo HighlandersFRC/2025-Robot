@@ -43,7 +43,7 @@ public final class Constants {
                                 "odometry test.polarauto",
                                 "3PieceFeederSmart.polarauto",
                                 "4PieceFeederGroundSmart.polarauto",
-                                "TushPush.polarauto",
+                                "Bump.polarauto",
                 };
 
                 public static int getSelectedPathIndex() {
