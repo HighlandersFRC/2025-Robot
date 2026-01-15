@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.drive;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
@@ -77,16 +75,16 @@ public class SwerveModule extends SubsystemBase {
 
     switch (moduleNumber) {
       case 1:
-        angle = (Math.atan2(-width, length)) - Math.PI;
+        angle = (Math.atan2(-width, length)) - Math.PI - (Math.PI / 2.0);
         break;
       case 2:
-        angle = Math.atan2(width, length);
+        angle = Math.atan2(width, length) + (Math.PI / 2.0);
         break;
       case 3:
-        angle = Math.PI + Math.atan2(width, -length);
+        angle = Math.PI + Math.atan2(width, -length) - (Math.PI / 2.0);
         break;
       case 4:
-        angle = (2 * Math.PI) + (Math.atan2(-width, -length));
+        angle = (2 * Math.PI) + (Math.atan2(-width, -length)) + (Math.PI / 2.0);
         break;
       default:
         angle = 1;
@@ -99,9 +97,9 @@ public class SwerveModule extends SubsystemBase {
     TalonFXConfiguration angleMotorConfig = new TalonFXConfiguration();
     TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
 
-    angleMotorConfig.Slot0.kP = 850.0;
+    angleMotorConfig.Slot0.kP = 200.0;
     angleMotorConfig.Slot0.kI = 0.0;
-    angleMotorConfig.Slot0.kD = 15;
+    angleMotorConfig.Slot0.kD = 1.1;
 
     angleMotorConfig.Slot1.kP = 3.0;
     angleMotorConfig.Slot1.kI = 0.0;
@@ -114,7 +112,7 @@ public class SwerveModule extends SubsystemBase {
 
     angleMotorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.1;
 
-    angleMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    angleMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     angleMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     angleMotorConfig.Feedback.FeedbackRemoteSensorID = canCoder.getDeviceID();
@@ -149,7 +147,7 @@ public class SwerveModule extends SubsystemBase {
 
     driveMotorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.1;
 
-    driveMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    driveMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     double absolutePosition = canCoder.getAbsolutePosition().getValueAsDouble();
     angleMotor.setPosition(absolutePosition);
@@ -179,9 +177,6 @@ public class SwerveModule extends SubsystemBase {
    */
   public void setWheelPID(double angle, double velocity) {
     // method used to move wheel
-    Logger.recordOutput("random wheel velocity", velocity);
-    Logger.recordOutput("drive motor info",
-        driveMotor.getDeviceID() + "   " + driveMotor.getDeviceEnable() + "   " + driveMotor.getIsProLicensed());
     angleMotor.setControl(positionTorqueFOCRequest.withPosition(degreesToRotations(Math.toDegrees(angle))));
     driveMotor.setControl(velocityTorqueFOCRequest.withVelocity(wheelToDriveMotorRotations(velocity)));
   }

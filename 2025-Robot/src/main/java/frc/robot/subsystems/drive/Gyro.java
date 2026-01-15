@@ -21,9 +21,13 @@ public class Gyro {
         pigeonConfig.MountPose.MountPosePitch = 2.9378323554992676;
         pigeonConfig.MountPose.MountPoseRoll = -1.7237112522125244;
 
-        pigeonExtraConfig.MountPose.MountPosePitch = 2.9378318786621094;
-        pigeonExtraConfig.MountPose.MountPoseRoll = -1.7237101793289185;
-        pigeonExtraConfig.MountPose.MountPoseYaw = -1.0769075155258179;
+        // pigeonConfig.MountPose.MountPoseYaw = 0.0;
+        // pigeonConfig.MountPose.MountPosePitch = 0.0;
+        // pigeonConfig.MountPose.MountPoseRoll = 0.0;
+
+        // pigeonExtraConfig.MountPose.MountPosePitch = 2.9378318786621094;
+        // pigeonExtraConfig.MountPose.MountPoseRoll = -1.7237101793289185;
+        // pigeonExtraConfig.MountPose.MountPoseYaw = -1.0769075155258179;
 
         pigeon.getConfigurator().apply(pigeonConfig);
 

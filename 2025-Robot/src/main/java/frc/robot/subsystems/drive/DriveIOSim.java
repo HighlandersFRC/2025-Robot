@@ -74,20 +74,20 @@ public class DriveIOSim extends DriveIO {
 
     @Override
     void update(DriveState currentState) {
-        int numSteps = (int) Math.floor(Globals.loopPeriodSecs / Constants.closedLoopSimResolution);
-        double dt = Globals.loopPeriodSecs / numSteps;
-        for (int i = 0; i < numSteps; i++) {
-            Vector acceleration = wantedVelocityVector.subtract(velocityVector).unit()
-                    .scaled(Constants.Physical.SIM_MAX_ACCELERATION * 10);
-            velocityVector = velocityVector.add(acceleration.scaled(dt));
-            if (velocityVector.magnitude() > Constants.Physical.SIM_TOP_SPEED) {
-                velocityVector = velocityVector.scaled(Constants.Physical.SIM_TOP_SPEED / velocityVector.magnitude());
-            }
-            positionVector = positionVector.add(velocityVector.scaled(dt));
-            double angularAcceleration = Math.signum(wantedAngularVelocity - angularVelocity)
-                    * Constants.Physical.SIM_MAX_ANGULAR_ACCELERATION;
-            angularVelocity += angularAcceleration * dt;
-            angle += angularVelocity * dt;
-        }
+        // int numSteps = (int) Math.floor(Globals.loopPeriodSecs / Constants.closedLoopSimResolution);
+        // double dt = Globals.loopPeriodSecs / numSteps;
+        // for (int i = 0; i < numSteps; i++) {
+        //     Vector acceleration = wantedVelocityVector.subtract(velocityVector).unit()
+        //             .scaled(Constants.Physical.SIM_MAX_ACCELERATION * 10);
+        //     velocityVector = velocityVector.add(acceleration.scaled(dt));
+        //     if (velocityVector.magnitude() > Constants.Physical.SIM_TOP_SPEED) {
+        //         velocityVector = velocityVector.scaled(Constants.Physical.SIM_TOP_SPEED / velocityVector.magnitude());
+        //     }
+        //     positionVector = positionVector.add(velocityVector.scaled(dt));
+        //     double angularAcceleration = Math.signum(wantedAngularVelocity - angularVelocity)
+        //             * Constants.Physical.SIM_MAX_ANGULAR_ACCELERATION;
+        //     angularVelocity += angularAcceleration * dt;
+        //     angle += angularVelocity * dt;
+        // }
     }
 }

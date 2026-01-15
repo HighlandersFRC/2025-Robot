@@ -546,7 +546,7 @@ public class Drive extends SubsystemBase {
    */
   public void teleopDrive() {
     double oiRX = OI.getDriverRightX();
-    double oiLX = OI.getDriverLeftX();
+    double oiLX = -OI.getDriverLeftX();
     double oiRY = OI.getDriverRightY();
     double oiLY = OI.getDriverLeftY();
     if (OI.operatorLT.getAsBoolean() && OI.operatorRT.getAsBoolean()) {
@@ -585,6 +585,9 @@ public class Drive extends SubsystemBase {
       controllerVector.setI(-xSpeed);
       controllerVector.setJ(-ySpeed);
     }
+    Logger.recordOutput("Drive Vector I", controllerVector.getI());
+    Logger.recordOutput("Drive Vector J", controllerVector.getJ());
+    Logger.recordOutput("Drive Turn", turn);
     io.drive(controllerVector, turn);
   }
 
@@ -965,6 +968,7 @@ public class Drive extends SubsystemBase {
       systemState = newState;
     }
     Logger.recordOutput("Drive State", systemState);
+    Logger.recordOutput("Gyro", getGyroYaw());
     // Stop moving when disabled
     if (DriverStation.isDisabled()) {
       systemState = DriveState.DEFAULT;

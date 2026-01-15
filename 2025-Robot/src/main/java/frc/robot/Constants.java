@@ -16,58 +16,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class Constants {
-        // public static final class Autonomous {
-        //         public static final int STAGNATE_BOOST = 25;
-        //         public static final int STAGNATE_THRESHOLD = 8; // Number of cycles of stagnation before ending path
-        //         // lookahead distance is a function:
-        //         // LOOKAHEAD = AUTONOMOUS_LOOKAHEAD_DISTANCE * velocity + MIN_LOOKAHEAD_DISTANCE
-        //         // their constants
-        //         public static final double AUTONOMOUS_LOOKAHEAD_DISTANCE = 0.04; // Lookahead at 1m/s scaled by wanted
-        //                                                                          // velocity
-        //         public static final double FULL_SEND_LOOKAHEAD = 0.60;
-        //         public static final double MIN_LOOKAHEAD_DISTANCE = 0.05; // Lookahead distance at 0m/s
-        //         // Path follower will end if within this radius of the final point
-        //         public static final double AUTONOMOUS_END_ACCURACY = 0.40;
-        //         public static final double ACCURATE_FOLLOWER_AUTONOMOUS_END_ACCURACY = 0.05;
-        //         // When calculating the point distance, will divide x and y by this constant
-        //         public static final double AUTONOMOUS_LOOKAHEAD_LINEAR_RADIUS = 1.0;
-        //         // When calculating the point distance, will divide theta by this constant
-        //         public static final double AUTONOMOUS_LOOKAHEAD_ANGULAR_RADIUS = 4 * Math.PI;
-        //         // Feed Forward Multiplier
-        //         public static final double FEED_FORWARD_MULTIPLIER = 0.8044;
-        //         public static final double ACCURATE_FOLLOWER_FEED_FORWARD_MULTIPLIER = 1;
-        //         public static final String[] paths = new String[] {
-        //                         "2AlgaeCenter.polarauto",
-        //                         "odometry test.polarauto",
-        //                         "3PieceFeederSmart.polarauto",
-        //                         "4PieceFeederGroundSmart.polarauto",
-        //                         "TushPush.polarauto",
-        //         };
-
-        //         public static int getSelectedPathIndex() {
-        //                 if (OI.autoChooserConnected()) {
-        //                         if (OI.autoChooser.getRawButton(1)) {
-        //                                 return 0;
-        //                         }
-        //                         if (OI.autoChooser.getRawButton(2)) {
-        //                                 return 1;
-        //                         }
-        //                         if (OI.autoChooser.getRawButton(3)) {
-        //                                 return 2;
-        //                         }
-        //                         if (OI.autoChooser.getRawButton(4)) {
-        //                                 return 3;
-        //                         }
-        //                         if (OI.autoChooser.getRawButton(5)) {
-        //                                 return 4;
-        //                         }
-        //                 } else {
-        //                         return (int) Math.round(SmartDashboard.getNumber("ROBOT AUTO OVERIDE", -1));
-        //                 }
-        //                 return -1;
-        //         }
-
-        // }
 
         public static final double closedLoopSimResolution = 0.01; // seconds
 
@@ -88,20 +36,20 @@ public final class Constants {
                 public static final double WHEEL_TO_FRAME_DISTANCE = inchesToMeters(2.5); // TODO: is this different for
                                                                                           // mk5s?
                 public static final double TOP_SPEED = feetToMeters(30.0);
-                public static final double SIM_TOP_SPEED = 6.0; // meters per second
+                // public static final double SIM_TOP_SPEED = 6.0; // meters per second
                 public static final double MAX_ACCELERATION = feetToMeters(30.0); // TODO: actually tune the top speed
                                                                                   // and max acceleration. Add a max
                                                                                   // deceleration if needed.
-                public static final double SIM_MAX_ACCELERATION = 4.0; // meters per second
-                public static final double TWIST_MOI = Units.lbsToKilograms(5.98)
-                                * Math.pow(Units.inchesToMeters(0.5), 2.0);// used cad to find
-                public static final int TWIST_MOTOR_COUNT = 1;
-                public static final double ROBOT_LENGTH = inchesToMeters(26);
-                public static final double ROBOT_WIDTH = inchesToMeters(26);
-                public static final double MODULE_OFFSET = inchesToMeters(2.625); // TODO: is this different for mk5s?
+                                                                                  // public static final double SIM_MAX_ACCELERATION = 4.0; // meters per second
+                                                                                  // public static final double TWIST_MOI = Units.lbsToKilograms(5.98)
+                                                                                  //                 * Math.pow(Units.inchesToMeters(0.5), 2.0);// used cad to find
+                                                                                  // public static final int TWIST_MOTOR_COUNT = 1;
+                public static final double ROBOT_LENGTH = inchesToMeters(29);
+                public static final double ROBOT_WIDTH = inchesToMeters(29);
+                public static final double MODULE_OFFSET = inchesToMeters(3.0);
                 public static final double ROBOT_RADIUS = Math.hypot(ROBOT_LENGTH / 2 - WHEEL_TO_FRAME_DISTANCE,
                                 ROBOT_WIDTH / 2 - WHEEL_TO_FRAME_DISTANCE);
-                public static final double SIM_MAX_ANGULAR_ACCELERATION = SIM_MAX_ACCELERATION / ROBOT_RADIUS;
+                // public static final double SIM_MAX_ANGULAR_ACCELERATION = SIM_MAX_ACCELERATION / ROBOT_RADIUS;
 
                 public static final double GRAVITY_ACCEL_MS2 = 9.806;
         }
@@ -305,11 +253,8 @@ public final class Constants {
         public static final class Ratios {
 
                 // drive
-                // public static final double DRIVE_GEAR_RATIO = 7.03; // mk5 R1
-                public static final double DRIVE_GEAR_RATIO = 7.2409; // mk5 R1 wierd?
-                // public static final double DRIVE_GEAR_RATIO = 6.03; // mk5 R2
-                // public static final double DRIVE_GEAR_RATIO = 5.27; // mk5 R3
-                public static final double STEER_GEAR_RATIO = 26.09; // mk5
+                public static final double DRIVE_GEAR_RATIO = 6.75;
+                public static final double STEER_GEAR_RATIO = 12.8;
 
                 // Testing
                 public static final double TEST_MOTOR_TO_FLY_WHEEL_RATIO = 1.0;

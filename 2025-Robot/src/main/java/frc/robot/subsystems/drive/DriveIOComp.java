@@ -2,6 +2,7 @@ package frc.robot.subsystems.drive;
 
 import java.util.Optional;
 
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
@@ -505,6 +506,9 @@ public class DriveIOComp extends DriveIO {
         @Override
         protected void drive(Vector velocityVector, double turnVelocity) {
 
+                Logger.recordOutput("Module Setpoints", getModuleSetpoints());
+                Logger.recordOutput("Module States", getModuleStates());
+                Logger.recordOutput("Robot Speed", getRobotSpeed());
                 double yaw = getYaw().getRadians();
                 frontLeft.drive(velocityVector, turnVelocity, yaw);
                 frontRight.drive(velocityVector, turnVelocity, yaw);
