@@ -21,6 +21,9 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.SuperState;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.Peripherals;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.shooter.Shooter;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -36,7 +39,10 @@ public class RobotContainer {
         // Subsystems
         Peripherals peripherals = new Peripherals();
         Drive drive = new Drive(peripherals);
-        Superstructure superstructure = new Superstructure(drive);
+        Shooter shooter = new Shooter();
+        Intake intake = new Intake();
+        Feeder feeder = new Feeder();
+        Superstructure superstructure = new Superstructure(drive, shooter, intake, feeder);
 
         public boolean algaeMode = false;
         boolean manualMode = false;
@@ -82,6 +88,12 @@ public class RobotContainer {
                 // COMPETITION CONTROLS
                 // Driver
                 OI.driverViewButton.whileTrue(new ZeroAngleMidMatch(drive)); // zero pidgeon
+
+                OI.driverRT.whileTrue(new SetRobotStateOnce(superstructure, SuperState.INTAKE));
+                OI.driverLT.whileTrue(new SetRobotStateOnce(superstructure, SuperState.OUTAKE));
+
+                OI.driverA.whileTrue(new SetRobotStateOnce(superstructure, SuperState.PREP_SHOOT_AUTO));
+                OI.driverY.whileTrue(new SetRobotStateOnce(superstructure, SuperState.PREP_SHOOT_NORMAL));
 
         }
 

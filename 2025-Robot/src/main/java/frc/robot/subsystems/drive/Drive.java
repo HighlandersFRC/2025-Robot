@@ -585,9 +585,9 @@ public class Drive extends SubsystemBase {
       controllerVector.setI(-xSpeed);
       controllerVector.setJ(-ySpeed);
     }
-    Logger.recordOutput("Drive Vector I", controllerVector.getI());
-    Logger.recordOutput("Drive Vector J", controllerVector.getJ());
-    Logger.recordOutput("Drive Turn", turn);
+    // Logger.recordOutput("Drive Vector I", controllerVector.getI());
+    // Logger.recordOutput("Drive Vector J", controllerVector.getJ());
+    // Logger.recordOutput("Drive Turn", turn);
     io.drive(controllerVector, turn);
   }
 

@@ -54,6 +54,11 @@ public class Shooter extends SubsystemBase {
     IDLE,
     SHOOTING_PERCENT,
     SHOOTING_RPM,
+    SHOOTING_AUTO,
+  }
+
+  public void setWantedState(ShooterState wantedState) {
+    this.wantedState = wantedState;
   }
 
   private ShooterState wantedState = ShooterState.IDLE;
@@ -67,9 +72,27 @@ public class Shooter extends SubsystemBase {
         return ShooterState.SHOOTING_PERCENT;
       case SHOOTING_RPM:
         return ShooterState.SHOOTING_RPM;
+      case SHOOTING_AUTO:
+        return ShooterState.SHOOTING_AUTO;
       default:
         return ShooterState.IDLE;
     }
+  }
+
+  public boolean readyToShootNormal() {
+    return (Math.abs(getShooterRPM() - 1000.0) < 100.0);
+  }
+
+  public boolean readyToShootAuto() {
+    return true;
+  }
+
+  public double getShooterRPMSetpoint() {
+    return 0.0;
+  }
+
+  public double getHoodAngleSetpoint() {
+    return 0.0;
   }
 
   @Override
@@ -77,17 +100,23 @@ public class Shooter extends SubsystemBase {
     io.updateInputs(systemState);
     systemState = handleStateTransition();
     Logger.recordOutput("Shooter State", systemState);
+    Logger.recordOutput("Shooter RPM", getShooterRPM());
+    Logger.recordOutput("Hood Angle", getHoodAngle());
     switch (systemState) {
       case IDLE:
         setShooterPercent(0.0);
         break;
       case SHOOTING_PERCENT:
-        setShooterPercent(0.1);
+        setShooterPercent(0.5);
         setHoodAngle(10.0);
         break;
       case SHOOTING_RPM:
         setShooterRPM(1000);
         setHoodAngle(20.0);
+        break;
+      case SHOOTING_AUTO:
+        setShooterRPM(getShooterRPMSetpoint());
+        setHoodAngle(getHoodAngleSetpoint());
         break;
       default:
         setShooterPercent(0.0);

@@ -97,7 +97,7 @@ public class SwerveModule extends SubsystemBase {
     TalonFXConfiguration angleMotorConfig = new TalonFXConfiguration();
     TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
 
-    angleMotorConfig.Slot0.kP = 200.0;
+    angleMotorConfig.Slot0.kP = 100.0;
     angleMotorConfig.Slot0.kI = 0.0;
     angleMotorConfig.Slot0.kD = 1.1;
 
