@@ -8,6 +8,7 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -70,6 +71,13 @@ public class DriveIOComp extends DriveIO {
         private final SwerveModule backRight = new SwerveModule(4, backRightAngleMotor, backRightDriveMotor,
                         backRightCanCoder);
 
+        private long lastImuTime = edu.wpi.first.wpilibj.RobotController.getFPGATime();
+
+        private Vector imuVelocity = new Vector();
+        private Vector imuPosition = new Vector();
+
+        private boolean imuInitialized = false;
+
         PhotonPoseEstimator photonPoseEstimator;
         PhotonPoseEstimator backPhotonPoseEstimator;
         PhotonPoseEstimator backLeftPhotonPoseEstimator;
@@ -105,7 +113,7 @@ public class DriveIOComp extends DriveIO {
                         new Translation3d(Constants.inchesToMeters(-12.375), Constants.inchesToMeters(9.375),
                                         Constants.inchesToMeters(8.6875)),
                         new Rotation3d(Math.toRadians(1.2), Math.toRadians(-19.7), Math.toRadians(181.53))); // 0.4,
-                                                                                                                                                                                                                                                                                           // -20.5
+                                                                                                             // -20.5
 
         Transform3d backRightReefRobotToCam = new Transform3d(
                         new Translation3d(Constants.inchesToMeters(
@@ -243,7 +251,6 @@ public class DriveIOComp extends DriveIO {
          * time differences.
          */
         private void updateOdometryFusedArray(DriveState currentState) {
-
                 SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
                 swerveModulePositions[0] = new SwerveModulePosition(frontLeft.getModuleDistance(),
                                 new Rotation2d(frontLeft.getCanCoderPositionRadians()));
@@ -255,8 +262,49 @@ public class DriveIOComp extends DriveIO {
                                 new Rotation2d(backRight.getCanCoderPositionRadians()));
                 mt2Pose = mt2Odometry.update(getYaw(), swerveModulePositions);
 
+                // double pitch = gyro.getPitchDegrees();
+                // Vector acceleration = gyro.getLinearAccelGVector();
+                // long now = edu.wpi.first.wpilibj.RobotController.getFPGATime();
+                // double dt = (now - lastImuTime) / 1000000.0;
+                // lastImuTime = now;
+                // if (!imuInitialized) {
+                // Vector wheelVel = getVelocityVector();
+
+                // imuVelocity.setI(wheelVel.getI());
+                // imuVelocity.setJ(wheelVel.getJ());
+
+                // imuPosition.setI(mt2Pose.getX());
+                // imuPosition.setJ(mt2Pose.getY());
+
+                // imuInitialized = true;
+                // }
+                // acceleration.setI(
+                // acceleration.getI() * Constants.Physical.GRAVITY_ACCEL_MS2);
+
+                // acceleration.setJ(
+                // acceleration.getJ() * Constants.Physical.GRAVITY_ACCEL_MS2);
+                // double pitchRad = Math.toRadians(pitch);
+                // double gX = Math.sin(pitchRad) * Constants.Physical.GRAVITY_ACCEL_MS2;
+                // acceleration.setI(acceleration.getI() - gX);
+                // imuVelocity.setI(imuVelocity.getI() + acceleration.getI() * dt);
+                // imuVelocity.setJ(imuVelocity.getJ() + acceleration.getJ() * dt);
+                // imuPosition.setI(imuPosition.getI() + imuVelocity.getI() * dt);
+                // imuPosition.setJ(imuPosition.getJ() + imuVelocity.getJ() * dt);
+                // Pose2d imuPose = new Pose2d(
+                // imuPosition.getI(),
+                // imuPosition.getJ(),
+                // getYaw());
+                // mt2Odometry.addVisionMeasurement(
+                // imuPose,
+                // Timer.getFPGATimestamp());
+                // Logger.recordOutput("IMU Pos X", imuPosition.getI());
+                // Logger.recordOutput("IMU Pos Y", imuPosition.getJ());
+                // Logger.recordOutput("IMU Vel X", imuVelocity.getI());
+                // Logger.recordOutput("IMU Vel Y", imuVelocity.getJ());
+                // Logger.recordOutput("IMU Accel X", acceleration.getI());
+                // Logger.recordOutput("IMU Accel Y", acceleration.getJ());
                 Matrix<N3, N1> standardDeviation = new Matrix<>(Nat.N3(), Nat.N1());
-                Logger.recordOutput("Closde to reef", closeToReef());
+                Logger.recordOutput("Close to reef", closeToReef());
 
                 if (((closeToReef()) || inReefInteractionState(
                                 currentState))

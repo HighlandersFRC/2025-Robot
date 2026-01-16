@@ -202,17 +202,19 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (OI.driverB.getAsBoolean()) {
+    if (OI.driverRT.getAsBoolean()) {
       // if (bPressed) {
       // m_robotContainer.algaeMode = !m_robotContainer.algaeMode;
       // bPressed = false;
       // }
       // } else {
       // bPressed = true;
-      roller.setRollerPercent(0.2);
+      roller.setRollerPercent(-1.0);
 
+    } else if (OI.driverLT.getAsBoolean()) {
+      roller.setRollerPercent(1.0);
     } else {
-      roller.setRollerPercent(0);
+      roller.setRollerPercent(0.0);
     }
 
     if (OI.driverX.getAsBoolean()) {
@@ -241,6 +243,7 @@ public class Robot extends LoggedRobot {
     } else {
       autoChooserCenterSwitch = true;
     }
+
   }
 
   @Override

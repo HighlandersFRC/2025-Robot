@@ -20,7 +20,7 @@ import frc.robot.subsystems.intake.Intake.IntakeState;
 
 public class Roller extends SubsystemBase {
     /** Creates a new Intake. */
-    private final TalonFX roller = new TalonFX(Constants.CANInfo.TEST_MOTOR_ID,
+    private final TalonFX roller = new TalonFX(30,
             Constants.CANInfo.CANBUS_NAME);
     // private final TalonFX roller2 = new TalonFX(Constants.CANInfo.TEST_MOTOR_ID2,
     // Constants.CANInfo.CANBUS_NAME);
@@ -105,7 +105,7 @@ public class Roller extends SubsystemBase {
                 setRollerVelocity(2500.0);
                 break;
             default:
-                setRollerPercent(0.0);
+                // setRollerPercent(0.0);
                 break;
         }
     }
