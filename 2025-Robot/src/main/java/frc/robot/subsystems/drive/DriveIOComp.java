@@ -262,47 +262,47 @@ public class DriveIOComp extends DriveIO {
                                 new Rotation2d(backRight.getCanCoderPositionRadians()));
                 mt2Pose = mt2Odometry.update(getYaw(), swerveModulePositions);
 
-                // double pitch = gyro.getPitchDegrees();
-                // Vector acceleration = gyro.getLinearAccelGVector();
-                // long now = edu.wpi.first.wpilibj.RobotController.getFPGATime();
-                // double dt = (now - lastImuTime) / 1000000.0;
-                // lastImuTime = now;
-                // if (!imuInitialized) {
-                // Vector wheelVel = getVelocityVector();
+                double pitch = gyro.getPitchDegrees();
+                Vector acceleration = gyro.getLinearAccelGVector();
+                long now = edu.wpi.first.wpilibj.RobotController.getFPGATime();
+                double dt = (now - lastImuTime) / 1000000.0;
+                lastImuTime = now;
+                if (!imuInitialized) {
+                        Vector wheelVel = getVelocityVector();
 
-                // imuVelocity.setI(wheelVel.getI());
-                // imuVelocity.setJ(wheelVel.getJ());
+                        imuVelocity.setI(wheelVel.getI());
+                        imuVelocity.setJ(wheelVel.getJ());
 
-                // imuPosition.setI(mt2Pose.getX());
-                // imuPosition.setJ(mt2Pose.getY());
+                        imuPosition.setI(mt2Pose.getX());
+                        imuPosition.setJ(mt2Pose.getY());
 
-                // imuInitialized = true;
-                // }
-                // acceleration.setI(
-                // acceleration.getI() * Constants.Physical.GRAVITY_ACCEL_MS2);
+                        imuInitialized = true;
+                }
+                acceleration.setI(
+                                acceleration.getI() * Constants.Physical.GRAVITY_ACCEL_MS2);
 
-                // acceleration.setJ(
-                // acceleration.getJ() * Constants.Physical.GRAVITY_ACCEL_MS2);
-                // double pitchRad = Math.toRadians(pitch);
-                // double gX = Math.sin(pitchRad) * Constants.Physical.GRAVITY_ACCEL_MS2;
-                // acceleration.setI(acceleration.getI() - gX);
-                // imuVelocity.setI(imuVelocity.getI() + acceleration.getI() * dt);
-                // imuVelocity.setJ(imuVelocity.getJ() + acceleration.getJ() * dt);
-                // imuPosition.setI(imuPosition.getI() + imuVelocity.getI() * dt);
-                // imuPosition.setJ(imuPosition.getJ() + imuVelocity.getJ() * dt);
-                // Pose2d imuPose = new Pose2d(
-                // imuPosition.getI(),
-                // imuPosition.getJ(),
-                // getYaw());
-                // mt2Odometry.addVisionMeasurement(
-                // imuPose,
-                // Timer.getFPGATimestamp());
-                // Logger.recordOutput("IMU Pos X", imuPosition.getI());
-                // Logger.recordOutput("IMU Pos Y", imuPosition.getJ());
-                // Logger.recordOutput("IMU Vel X", imuVelocity.getI());
-                // Logger.recordOutput("IMU Vel Y", imuVelocity.getJ());
-                // Logger.recordOutput("IMU Accel X", acceleration.getI());
-                // Logger.recordOutput("IMU Accel Y", acceleration.getJ());
+                acceleration.setJ(
+                                acceleration.getJ() * Constants.Physical.GRAVITY_ACCEL_MS2);
+                double pitchRad = Math.toRadians(pitch);
+                double gX = Math.sin(pitchRad) * Constants.Physical.GRAVITY_ACCEL_MS2;
+                acceleration.setI(acceleration.getI() - gX);
+                imuVelocity.setI(imuVelocity.getI() + acceleration.getI() * dt);
+                imuVelocity.setJ(imuVelocity.getJ() + acceleration.getJ() * dt);
+                imuPosition.setI(imuPosition.getI() + imuVelocity.getI() * dt);
+                imuPosition.setJ(imuPosition.getJ() + imuVelocity.getJ() * dt);
+                Pose2d imuPose = new Pose2d(
+                                imuPosition.getI(),
+                                imuPosition.getJ(),
+                                getYaw());
+                mt2Odometry.addVisionMeasurement(
+                                imuPose,
+                                Timer.getFPGATimestamp());
+                Logger.recordOutput("IMU Pos X", imuPosition.getI());
+                Logger.recordOutput("IMU Pos Y", imuPosition.getJ());
+                Logger.recordOutput("IMU Vel X", imuVelocity.getI());
+                Logger.recordOutput("IMU Vel Y", imuVelocity.getJ());
+                Logger.recordOutput("IMU Accel X", acceleration.getI());
+                Logger.recordOutput("IMU Accel Y", acceleration.getJ());
                 Matrix<N3, N1> standardDeviation = new Matrix<>(Nat.N3(), Nat.N1());
                 Logger.recordOutput("Close to reef", closeToReef());
 
