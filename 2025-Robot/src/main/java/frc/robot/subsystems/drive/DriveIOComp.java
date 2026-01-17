@@ -485,20 +485,28 @@ public class DriveIOComp extends DriveIO {
 
         public double[] getModuleSetpoints() {
                 double[] setpoints = {
-                                frontLeft.getAngleMotorSetpoint() * 360, frontLeft.getDriveMotorSetpoint(),
-                                frontRight.getAngleMotorSetpoint() * 360, frontRight.getDriveMotorSetpoint(),
-                                backLeft.getAngleMotorSetpoint() * 360, backLeft.getDriveMotorSetpoint(),
-                                backRight.getAngleMotorSetpoint() * 360, backRight.getDriveMotorSetpoint(),
+                                Constants.standardizeAngleDegrees(frontLeft.getAngleMotorSetpoint() * 360),
+                                frontLeft.getDriveMotorSetpoint(),
+                                Constants.standardizeAngleDegrees(frontRight.getAngleMotorSetpoint() * 360),
+                                frontRight.getDriveMotorSetpoint(),
+                                Constants.standardizeAngleDegrees(backLeft.getAngleMotorSetpoint() * 360),
+                                backLeft.getDriveMotorSetpoint(),
+                                Constants.standardizeAngleDegrees(backRight.getAngleMotorSetpoint() * 360),
+                                backRight.getDriveMotorSetpoint(),
                 };
                 return setpoints;
         }
 
         public double[] getModuleStates() {
                 double[] states = {
-                                frontLeft.getCanCoderPosition() * 360.0, frontLeft.getGroundSpeed(),
-                                frontRight.getCanCoderPosition() * 360.0, frontRight.getGroundSpeed(),
-                                backLeft.getCanCoderPosition() * 360.0, backLeft.getGroundSpeed(),
-                                backRight.getCanCoderPosition() * 360.0, backRight.getGroundSpeed(),
+                                Constants.standardizeAngleDegrees(frontLeft.getCanCoderPosition() * 360.0),
+                                frontLeft.getGroundSpeed(),
+                                Constants.standardizeAngleDegrees(frontRight.getCanCoderPosition() * 360.0),
+                                frontRight.getGroundSpeed(),
+                                Constants.standardizeAngleDegrees(backLeft.getCanCoderPosition() * 360.0),
+                                backLeft.getGroundSpeed(),
+                                Constants.standardizeAngleDegrees(backRight.getCanCoderPosition() * 360.0),
+                                backRight.getGroundSpeed(),
                 };
                 return states;
         }
@@ -506,9 +514,9 @@ public class DriveIOComp extends DriveIO {
         @Override
         protected void drive(Vector velocityVector, double turnVelocity) {
 
-                // Logger.recordOutput("Module Setpoints", getModuleSetpoints());
-                // Logger.recordOutput("Module States", getModuleStates());
-                // Logger.recordOutput("Robot Speed", getRobotSpeed());
+                Logger.recordOutput("Module Setpoints", getModuleSetpoints());
+                Logger.recordOutput("Module States", getModuleStates());
+                Logger.recordOutput("Robot Speed", getRobotSpeed());
                 double yaw = getYaw().getRadians();
                 frontLeft.drive(velocityVector, turnVelocity, yaw);
                 frontRight.drive(velocityVector, turnVelocity, yaw);

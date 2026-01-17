@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.drive;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
@@ -97,9 +99,9 @@ public class SwerveModule extends SubsystemBase {
     TalonFXConfiguration angleMotorConfig = new TalonFXConfiguration();
     TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
 
-    angleMotorConfig.Slot0.kP = 100.0;
+    angleMotorConfig.Slot0.kP = 300.0;
     angleMotorConfig.Slot0.kI = 0.0;
-    angleMotorConfig.Slot0.kD = 1.1;
+    angleMotorConfig.Slot0.kD = 5.1;
 
     angleMotorConfig.Slot1.kP = 3.0;
     angleMotorConfig.Slot1.kI = 0.0;
@@ -114,7 +116,7 @@ public class SwerveModule extends SubsystemBase {
 
     angleMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-    angleMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    angleMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
     angleMotorConfig.Feedback.FeedbackRemoteSensorID = canCoder.getDeviceID();
     angleMotorConfig.Feedback.SensorToMechanismRatio = 1.0;
     angleMotorConfig.Feedback.RotorToSensorRatio = Constants.Ratios.STEER_GEAR_RATIO;
@@ -125,7 +127,7 @@ public class SwerveModule extends SubsystemBase {
     // driveMotorConfig.Slot0.kD = 0.0;
     // driveMotorConfig.Slot0.kV = 0.0;
     // } else {
-    driveMotorConfig.Slot0.kP = 8.0;
+    driveMotorConfig.Slot0.kP = 6.0;
     driveMotorConfig.Slot0.kI = 0.0;
     driveMotorConfig.Slot0.kD = 0.0;
     driveMotorConfig.Slot0.kV = 0.0;
@@ -177,6 +179,8 @@ public class SwerveModule extends SubsystemBase {
    */
   public void setWheelPID(double angle, double velocity) {
     // method used to move wheel
+    // Logger.recordOutput("Left front setpoint degrees", Math.toDegrees(angle));
+    // Logger.recordOutput("left front angle actual", angleMotor.getPosition().getValueAsDouble() * 360.0);
     angleMotor.setControl(positionTorqueFOCRequest.withPosition(degreesToRotations(Math.toDegrees(angle))));
     driveMotor.setControl(velocityTorqueFOCRequest.withVelocity(wheelToDriveMotorRotations(velocity)));
   }

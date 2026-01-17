@@ -546,7 +546,7 @@ public class Drive extends SubsystemBase {
    */
   public void teleopDrive() {
     double oiRX = OI.getDriverRightX();
-    double oiLX = -OI.getDriverLeftX();
+    double oiLX = OI.getDriverLeftX();
     double oiRY = OI.getDriverRightY();
     double oiLY = OI.getDriverLeftY();
     if (OI.operatorLT.getAsBoolean() && OI.operatorRT.getAsBoolean()) {
@@ -968,7 +968,8 @@ public class Drive extends SubsystemBase {
       systemState = newState;
     }
     Logger.recordOutput("Drive State", systemState);
-    Logger.recordOutput("Gyro", getGyroYaw());
+    Logger.recordOutput("Gyro", Constants.standardizeAngleDegrees(getGyroYaw()));
+    Logger.recordOutput("Robot Pose", getMt2Pose2d());
     // Stop moving when disabled
     if (DriverStation.isDisabled()) {
       systemState = DriveState.DEFAULT;
