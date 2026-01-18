@@ -63,7 +63,7 @@ public class Pivot extends SubsystemBase {
   }
 
   public LoggedMechanismLigament2d getLigament() {
-    return new LoggedMechanismLigament2d("Pivot", Units.inchesToMeters(29), io.getPosition() * 360);
+    return new LoggedMechanismLigament2d("Pivot", Units.inchesToMeters(29), io.getPosition() * -360.0);
   }
 
   public enum PivotFlip {
