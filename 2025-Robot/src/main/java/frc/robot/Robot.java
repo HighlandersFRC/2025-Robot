@@ -9,14 +9,16 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.net.PortForwarder;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.Autonomous;
 import frc.robot.subsystems.Superstructure.SuperState;
 import frc.robot.tools.logging.AdvantageKitMultiLevelLogHandler;
 
@@ -134,6 +136,20 @@ public class Robot extends LoggedRobot {
     LoggedMechanism2d bot = new LoggedMechanism2d(2.0, 2.6);
     bot.getRoot("elevator", 1.0, Units.inchesToMeters(12.5)).append(elevatorLigament2d);
     Logger.recordOutput("Arm Sim", bot);
+
+    Pose3d elevatorPose = new Pose3d(0.0, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0));
+    Pose3d carriagePose = new Pose3d(0.0,
+        0.0, m_robotContainer.elevator.getElevatorLigament().getLength(), new Rotation3d(0.0, 0.0, 0.0));
+    Pose3d armPose = new Pose3d(0.0, 0.0, m_robotContainer.elevator.getElevatorLigament()
+        .getLength(),
+        new Rotation3d(0.0, Math.toRadians(m_robotContainer.pivot.getLigament().getAngle()), 0.0));
+    Pose3d[] componentPoses = new Pose3d[] {
+        elevatorPose,
+        carriagePose,
+        armPose
+    };
+    Logger.recordOutput("Component Poses", componentPoses);
+
   }
 
   @Override
